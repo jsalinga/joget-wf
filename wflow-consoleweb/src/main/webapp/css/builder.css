@@ -1,0 +1,559 @@
+* {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #f9f9f9;
+}
+div, label, input, button, select, th, td, a, span {
+    font-size: 13px;
+}
+.property-editor-page-button-panel input[type=button] {
+    background: rgb(39, 174, 96);
+    font-family: Arial;
+    text-decoration: none;
+    box-shadow: none;
+    border: none;
+    cursor: pointer;    
+    color: white;
+    border-radius: 4px;
+    margin-right: 2px;
+    padding: 10px;
+}
+.property-editor-page-button-panel input[type=button]:disabled {
+    opacity: 0.5;
+}
+.property-editor-page-button-panel input.page-button-cancel {
+    background: #aaa;
+}
+#builder-container {
+    min-width: 100%;
+    width: auto;
+}
+#builder-header {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    z-index: 301;
+    width: 100%;
+    height: 39px;
+    padding: 7px 10px 0;
+    background: #333;
+    box-sizing: border-box;
+}
+#builder-header:before {
+    content: "";
+    background: #3f84f4;
+    position: absolute;
+    top:0;
+    left:0;
+    width: 120px;
+    height: 39px;
+    z-index: -1;
+}
+#datalistbuilder #builder-header:before {
+    background: #6638b6;
+}
+#userviewbuilder #builder-header:before {
+    background: #f3b328;
+}
+#pbuilder #builder-header:before {
+    background: #dc4438;
+}
+#builder-header > i {
+    float: left;
+    color: #fff;
+}
+#builder-title {
+    color: white;
+    font-size: 22px;
+    text-transform: uppercase;
+    line-height: 11px;
+    padding-top: 8px;
+    margin-left: 120px;
+}
+#builder-title i {
+    font-style: normal;
+    text-transform: none;
+    text-shadow: 0px 0px 1px black;
+    font-size: 14px;
+}
+#builder-body {
+    min-width: 100%;
+    min-height: 520px;
+    background-color: #FFFFFF;
+    padding: 0 3% 100px 0px;
+    display: table;
+    box-sizing: border-box;
+}
+#builder-logo {
+    background: url(../images/v3/builder/logo.png) no-repeat;
+    background-size: cover;
+    width: 68px;
+    height: 24px;
+    float: left;
+    background-position: 10px 3px;
+    margin-left: 16px;
+    position: relative;
+}
+#builder-logo:before {
+    content: "";
+    border-left: 1px solid #fff;
+    left: 0;
+    top: 5px;
+    height: 18px;
+    display: block;
+    position: absolute;
+}
+#builder-bar { 
+    padding: 0px;
+    background: #eee;
+    margin-bottom: -8px;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 39px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    z-index: 101;
+    height: 38px;
+    border-bottom: solid 1px #ccc;
+}
+#builder-bg {
+    background: white;
+    opacity: 1;
+    position: fixed;
+    top: 31px;
+    width: 100%;
+    height: auto;
+    z-index: -1;
+}
+#builder-content, #tabpanels {
+    min-height: 380px;
+    left: 10px;
+    position: relative;
+    top: 100px; 
+    margin-right: 60px;
+}
+#builder-bar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 38px;
+    overflow: hidden;
+    display: inline-block;
+    width: auto;
+}
+#builder-bar li { 
+    float: left;
+    margin: 0;
+}
+#builder-bar a {
+    display: block;
+    text-decoration: none;
+    padding-right:18px;   
+    background: #ccc;
+    position: relative;
+}
+#builder-bar a span.steps-bg {
+    min-width: 100px;
+    display: block;
+    font-size: 16px;
+    color: #acacac;
+    height:38px;
+    text-decoration: none;
+    cursor: pointer;
+    padding:0 30px;
+    background: #ccc;
+    position: relative;
+}
+#builder-bar span.title {
+    font-size: 16px;
+    height: 14px;
+    color: #333;
+    display: block;
+    padding: 10px 0 0 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+#builder-bar span.subtitle {
+    display:none;
+}
+#builder-bar #builder-steps li.active a:before,
+#builder-bar #builder-steps li:not(.active):hover a:before,
+#builder-bar span.title:after,
+#builder-bar span.title:before{
+    display:block;
+    content:"";
+    width:0;
+    height:0em;
+    border-style:solid;
+    position:absolute;
+    right:-17px;
+    top:0;
+    border-width:19px 0 19px 18px;
+    border-color:transparent transparent transparent #ccc;    
+}
+#builder-bar #builder-steps li.active a:before,
+#builder-bar #builder-steps li:not(.active):hover a:before{
+    right: inherit;
+    left:-18px;
+    border-color:#888 #888 #888 transparent;    
+}
+#builder-bar span.title:before{
+    right: -18px;
+    border-color:transparent transparent transparent #fff;  
+}
+#builder-bar li.active a span.steps-bg {
+    background: #888;
+}
+#builder-bar li.active span.title {
+    color: #fff;
+}
+#builder-bar li.active span.title:after{
+    border-color:transparent transparent transparent #888;    
+}
+#builder-bar li.last-inactive span.title:after{
+    border-color:#ccc;
+}
+#builder-bar li.last-inactive span.title:before{
+    border-color:#fff;
+}
+#builder-bar li:not(.active):hover a span.steps-bg {
+    background: #c0c0c0;
+}
+#builder-bar li:not(.active):hover span.title:after{
+    border-color:transparent transparent transparent #c0c0c0;    
+}
+#builder-bar li.last-inactive:not(.active):hover span.title:after{
+    border-color:#c0c0c0;    
+}
+#builder-bar #builder-steps li:not(.active):hover a:before{
+    border-color:#c0c0c0 #c0c0c0 #c0c0c0 transparent; 
+}
+#builder-footer {
+    text-align: center;
+    color: #868686;
+    text-shadow: 1px 1px 0 #fff; 
+    padding: 20px 0 40px
+}
+#builder-palette {
+    display: block;
+    width: 190px;
+    padding: 0px 0px 20px 0px;
+    margin: 5px;
+    float: left;
+    position: fixed;
+    top: 73px;
+    z-index: 10;
+    background: #ECECEC;
+    left: -5px;
+    height: calc(100vh - 75px);
+    box-sizing: border-box;
+    border: 0;
+    border-right: 1px solid #aaa; 
+}
+#builder-palette legend {
+    display: none;
+}
+#builder-palette h3 {
+    background: #37C8A9;
+    color: white;
+    text-shadow: 0px 0px 1px black;
+    padding: 5px;
+    margin: 5px 5px;
+}
+#builder-palette ul {
+    list-style: none outside;
+    padding: 0px 5px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+#builder-palette-body {
+    height: 100%;
+    overflow: auto;
+}
+#builder-palette ul li {
+    padding-bottom: 2px;
+    widthx: 148px;
+    overflow: hidden;
+}
+#builder-palette ul li:hover {
+    opacity: 0.7;
+}
+#builder-palette label{
+    cursor: pointer;
+}
+#builder-palette-top {
+    background: url(../images/v3/builder/sidebar_bg.gif) 0 0 repeat-x;
+    width: 99%;
+    height: 13px;
+    display: none;
+    border-left: 1px solid #d6d6d6;
+    border-right: 1px solid #d6d6d6
+}
+#builder-palette-spacer {
+    width: 175px;
+}
+#builder-body #canvas, #builder-body #form-canvas {
+    box-shadow: 0 0 1px gray;
+    border-radius: 0px;
+}
+#form-canvas {
+    position: relative;
+    top: 16px;
+    left: 0px;
+    floatx: right;
+    display: block;
+    min-width: 700px;
+    border: none; //1px solid #D6D6D6;
+    padding: 5px;
+    margin: 5px;
+    background: #ffffff;
+}
+#form-canvas legend {
+    display: none;
+}
+.form-clear {
+    clear: both;
+}
+.ui-sortable-placeholder, .form-cell-highlight {
+    border: 1px dotted #111111;
+    visibility: visible !important;
+    height: 50px !important;
+    background: #969696;
+    color: white;
+    opacity: 0.7;
+}
+#builder-bar .controls {
+    display: inline-block;
+    position: relative;
+    background: #eee;
+    padding: 3px 5px;
+    border-radius: 7px;
+    float: right;
+    margin-right: 220px;
+}
+#builder-bar .controls a{
+    display: inline;
+    background: transparent;
+    padding:0;
+    margin:0;
+    cursor: pointer;
+}
+#builder-bar .controls a:not(.disabled):hover {
+    opacity: 0.7;
+}
+#builder-bar .controls a.disabled{
+    color: #888;
+    cursor: default;
+}
+#loading {
+    position: fixed;
+    top: 150px;
+    left: 35%;
+    z-index: 10000;
+    font-size: 48px;
+    color: whitesmoke;
+    background: #999;
+    padding: 20px;
+    opacity: 0.8;
+    border-radius: 10px;
+}
+
+#builder-message {
+    position: fixed;
+    top: 20px;
+    left: 450px;
+    background: yellow;
+    border-radius: 5px;
+    display: none;
+    opacity: 0.8;
+    z-index: 100000;
+    padding: 10px;
+}
+#tab-diffChecker h3 {
+    color: green;
+    font-size: 16px;
+    font-weight: 500;
+}
+li.jsondiffpatch-unchanged {
+    display: none;
+}
+#diff1, #diff2 {
+    border: solid 1px #ccc;
+    margin: 5px;
+    background: #fAfafA;
+    line-height: 18px;
+}
+#advancedToolsOverlay.quickOverlay {
+    z-index: 1300;
+}
+#advancedToolsFrame { 
+    position: fixed;
+    height: 100%;
+    width: 91%;
+    top: 0px;
+    left: 1%;
+    z-index: 1301;
+    border: none;
+    box-shadow: #555 0px 0px 2px 2px;
+    min-height: 500px;
+    min-width: 780px;
+    background: white;
+    overflow: hidden;
+}
+#advancedToolsFrame > h1{
+    font-size: 20px;
+    padding: 20px 20px 0;
+    color:#70B237;
+}
+.ui-widget-content.builder_tool_tabs_container{
+    border:0;
+}
+.ui-tabs .builder_tool_tabs.ui-tabs-nav {
+    display: block;
+    text-align: left;
+    border: 0;
+    display: block;
+    text-align: left;
+    margin: 0 25px 25px;
+    border: 0;
+    border-bottom: 2px solid #ddd;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.ui-tabs .builder_tool_tabs.ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: -2px;
+    padding-bottom: 2px;
+}
+.ui-tabs .builder_tool_tabs.ui-tabs-nav li{
+    position: relative;
+    border:0;
+}
+.builder_tool_tabs > li > a {
+    min-width: 150px;
+    padding: 14px 21px;
+    border-radius: 2px 2px 0 0;
+    font-size: 20px;
+    font-weight: normal;
+    text-align: center;
+    text-transform: uppercase;
+    background: #f0f0f0;
+    color: #757575;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+}
+.builder_tool_tabs > li.ui-tabs-active > a {
+    padding-top: 10px;
+    background: #fff;
+    box-shadow: inset 0 3px #8CC954;
+}
+.builder_tool_tabs > li.ui-tabs-active > a > i.fa {
+    color: #8CC954;
+}
+.builder_tool_tabs > li > a > i{
+    margin: 0 0.4em 0 0;
+}
+.builder_tool_tabs_container .tab-content {
+    display: none;
+    line-height: 25px;
+    padding: 0 25px;
+    background: #fff;
+    overflow: auto;
+    position: relative;
+}
+.builder_tool_tabs_container .tab-content h2 {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #70B237;
+}
+.builder_tool_tabs_container .tab-content .button {
+    background: rgb(39, 174, 96);
+    font-family: Arial;
+    text-decoration: none;
+    box-shadow: none;
+    border: none;
+    cursor: pointer;    
+    color: white;
+    border-radius: 4px;
+    margin-right: 2px;
+    padding: 5px 15px;
+}
+.builder_tool_tabs_container .tab-content .button:hover {
+    background: #35AC5B;
+    text-decoration: none;
+}
+.sticky-buttons {
+    position: fixed;
+    right: 10%;
+}
+.table_column_items {
+    list-style: none;
+    padding: 0;
+}
+.table_column_items li {
+    padding: 8px 5px;
+    min-width: 23%;
+    background: #f3f3f3;
+    margin: 0.5% 0.5% 0 0;
+    display: inline-block;
+}
+#main-action-help {
+    display: block;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 5px;
+    position: absolute;
+    left: 932px;
+}
+#builder-bar .highlight-button{
+    position: fixed;
+    right:0;
+}
+#builder-bar .highlight-button a, #builder-bar .highlight-button a:hover{
+    background: #009688;
+    padding-right: 0;
+}
+#builder-bar .highlight-button a:hover {
+    opacity: 0.8;
+}
+#builder-bar .highlight-button a span.steps-bg{
+    background: transparent !important;
+}
+#builder-bar .highlight-button a span.steps-bg span.title{
+    color: #fff;
+}
+#builder-bar .highlight-button a:before,
+#builder-bar .highlight-button span.title:after,
+#builder-bar .highlight-button span.title:before{
+    display: none !important;
+}
+@media (min-width: 1200px) {
+    #builder-bar .controls {top:15px; }
+}
+@media (max-width: 1199px) {
+    #builder-bar .controls {position: absolute; margin-right: 0px; right:15px; top: 43px;}
+}
+a.reload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 39px;
+    z-index: 9;
+    cursor: pointer;
+}
+body.adminBarShown #builder-bar .highlight-button {
+    right: 82px;
+}
+body.adminBarShown #builder-bar .controls {
+    margin-right: 280px;
+}

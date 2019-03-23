@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.joget</groupId>
+    <artifactId>wflow-install</artifactId>
+    <packaging>pom</packaging>
+    <version>6.0-SNAPSHOT</version>
+    <name>wflow-install</name>
+    <url>http://www.joget.org</url>
+    <properties>
+        <nsis.setup.nsi>target/setup.nsi</nsis.setup.nsi>
+        <nsis.output.file>../wflow-install/builds/joget-setup-${project.version}-${buildNumber}.exe</nsis.output.file>
+        <nsis.makensis.bin>makensis</nsis.makensis.bin>
+    </properties>
+    <scm>
+        <connection>scm:git:ssh://git@repo.joget.org/opt/git/jw-community</connection>
+        <developerConnection>scm:git:ssh://git@repo.joget.org/opt/git/jw-community</developerConnection>
+        <url>ssh://git@repo.joget.org/opt/git/jw-community</url>
+      <tag>HEAD</tag>
+    </scm>
+    <modules>
+        <module>../wflow-app</module>
+    </modules>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>README.txt</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.9.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <revisionOnScmFailure>0</revisionOnScmFailure>
+                    <shortRevisionLength>7</shortRevisionLength>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>cd</executable>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>ant</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <property file="src/main/resources/install.properties" />
+                                
+                                <delete dir="target" />
+                                <mkdir dir="target" />
+                                <mkdir dir="builds" />
+                                
+                                <copy todir="target/data">
+                                    <fileset dir="src/main/resources/data" />
+                                </copy>
+                                <copy file="src/main/resources/README.txt" todir="target" />
+                                <copy file="src/main/resources/CHANGES.txt" todir="target" />
+                                <copy file="src/main/resources/LICENSE.txt" todir="target" />
+                                <copy file="src/main/resources/NOTICE.txt" todir="target" />
+                                <copy file="src/main/resources/setup.nsi" todir="target" />
+                                <copy file="src/main/resources/joget_logo.bmp" todir="target" />
+                                <copy file="src/main/resources/joget.ico" todir="target" />
+                                <copy file="src/main/resources/joget_start.ico" todir="target" />
+                                <copy file="src/main/resources/joget_stop.ico" todir="target" />
+                                <copy file="src/main/resources/mariadb-start.bat" todir="target" />
+                                <copy file="src/main/resources/mariadb-stop.bat" todir="target" />
+                                <copy file="src/main/resources/tomcat8-run.bat" todir="target" />
+                                <copy file="src/main/resources/tomcat8-stop.bat" todir="target" />
+                                <copy file="src/main/resources/joget-start.bat" todir="target" />
+                                <copy file="src/main/resources/joget-stop.bat" todir="target" />
+                                <copy file="src/main/resources/build.xml" todir="target" />
+                                <copy file="src/main/resources/setup.sh" todir="target" />
+                                <copy file="src/main/resources/tomcat8.sh" todir="target" />
+
+                                <mkdir dir="downloads" />
+                                <get src="https://dev.joget.org/downloads/dependencies/apache-tomcat-${tomcat.version}.tar.gz" dest="downloads/apache-tomcat-${tomcat.version}.tar.gz" username="public" password="public" usetimestamp="true" />
+                                <get src="https://dev.joget.org/downloads/dependencies/apache-ant-${apache-ant.version}-bin.tar.gz" dest="downloads/apache-ant-${apache-ant.version}-bin.tar.gz" username="public" password="public" usetimestamp="true" />
+                                <get src="https://dev.joget.org/downloads/dependencies/mariadb-noinstall-${mariadb.version}-win32.zip" dest="downloads/mariadb-noinstall-${mariadb.version}-win32.zip" username="public" password="public" usetimestamp="true" />
+                                <get src="https://dev.joget.org/downloads/dependencies/jre${jre.version}.tar.gz" dest="downloads/jre${jre.version}.tar.gz" username="public" password="public" usetimestamp="true" />
+
+                                <untar compression="gzip" dest="target">
+                                    <fileset dir="downloads/">
+                                        <include name="apache-tomcat-${tomcat.version}.tar.gz" />
+                                        <include name="apache-ant-${apache-ant.version}-bin.tar.gz" />
+                                        <include name="jre${jre.version}.tar.gz" />
+                                    </fileset>
+                                </untar>
+
+                                <unzip dest="target">
+                                    <fileset dir="downloads/">
+                                        <include name="mariadb-noinstall-${mariadb.version}-win32.zip" />
+                                    </fileset>
+                                </unzip>
+
+                                <copy flatten="true" todir="target/apache-tomcat-${tomcat.version}/webapps">
+                                    <fileset dir="../wflow-consoleweb/">
+                                        <include name="*/jw.war" />
+                                    </fileset>
+                                </copy>
+                                <copy flatten="true" todir="target/apache-tomcat-${tomcat.version}/webapps">
+                                    <fileset dir="../wflow-designerweb/">
+                                        <include name="*/jwdesigner.war" />
+                                    </fileset>
+                                </copy>
+                                <copy tofile="target/apache-tomcat-${tomcat.version}/conf/server.xml" file="src/main/resources/server.xml" overwrite="true" />
+                                <copy tofile="target/apache-tomcat-${tomcat.version}/conf/context.xml" file="src/main/resources/context.xml" overwrite="true" />
+                                <copy todir="target/mariadb-${mariadb.version}-win32/" file="src/main/resources/my.ini" />
+                                <copy todir="target/mariadb-${mariadb.version}-win32/data/" overwrite="true">
+                                    <fileset dir="src/main/resources/mariadb-data" />
+                                </copy>
+
+                                <echo file="target/VERSION.txt">${project.version} - build ${buildNumber}</echo>
+
+                                <copy todir="target/wflow">
+                                    <fileset dir="src/main/resources/wflow-home" />
+                                </copy>
+
+                                <zip destfile="builds/joget-windows-${project.version}-${buildNumber}.zip">
+                                    <fileset dir="target">
+                                        <include name="apache-ant-${apache-ant.version}/**" />
+                                        <include name="apache-tomcat-${tomcat.version}/**" />
+                                        <include name="jre${jre.version}/**" />
+                                        <include name="mariadb-${mariadb.version}-win32/**" />
+                                        <include name="data/**" />
+                                        <include name="docs/**" />
+                                        <include name="wflow/**" />
+                                        <include name="build.xml" />
+                                        <include name="joget-start.bat" />
+                                        <include name="joget-stop.bat" />
+                                        <include name="LICENSE.txt" />
+                                        <include name="NOTICE.txt" />
+                                        <include name="README.txt" />
+                                        <include name="CHANGES.txt" />
+                                        <include name="tomcat8-run.bat" />
+                                        <include name="tomcat8-stop.bat" />
+                                        <include name="mariadb-start.bat" />
+                                        <include name="mariadb-stop.bat" />
+                                        <include name="VERSION.txt" />
+                                    </fileset>
+                                </zip>
+
+                                <tar compression="gzip" destfile="builds/joget-linux-${project.version}-${buildNumber}.tar.gz">
+                                    <tarfileset dir="target" prefix="joget-linux-${project.version}">
+                                        <include name="apache-ant-${apache-ant.version}/**" />
+                                        <include name="apache-tomcat-${tomcat.version}/**" />
+                                        <include name="data/**" />
+                                        <include name="docs/**" />
+                                        <include name="wflow/**" />
+                                        <exclude name="wflow/app_datasource.properties" />
+                                        <include name="build.xml" />
+                                        <include name="LICENSE.txt" />
+                                        <include name="NOTICE.txt" />
+                                        <include name="README.txt" />
+                                        <include name="CHANGES.txt" />
+                                        <include name="setup.sh" />
+                                        <include name="tomcat8.sh" />
+                                        <include name="VERSION.txt" />
+                                    </tarfileset>
+                                    <tarfileset dir="target" filemode="755" prefix="joget-linux-${project.version}">
+                                        <include name="apache-ant-${apache-ant.version}/bin/ant" />
+                                        <include name="apache-tomcat-${tomcat.version}/bin/*.sh" />
+                                        <include name="*.sh" />
+                                    </tarfileset>
+                                </tar>
+
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nsis-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>generate-project</goal>  
+                            <goal>compile</goal>           
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <distributionManagement>
+        <repository>
+            <id>internal</id>
+            <url>dav:http://dev.joget.org/archiva/repository/internal/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://dev.joget.org/archiva/repository/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>internal</id>
+            <url>http://dev.joget.org/archiva/repository/internal</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>
+
