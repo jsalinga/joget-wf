@@ -1,6 +1,9 @@
 package org.joget.apps.app.controller;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.blockchain.NetworkType;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -930,7 +933,10 @@ public class ConsoleWebController {
                         }
                         user.setRoles(roles);
                     }
-
+                    Account account = Account.createFromPrivateKey("74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4",NetworkType.TEST_NET );
+                    user.setAddress(account.getAddress().plain().toString());
+                    user.setPublicKey(account.getPublicKey());
+                    user.setPrivateKey(account.getPrivateKey());
                     invalid = !userDao.addUser(user);
 
                     if (us != null && !invalid) {
