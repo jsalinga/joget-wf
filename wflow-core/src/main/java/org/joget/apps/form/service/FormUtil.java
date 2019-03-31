@@ -111,6 +111,8 @@ public class FormUtil implements ApplicationContextAware {
     public static final String PROPERTY_TEMP_REQUEST_PARAMS = "_tempRequestParamsMap";
     public static final String PROPERTY_POST_PROCESSOR = "postProcessor";
     public static final String PROPERTY_POST_PROCESSOR_RUN_ON = "postProcessorRunOn";
+    public static final String PROPERTY_DATA_HASH = "dataHash";
+    public static final String PROPERTY_TRANSACTION_HASH = "transactionHash";
     public static final String FORM_META_ORIGINAL_ID = "_FORM_META_ORIGINAL_ID";
     public static final String FORM_BUILDER_ACTIVE = "formBuilderActive";
     public static final String FORM_ERRORS_PARAM = "_FORM_ERRORS";

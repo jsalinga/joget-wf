@@ -156,4 +156,27 @@ public class DefaultFormBinder extends FormBinder implements FormLoadBinder, For
         }
         return form;
     }
+
+	public FormRowSet store(Element element, FormRowSet rows, FormData formData, String blockchainTransactionHash,
+			String blockchainDataHash) {
+
+        if (rows != null && !rows.isEmpty()) {
+            // find root form
+            Form form = FormUtil.findRootForm(element);
+            form = findFormForStoreBinder(form);
+            if (form == null) {
+                form = FormUtil.findRootForm(element);
+            }
+            if (form == null) {
+                return rows;
+            }
+
+            // store form data
+            AppService appService = (AppService) FormUtil.getApplicationContext().getBean("appService");
+            String primaryKeyValue = form.getPrimaryKeyValue(formData);
+            rows = appService.storeFormData(form, rows, primaryKeyValue);
+        }
+        return rows;
+    
+	}
 }

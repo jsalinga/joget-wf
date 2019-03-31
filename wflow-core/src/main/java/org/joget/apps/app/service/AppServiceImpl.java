@@ -27,6 +27,7 @@ import java.util.zip.ZipOutputStream;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.map.ListOrderedMap;
+import org.apache.commons.lang.StringUtils;
 import org.joget.apps.app.dao.AppDefinitionDao;
 import org.joget.apps.app.dao.AppResourceDao;
 import org.joget.apps.app.dao.DatalistDefinitionDao;
@@ -90,12 +91,23 @@ import org.joget.workflow.model.service.WorkflowManager;
 import org.joget.workflow.model.service.WorkflowUserManager;
 import org.joget.workflow.shark.model.dao.WorkflowAssignmentDao;
 import org.joget.workflow.util.WorkflowUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.proximax.connection.BlockchainNetworkConnection;
+import io.proximax.connection.ConnectionConfig;
+import io.proximax.connection.HttpProtocol;
+import io.proximax.connection.IpfsConnection;
+import io.proximax.download.DownloadParameter;
+import io.proximax.download.DownloadResult;
+import io.proximax.download.Downloader;
+import io.proximax.model.BlockchainNetworkType;
 
 /**
  * Implementation of AppService interface
@@ -1432,7 +1444,34 @@ public class AppServiceImpl implements AppService {
             results.setMultiRow(false);
             if (primaryKeyValue != null && primaryKeyValue.trim().length() > 0) {
                 FormRow row = (transactional) ? formDataDao.load(formDefId, tableName, primaryKeyValue) : formDataDao.loadWithoutTransaction(formDefId, tableName, primaryKeyValue);
-                if (row != null) {
+               
+                if(null != row && !StringUtils.isBlank(row.getProperty("resultValue"))) {
+                	 BlockchainNetworkConnection blockChain = new BlockchainNetworkConnection(
+                             BlockchainNetworkType.TEST_NET, "bctestnet1.xpxsirius.io", 3000, HttpProtocol.HTTP);
+                     IpfsConnection connection = new IpfsConnection("127.0.0.1", 5001);
+                     ConnectionConfig config = ConnectionConfig.createWithLocalIpfsConnection(blockChain, connection);
+                     
+             		String transactionHash = row.getProperty("resultValue");
+             		DownloadParameter param = DownloadParameter.create(transactionHash).build();
+             		Downloader downloader = new Downloader(config);
+             		DownloadResult result = downloader.download(param);
+             		String data = result.getData().getContentAsString("UTF-8");
+             		try {
+						JSONObject object = new JSONObject(data);
+						Iterator<String> iterate = object.keys();
+						while(iterate.hasNext()) {
+							String key = iterate.next();
+							if(!StringUtils.isBlank(object.getString(key))) {
+								row.put(key, object.getString(key));
+							}
+							
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+                if (row != null) {	
                     results.add(row);
                 }
                 LogUtil.debug(getClass().getName(), "  -- Loaded form data row [" + primaryKeyValue + "] for form [" + formDefId + "] from table [" + tableName + "]");
@@ -1542,6 +1581,9 @@ public class AppServiceImpl implements AppService {
                     createdBy = workflowUserManager.getCurrentUsername();
                     createdByName = name;
                 }
+                row.setBlockchainDataHash(rows.getBlockchainDataHash());
+                row.setBlockchainTransactionHash(rows.getBlockchainTransactionHash());
+                
                 row.setDateCreated(dateCreated);
                 row.setCreatedBy(createdBy);
                 row.setCreatedByName(createdByName);

@@ -17,17 +17,39 @@ public class FormData {
     private String primaryKeyValue;
     private String processId;
     private String activityId;
+    private String blockchainTransactionHash;
+    private String blockchainDataHash;
     protected Map<FormLoadBinder, FormRowSet> loadBinderMap = new HashMap<FormLoadBinder, FormRowSet>();
     protected Map<FormLoadBinder, FormRowSet> optionsBinderMap = new HashMap<FormLoadBinder, FormRowSet>();
     protected Map<String, String> previousErrorMap = new ListOrderedMap();
-    protected Map<String, String> fileErrorMap = new ListOrderedMap();
+	protected Map<String, String> fileErrorMap = new ListOrderedMap();
     protected Map<String, String> errorMap = new ListOrderedMap();
     protected Map<String, String[]> requestParamMap = new HashMap<String, String[]>();
     protected Map<FormStoreBinder, FormRowSet> binderRowSetMap = new ListOrderedMap();
     protected Map<String, String> resultMap = new ListOrderedMap();
     protected Boolean stay = false;
+    
+    public Map<String, String[]> getRequestParamMap() {
+		return requestParamMap;
+	}
+    
+    public String getBlockchainTransactionHash() {
+		return blockchainTransactionHash;
+	}
 
-    public Boolean getStay() {
+	public void setBlockchainTransactionHash(String blockchainTransactionHash) {
+		this.blockchainTransactionHash = blockchainTransactionHash;
+	}
+
+	public String getBlockchainDataHash() {
+		return blockchainDataHash;
+	}
+
+	public void setBlockchainDataHash(String blockchainDataHash) {
+		this.blockchainDataHash = blockchainDataHash;
+	}
+
+	public Boolean getStay() {
         return stay;
     }
 

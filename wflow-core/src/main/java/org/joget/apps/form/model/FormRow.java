@@ -135,6 +135,32 @@ public class FormRow extends Properties {
         }
     }
     
+    public String getBlockchainDataHash() {
+    	 return getProperty(FormUtil.PROPERTY_DATA_HASH);
+    }
+    
+    public void setBlockchainDataHash(String dataHash) {
+        if (dataHash != null) {
+            put(FormUtil.PROPERTY_DATA_HASH, dataHash);
+        } else {
+            remove(FormUtil.PROPERTY_DATA_HASH);
+        }
+    }
+    
+    
+    public String getBlockchainTransactionHash() {
+   	 return getProperty(FormUtil.PROPERTY_TRANSACTION_HASH);
+   }
+   
+   public void setBlockchainTransactionHash(String TransactionHash) {
+       if (TransactionHash != null) {
+           put(FormUtil.PROPERTY_TRANSACTION_HASH, TransactionHash);
+       } else {
+           remove(FormUtil.PROPERTY_TRANSACTION_HASH);
+       }
+   }
+    
+    
     /**
      * User name who created the row 
      * @return

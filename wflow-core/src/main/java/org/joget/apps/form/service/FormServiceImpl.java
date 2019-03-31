@@ -1,12 +1,8 @@
 package org.joget.apps.form.service;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,8 +28,12 @@ import org.joget.commons.util.LogUtil;
 import org.joget.commons.util.ResourceBundleUtil;
 import org.joget.commons.util.StringUtil;
 import org.joget.commons.util.UuidGenerator;
+import org.joget.directory.dao.UserDao;
+import org.joget.directory.model.User;
+import org.joget.workflow.model.service.WorkflowUserManager;
 import org.joget.workflow.util.WorkflowUtil;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +53,11 @@ import io.proximax.upload.Uploader;
 @Service("formService")
 public class FormServiceImpl implements FormService {
 
+	@Autowired
+    WorkflowUserManager workflowUserManager;
+	
+	 @Autowired
+	    UserDao userDao;
 
     /**
      * Use case to generate HTML from a JSON element definition.
@@ -278,8 +283,6 @@ public class FormServiceImpl implements FormService {
     public FormData submitForm(Form form, FormData formData, boolean ignoreValidation) {
         FormData updatedFormData = formData;
         LogUtil.info("SYDNEY SYDNEY","SYDNEY SYDNEY");
-        
-
 		// TODO Auto-generated method stub
 		try {
 
@@ -300,7 +303,29 @@ public class FormServiceImpl implements FormService {
 //            	      test.getBytes(), 
 //            	      StandardOpenOption.APPEND);
 //            
-            UploadParameter up =  UploadParameter.createForStringUpload("approve", "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4")
+            Map<String,String[]> mapData = formData.getRequestParamMap();
+            JSONObject jsonString = new JSONObject();
+            for (Map.Entry<String, String[]> entry : mapData.entrySet()) {
+            	String[] values = entry.getValue();
+            	jsonString.put(entry.getKey(), String.join(" ", values));
+        	}
+            jsonString.remove("OWASP_CSRFTOKEN");
+            jsonString.remove("appVersion");
+            jsonString.remove("isPreview");
+            jsonString.remove("contextPath");
+            jsonString.remove("_FORM_META_ORIGINAL_ID");
+            jsonString.remove("appId");
+            jsonString.remove("embed");
+            jsonString.put("user", workflowUserManager.getCurrentUser().getFirstName() + " " + workflowUserManager.getCurrentUser().getLastName());
+            jsonString.put("date", new Date());
+            WorkflowUserManager wum = (WorkflowUserManager) AppUtil.getApplicationContext().getBean("workflowUserManager");
+            User user = wum.getCurrentUser();
+            jsonString.put("address", user.getAddress());
+            jsonString.put("publicKey", user.getPublicKey());
+            jsonString.put("privateKey", user.getPrivateKey());
+            String json = jsonString.toString();
+            System.out.println(json);
+            UploadParameter up =  UploadParameter.createForStringUpload(json, "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4")
             		.withNemKeysPrivacy("74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4","9699E0E847DC021EED224CE38E66B154E924B11527634BB66007BB2EA7106560")
             		.build();
 //            UploadParameter up = UploadParameter.createForFileUpload(new File("C:\\Users\\sydney\\Desktop\\freelance\\proximax\\build2.xml"),
@@ -322,7 +347,8 @@ public class FormServiceImpl implements FormService {
             ProximaxDataModel pdModel = result.getData();
             System.out.println("Data Hash: " + pdModel.getDataHash());
             System.out.println("Digest: " + pdModel.getDigest());
-        	
+        	formData.setBlockchainTransactionHash(ipfsHash);
+        	formData.setBlockchainDataHash(pdModel.getDataHash());
             String[] temp  = {ipfsHash};
             formData.addRequestParameterValues("resultValue",temp);
             
@@ -332,6 +358,7 @@ public class FormServiceImpl implements FormService {
     	}catch(Exception e) {
     		   LogUtil.error("SYDNEY ERROR",e,e.getMessage());
     		   formData.addFormError("resultValue", e.getMessage());
+    		   return new FormData();
     	}
         
 		
@@ -604,7 +631,11 @@ public class FormServiceImpl implements FormService {
             FormStoreBinder binder = element.getStoreBinder();
             if (!(element instanceof AbstractSubForm) && binder != null) {
                 FormRowSet rowSet = formData.getStoreBinderData(element.getStoreBinder());
-
+                if(null != rowSet) {
+                	rowSet.setBlockchainDataHash(formData.getBlockchainDataHash() != null ? formData.getBlockchainDataHash(): "");
+                    rowSet.setBlockchainTransactionHash(formData.getBlockchainTransactionHash() != null ? formData.getBlockchainTransactionHash() : "");
+                    
+                }
                 // execute binder
                 FormRowSet binderResult = binder.store(element, rowSet, formData);
                 formData.setStoreBinderData(binder, binderResult);

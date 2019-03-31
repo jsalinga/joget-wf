@@ -223,6 +223,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
 
     @Override
     public void addAppActivityForm(String appId, Long appVersion, PackageActivityForm activityForm) {
+    	
         PackageDefinition packageDef = loadAppPackageDefinition(appId, appVersion);
         if (packageDef == null) {
             AppDefinition appDef = getAppDefinitionDao().loadVersion(appId, appVersion);

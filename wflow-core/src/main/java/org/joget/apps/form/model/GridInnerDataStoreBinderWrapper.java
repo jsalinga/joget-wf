@@ -215,4 +215,5 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
     public void setElement(Element element) {
         ((FormBinder)storeBinder).setElement(element);
     }
+
 }
