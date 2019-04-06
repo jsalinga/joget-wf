@@ -1,6 +1,9 @@
 package org.joget.apps.form.service;
 
+import java.math.BigInteger;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -12,8 +15,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joget.apps.app.service.AppUtil;
 import org.joget.apps.form.model.AbstractSubForm;
 import org.joget.apps.form.model.Element;
@@ -38,6 +43,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.nem.sdk.infrastructure.TransactionHttp;
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.mosaic.Mosaic;
+import io.nem.sdk.model.mosaic.MosaicId;
+import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.PlainMessage;
+import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.TransferTransaction;
 import io.proximax.connection.BlockchainNetworkConnection;
 import io.proximax.connection.ConnectionConfig;
 import io.proximax.connection.HttpProtocol;
@@ -282,21 +297,31 @@ public class FormServiceImpl implements FormService {
     @Transactional
     public FormData submitForm(Form form, FormData formData, boolean ignoreValidation) {
         FormData updatedFormData = formData;
+        Account account2 = null;
         LogUtil.info("SYDNEY SYDNEY","SYDNEY SYDNEY");
 		// TODO Auto-generated method stub
+        
+        HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
+        HttpSession session = request.getSession();
+        String privateKey = (String) session.getAttribute("privateKey");
+        if(StringUtils.isBlank(privateKey)) {
+        	String tempKey = formData.getRequestParameter("keyOne");
+        	if(!StringUtils.isBlank(tempKey)) {
+        		session.setAttribute("privateKey", tempKey);
+        	}
+        	
+        }
+        if(!StringUtils.isBlank(privateKey)) {
+        	account2 = Account.createFromPrivateKey(privateKey, NetworkType.TEST_NET);
+        }
+        
+        
 		try {
 
-    		System.out.print("\nConnecting to Blockchain Network bctestnet2.xpxsirius.io:3000...");
             BlockchainNetworkConnection blockChain = new BlockchainNetworkConnection(
                     BlockchainNetworkType.TEST_NET, "bctestnet2.xpxsirius.io", 3000, HttpProtocol.HTTP);
-            System.out.println("done!");
-            System.out.print("\nConnecting to IPFS 127.0.0.1:5001...");
             IpfsConnection connection = new IpfsConnection("127.0.0.1", 5001);
-            System.out.println("done!");
-            System.out.print("\nExecuting \"ConnectionConfig.createWithLocalIpfsConnection(blockChain, connection);\"...");
             ConnectionConfig config = ConnectionConfig.createWithLocalIpfsConnection(blockChain, connection);
-            System.out.println("done!");
-            System.out.print("\nExecuting \"UploadParameter.createForFileUpload(file, privatekey)\"");
 //            String req =  updatedFormData.getRequestParameter("sydneytextfield");
 //            Files.write(
 //            	      Paths.get("C:\\Users\\sydney\\Desktop\\freelance\\proximax\\build2.xml"), 
@@ -320,9 +345,15 @@ public class FormServiceImpl implements FormService {
             jsonString.put("date", new Date());
             WorkflowUserManager wum = (WorkflowUserManager) AppUtil.getApplicationContext().getBean("workflowUserManager");
             User user = wum.getCurrentUser();
-            jsonString.put("address", user.getAddress());
-            jsonString.put("publicKey", user.getPublicKey());
-            jsonString.put("privateKey", user.getPrivateKey());
+            if(null != account2) {
+            	   jsonString.put("address", account2.getAddress().plain());
+                   jsonString.put("publicKey", account2.getPublicKey());
+            }else {
+         	   jsonString.put("address", user.getAddress());
+               jsonString.put("publicKey", user.getPublicKey());
+        
+            }
+         
             String json = jsonString.toString();
             System.out.println(json);
             UploadParameter up =  UploadParameter.createForStringUpload(json, "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4")
@@ -336,8 +367,15 @@ public class FormServiceImpl implements FormService {
 //                    .build();
             System.out.println("done!");
             System.out.print("\nPerforming uploads....");
-            UploadParameterBuilder builder = new UploadParameterBuilder(up.getData(),
-                    "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4");
+            UploadParameterBuilder builder = null;
+            if(null != account2) {
+            	  builder = new UploadParameterBuilder(up.getData(),
+                 		account2.getPrivateKey());
+            }else {
+            	builder = new UploadParameterBuilder(up.getData(),
+                 		user.getPrivateKey());
+            }
+           
             UploadParameter uploadParameter = builder.build();
             Uploader upload = new Uploader(config);
             UploadResult result = upload.upload(uploadParameter);
@@ -354,11 +392,36 @@ public class FormServiceImpl implements FormService {
             
             String[] temp2  = {pdModel.getDataHash()};
             formData.addRequestParameterValues("resultValue2",temp2);
+            final String recipientAddress;
+			if (null != account2) {
+				 recipientAddress = account2.getAddress().plain();
+			} else {
+				recipientAddress = user.getAddress();
+			}
+            
+            
+            MosaicId xpxMosaic = new MosaicId("prx:xpx");
+            final TransferTransaction transferTransaction = TransferTransaction.create(
+                Deadline.create(1, ChronoUnit.HOURS),
+                Address.createFromRawAddress(recipientAddress),
+                Arrays.asList(
+                        new Mosaic(new MosaicId("prx:xpx"), BigInteger.valueOf(100000))
+                ),
+                PlainMessage.create("prx:xpx"),
+                NetworkType.TEST_NET
+            );
+            
+            
+            final Account account = Account.createFromPrivateKey("65F5A572ADD524CA56E2D6210F1A8BE3A7C2340D4F4F6E4BFE3D36797B37DF2F", NetworkType.TEST_NET);
+            final SignedTransaction signedTransaction = account.sign(transferTransaction);
+            final TransactionHttp transactionHttp = new TransactionHttp("http://bctestnet1.xpxsirius.io:3000");
+
+            transactionHttp.announce(signedTransaction);
+            
         	
     	}catch(Exception e) {
     		   LogUtil.error("SYDNEY ERROR",e,e.getMessage());
     		   formData.addFormError("resultValue", e.getMessage());
-    		   return new FormData();
     	}
         
 		

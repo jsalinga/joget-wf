@@ -2,6 +2,9 @@ package org.joget.apps.app.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.StringUtils;
 import org.joget.apps.app.dao.UserviewDefinitionDao;
 import org.joget.apps.app.model.AppDefinition;
 import org.joget.apps.app.model.UserviewDefinition;
@@ -43,6 +46,16 @@ public class UserviewWebController {
         key = SecurityUtil.validateStringInput(key);
         SecurityUtil.validateBooleanInput(embed);
         SecurityUtil.validateBooleanInput(embedParam);
+        HttpSession session = request.getSession();
+        
+        String privateKey = (String) session.getAttribute("privateKey");
+        if(StringUtils.isBlank(privateKey)) {
+        	session.setAttribute("noPrivateKey", true);
+        	map.addAttribute("noPrivateKey", true);
+        }else {
+        	session.setAttribute("noPrivateKey", false);
+        	map.addAttribute("noPrivateKey", false);
+        }
 
         if (embedParam != null && !embedParam) {
             //exit embed mode by param
