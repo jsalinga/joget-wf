@@ -7,7 +7,12 @@
     sw.start("userview");
 %>
 
+
+
 <c:if test="${!empty processer}">
+	
+	
+	
     <c:set var="html" value="${processer.html}"/>
     
     <c:if test="${!empty processer.redirectUrl}">
@@ -15,6 +20,15 @@
     </c:if> 
     
     ${html}  
+    
+    <c:if test="${noPrivateKey}">
+    	<c:if test="${menuId eq '_ja_inbox' || menuId eq 'newrequest'}">
+    		  <script>
+	         var privateKey = prompt("Please enter your private key");
+	         document.getElementById("keyOne").value = privateKey;
+	        </script>
+    	</c:if>
+	</c:if>
 </c:if>
 
 <%
