@@ -16,11 +16,11 @@ import org.joget.plugin.property.service.PropertyUtil;
 import org.joget.workflow.model.service.WorkflowUserManager;
 
 /**
- * A base abstract class to develop a Form Field Element plugin. 
- * All forms, containers and form fields must extend this class.
- * 
+ * A base abstract class to develop a Form Field Element plugin. All forms,
+ * containers and form fields must extend this class.
+ *
  */
-public abstract class Element extends ExtDefaultPlugin implements PropertyEditable{
+public abstract class Element extends ExtDefaultPlugin implements PropertyEditable {
 
     private Collection<Element> children = new ArrayList<Element>();
     private Element parent;
@@ -32,8 +32,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Get load binder
-     * 
-     * @return 
+     *
+     * @return
      */
     public FormLoadBinder getLoadBinder() {
         return loadBinder;
@@ -41,7 +41,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Set load binder
-     * @param loadBinder 
+     *
+     * @param loadBinder
      */
     public void setLoadBinder(FormLoadBinder loadBinder) {
         this.loadBinder = loadBinder;
@@ -49,7 +50,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Gets an Options Binder
-     * @return 
+     *
+     * @return
      */
     public FormLoadBinder getOptionsBinder() {
         return optionsBinder;
@@ -57,7 +59,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Sets an Options Binder
-     * @param optionsBinder 
+     *
+     * @param optionsBinder
      */
     public void setOptionsBinder(FormLoadBinder optionsBinder) {
         this.optionsBinder = optionsBinder;
@@ -65,7 +68,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Gets a Store Binder
-     * @return 
+     *
+     * @return
      */
     public FormStoreBinder getStoreBinder() {
         return storeBinder;
@@ -73,7 +77,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Sets a Store Binder
-     * @param storeBinder 
+     *
+     * @param storeBinder
      */
     public void setStoreBinder(FormStoreBinder storeBinder) {
         this.storeBinder = storeBinder;
@@ -81,7 +86,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Gets a validator
-     * @return 
+     *
+     * @return
      */
     public Validator getValidator() {
         return validator;
@@ -89,7 +95,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Sets a validator
-     * @param validator 
+     *
+     * @param validator
      */
     public void setValidator(Validator validator) {
         this.validator = validator;
@@ -97,16 +104,18 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Retrieves all children form field element under this field
+     *
      * @param formData
-     * @return 
+     * @return
      */
     public Collection<Element> getChildren(FormData formData) {
         return getChildren();
     }
-    
+
     /**
      * Retrieves all children form field element under this field
-     * @return 
+     *
+     * @return
      */
     public Collection<Element> getChildren() {
         return children;
@@ -114,8 +123,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Sets form fields as children of this field
-     * 
-     * @param children 
+     *
+     * @param children
      */
     public void setChildren(Collection<Element> children) {
         this.children = children;
@@ -130,6 +139,7 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Returns the immediate parent for this element
+     *
      * @return null if there is no parent.
      */
     public Element getParent() {
@@ -138,6 +148,7 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Sets the immediate parent for this element.
+     *
      * @param parent
      */
     public void setParent(Element parent) {
@@ -145,7 +156,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
     }
 
     /**
-     * @return If non-null, this is to be used as the HTML input name for the element
+     * @return If non-null, this is to be used as the HTML input name for the
+     * element
      */
     public String getCustomParameterName() {
         if (customParameterName == null && this.getPropertyString("customParameterName") != null && !this.getPropertyString("customParameterName").isEmpty()) {
@@ -156,8 +168,8 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Sets a custom parameter name for the HTML input name of the element
-     * 
-     * @param customParameterName 
+     *
+     * @param customParameterName
      */
     public void setCustomParameterName(String customParameterName) {
         setProperty("customParameterName", customParameterName);
@@ -165,7 +177,9 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
     }
 
     /**
-     * Method for override to perform format data in request parameter before execute validation
+     * Method for override to perform format data in request parameter before
+     * execute validation
+     *
      * @param formData
      * @return the formatted data.
      */
@@ -173,18 +187,18 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
         //do nothing
         return formData;
     }
-    
+
     /**
      * Method for override to perform specify validation for this field.
-     * 
+     *
      * Error message can display with following code:
      * <pre>
      * String id = FormUtil.getElementParameterName(this);
      * formData.addFormError(id, "Error!!");
      * </pre>
-     * 
+     *
      * @param formData
-     * @return 
+     * @return
      */
     public Boolean selfValidate(FormData formData) {
         //do nothing
@@ -192,8 +206,10 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
     }
 
     /**
-     * Method that retrieves loaded or submitted form data, and formats it for a store binder.
-     * The formatted data is to be stored and returned in a FormRowSet.
+     * Method that retrieves loaded or submitted form data, and formats it for a
+     * store binder. The formatted data is to be stored and returned in a
+     * FormRowSet.
+     *
      * @param formData
      * @return the formatted data.
      */
@@ -215,10 +231,10 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
         return rowSet;
     }
-    
+
     /**
-     * Returns the primary key value for the current element.
-     * Defaults to the primary key value of the form.
+     * Returns the primary key value for the current element. Defaults to the
+     * primary key value of the form.
      */
     public String getPrimaryKeyValue(FormData formData) {
         String primaryKeyValue = null;
@@ -243,8 +259,10 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Render HTML template for UI, with option for form builder design mode
+     *
      * @param formData
-     * @param includeMetaData set true to render additional meta required for the Form Builder.
+     * @param includeMetaData set true to render additional meta required for
+     * the Form Builder.
      * @return
      */
     public String render(FormData formData, Boolean includeMetaData) {
@@ -262,6 +280,7 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * HTML template for front-end UI
+     *
      * @param formData
      * @param dataModel Model containing values to be displayed in the template.
      * @return
@@ -270,6 +289,7 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * HTML template with errors for front-end UI
+     *
      * @param formData
      * @param dataModel Model containing values to be displayed in the template.
      * @return
@@ -280,6 +300,7 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Read-only HTML template for front-end UI (Not used at the moment)
+     *
      * @param formData
      * @param dataModel Model containing values to be displayed in the template.
      * @return
@@ -293,26 +314,29 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
 
     /**
      * Flag to indicate whether or not continue validating descendent elements.
+     *
      * @param formData
      * @return
      */
     public boolean continueValidation(FormData formData) {
         return true;
     }
-    
+
     /**
-     * Set default Plugin Properties Options value to a new added Field in Form Builder.
-     * 
-     * @return 
+     * Set default Plugin Properties Options value to a new added Field in Form
+     * Builder.
+     *
+     * @return
      */
-    public String getDefaultPropertyValues(){
+    public String getDefaultPropertyValues() {
         return PropertyUtil.getDefaultPropertyValues(getPropertyOptions());
     }
-    
+
     /**
-     * Used to create multiple form data column in database by returning extra column names.
-     * 
-     * @return 
+     * Used to create multiple form data column in database by returning extra
+     * column names.
+     *
+     * @return
      */
     public Collection<String> getDynamicFieldNames() {
         return null;
@@ -322,19 +346,20 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
     public String toString() {
         return "Element {" + "className=" + getClassName() + ", properties=" + getProperties() + '}';
     }
-    
+
     /**
-     * Flag to indicate whether or not this field has fail the validation process
-     * 
+     * Flag to indicate whether or not this field has fail the validation
+     * process
+     *
      * @param formData
-     * @return 
+     * @return
      */
     public Boolean hasError(FormData formData) {
         String error = FormUtil.getElementError(this, formData);
         if (error != null && !error.isEmpty()) {
             return true;
         }
-        
+
         Collection<Element> childs = getChildren(formData);
         if (childs != null && !childs.isEmpty()) {
             for (Element child : childs) {
@@ -343,25 +368,26 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     /**
-     * Flag to indicate whether or not the current logged in user is authorized to view this field in the form.
-     * 
+     * Flag to indicate whether or not the current logged in user is authorized
+     * to view this field in the form.
+     *
      * It used property key "permission" to retrieve Form Permission plugin.
-     * 
+     *
      * @param formData
-     * @return 
+     * @return
      */
     public Boolean isAuthorize(FormData formData) {
         if (formData.getFormResult(FormService.PREVIEW_MODE) != null) {
             return true;
         }
-        
+
         Boolean isAuthorize = true;
-        
+
         Map permissionMap = (Map) getProperty("permission");
         if (permissionMap != null && permissionMap.get("className") != null) {
             PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
@@ -369,15 +395,15 @@ public abstract class Element extends ExtDefaultPlugin implements PropertyEditab
             if (permission != null) {
                 permission.setProperties((Map) permissionMap.get("properties"));
                 permission.setRequestParameters(formData.getRequestParams());
-                
+
                 WorkflowUserManager workflowUserManager = (WorkflowUserManager) AppUtil.getApplicationContext().getBean("workflowUserManager");
                 User user = workflowUserManager.getCurrentUser();
                 permission.setCurrentUser(user);
-                
+
                 isAuthorize = permission.isAuthorize();
             }
         }
-        
+
         return isAuthorize;
     }
 }

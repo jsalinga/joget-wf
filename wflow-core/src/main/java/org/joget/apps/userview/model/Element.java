@@ -18,6 +18,7 @@ public abstract class Element implements PropertyEditable {
 
     /**
      * Convenience method to get a property value
+     *
      * @param property
      * @return
      */
@@ -28,6 +29,7 @@ public abstract class Element implements PropertyEditable {
 
     /**
      * Convenience method to get a property String value
+     *
      * @param property
      * @return Empty string instead of null.
      */
@@ -38,6 +40,7 @@ public abstract class Element implements PropertyEditable {
 
     /**
      * Convenience method to set a property value
+     *
      * @param property
      * @param value
      */
@@ -47,7 +50,7 @@ public abstract class Element implements PropertyEditable {
         }
         properties.put(property, value);
     }
-    
+
     public String getLabel() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -29,6 +29,7 @@ public class DataListService {
 
     /**
      * Create a DataList object from JSON definition
+     *
      * @param json
      * @return
      */
@@ -41,6 +42,7 @@ public class DataListService {
 
     /**
      * Retrieve a binder plugin by ID. For now the ID is the class name
+     *
      * @param id
      * @return
      */
@@ -57,6 +59,7 @@ public class DataListService {
 
     /**
      * Retrieve an action plugin by class name.
+     *
      * @param className
      * @return
      */
@@ -71,7 +74,9 @@ public class DataListService {
     }
 
     /**
-     * Returns an array of available binder plugins. For now, ID is the fully qualified class name. 
+     * Returns an array of available binder plugins. For now, ID is the fully
+     * qualified class name.
+     *
      * @return
      */
     public DataListBinder[] getAvailableBinders() {
@@ -87,7 +92,9 @@ public class DataListService {
     }
 
     /**
-     * Returns an array of available action plugins. For now, ID is the fully qualified class name.
+     * Returns an array of available action plugins. For now, ID is the fully
+     * qualified class name.
+     *
      * @return
      */
     public DataListAction[] getAvailableActions() {
@@ -103,7 +110,9 @@ public class DataListService {
     }
 
     /**
-     * Returns an array of available formatter plugins. For now, ID is the fully qualified class name.
+     * Returns an array of available formatter plugins. For now, ID is the fully
+     * qualified class name.
+     *
      * @return
      */
     public DataListColumnFormat[] getAvailableFormats() {
@@ -117,33 +126,34 @@ public class DataListService {
         DataListColumnFormat[] result = (DataListColumnFormat[]) list.toArray(new DataListColumnFormat[0]);
         return result;
     }
-    
+
     public static Object evaluateColumnValueFromRow(Object row, String propertyName) {
         if (propertyName != null && !propertyName.isEmpty()) {
             try {
                 Object value = LookupUtil.getBeanProperty(row, propertyName);
-                
+
                 //handle for lowercase propertyName
                 if (value == null) {
                     value = LookupUtil.getBeanProperty(row, propertyName.toLowerCase());
                 }
-                
+
                 //handle for numeric field name
                 if (value == null && row instanceof FormRow && Character.isDigit(propertyName.charAt(0))) {
                     propertyName = "t__" + propertyName;
                     value = LookupUtil.getBeanProperty(row, propertyName);
-                    
+
                     //handle for lowercase propertyName
                     if (value == null) {
                         value = LookupUtil.getBeanProperty(row, propertyName.toLowerCase());
                     }
                 }
-                
+
                 if (value != null && value instanceof Date) {
                     value = TimeZoneUtil.convertToTimeZone((Date) value, null, AppUtil.getAppDateFormat());
                 }
                 return value;
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return null;
     }

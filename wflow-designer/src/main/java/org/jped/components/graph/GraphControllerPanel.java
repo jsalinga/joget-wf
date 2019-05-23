@@ -1,13 +1,11 @@
 package org.jped.components.graph;
 
-
-
 import org.enhydra.jawe.components.graph.GraphController;
 
 /**
- *  Container for displaying menubar, toolbar, process graphs ...
+ * Container for displaying menubar, toolbar, process graphs ...
  *
- *  @author Sasa Bojanic
+ * @author Sasa Bojanic
  */
 public class GraphControllerPanel extends org.enhydra.jawe.components.graph.GraphControllerPanel {
 

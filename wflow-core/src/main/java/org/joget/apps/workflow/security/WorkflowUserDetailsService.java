@@ -12,8 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class WorkflowUserDetailsService implements UserDetailsService, Serializable {
 
-    transient
-    @Autowired
+    transient @Autowired
     @Qualifier("main")
     private DirectoryManager directoryManager;
 

@@ -1,6 +1,7 @@
 package org.joget.workflow.shark.model;
 
 public class SharkProcess {
+
     private String processId;
     private String processName;
     private String processRequesterId;
@@ -34,7 +35,7 @@ public class SharkProcess {
     public String getProcessVersion() {
         return processDefId.split("#")[1];
     }
-    
+
     public String getVersion() {
         return version;
     }

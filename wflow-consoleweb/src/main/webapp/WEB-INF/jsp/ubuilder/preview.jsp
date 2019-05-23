@@ -28,41 +28,41 @@
         <script type="text/javascript">
             $(document).ready(function () {
 
-                $('.menu-link.default, .category-label a').click(function(){
-                    $.blockUI({ css: { 
-                        border: 'none', 
-                        padding: '15px', 
-                        backgroundColor: '#000', 
-                        '-webkit-border-radius': '10px', 
-                        '-moz-border-radius': '10px', 
-                        opacity: .3, 
-                        color: '#fff' 
-                    }, message : "<h1><fmt:message key="form.form.message.wait"/></h1>" }); 
-                
-                    var action = $(this).attr('href');
-                    $('#preview').attr('action', action);
-                    $('#preview').submit();
-                    
-                    return false;
-                });
+            $('.menu-link.default, .category-label a').click(function(){
+            $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .3, 
+            color: '#fff' 
+            }, message : "<h1><fmt:message key="form.form.message.wait"/></h1>" }); 
 
-                $('#header-link').click(function(){
-                    $.blockUI({ css: { 
-                        border: 'none', 
-                        padding: '15px', 
-                        backgroundColor: '#000', 
-                        '-webkit-border-radius': '10px', 
-                        '-moz-border-radius': '10px', 
-                        opacity: .3, 
-                        color: '#fff' 
-                    }, message : "<h1><fmt:message key="form.form.message.wait"/></h1>" }); 
-                
-                    var action = $(this).attr('href');
-                    $('#preview').attr('action', action);
-                    $('#preview').submit();
+            var action = $(this).attr('href');
+            $('#preview').attr('action', action);
+            $('#preview').submit();
 
-                    return false;
-                });
+            return false;
+            });
+
+            $('#header-link').click(function(){
+            $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .3, 
+            color: '#fff' 
+            }, message : "<h1><fmt:message key="form.form.message.wait"/></h1>" }); 
+
+            var action = $(this).attr('href');
+            $('#preview').attr('action', action);
+            $('#preview').submit();
+
+            return false;
+            });
             });
 
             ${userview.setting.theme.javascript}
@@ -100,8 +100,8 @@
     </c:choose>
 
     <body id="${bodyId}" class="<c:if test="${param.embed}">embeded</c:if><c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}"> rtl</c:if>">
-        <div id="page">
-            <div id="header">
+            <div id="page">
+                <div id="header">
 
                 <c:choose>
                     <c:when test="${!empty userview.setting.theme.header}">
@@ -160,8 +160,8 @@
                                                     <c:set var="menuItemId" value="${firstMenuItem.properties.id}"/>
                                                 </c:if>
                                                 <a href="${firstMenuItem.url}"><span>${category.properties.label}</span></a>
-                                            </c:when>
-                                            <c:otherwise>
+                                                    </c:when>
+                                                    <c:otherwise>
                                                 <span>${category.properties.label}</span>
                                             </c:otherwise>
                                         </c:choose>

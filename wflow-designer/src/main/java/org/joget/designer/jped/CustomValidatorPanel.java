@@ -53,7 +53,8 @@ import org.enhydra.shark.xpdl.elements.WorkflowProcess;
 import org.joget.designer.Designer;
 
 /**
- * Panel to show the warnings and errors in the process, and to suggest corrective actions.
+ * Panel to show the warnings and errors in the process, and to suggest
+ * corrective actions.
  */
 public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
 
@@ -113,7 +114,7 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getSelectionModel().addListSelectionListener(new CustomListListener());
-        table.setModel(new DefaultTableModel(new Object[][] {}, new Object[] { "", "" }));
+        table.setModel(new DefaultTableModel(new Object[][]{}, new Object[]{"", ""}));
         table.getColumnModel().getColumn(0).setCellRenderer(new CustomCellRenderer());
         table.getColumnModel().getColumn(1).setCellRenderer(new CustomButtonRenderer(new JCheckBox()));
         table.getColumnModel().getColumn(1).setCellEditor(new CustomButtonRenderer(new JCheckBox()));
@@ -179,18 +180,18 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
                 }
 
                 // compose label message
-                String message =
-                        "<html>"
-//                        + "<span bgcolor=\"" + color + "\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;"
+                String message
+                        = "<html>"
+                        //                        + "<span bgcolor=\"" + color + "\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;"
                         + "<b><font size=\"2\">" + errorType + ": " + name + "</font></b><br>"
                         + "<font size=\"2\">" + error + "</font>"
                         + "</html>";
                 JLabel label = new JLabel(message, new ImageIcon(getClass().getClassLoader().getResource("org/enhydra/jawe/images/" + icon)), SwingConstants.LEFT);
 
                 // add row
-                tableModel.addRow(new Object[] { label, getSuggestionKey(error) });
+                tableModel.addRow(new Object[]{label, getSuggestionKey(error)});
             } else if (el instanceof String) {
-                tableModel.addRow(new Object[] { el });
+                tableModel.addRow(new Object[]{el});
             }
         }
 
@@ -227,6 +228,7 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
 
     /**
      * Retrieves the workflow element based on the selected row
+     *
      * @return
      */
     protected XMLElement getSelectedElement() {
@@ -244,7 +246,8 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
     }
 
     /**
-     * Listener to select the affected element in the graph when an error is selected.
+     * Listener to select the affected element in the graph when an error is
+     * selected.
      */
     class CustomListListener implements ListSelectionListener {
 
@@ -294,9 +297,9 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
 
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             if (value instanceof Component) {
-                Component comp = (Component)value;
+                Component comp = (Component) value;
                 if (isSelected) {
-                    JLabel label = (JLabel)comp;
+                    JLabel label = (JLabel) comp;
                     label.setOpaque(true);
                     label.setBackground(table.getSelectionBackground());
                 } else {
@@ -317,7 +320,8 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
     }
 
     /**
-     * Custom cell renderer and editor to show a button that can trigger an action
+     * Custom cell renderer and editor to show a button that can trigger an
+     * action
      */
     public class CustomButtonRenderer extends DefaultCellEditor implements TableCellRenderer {
 
@@ -403,6 +407,7 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
 
     /**
      * Returns a non empty String if there is a suggestion for the error.
+     *
      * @param errorId
      * @return
      */
@@ -425,6 +430,7 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
 
     /**
      * Perform suggestion based on the error/warning message
+     *
      * @param button
      * @param error
      */
@@ -438,13 +444,13 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
 
         } else if (error.equals(ResourceManager.getLanguageDependentString("ErrorIncomingTransitionOrConnectionFromStartBubbleIsMissing"))
                 || error.equals(ResourceManager.getLanguageDependentString("ErrorOutgoingTransitionOrConnectionToEndBubbleIsMissing"))) {
-            
+
             // suggest to insert missing start/end
             String message = getSuggestionMessage(error, ResourceManager.getLanguageDependentString("GUIDE_ERROR_START_END"));
             int result = JOptionPane.showConfirmDialog(this.getRootPane(), message, ResourceManager.getLanguageDependentString("GUIDE_TITLE"), JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 // insert missing start/end
-                GraphController gc = (GraphController)JaWEManager.getInstance().getComponentManager().getComponent("GraphComponent");
+                GraphController gc = (GraphController) JaWEManager.getInstance().getComponentManager().getComponent("GraphComponent");
                 JaWEAction action = gc.getGraphSettings().getAction("InsertMissingStartAndEndBubbles");
                 action.getAction().actionPerformed(null);
             }
@@ -456,7 +462,7 @@ public class CustomValidatorPanel extends JPanel implements JaWEComponentView {
                 || error.equals(ResourceManager.getLanguageDependentString("WARNING_OTHERWISE_TRANSITION_WITH_EXPRESSION"))
                 || error.equals(ResourceManager.getLanguageDependentString("WARNING_CONDITION_EXPRESSION_POSSIBLY_INVALID"))
                 || error.equals(ResourceManager.getLanguageDependentString("WARNING_DEADLINE_EXPRESSION_POSSIBLY_INVALID"))) {
-            
+
             // suggest to edit transition properties
             String message = getSuggestionMessage(error, ResourceManager.getLanguageDependentString("GUIDE_WARNING_TRANSITION"));
             int result = JOptionPane.showConfirmDialog(this.getRootPane(), message, ResourceManager.getLanguageDependentString("GUIDE_TITLE"), JOptionPane.YES_NO_OPTION);

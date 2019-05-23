@@ -16,7 +16,7 @@ public class AppResourceDaoImpl extends AbstractAppVersionedObjectDao<AppResourc
     public String getEntityName() {
         return ENTITY_NAME;
     }
-    
+
     public Collection<AppResource> getResources(String filterString, AppDefinition appDefinition, String sort, Boolean desc, Integer start, Integer rows) {
         String conditions = "";
         List params = new ArrayList();
@@ -42,7 +42,7 @@ public class AppResourceDaoImpl extends AbstractAppVersionedObjectDao<AppResourc
 
         return this.count(conditions, params.toArray(), appDefinition);
     }
-    
+
     @Override
     public boolean delete(String filename, AppDefinition appDef) {
         boolean result = false;

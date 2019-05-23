@@ -25,11 +25,11 @@ public class DatalistDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Dat
     public void setCache(Cache cache) {
         this.cache = cache;
     }
-    
-    private String getCacheKey(String id, String appId, Long version){
-        return DynamicDataSourceManager.getCurrentProfile()+"_"+appId+"_"+version+"_LIST_"+id;
+
+    private String getCacheKey(String id, String appId, Long version) {
+        return DynamicDataSourceManager.getCurrentProfile() + "_" + appId + "_" + version + "_LIST_" + id;
     }
-    
+
     @Override
     public String getEntityName() {
         return ENTITY_NAME;
@@ -72,13 +72,13 @@ public class DatalistDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Dat
 
         if (element == null) {
             DatalistDefinition listDef = super.loadById(id, appDefinition);
-            
+
             if (listDef != null) {
                 element = new Element(cacheKey, (Serializable) listDef);
                 cache.put(element);
             }
             return listDef;
-        }else{
+        } else {
             return (DatalistDefinition) element.getValue();
         }
     }
@@ -93,7 +93,7 @@ public class DatalistDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Dat
     @Override
     public boolean update(DatalistDefinition object) {
         cache.remove(getCacheKey(object.getId(), object.getAppId(), object.getAppVersion()));
-        
+
         object.setDateModified(new Date());
         return super.update(object);
     }
@@ -118,7 +118,7 @@ public class DatalistDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Dat
                 // delete obj
                 super.delete(getEntityName(), obj);
                 result = true;
-                
+
                 cache.remove(getCacheKey(id, appDef.getId(), appDef.getVersion()));
             }
         } catch (Exception e) {

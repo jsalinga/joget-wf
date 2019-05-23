@@ -90,9 +90,9 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
         if (label != null) {
             label = StringUtil.stripHtmlRelaxed(label);
         }
-        
+
         String escapedId = getPropertyString("id").replaceAll("[\\s-]", "_");
-        
+
         if ("Yes".equals(getPropertyString("showInPopupDialog"))) {
             String menu = "<a onclick=\"menu_" + escapedId + "_showDialog();return false;\" class=\"menu-link\"><span>" + label + "</span></a>";
             menu += "<script>\n";
@@ -124,11 +124,11 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
             }
             if (startFormDef == null || startFormDef.getFormId() == null) {
                 String url = getUrl();
-                
+
                 if (MobileUtil.isMobileView()) {
                     url = url.replace("/web/userview", "/web/mobile");
                 }
-                
+
                 String menu = "<a onclick=\"menu_" + escapedId + "_postForm();return false;\" class=\"menu-link\"><span>" + label + "</span></a>";
                 if (!"true".equals(getRequestParameter("isPreview"))) {
                     menu += "<form id=\"menu_" + escapedId + "_form\" method=\"POST\" action=\"" + url + "?_action=run" + "\" style=\"display:none\"></form>\n";
@@ -145,7 +145,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
                 return menu;
             }
         }
-        
+
         return null;
     }
 
@@ -155,7 +155,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
         if (!isAdmin) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
-        }        
+        }
 
         String action = request.getParameter("action");
 
@@ -202,7 +202,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
             if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
                 return "userview/plugin/unauthorized.jsp";
             }
-            
+
             startProcess(getRequestParameterString("_action"));
         } else if ("assignmentView".equals(getRequestParameterString("_action"))) {
             assignmentView();
@@ -212,7 +212,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
             if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
                 return "userview/plugin/unauthorized.jsp";
             }
-            
+
             assignmentSubmit();
         } else {
             ApplicationContext ac = AppUtil.getApplicationContext();
@@ -224,13 +224,13 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
                     setProperty("view", "featureDisabled");
                 } else {
                     viewProcess(null);
-                    
+
                     HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
                     if (request != null && request.getQueryString() != null && !request.getQueryString().isEmpty()) {
                         String url = StringUtil.addParamsToUrl(getPropertyString("startUrl"), StringUtil.getUrlParams(request.getQueryString()));
                         setProperty("startUrl", url);
                     }
-                    
+
                     String csrfToken = "";
                     if (request != null) {
                         csrfToken = SecurityUtil.getCsrfTokenName() + "=" + SecurityUtil.getCsrfTokenValue(request);
@@ -249,7 +249,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
         ApplicationContext ac = AppUtil.getApplicationContext();
         AppService appService = (AppService) ac.getBean("appService");
         FormService formService = (FormService) ac.getBean("formService");
-        
+
         if (getPropertyString("processDefId").isEmpty()) {
             setProperty("view", "noProcess");
             return;
@@ -260,9 +260,9 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
             setProperty("view", "noProcess");
             return;
         }
-        
+
         setProperty("process", process);
-        
+
         if (isUnauthorized(process.getId())) {
             AppDefinition appDef = appService.getAppDefinition(getRequestParameterString("appId"), getRequestParameterString("appVersion"));
 
@@ -279,21 +279,21 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
             if (getPropertyString("keyName") != null && getPropertyString("keyName").trim().length() > 0 && getKey() != null) {
                 formData.addRequestParameterValues(FormService.PREFIX_FOREIGN_KEY + getPropertyString("keyName"), new String[]{getKey()});
             }
-            
+
             if (startFormDef == null) {
                 startFormDef = appService.viewStartProcessForm(getRequestParameterString("appId"), getRequestParameterString("appVersion"), getPropertyString("processDefId"), formData, formUrl);
             }
-            
+
             if (startFormDef != null && (startFormDef.getForm() != null || PackageActivityForm.ACTIVITY_FORM_TYPE_EXTERNAL.equals(startFormDef.getType()))) {
                 Form startForm = startFormDef.getForm();
-                
+
                 changeButtonLabel(startForm, formData);
 
                 // generate form HTML
                 String formHtml = formService.retrieveFormHtml(startForm, formData);
-                
+
                 // show form
-                setProperty("headerTitle",  AppUtil.processHashVariable(process.getName(), null, null, null, appDef));
+                setProperty("headerTitle", AppUtil.processHashVariable(process.getName(), null, null, null, appDef));
                 setProperty("view", "formView");
                 setProperty("formHtml", formHtml);
                 setProperty("activityForm", startFormDef);
@@ -351,7 +351,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
                 viewProcess(startFormDef);
                 return;
             }
-            
+
             // get workflow variables
             Map<String, String> variableMap = AppUtil.retrieveVariableDataFromMap(getRequestParameters());
             WorkflowProcessResult result = appService.submitFormToStartProcess(getRequestParameterString("appId"), getRequestParameterString("appVersion"), startFormDef, getPropertyString("processDefId"), formData, variableMap, recordId);
@@ -360,7 +360,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
                 startForm = startFormDef.getForm();
                 if (result == null) {
                     changeButtonLabel(startForm, formData);
-                    
+
                     // generate form HTML
                     String formHtml = formService.retrieveFormErrorHtml(startForm, formData);
                     AppDefinition appDef = AppUtil.getCurrentAppDefinition();
@@ -507,7 +507,7 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
 
                 // show form
                 setProperty("headerTitle", assignment.getProcessName() + " - " + assignment.getActivityName());
-                if (!formResult.getStay() &&errorCount == 0) {
+                if (!formResult.getStay() && errorCount == 0) {
                     if (getPropertyString("redirectUrlAfterComplete") != null && !getPropertyString("redirectUrlAfterComplete").isEmpty()) {
                         setProperty("view", "redirect");
                         boolean redirectToParent = "Yes".equals(getPropertyString("showInPopupDialog"));
@@ -561,14 +561,14 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
         setAlertMessage(getPropertyString("messageShowAfterComplete"));
         if (getPropertyString("redirectUrlAfterComplete") != null && !getPropertyString("redirectUrlAfterComplete").isEmpty()) {
             setProperty("view", "redirect");
-            boolean redirectToParent = "Yes".equals(getPropertyString("showInPopupDialog"));            
+            boolean redirectToParent = "Yes".equals(getPropertyString("showInPopupDialog"));
             setRedirectUrl("");
         } else {
             setProperty("headerTitle", "Process Started");
             setProperty("view", "processStarted");
         }
     }
-    
+
     protected String getRedirectUrl(Form form, FormData formData) {
         // determine redirect URL
         String redirectUrl = "";
@@ -576,15 +576,15 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
         if (form != null && formData != null && redirectUrl != null && redirectUrl.trim().length() > 0 && getPropertyString("fieldPassover") != null && getPropertyString("fieldPassover").trim().length() > 0) {
             String passoverFieldName = getPropertyString("fieldPassover");
             Element passoverElement = FormUtil.findElement(passoverFieldName, form, formData, true);
-            
+
             String passoverValue = "";
-            
+
             if (passoverElement != null) {
                 passoverValue = FormUtil.getElementPropertyValue(passoverElement, formData);
             } else if (FormUtil.PROPERTY_ID.equals(passoverFieldName)) {
                 passoverValue = formData.getPrimaryKeyValue();
             }
-            
+
             try {
                 if ("append".equals(getPropertyString("fieldPassoverMethod"))) {
                     if (!redirectUrl.endsWith("/")) {
@@ -599,7 +599,8 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
                     }
                     redirectUrl += URLEncoder.encode(getPropertyString("paramName"), "UTF-8") + "=" + URLEncoder.encode(passoverValue, "UTF-8");
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return redirectUrl;
     }
@@ -617,8 +618,8 @@ public class RunProcess extends UserviewMenu implements PluginWebSupport {
     public String getCategory() {
         return UserviewBuilderPalette.CATEGORY_GENERAL;
     }
-    
-    protected void changeButtonLabel(Form startForm, FormData formData){
+
+    protected void changeButtonLabel(Form startForm, FormData formData) {
         String label = getPropertyString("runProcessSubmitLabel");
         if (label != null && !label.isEmpty()) {
             Element button = FormUtil.findButton(AssignmentCompleteButton.DEFAULT_ID, startForm, formData);

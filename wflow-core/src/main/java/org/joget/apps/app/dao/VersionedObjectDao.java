@@ -7,6 +7,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Total row count by specific version
+     *
      * @param id
      * @param appId
      * @param version
@@ -17,6 +18,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Count the latest versions of matching objects
+     *
      * @param id Optional ID to filter
      * @param appId Optional package ID to filter
      * @param name Optional name to filter
@@ -26,6 +28,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Total number of versions for a specific ID.
+     *
      * @param id
      * @return
      */
@@ -33,18 +36,21 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Delete an object by primary key
+     *
      * @param obj
      */
     void delete(T obj);
 
     /**
      * Delete all versions of an object
+     *
      * @param appId
      */
     void deleteAllVersions(String id);
 
     /**
      * Delete a specific object version
+     *
      * @param id
      * @param version
      */
@@ -52,6 +58,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Find unique forms by specific version
+     *
      * @param id
      * @param appId
      * @param version
@@ -66,6 +73,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Find the latest versions of matching objects
+     *
      * @param id Optional ID to filter
      * @param appId Optional package ID to filter
      * @param name Optional name to filter
@@ -79,6 +87,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Find the versions for a specific ID.
+     *
      * @param id
      * @param sort
      * @param desc
@@ -90,12 +99,14 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Hibernate entity name for the object.
+     *
      * @return
      */
     String getEntityName();
 
     /**
      * Gets the latest version for an object
+     *
      * @param id
      * @return
      */
@@ -103,6 +114,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Find the latest version of an object by ID
+     *
      * @param id
      * @return
      */
@@ -110,6 +122,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Loads an object by unique ID (primary key)
+     *
      * @param uid
      * @return
      */
@@ -117,6 +130,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Find a specific version of an object by ID
+     *
      * @param id
      * @param version
      * @return
@@ -125,6 +139,7 @@ public interface VersionedObjectDao<T extends AbstractVersionedObject> {
 
     /**
      * Save/update an object
+     *
      * @param object
      */
     void saveOrUpdate(T object);

@@ -17,14 +17,14 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
- * Overrides Spring's DelegatingFilterProxy to support re-initialization of the 
+ * Overrides Spring's DelegatingFilterProxy to support re-initialization of the
  * ApplicationContext if previous attempts fail.
  */
 public class CustomDelegatingFilterProxy extends DelegatingFilterProxy {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest req = ((HttpServletRequest)request);
+        HttpServletRequest req = ((HttpServletRequest) request);
         String url = req.getContextPath() + "/setup";
         try {
             if (!req.getRequestURI().startsWith(url)) {
@@ -32,21 +32,21 @@ public class CustomDelegatingFilterProxy extends DelegatingFilterProxy {
             } else {
                 filterChain.doFilter(request, response);
             }
-        } catch(IllegalStateException ise) {
+        } catch (IllegalStateException ise) {
             if (ise.getMessage().startsWith("No WebApplicationContext found")) {
                 LogUtil.info(getClass().getName(), "No WebApplicationContext found, redirecting to error page");
-                ((HttpServletResponse)response).sendRedirect(url);
+                ((HttpServletResponse) response).sendRedirect(url);
             } else {
                 throw ise;
             }
-        } catch(NoSuchBeanDefinitionException nbe) {
+        } catch (NoSuchBeanDefinitionException nbe) {
             if (nbe.getMessage().startsWith("No bean named 'springSecurityFilterChain' ")) {
                 LogUtil.info(getClass().getName(), "No WebApplicationContext found, redirecting to error page");
-                ((HttpServletResponse)response).sendRedirect(url);
+                ((HttpServletResponse) response).sendRedirect(url);
             } else {
                 throw nbe;
             }
-        } catch(ServletException e) {
+        } catch (ServletException e) {
             if (e.getMessage().startsWith("java.lang.IllegalStateException: getOutputStream() has already been called for this response")) {
                 //ignore to override the response
             } else {
@@ -88,9 +88,9 @@ public class CustomDelegatingFilterProxy extends DelegatingFilterProxy {
         // catch NoSuchBeanDefinitionException for JBoss EAP, Websphere and Weblogic
         try {
             super.initFilterBean();
-        } catch(NoSuchBeanDefinitionException e) {
+        } catch (NoSuchBeanDefinitionException e) {
             // ignore
         }
     }
-    
+
 }

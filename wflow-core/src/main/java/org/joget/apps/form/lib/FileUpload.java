@@ -67,17 +67,16 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
 
         // set value
         String[] values = FormUtil.getElementPropertyValues(this, formData);
-        
+
         //check is there a stored value
         String storedValue = formData.getStoreBinderDataProperty(this);
         if (storedValue != null) {
             values = storedValue.split(";");
         }
-        
-        
+
         Map<String, String> tempFilePaths = new LinkedHashMap<String, String>();
         Map<String, String> filePaths = new LinkedHashMap<String, String>();
-        
+
         String primaryKeyValue = getPrimaryKeyValue(formData);
         String formDefId = "";
         Form form = FormUtil.findRootForm(this);
@@ -93,11 +92,11 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
             appId = appDef.getId();
             appVersion = appDef.getVersion().toString();
         }
-                
+
         for (String value : values) {
             // check if the file is in temp file
             File file = FileManager.getFileByPath(value);
-            
+
             if (file != null) {
                 tempFilePaths.put(value, file.getName());
             } else if (value != null && !value.isEmpty()) {
@@ -111,7 +110,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                         // ignore
                     }
                 }
-                
+
                 String filePath = "/web/client/app/" + appId + "/" + appVersion + "/form/download/" + formDefId + "/" + primaryKeyValue + "/" + encodedFileName + ".";
                 if (Boolean.valueOf(getPropertyString("attachment")).booleanValue()) {
                     filePath += "?attachment=true";
@@ -119,14 +118,14 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                 filePaths.put(filePath, value);
             }
         }
-        
+
         if (!tempFilePaths.isEmpty()) {
             dataModel.put("tempFilePaths", tempFilePaths);
         }
         if (!filePaths.isEmpty()) {
             dataModel.put("filePaths", filePaths);
         }
-        
+
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
         return html;
     }
@@ -138,7 +137,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
         if (id != null) {
             String[] tempFilenames = formData.getRequestParameterValues(id);
             String[] tempExisting = formData.getRequestParameterValues(id + filePathPostfix);
-            
+
             List<String> filenames = new ArrayList<String>();
             if (tempFilenames != null && tempFilenames.length > 0) {
                 filenames.addAll(Arrays.asList(tempFilenames));
@@ -158,13 +157,13 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
         }
         return formData;
     }
-    
+
     @Override
     public FormRowSet formatData(FormData formData) {
         FormRowSet rowSet = null;
-        
+
         String id = getPropertyString(FormUtil.PROPERTY_ID);
-        
+
         Set<String> remove = null;
         if ("true".equals(getPropertyString("removeFile"))) {
             remove = new HashSet<String>();
@@ -183,7 +182,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                 FormRow result = new FormRow();
                 List<String> resultedValue = new ArrayList<String>();
                 List<String> filePaths = new ArrayList<String>();
-                
+
                 for (String value : values) {
                     // check if the file is in temp file
                     File file = FileManager.getFileByPath(value);
@@ -197,20 +196,20 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                         resultedValue.add(value);
                     }
                 }
-                
+
                 if (!filePaths.isEmpty()) {
                     result.putTempFilePath(id, filePaths.toArray(new String[]{}));
                 }
-                
+
                 if (remove != null) {
                     result.putDeleteFilePath(id, remove.toArray(new String[]{}));
                 }
-                
+
                 // formulate values
                 String delimitedValue = FormUtil.generateElementPropertyValues(resultedValue.toArray(new String[]{}));
                 String paramName = FormUtil.getElementParameterName(this);
                 formData.addRequestParameterValues(paramName, resultedValue.toArray(new String[]{}));
-                        
+
                 // set value into Properties and FormRowSet object
                 result.setProperty(id, delimitedValue);
                 rowSet = new FormRowSet();
@@ -255,7 +254,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
     public String getFormBuilderIcon() {
         return null;
     }
-    
+
     @Override
     public Boolean selfValidate(FormData formData) {
         String id = FormUtil.getElementParameterName(this);
@@ -267,7 +266,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
             for (String value : values) {
                 File file = FileManager.getFileByPath(value);
                 if (file != null) {
-                    if(getPropertyString("maxSize") != null && !getPropertyString("maxSize").isEmpty()) {
+                    if (getPropertyString("maxSize") != null && !getPropertyString("maxSize").isEmpty()) {
                         long maxSize = Long.parseLong(getPropertyString("maxSize")) * 1024;
 
                         if (file.length() > maxSize) {
@@ -276,7 +275,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
 
                         }
                     }
-                    if(getPropertyString("fileType") != null && !getPropertyString("fileType").isEmpty()) {
+                    if (getPropertyString("fileType") != null && !getPropertyString("fileType").isEmpty()) {
                         String[] fileType = getPropertyString("fileType").split(";");
                         String filename = file.getName().toUpperCase();
                         Boolean found = false;
@@ -292,15 +291,16 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                     }
                 }
             }
-            
+
             if (!valid) {
                 formData.addFormError(id, error);
             }
-        } catch (Exception e) {}
-        
+        } catch (Exception e) {
+        }
+
         return valid;
     }
-    
+
     public boolean isDownloadAllowed(Map requestParameters) {
         String permissionType = getPropertyString("permissionType");
         if (permissionType.equals("public")) {
@@ -331,20 +331,21 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
             return !WorkflowUtil.isCurrentUserAnonymous();
         }
     }
-    
+
     public String getServiceUrl() {
-        String url = WorkflowUtil.getHttpServletRequest().getContextPath()+ "/web/json/plugin/org.joget.apps.form.lib.FileUpload/service";
+        String url = WorkflowUtil.getHttpServletRequest().getContextPath() + "/web/json/plugin/org.joget.apps.form.lib.FileUpload/service";
         AppDefinition appDef = AppUtil.getCurrentAppDefinition();
-        
+
         //create nonce
         String paramName = FormUtil.getElementParameterName(this);
         String nonce = SecurityUtil.generateNonce(new String[]{"FileUpload", appDef.getAppId(), appDef.getVersion().toString(), paramName}, 1);
         try {
-            url = url + "?_nonce="+URLEncoder.encode(nonce, "UTF-8")+"&_paramName="+URLEncoder.encode(paramName, "UTF-8")+"&_appId="+URLEncoder.encode(appDef.getAppId(), "UTF-8")+"&_appVersion="+URLEncoder.encode(appDef.getVersion().toString(), "UTF-8");
-        } catch (Exception e) {}
+            url = url + "?_nonce=" + URLEncoder.encode(nonce, "UTF-8") + "&_paramName=" + URLEncoder.encode(paramName, "UTF-8") + "&_appId=" + URLEncoder.encode(appDef.getAppId(), "UTF-8") + "&_appVersion=" + URLEncoder.encode(appDef.getVersion().toString(), "UTF-8");
+        } catch (Exception e) {
+        }
         return url;
     }
-    
+
     public void webService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nonce = request.getParameter("_nonce");
         String paramName = request.getParameter("_paramName");
@@ -376,7 +377,8 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                         FileStore.clear();
                     }
                     obj.write(response.getWriter());
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                }
             } else if (filePath != null && !filePath.isEmpty()) {
                 String normalizedFilePath = Normalizer.normalize(filePath, Normalizer.Form.NFKC);
                 if (normalizedFilePath.contains("../") || normalizedFilePath.contains("..\\")) {
@@ -387,7 +389,7 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                     ServletOutputStream stream = response.getOutputStream();
                     DataInputStream in = new DataInputStream(new FileInputStream(file));
                     byte[] bbuf = new byte[65536];
-                        
+
                     try {
                         String contentType = request.getSession().getServletContext().getMimeType(file.getName());
                         if (contentType != null) {
@@ -400,12 +402,12 @@ public class FileUpload extends Element implements FormBuilderPaletteElement, Fi
                             stream.write(bbuf, 0, length);
                         }
                     } catch (Exception e) {
-                    
+
                     } finally {
                         in.close();
                         stream.flush();
                         stream.close();
-                    }    
+                    }
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;

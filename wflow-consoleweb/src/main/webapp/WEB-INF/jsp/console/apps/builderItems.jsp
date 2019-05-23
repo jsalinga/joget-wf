@@ -28,11 +28,11 @@
                                     </c:otherwise> 
                                 </c:choose>
                             </c:forEach>
-                         </c:when>
-                         <c:otherwise>
-                             <li><fmt:message key="general.method.label.noItemAvailable"/></li>
-                         </c:otherwise>           
-                    </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <li><fmt:message key="general.method.label.noItemAvailable"/></li>
+                            </c:otherwise>           
+                        </c:choose>
                 </ul>
                 <ul>
                     <li class="buttons"><button onclick="navCreate('form')"><fmt:message key="console.form.create.label"/></button></li>
@@ -62,11 +62,11 @@
                                     </c:otherwise> 
                                 </c:choose>
                             </c:forEach>
-                         </c:when>
-                         <c:otherwise>
-                             <li><fmt:message key="general.method.label.noItemAvailable"/></li>
-                         </c:otherwise>           
-                    </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <li><fmt:message key="general.method.label.noItemAvailable"/></li>
+                            </c:otherwise>           
+                        </c:choose>
                 </ul>
                 <ul>
                     <li class="buttons"><button onclick="navCreate('datalist')"><fmt:message key="console.datalist.create.label"/></button></li>
@@ -96,11 +96,11 @@
                                     </c:otherwise> 
                                 </c:choose>
                             </c:forEach>
-                         </c:when>
-                         <c:otherwise>
-                             <li><fmt:message key="general.method.label.noItemAvailable"/></li>
-                         </c:otherwise>           
-                    </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <li><fmt:message key="general.method.label.noItemAvailable"/></li>
+                            </c:otherwise>           
+                        </c:choose>
                 </ul>
                 <ul>
                     <li class="buttons"><button onclick="navCreate('userview')"><fmt:message key="console.userview.create.label"/></button></li>
@@ -114,11 +114,11 @@
             showCreateForm('<c:out value="${param.showCreate}" escapeXml="true"/>');
         </c:if>
         function navCreate(type){
-            window.location.href = "?showCreate="+type;
+        window.location.href = "?showCreate="+type;
         }
         function showCreateForm(type){
-            builderwCreateDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/" + type + "/create?builderMode=true";
-            builderwCreateDialog.init();
+        builderwCreateDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/" + type + "/create?builderMode=true";
+        builderwCreateDialog.init();
         }
     </script>
 </div>

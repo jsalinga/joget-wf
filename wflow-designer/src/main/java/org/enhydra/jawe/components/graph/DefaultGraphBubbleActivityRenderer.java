@@ -20,8 +20,7 @@ public class DefaultGraphBubbleActivityRenderer extends VertexRenderer implement
     private BasicStroke borderStroke = new BasicStroke(1);
 
     /**
-     * Paints End. Overrides super class paint
-     * to add specific painting.
+     * Paints End. Overrides super class paint to add specific painting.
      */
     public void paint(Graphics g) {
 
@@ -70,7 +69,6 @@ public class DefaultGraphBubbleActivityRenderer extends VertexRenderer implement
         }
 
         //END CUSTOM
-
         if (selected) {
             g2.setStroke(GraphConstants.SELECTION_STROKE);
             g.setColor(highlightColor);

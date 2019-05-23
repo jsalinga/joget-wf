@@ -64,7 +64,7 @@ public class WorkflowAssignmentHashVariable extends DefaultHashVariablePlugin {
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();
@@ -79,7 +79,7 @@ public class WorkflowAssignmentHashVariable extends DefaultHashVariablePlugin {
         syntax.add("assignment.activityDefId");
         syntax.add("assignment.appId");
         syntax.add("assignment.assigneeId");
-        
+
         return syntax;
     }
 }

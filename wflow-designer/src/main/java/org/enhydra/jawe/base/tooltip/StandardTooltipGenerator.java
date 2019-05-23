@@ -126,71 +126,85 @@ import org.enhydra.shark.xpdl.elements.XPDLVersion;
  */
 public class StandardTooltipGenerator implements TooltipGenerator {
 
-   /** Used for tooltips */
-   public static final String EMPTY_STRING = "";
+    /**
+     * Used for tooltips
+     */
+    public static final String EMPTY_STRING = "";
 
-   /** Used for tooltips */
-   public static final String HTML_OPEN = "<html>";
+    /**
+     * Used for tooltips
+     */
+    public static final String HTML_OPEN = "<html>";
 
-   /** Used for tooltips */
-   public static final String HTML_CLOSE = "</html>";
+    /**
+     * Used for tooltips
+     */
+    public static final String HTML_CLOSE = "</html>";
 
-   /** Used for tooltips */
-   public static final String STRONG_OPEN = "<strong>";
+    /**
+     * Used for tooltips
+     */
+    public static final String STRONG_OPEN = "<strong>";
 
-   /** Used for tooltips */
-   public static final String STRONG_CLOSE = "</strong>";
+    /**
+     * Used for tooltips
+     */
+    public static final String STRONG_CLOSE = "</strong>";
 
-   /** Used for tooltips */
-   public static final String LINE_BREAK = "<br>";
+    /**
+     * Used for tooltips
+     */
+    public static final String LINE_BREAK = "<br>";
 
-   /** Used for tooltips */
-   public static final String COLON_SPACE = ": ";
+    /**
+     * Used for tooltips
+     */
+    public static final String COLON_SPACE = ": ";
 
-   protected TooltipGeneratorSettings settings;
+    protected TooltipGeneratorSettings settings;
 
-   public StandardTooltipGenerator() {
-      settings = new TooltipGeneratorSettings();
-      settings.init((JaWEComponent) null);
-   }
+    public StandardTooltipGenerator() {
+        settings = new TooltipGeneratorSettings();
+        settings.init((JaWEComponent) null);
+    }
 
-   public StandardTooltipGenerator(TooltipGeneratorSettings settings) {
-      this.settings = settings;
-      this.settings.init((JaWEComponent) null);
-   }
+    public StandardTooltipGenerator(TooltipGeneratorSettings settings) {
+        this.settings = settings;
+        this.settings.init((JaWEComponent) null);
+    }
 
-   public String getTooltip(Activities el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Activities el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Activity el) {
-      // CUSTOM: hide unused fields
-      LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
-      Map toDisplay = new SequencedHashMap();
-      putKeyValue(toDisplay, el.get("Id"));
-      putKeyValue(toDisplay, el.get("Name"));
+    public String getTooltip(Activity el) {
+        // CUSTOM: hide unused fields
+        LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
+        Map toDisplay = new SequencedHashMap();
+        putKeyValue(toDisplay, el.get("Id"));
+        putKeyValue(toDisplay, el.get("Name"));
 //      putKeyValue(toDisplay, el.get("Description"));
 //      putKeyValue(toDisplay, el.get("Performer"));
 //      putKeyValue(toDisplay, el.getStartMode());
 //      putKeyValue(toDisplay, el.getFinishMode());
 //      putKeyValue(toDisplay, el.get("Priority"));
-      putKeyValue(toDisplay, el.get("Limit"));
-      if (el.getTransitionRestrictions().size() > 0) {
-         TransitionRestriction tr = (TransitionRestriction) el.getTransitionRestrictions().get(0);
-         putKeyValue(toDisplay, tr.getJoin());
-         putKeyValue(toDisplay, tr.getSplit());
-      } else {
-         toDisplay.put(lg.getLabel(new Join(null)), "");
-         toDisplay.put(lg.getLabel(new Split(null)), "");
-      }
-      fillTypePartOfTooltip(el, toDisplay);
-      return makeTooltip(toDisplay);
-      // END CUSTOM
-   }
+        putKeyValue(toDisplay, el.get("Limit"));
+        if (el.getTransitionRestrictions().size() > 0) {
+            TransitionRestriction tr = (TransitionRestriction) el.getTransitionRestrictions().get(0);
+            putKeyValue(toDisplay, tr.getJoin());
+            putKeyValue(toDisplay, tr.getSplit());
+        } else {
+            toDisplay.put(lg.getLabel(new Join(null)), "");
+            toDisplay.put(lg.getLabel(new Split(null)), "");
+        }
+        fillTypePartOfTooltip(el, toDisplay);
+        return makeTooltip(toDisplay);
+        // END CUSTOM
+    }
 
-   protected void fillTypePartOfTooltip(Activity el, Map toDisplay) {
-      // CUSTOM: hide type
-      /*
+    protected void fillTypePartOfTooltip(Activity el, Map toDisplay) {
+        // CUSTOM: hide type
+        /*
       LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
       String label, key;
       label = lg.getLabel(el.getActivityTypes());
@@ -227,485 +241,484 @@ public class StandardTooltipGenerator implements TooltipGenerator {
          }
          toDisplay.put(label, key);
       }
-       */
-       // END CUSTOM
-   }
+         */
+        // END CUSTOM
+    }
 
-   public String getTooltip(ActivitySet el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ActivitySet el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ActivitySets el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ActivitySets el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ActivityTypes el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ActivityTypes el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ActualParameter el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ActualParameter el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ActualParameters el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ActualParameters el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Application el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Application el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Applications el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Applications el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ApplicationTypes el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ApplicationTypes el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ArrayType el) {
-      return ResourceManager.getLanguageDependentString("SubTypeKey");
-      // return generateStandardLabel(el);
-   }
+    public String getTooltip(ArrayType el) {
+        return ResourceManager.getLanguageDependentString("SubTypeKey");
+        // return generateStandardLabel(el);
+    }
 
-   public String getTooltip(Author el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Author el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Automatic el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Automatic el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(BasicType el) {
-      return ResourceManager.getLanguageDependentString("SubTypeKey");
-   }
+    public String getTooltip(BasicType el) {
+        return ResourceManager.getLanguageDependentString("SubTypeKey");
+    }
 
-   public String getTooltip(BlockActivity el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(BlockActivity el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Codepage el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Codepage el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Condition el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Condition el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ConformanceClass el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ConformanceClass el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Cost el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Cost el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(CostUnit el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(CostUnit el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Countrykey el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Countrykey el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Created el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Created el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(DataField el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(DataField el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(DataFields el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(DataFields el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(DataType el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(DataType el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(DataTypes el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(DataTypes el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Deadline el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Deadline el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(DeadlineCondition el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(DeadlineCondition el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Deadlines el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Deadlines el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(DeclaredType el) {
-      return ResourceManager.getLanguageDependentString("SubTypeKey");
-   }
+    public String getTooltip(DeclaredType el) {
+        return ResourceManager.getLanguageDependentString("SubTypeKey");
+    }
 
-   public String getTooltip(Description el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Description el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Documentation el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Documentation el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Duration el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Duration el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(EnumerationType el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(EnumerationType el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(EnumerationValue el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(EnumerationValue el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ExceptionName el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ExceptionName el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ExtendedAttribute el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ExtendedAttribute el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ExtendedAttributes el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ExtendedAttributes el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ExternalPackage el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ExternalPackage el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ExternalPackages el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ExternalPackages el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ExternalReference el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ExternalReference el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(FinishMode el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(FinishMode el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(FormalParameter el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(FormalParameter el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(FormalParameters el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(FormalParameters el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Icon el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Icon el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Implementation el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Implementation el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ImplementationTypes el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ImplementationTypes el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(InitialValue el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(InitialValue el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Join el) {
-      return ResourceManager.getLanguageDependentString("JoinTypeKey");
-   }
+    public String getTooltip(Join el) {
+        return ResourceManager.getLanguageDependentString("JoinTypeKey");
+    }
 
-   public String getTooltip(Length el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Length el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Limit el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Limit el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ListType el) {
-      return ResourceManager.getLanguageDependentString("SubTypeKey");
-   }
+    public String getTooltip(ListType el) {
+        return ResourceManager.getLanguageDependentString("SubTypeKey");
+    }
 
-   public String getTooltip(Manual el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Manual el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Member el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Member el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Namespace el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Namespace el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Namespaces el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Namespaces el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(No el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(No el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(org.enhydra.shark.xpdl.elements.Package el) {
-      Map toDisplay = new SequencedHashMap();
-      putKeyValue(toDisplay, el.get("Id"));
-      putKeyValue(toDisplay, el.get("Name"));
-      putKeyValue(toDisplay, el.getPackageHeader().get("Description"));
-      return makeTooltip(toDisplay);
-   }
+    public String getTooltip(org.enhydra.shark.xpdl.elements.Package el) {
+        Map toDisplay = new SequencedHashMap();
+        putKeyValue(toDisplay, el.get("Id"));
+        putKeyValue(toDisplay, el.get("Name"));
+        putKeyValue(toDisplay, el.getPackageHeader().get("Description"));
+        return makeTooltip(toDisplay);
+    }
 
-   public String getTooltip(PackageHeader el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(PackageHeader el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Participant el) {
-      Map toDisplay = new SequencedHashMap();
-      putKeyValue(toDisplay, el.get("Id"));
-      putKeyValue(toDisplay, el.get("Name"));
-      putKeyValue(toDisplay, el.getParticipantType());
+    public String getTooltip(Participant el) {
+        Map toDisplay = new SequencedHashMap();
+        putKeyValue(toDisplay, el.get("Id"));
+        putKeyValue(toDisplay, el.get("Name"));
+        putKeyValue(toDisplay, el.getParticipantType());
 //      putKeyValue(toDisplay, el.get("Description"));
-      return makeTooltip(toDisplay);
-   }
+        return makeTooltip(toDisplay);
+    }
 
-   public String getTooltip(Participants el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Participants el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ParticipantType el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ParticipantType el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Performer el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Performer el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Priority el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Priority el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(PriorityUnit el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(PriorityUnit el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ProcessHeader el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ProcessHeader el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(RecordType el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(RecordType el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(RedefinableHeader el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(RedefinableHeader el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Responsible el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Responsible el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Responsibles el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Responsibles el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Route el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Route el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(SchemaType el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(SchemaType el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Script el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Script el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(SimulationInformation el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(SimulationInformation el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Split el) {
-      return ResourceManager.getLanguageDependentString("SplitTypeKey");
-   }
+    public String getTooltip(Split el) {
+        return ResourceManager.getLanguageDependentString("SplitTypeKey");
+    }
 
-   public String getTooltip(StartFinishModes el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(StartFinishModes el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(StartMode el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(StartMode el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(SubFlow el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(SubFlow el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(TimeEstimation el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TimeEstimation el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Tool el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Tool el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Tools el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Tools el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Transition el) {
-      LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
-      Map toDisplay = new SequencedHashMap();
-      putKeyValue(toDisplay, el.get("Id"));
-      putKeyValue(toDisplay, el.get("Name"));
-      putKeyValue(toDisplay, el.get("Description"));
-      putKeyValue(toDisplay, el.get("From"));
-      putKeyValue(toDisplay, el.get("To"));
-      putKeyValue(toDisplay, el.getCondition().getTypeAttribute());
-      toDisplay.put(lg.getLabel(el.getCondition()), el.getCondition().toValue());
-      return makeTooltip(toDisplay);
-   }
+    public String getTooltip(Transition el) {
+        LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
+        Map toDisplay = new SequencedHashMap();
+        putKeyValue(toDisplay, el.get("Id"));
+        putKeyValue(toDisplay, el.get("Name"));
+        putKeyValue(toDisplay, el.get("Description"));
+        putKeyValue(toDisplay, el.get("From"));
+        putKeyValue(toDisplay, el.get("To"));
+        putKeyValue(toDisplay, el.getCondition().getTypeAttribute());
+        toDisplay.put(lg.getLabel(el.getCondition()), el.getCondition().toValue());
+        return makeTooltip(toDisplay);
+    }
 
-   public String getTooltip(TransitionRef el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TransitionRef el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(TransitionRefs el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TransitionRefs el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(TransitionRestriction el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TransitionRestriction el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(TransitionRestrictions el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TransitionRestrictions el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Transitions el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Transitions el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(TypeDeclaration el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TypeDeclaration el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(TypeDeclarations el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(TypeDeclarations el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(UnionType el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(UnionType el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ValidFrom el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ValidFrom el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(ValidTo el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(ValidTo el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Vendor el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Vendor el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(Version el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(Version el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(WaitingTime el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(WaitingTime el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(WorkflowProcess el) {
-      Map toDisplay = new SequencedHashMap();
-      putKeyValue(toDisplay, el.get("Id"));
-      putKeyValue(toDisplay, el.get("Name"));
-      putKeyValue(toDisplay, el.get("AccessLevel"));
-      putKeyValue(toDisplay, el.getProcessHeader().get("Description"));
-      return makeTooltip(toDisplay);
-   }
+    public String getTooltip(WorkflowProcess el) {
+        Map toDisplay = new SequencedHashMap();
+        putKeyValue(toDisplay, el.get("Id"));
+        putKeyValue(toDisplay, el.get("Name"));
+        putKeyValue(toDisplay, el.get("AccessLevel"));
+        putKeyValue(toDisplay, el.getProcessHeader().get("Description"));
+        return makeTooltip(toDisplay);
+    }
 
-   public String getTooltip(WorkflowProcesses el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(WorkflowProcesses el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(WorkingTime el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(WorkingTime el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(XPDLVersion el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XPDLVersion el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip (XMLEmptyChoiceElement el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XMLEmptyChoiceElement el) {
+        return generateStandardTooltip(el);
+    }
 
+    public String getTooltip(XMLComplexChoice el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip (XMLComplexChoice el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XMLCollection el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(XMLCollection el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XMLCollectionElement el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(XMLCollectionElement el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XMLComplexElement el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(XMLComplexElement el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XMLSimpleElement el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(XMLSimpleElement el) {
-      return generateStandardTooltip(el);
-   }
+    public String getTooltip(XMLAttribute el) {
+        return generateStandardTooltip(el);
+    }
 
-   public String getTooltip(XMLAttribute el) {
-      return generateStandardTooltip(el);
-   }
-
-   public String getTooltip(XMLElement el) {
-      try {
-         Class cl = el.getClass();
-         Method m = null;
-         try {
-            m = this.getClass().getMethod("getTooltip", new Class[] { cl });
-         } catch (Exception ex) {
-            if (!(cl == XMLSimpleElement.class || cl == XMLAttribute.class || cl == XMLComplexChoice.class
-                  || cl == XMLComplexElement.class || cl == XMLCollectionElement.class || cl == XMLCollection.class)) {
-               if (XMLComplexChoice.class.isAssignableFrom(cl)) {
-                  cl = XMLComplexChoice.class;
-               } else if (XMLAttribute.class.isAssignableFrom(cl)) {
-                  cl = XMLAttribute.class;
-               } else if (XMLSimpleElement.class.isAssignableFrom(cl)) {
-                  cl = XMLSimpleElement.class;
-               } else if (XMLComplexElement.class.isAssignableFrom(cl)) {
-                  cl = XMLComplexElement.class;
-               } else if (XMLCollection.class.isAssignableFrom(cl)) {
-                  cl = XMLCollection.class;
-               }
+    public String getTooltip(XMLElement el) {
+        try {
+            Class cl = el.getClass();
+            Method m = null;
+            try {
+                m = this.getClass().getMethod("getTooltip", new Class[]{cl});
+            } catch (Exception ex) {
+                if (!(cl == XMLSimpleElement.class || cl == XMLAttribute.class || cl == XMLComplexChoice.class
+                        || cl == XMLComplexElement.class || cl == XMLCollectionElement.class || cl == XMLCollection.class)) {
+                    if (XMLComplexChoice.class.isAssignableFrom(cl)) {
+                        cl = XMLComplexChoice.class;
+                    } else if (XMLAttribute.class.isAssignableFrom(cl)) {
+                        cl = XMLAttribute.class;
+                    } else if (XMLSimpleElement.class.isAssignableFrom(cl)) {
+                        cl = XMLSimpleElement.class;
+                    } else if (XMLComplexElement.class.isAssignableFrom(cl)) {
+                        cl = XMLComplexElement.class;
+                    } else if (XMLCollection.class.isAssignableFrom(cl)) {
+                        cl = XMLCollection.class;
+                    }
+                }
             }
-         }
-         m = this.getClass().getMethod("getTooltip", new Class[] { cl });
-         // System.err.println("calling "+m.toString());
-         return (String) m.invoke(this, new Object[] { el });
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+            m = this.getClass().getMethod("getTooltip", new Class[]{cl});
+            // System.err.println("calling "+m.toString());
+            return (String) m.invoke(this, new Object[]{el});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-      return generateStandardTooltip(el);
+        return generateStandardTooltip(el);
 
-   }
+    }
 
-   public String generateStandardTooltip(XMLElement el) {
+    public String generateStandardTooltip(XMLElement el) {
 //      Map toDisplay = new SequencedHashMap();
 //      if (el instanceof XMLCollection) {
 //
@@ -718,84 +731,88 @@ public class StandardTooltipGenerator implements TooltipGenerator {
 //      } else if (el instanceof XMLAttribute) {
 //
 //      }
-      return ResourceManager.getLanguageDependentString(el.toName() + "Key");
-   }
+        return ResourceManager.getLanguageDependentString(el.toName() + "Key");
+    }
 
-   /**
-    * Neat little thing. Makes HTML formated string for tooltip (made of
-    * property names and coresponding values).
-    */
-   protected static String makeTooltip(Map elements) {
-      if (elements == null)
-         return "";
-      String s = HTML_OPEN;
-      Iterator it = elements.entrySet().iterator();
-      while (it.hasNext()) {
-         Map.Entry me = (Map.Entry) it.next();
-         s += makeAnotherHtmlLine((String) me.getKey(), (String) me.getValue());
-      }
-      s = s.substring(0, s.length() - LINE_BREAK.length());
-      s += HTML_CLOSE;
-      return s;
-   }
+    /**
+     * Neat little thing. Makes HTML formated string for tooltip (made of
+     * property names and coresponding values).
+     */
+    protected static String makeTooltip(Map elements) {
+        if (elements == null) {
+            return "";
+        }
+        String s = HTML_OPEN;
+        Iterator it = elements.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            s += makeAnotherHtmlLine((String) me.getKey(), (String) me.getValue());
+        }
+        s = s.substring(0, s.length() - LINE_BREAK.length());
+        s += HTML_CLOSE;
+        return s;
+    }
 
-   /** Helps when generating tooltip for some element. */
-   protected static String makeAnotherHtmlLine(String label, String text) {
-      int MAX_LENGTH = 100;
-      int MAX_LINES_PER_TEXT = 15;
-      String textToAppend = "";
-      textToAppend += STRONG_OPEN;
-      textToAppend += label + COLON_SPACE;
-      textToAppend += STRONG_CLOSE;
-      String val = text;
-      val = val.replaceAll("<", "&lt;");
-      val = val.replaceAll(">", "&gt;");
-      int vl = val.length();
-      if (vl > MAX_LENGTH) {
-         String newVal = "";
-         int hm = vl / MAX_LENGTH;
-         for (int i = 0; i <= hm; i++) {
-            int startI = i * MAX_LENGTH;
-            int endI = (i + 1) * MAX_LENGTH;
-            if (endI > vl) {
-               endI = vl;
+    /**
+     * Helps when generating tooltip for some element.
+     */
+    protected static String makeAnotherHtmlLine(String label, String text) {
+        int MAX_LENGTH = 100;
+        int MAX_LINES_PER_TEXT = 15;
+        String textToAppend = "";
+        textToAppend += STRONG_OPEN;
+        textToAppend += label + COLON_SPACE;
+        textToAppend += STRONG_CLOSE;
+        String val = text;
+        val = val.replaceAll("<", "&lt;");
+        val = val.replaceAll(">", "&gt;");
+        int vl = val.length();
+        if (vl > MAX_LENGTH) {
+            String newVal = "";
+            int hm = vl / MAX_LENGTH;
+            for (int i = 0; i <= hm; i++) {
+                int startI = i * MAX_LENGTH;
+                int endI = (i + 1) * MAX_LENGTH;
+                if (endI > vl) {
+                    endI = vl;
+                }
+                newVal = newVal + val.substring(startI, endI);
+                if (i == MAX_LINES_PER_TEXT) {
+                    newVal = newVal + " ...";
+                    break;
+                }
+                if (i < hm) {
+                    newVal += LINE_BREAK;
+                    newVal += StandardTooltipGenerator.makeEmptyHTMLText((label + COLON_SPACE).length());
+                }
             }
-            newVal = newVal + val.substring(startI, endI);
-            if (i == MAX_LINES_PER_TEXT) {
-               newVal = newVal + " ...";
-               break;
-            }
-            if (i < hm) {
-               newVal += LINE_BREAK;
-               newVal += StandardTooltipGenerator.makeEmptyHTMLText((label + COLON_SPACE).length());
-            }
-         }
-         val = newVal;
-      }
-      textToAppend += val;
-      textToAppend += LINE_BREAK;
+            val = newVal;
+        }
+        textToAppend += val;
+        textToAppend += LINE_BREAK;
 
-      return textToAppend;
-   }
+        return textToAppend;
+    }
 
-   protected static String makeEmptyHTMLText(int length) {
-      if (length < 0)
-         return null;
-      String es = "";
-      for (int i = 0; i < length; i++) {
-         es += "&nbsp;";
-      }
-      return es;
-   }
+    protected static String makeEmptyHTMLText(int length) {
+        if (length < 0) {
+            return null;
+        }
+        String es = "";
+        for (int i = 0; i < length; i++) {
+            es += "&nbsp;";
+        }
+        return es;
+    }
 
-   protected static void putKeyValue(Map toPut, XMLElement el) {
-      LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
-      DisplayNameGenerator dng = JaWEManager.getInstance().getDisplayNameGenerator();
-      toPut.put(lg.getLabel(el), dng.getDisplayName(el));
-   }
+    protected static void putKeyValue(Map toPut, XMLElement el) {
+        LabelGenerator lg = JaWEManager.getInstance().getLabelGenerator();
+        DisplayNameGenerator dng = JaWEManager.getInstance().getDisplayNameGenerator();
+        toPut.put(lg.getLabel(el), dng.getDisplayName(el));
+    }
 
-   public Settings getSettings() {
-      return settings;
-   }
+    public Settings getSettings() {
+        return settings;
+    }
 
 }

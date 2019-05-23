@@ -46,7 +46,7 @@
 <c:if test="${requestParameters.isPreview eq 'true'}">
     <script>
         $(document).ready(function() {
-            $(".form-button").attr("disabled", "disabled");
+        $(".form-button").attr("disabled", "disabled");
         });
     </script>
 </c:if>
@@ -94,17 +94,17 @@
         <div id="recordTraveling" style="padding:10px 0">
             <c:if test="${!empty properties.firstRecordUrl}">
                 <a id="firstRecord" href="${properties.firstRecordUrl}"><span>${properties.firstRecordLabel}</span></a>&nbsp;&nbsp;
-            </c:if>
-            <c:if test="${!empty properties.previousRecordUrl}">
+                    </c:if>
+                    <c:if test="${!empty properties.previousRecordUrl}">
                 <a id="prevRecord" href="${properties.previousRecordUrl}"><span>${properties.previousRecordLabel}</span></a>&nbsp;&nbsp;
-            </c:if>
+                    </c:if>
             <span>${properties.recordPosition} / ${properties.totalRecord}</span>&nbsp;&nbsp;
             <c:if test="${!empty properties.nextRecordUrl}">
                 <a id="nextRecord" href="${properties.nextRecordUrl}"><span>${properties.nextRecordLabel}</span></a>&nbsp;&nbsp;
-            </c:if>
-            <c:if test="${!empty properties.lastRecordUrl}">
+                    </c:if>
+                    <c:if test="${!empty properties.lastRecordUrl}">
                 <a id="lastRecord" href="${properties.lastRecordUrl}"><span>${properties.lastRecordLabel}</span></a>&nbsp;&nbsp;
-            </c:if>
+                    </c:if>
         </div>
     </c:if>
     <c:if test="${!empty properties.customFooter}">

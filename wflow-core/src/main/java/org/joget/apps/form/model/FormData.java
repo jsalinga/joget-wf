@@ -22,34 +22,34 @@ public class FormData {
     protected Map<FormLoadBinder, FormRowSet> loadBinderMap = new HashMap<FormLoadBinder, FormRowSet>();
     protected Map<FormLoadBinder, FormRowSet> optionsBinderMap = new HashMap<FormLoadBinder, FormRowSet>();
     protected Map<String, String> previousErrorMap = new ListOrderedMap();
-	protected Map<String, String> fileErrorMap = new ListOrderedMap();
+    protected Map<String, String> fileErrorMap = new ListOrderedMap();
     protected Map<String, String> errorMap = new ListOrderedMap();
     protected Map<String, String[]> requestParamMap = new HashMap<String, String[]>();
     protected Map<FormStoreBinder, FormRowSet> binderRowSetMap = new ListOrderedMap();
     protected Map<String, String> resultMap = new ListOrderedMap();
     protected Boolean stay = false;
-    
+
     public Map<String, String[]> getRequestParamMap() {
-		return requestParamMap;
-	}
-    
+        return requestParamMap;
+    }
+
     public String getBlockchainTransactionHash() {
-		return blockchainTransactionHash;
-	}
+        return blockchainTransactionHash;
+    }
 
-	public void setBlockchainTransactionHash(String blockchainTransactionHash) {
-		this.blockchainTransactionHash = blockchainTransactionHash;
-	}
+    public void setBlockchainTransactionHash(String blockchainTransactionHash) {
+        this.blockchainTransactionHash = blockchainTransactionHash;
+    }
 
-	public String getBlockchainDataHash() {
-		return blockchainDataHash;
-	}
+    public String getBlockchainDataHash() {
+        return blockchainDataHash;
+    }
 
-	public void setBlockchainDataHash(String blockchainDataHash) {
-		this.blockchainDataHash = blockchainDataHash;
-	}
+    public void setBlockchainDataHash(String blockchainDataHash) {
+        this.blockchainDataHash = blockchainDataHash;
+    }
 
-	public Boolean getStay() {
+    public Boolean getStay() {
         return stay;
     }
 
@@ -87,6 +87,7 @@ public class FormData {
 
     /**
      * Adds data from a load binder
+     *
      * @param binder
      * @param data
      */
@@ -96,6 +97,7 @@ public class FormData {
 
     /**
      * Retrieves the rows from a load binder for an element.
+     *
      * @param element
      * @param property
      * @return
@@ -115,6 +117,7 @@ public class FormData {
 
     /**
      * Retrieves the value of a property from a load binder for an element.
+     *
      * @param element
      * @param property
      * @return
@@ -130,9 +133,10 @@ public class FormData {
         }
         return value;
     }
-    
+
     /**
      * Retrieves the value of a property from a store binder for an element.
+     *
      * @param element
      * @param property
      * @return
@@ -152,6 +156,7 @@ public class FormData {
 
     /**
      * Adds data from an options binder
+     *
      * @param binder
      * @param data
      */
@@ -161,6 +166,7 @@ public class FormData {
 
     /**
      * Retrieves the value of a property from an options binder for an element.
+     *
      * @param element
      * @param property
      * @return
@@ -177,9 +183,10 @@ public class FormData {
         }
         return rowSet;
     }
-    
+
     /**
      * Adds an error from previous submission
+     *
      * @param id
      * @param error
      */
@@ -192,6 +199,7 @@ public class FormData {
 
     /**
      * Adds an error
+     *
      * @param id
      * @param error
      */
@@ -201,9 +209,10 @@ public class FormData {
         }
         errorMap.put(id, error);
     }
-    
+
     /**
      * Adds an error retrieved from file upload
+     *
      * @param json
      */
     public void addFileError(String id, String error) {
@@ -212,9 +221,10 @@ public class FormData {
         }
         fileErrorMap.put(id, error);
     }
-    
+
     /**
      * Returns the previous submission error for a specific id.
+     *
      * @param id
      * @return null if there is no error.
      */
@@ -224,24 +234,27 @@ public class FormData {
 
     /**
      * Returns the error for a specific id.
+     *
      * @param id
      * @return null if there is no error.
      */
     public String getFormError(String id) {
         return errorMap.get(id);
     }
-    
+
     /**
      * Returns the file upload error for a specific id.
+     *
      * @param id
      * @return null if there is no error.
      */
     public String getFileError(String id) {
         return fileErrorMap.get(id);
     }
-    
+
     /**
      * Retrieves previous submission errors for a form
+     *
      * @return
      */
     public Map<String, String> getPreviousFormErrors() {
@@ -250,14 +263,16 @@ public class FormData {
 
     /**
      * Retrieves errors for a form
+     *
      * @return
      */
     public Map<String, String> getFormErrors() {
         return errorMap;
     }
-    
+
     /**
      * Retrieves file upload errors for a form
+     *
      * @return
      */
     public Map<String, String> getFileErrors() {
@@ -275,21 +290,23 @@ public class FormData {
 
     /**
      * Adds request parameter values.
+     *
      * @param parameter
      * @param values
      */
     public void addRequestParameterValues(String parameter, String[] values) {
-        
+
         if (values.length > 1) {
             Set result = new LinkedHashSet(Arrays.asList(values));
             values = (String[]) result.toArray(new String[0]);
         }
-        
+
         requestParamMap.put(parameter, values);
     }
 
     /**
      * Returns the parameter value from a HTTP request
+     *
      * @param paramName
      * @return
      */
@@ -297,13 +314,14 @@ public class FormData {
         String value = null;
         String[] values = getRequestParameterValues(paramName);
         if (values != null && values.length > 0) {
-            value = values[values.length-1];
+            value = values[values.length - 1];
         }
         return value;
     }
 
     /**
      * Returns the parameter values from a HTTP request
+     *
      * @param paramName
      * @return
      */
@@ -313,6 +331,7 @@ public class FormData {
 
     /**
      * Retrieves request params for a form
+     *
      * @return
      */
     public Map<String, String[]> getRequestParams() {
@@ -321,6 +340,7 @@ public class FormData {
 
     /**
      * Sets data to be stored by store binders
+     *
      * @param binder
      * @param data
      */
@@ -329,7 +349,9 @@ public class FormData {
     }
 
     /**
-     * Retrieves the value of an element property to be passed to a store binder for storing.
+     * Retrieves the value of an element property to be passed to a store binder
+     * for storing.
+     *
      * @param binder
      * @param property
      * @return
@@ -339,7 +361,9 @@ public class FormData {
     }
 
     /**
-     * Returns the collection of store binders contained in this FormData object.
+     * Returns the collection of store binders contained in this FormData
+     * object.
+     *
      * @return
      */
     public Collection<FormStoreBinder> getStoreBinders() {
@@ -349,6 +373,7 @@ public class FormData {
 
     /**
      * Adds an result
+     *
      * @param id
      * @param result
      */
@@ -358,6 +383,7 @@ public class FormData {
 
     /**
      * Returns the result for a specific id.
+     *
      * @param id
      * @return null if there is no result.
      */
@@ -367,6 +393,7 @@ public class FormData {
 
     /**
      * Retrieves results for a form
+     *
      * @return
      */
     public Map<String, String> getFormResults() {

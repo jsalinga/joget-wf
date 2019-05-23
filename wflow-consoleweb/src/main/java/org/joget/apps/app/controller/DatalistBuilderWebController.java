@@ -65,7 +65,7 @@ public class DatalistBuilderWebController {
     @RequestMapping("/console/app/(*:appId)/(~:version)/datalist/builder/(*:id)")
     public String builder(ModelMap map, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("id") String id, @RequestParam(required = false) String json) throws Exception {
         // verify app version
-        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin)pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
+        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin) pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
         String page = consoleWebPlugin.verifyAppVersion(appId, version);
         if (page != null) {
             return page;
@@ -82,7 +82,7 @@ public class DatalistBuilderWebController {
             try {
                 // validate JSON
                 new JSONObject(json);
-                
+
                 // read custom JSON from request
                 listJson = json;
             } catch (JSONException ex) {
@@ -97,16 +97,16 @@ public class DatalistBuilderWebController {
         map.addAttribute("filterParam", new ParamEncoder(id).encodeParameterName(DataList.PARAMETER_FILTER_PREFIX));
         map.addAttribute("datalist", datalist);
         map.addAttribute("json", PropertyUtil.propertiesJsonLoadProcessing(listJson));
-        
+
         response.addHeader("X-XSS-Protection", "0");
-        
+
         return "dbuilder/builder";
     }
 
     @RequestMapping(value = "/console/app/(*:appId)/(~:version)/datalist/builderSave/(*:id)", method = RequestMethod.POST)
     public String save(Writer writer, @RequestParam("appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("id") String id, @RequestParam("json") String json) throws Exception {
         // verify app license
-        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin)pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
+        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin) pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
         String page = consoleWebPlugin.verifyAppVersion(appId, version);
         if (page != null) {
             return page;
@@ -137,7 +137,7 @@ public class DatalistBuilderWebController {
             // get data list
             DataList dataList = new DataList();
             if (json != null && !json.trim().isEmpty()) {
-                
+
                 String tempJson = json;
                 if (tempJson.contains(SecurityUtil.ENVELOPE) || tempJson.contains(PropertyUtil.PASSWORD_PROTECTED_VALUE)) {
                     DatalistDefinition datalistDef = datalistDefinitionDao.loadById(id, appDef);
@@ -146,7 +146,7 @@ public class DatalistBuilderWebController {
                         tempJson = PropertyUtil.propertiesJsonStoreProcessing(datalistDef.getJson(), tempJson);
                     }
                 }
-                
+
                 dataList = dataListService.fromJson(AppUtil.processHashVariable(tempJson, null, StringUtil.TYPE_JSON, null));
                 dataList.setUseSession(false);
                 map.addAttribute("json", json);
@@ -166,9 +166,9 @@ public class DatalistBuilderWebController {
 
         // set map into model to be used in the JSP template
         map.addAttribute("properties", new HashMap(map));
-        
+
         response.addHeader("X-XSS-Protection", "0");
-        
+
         return view;
     }
 
@@ -221,7 +221,7 @@ public class DatalistBuilderWebController {
         }
 
         DataListColumn[] sourceColumns = (binder != null) ? binder.getColumns() : new DataListColumn[0];
- 
+
         // sort columns by label
         List<DataListColumn> binderColumnList = Arrays.asList(sourceColumns);
         Collections.sort(binderColumnList, new Comparator<DataListColumn>() {
@@ -230,7 +230,7 @@ public class DatalistBuilderWebController {
                 return o1.getLabel().toLowerCase().compareTo(o2.getLabel().toLowerCase());
             }
         });
-        
+
         Collection<String> columnNameList = new HashSet<String>();
         DataListColumn[] targetColumns = dataList.getColumns();
         if (targetColumns != null) {
@@ -292,7 +292,7 @@ public class DatalistBuilderWebController {
         if (binderId != null && binderId.trim().length() > 0) {
             // create binder
             binder = dataListService.getBinder(binderId);
-            
+
             if (binder != null) {
                 if (binderJson.contains(SecurityUtil.ENVELOPE) || binderJson.contains(PropertyUtil.PASSWORD_PROTECTED_VALUE)) {
                     DatalistDefinition datalistDef = datalistDefinitionDao.loadById(datalistId, appDef);
@@ -329,7 +329,7 @@ public class DatalistBuilderWebController {
                         tempJson = PropertyUtil.propertiesJsonStoreProcessing(datalist.getJson(), tempJson);
                     }
                 }
-                
+
                 dataList = dataListService.fromJson(AppUtil.processHashVariable(tempJson, null, null, null));
                 dataList.setId(id);
             } catch (Exception ex) {
@@ -354,38 +354,38 @@ public class DatalistBuilderWebController {
         map.addAttribute("jsonParam", jsonParam);
         return dataList;
     }
-    
+
     @RequestMapping("/app/(*:appId)/(~:appVersion)/datalist/embed")
     public String embedDatalist(ModelMap model, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String version, HttpServletRequest request, @RequestParam("_submitButtonLabel") String buttonLabel, @RequestParam("_callback") String callback, @RequestParam("_setting") String callbackSetting, @RequestParam(required = false) String id, @RequestParam(value = "_listId", required = false) String listId, @RequestParam(value = "_type", required = false) String selectionType) throws JSONException {
         AppDefinition appDef = appService.getAppDefinition(appId, version);
-        
+
         if (appDef == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
-        
+
         String nonce = request.getParameter("_nonce");
         if (!SecurityUtil.verifyNonce(nonce, new String[]{"EmbedList", appDef.getAppId(), appDef.getVersion().toString(), listId, nonce})) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return null;
         }
-        
+
         DatalistDefinition datalistDefinition = datalistDefinitionDao.loadById(listId, appDef);
-        
+
         if (datalistDefinition == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
-        
+
         String json = datalistDefinition.getJson();
         String escapedJson = StringEscapeUtils.escapeJavaScript(json);
         DataList dataList = dataListService.fromJson(json);
         dataList.setSelectionType(selectionType);
-        
+
         if (buttonLabel.isEmpty()) {
             buttonLabel = ResourceBundleUtil.getMessage("general.method.label.submit");
         }
-        
+
         model.addAttribute("id", id);
         model.addAttribute("appId", appDef.getAppId());
         model.addAttribute("appVersion", appDef.getVersion().toString());
@@ -394,7 +394,7 @@ public class DatalistBuilderWebController {
         model.addAttribute("dataList", dataList);
         model.addAttribute("setting", callbackSetting);
         model.addAttribute("callback", callback);
-        
+
         if (request.getParameter("_mapp") != null) {
             String origin = request.getHeader("Origin");
             if (origin != null) {
@@ -403,9 +403,9 @@ public class DatalistBuilderWebController {
             response.setHeader("Access-Control-Allow-Origin", origin);
             response.setHeader("Access-Control-Allow-Credentials", "true");
             response.setHeader("Content-type", "application/xml");
-        
+
             return "mapp/embedDatalist";
-        } else {   
+        } else {
             return "dbuilder/embedDatalist";
         }
     }

@@ -72,7 +72,8 @@ public class CustomExcelHssfView implements BinaryExportView {
     private Map<Integer, DataListExcelExportFormatter> formatter = new HashMap<Integer, DataListExcelExportFormatter>();
 
     /**
-     * @see org.displaytag.export.ExportView#setParameters(TableModel, boolean, boolean, boolean)
+     * @see org.displaytag.export.ExportView#setParameters(TableModel, boolean,
+     * boolean, boolean)
      */
     public void setParameters(TableModel tableModel, boolean exportFullList, boolean includeHeader,
             boolean decorateValues) {
@@ -80,11 +81,11 @@ public class CustomExcelHssfView implements BinaryExportView {
         this.exportFull = exportFullList;
         this.header = includeHeader;
         this.decorated = decorateValues;
-        
+
         PageContext pageContext = (new TableModelWrapper(tableModel)).getPageContext();
         if (pageContext != null) {
             datalist = (DataList) pageContext.findAttribute("dataList");
-            
+
             if (datalist != null) {
                 DataListColumn[] columns = datalist.getColumns();
                 Collection<DataListColumnFormat> formats;
@@ -123,17 +124,17 @@ public class CustomExcelHssfView implements BinaryExportView {
         SXSSFWorkbook wb = null;
         try {
             wb_template = new XSSFWorkbook();
-            wb = new SXSSFWorkbook(wb_template, 100, true); 
+            wb = new SXSSFWorkbook(wb_template, 100, true);
             SXSSFSheet sheet = (SXSSFSheet) wb.createSheet("-");
             writer = new DataListExcelWriter(wb, sheet);
-            
+
             Iterator iterator = null;
             HeaderCell headerCell = null;
             String columnHeader = null;
             if (this.header) {
                 // Create an header row
                 writer.createNewRow();
-                
+
                 iterator = this.model.getHeaderCellList().iterator();
                 while (iterator.hasNext()) {
                     headerCell = (HeaderCell) iterator.next();
@@ -157,7 +158,7 @@ public class CustomExcelHssfView implements BinaryExportView {
             DataListExcelExportFormatter ef;
             while (rowIterator.hasNext()) {
                 row = rowIterator.next();
-                
+
                 if (isBeforeRow) {
                     // iterator on columns
                     columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -172,7 +173,7 @@ public class CustomExcelHssfView implements BinaryExportView {
                         col++;
                     }
                 }
-                
+
                 writer.createNewRow();
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -183,7 +184,7 @@ public class CustomExcelHssfView implements BinaryExportView {
                     value = column.getValue(this.decorated);
                     writer.addCell(value);
                 }
-                
+
                 if (isAfterRow) {
                     // iterator on columns
                     columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -209,18 +210,21 @@ public class CustomExcelHssfView implements BinaryExportView {
             if (wb_template != null) {
                 try {
                     wb_template.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (wb != null) {
                 try {
                     wb.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }
     }
-    
+
     /**
      * Wraps IText-generated exceptions.
+     *
      * @author Fabrizio Giustina
      * @version $Revision: 1143 $ ($Author: fgiust $)
      */
@@ -232,7 +236,9 @@ public class CustomExcelHssfView implements BinaryExportView {
         private static final long serialVersionUID = 899149338534L;
 
         /**
-         * Instantiate a new PdfGenerationException with a fixed message and the given cause.
+         * Instantiate a new PdfGenerationException with a fixed message and the
+         * given cause.
+         *
          * @param cause Previous exception
          */
         public ExcelGenerationException(Throwable cause) {
@@ -240,7 +246,8 @@ public class CustomExcelHssfView implements BinaryExportView {
         }
 
         /**
-         * @see org.displaytag.exception.BaseNestableJspTagException#getSeverity()
+         * @see
+         * org.displaytag.exception.BaseNestableJspTagException#getSeverity()
          */
         public SeverityEnum getSeverity() {
             return SeverityEnum.ERROR;

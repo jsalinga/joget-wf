@@ -22,42 +22,42 @@
         <c:set var="bodyId" scope="request" value="pageNotFound"/>
     </c:otherwise>
 </c:choose>
-            
-<c:catch var="bodyError">
-<c:set var="bodyContent">
-    <c:choose>
-        <c:when test="${!empty userview.current}">
-            <c:set var="properties" scope="request" value="${userview.current.properties}"/>
-            <c:set var="requestParameters" scope="request" value="${userview.current.requestParameters}"/>
-            <c:set var="readyJspPage" value="${userview.current.readyJspPage}"/>
-            <c:choose>
-                <c:when test="${!empty readyJspPage}">
-                    <jsp:include page="../${readyJspPage}" flush="true"/>
-                </c:when>
-                <c:otherwise>
-                    ${userview.current.readyRenderPage}
-                </c:otherwise>
-            </c:choose>
-        </c:when>
-        <c:otherwise>
-            <h3><fmt:message key="ubuilder.pageNotFound"/></h3>
 
-            <fmt:message key="ubuilder.pageNotFound.message"/>
-            <br><br>
-            <fmt:message key="ubuilder.pageNotFound.explanation"/>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p>
-                <a href="${pageContext.request.contextPath}/web/userview/${appId}/${userview.properties.id}/<c:out value="${key}"/>"><fmt:message key="ubuilder.pageNotFound.backToMain"/></a>
-            </p>
-        </c:otherwise>
-    </c:choose>
-</c:set>
-            
-<c:set var="alertMessageProperty" value="<%= UserviewMenu.ALERT_MESSAGE_PROPERTY %>"/>
-<c:set var="alertMessageValue" value="${userview.current.properties[alertMessageProperty]}"/>
-<c:set var="redirectUrlProperty" value="<%= UserviewMenu.REDIRECT_URL_PROPERTY %>"/>
-<c:set var="redirectUrlValue" value="${userview.current.properties[redirectUrlProperty]}"/>
+<c:catch var="bodyError">
+    <c:set var="bodyContent">
+        <c:choose>
+            <c:when test="${!empty userview.current}">
+                <c:set var="properties" scope="request" value="${userview.current.properties}"/>
+                <c:set var="requestParameters" scope="request" value="${userview.current.requestParameters}"/>
+                <c:set var="readyJspPage" value="${userview.current.readyJspPage}"/>
+                <c:choose>
+                    <c:when test="${!empty readyJspPage}">
+                        <jsp:include page="../${readyJspPage}" flush="true"/>
+                    </c:when>
+                    <c:otherwise>
+                        ${userview.current.readyRenderPage}
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+            <c:otherwise>
+                <h3><fmt:message key="ubuilder.pageNotFound"/></h3>
+
+                <fmt:message key="ubuilder.pageNotFound.message"/>
+                <br><br>
+                <fmt:message key="ubuilder.pageNotFound.explanation"/>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>
+                    <a href="${pageContext.request.contextPath}/web/userview/${appId}/${userview.properties.id}/<c:out value="${key}"/>"><fmt:message key="ubuilder.pageNotFound.backToMain"/></a>
+                </p>
+            </c:otherwise>
+        </c:choose>
+    </c:set>
+
+    <c:set var="alertMessageProperty" value="<%= UserviewMenu.ALERT_MESSAGE_PROPERTY %>"/>
+    <c:set var="alertMessageValue" value="${userview.current.properties[alertMessageProperty]}"/>
+    <c:set var="redirectUrlProperty" value="<%= UserviewMenu.REDIRECT_URL_PROPERTY %>"/>
+    <c:set var="redirectUrlValue" value="${userview.current.properties[redirectUrlProperty]}"/>
 
 </c:catch>            
 
@@ -66,7 +66,7 @@
         ${userview.current.properties.label}
     </c:if>
 </c:set>
-    
+
 <jg-value name="title">
     <ui:stripTag html="${html}"/>
 </jg-value>
@@ -94,7 +94,7 @@
                         <c:if test="${!empty userview.current && menu.properties.id eq userview.current.properties.id}">
                             <c:set var="m_class" value="${m_class} current"/>
                         </c:if>
-                                                    
+
                         <a class="item item-icon-right nav-clear menu-close menu-item ${m_class}" href="${menu.url}">
                             <ui:stripTag html="${menu.properties.label}" relaxed="true"/>
                             <i class="icon ion-chevron-right"></i>
@@ -109,8 +109,8 @@
 <c:choose>
     <c:when test="${!empty redirectUrlValue}">
         <jg-result alert="${alertMessageValue}" redirect="loadPage('${redirectUrlValue}')"></jg-result>
-    </c:when>
-    <c:otherwise>
+        </c:when>
+        <c:otherwise>
         <jg-result alert="${alertMessageValue}"></jg-result>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/json/ui.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/json/util.js"></script>
@@ -120,10 +120,10 @@
             <c:if test="${!empty bodyError}">
                 ${bodyError}
                 <pre>
-                <%
-                    Exception e = (Exception)pageContext.findAttribute("bodyError");
-                    e.printStackTrace(new java.io.PrintWriter(out));
-                %>
+                    <%
+                        Exception e = (Exception)pageContext.findAttribute("bodyError");
+                        e.printStackTrace(new java.io.PrintWriter(out));
+                    %>
                 </pre>
             </c:if>
             <div class="clearfix"></div>  

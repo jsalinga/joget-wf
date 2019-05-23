@@ -12,7 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Utility methods used by the system to manage cloud profile
- * 
+ *
  */
 @Service
 public class HostManager implements ApplicationContextAware {
@@ -25,9 +25,10 @@ public class HostManager implements ApplicationContextAware {
     protected static String contextPath;
 
     /**
-     * Sets the Host of current HTTP request.
-     * This method is security protected in Cloud installation.
-     * @param hostname 
+     * Sets the Host of current HTTP request. This method is security protected
+     * in Cloud installation.
+     *
+     * @param hostname
      */
     public static void setCurrentHost(String hostname) {
         currentHost.set(hostname);
@@ -35,29 +36,30 @@ public class HostManager implements ApplicationContextAware {
 
     /**
      * Gets the current Host of HTTP request
-     * @return 
+     *
+     * @return
      */
     public static String getCurrentHost() {
         if (isVirtualHostEnabled()) {
-            String hostname = (String)currentHost.get();
+            String hostname = (String) currentHost.get();
             return hostname;
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     /**
-     * Sets the profile of current HTTP request.
-     * This method is security protected in Cloud installation.
-     * @param profile 
+     * Sets the profile of current HTTP request. This method is security
+     * protected in Cloud installation.
+     *
+     * @param profile
      */
     public static void setCurrentProfile(String profile) {
         profile = SecurityUtil.validateStringInput(profile);
         if (profile == null) {
             previousProfile.set(null);
         } else {
-            String previous = (String)previousProfile.get();
+            String previous = (String) previousProfile.get();
             if (previous == null) {
                 String current = getCurrentProfile();
                 if (current != null) {
@@ -71,7 +73,8 @@ public class HostManager implements ApplicationContextAware {
 
     /**
      * Gets the current cloud profile of HTTP request
-     * @return 
+     *
+     * @return
      */
     public static String getCurrentProfile() {
         String profile = (String) currentProfile.get();
@@ -80,17 +83,18 @@ public class HostManager implements ApplicationContextAware {
 
     /**
      * Reset the profile of the current HTTP request.
-     * @param profile 
+     *
+     * @param profile
      */
     public static void resetProfile() {
-        String previous = (String)previousProfile.get();
+        String previous = (String) previousProfile.get();
         if (previous != null) {
             currentProfile.set(previous);
             previousProfile.set(null);
             currentHost.set(null);
         }
     }
-    
+
     /**
      * Initials the host for the current request
      */
@@ -110,7 +114,8 @@ public class HostManager implements ApplicationContextAware {
 
     /**
      * Flag to indicate it is a Cloud installation
-     * @return 
+     *
+     * @return
      */
     public static boolean isVirtualHostEnabled() {
         boolean enabled = Boolean.valueOf(System.getProperty(SYSTEM_PROPERTY_VIRTUALHOST));
@@ -119,21 +124,23 @@ public class HostManager implements ApplicationContextAware {
 
     /**
      * Gets the context path of the HTTP request
-     * @return 
+     *
+     * @return
      */
     public static String getContextPath() {
         return contextPath;
     }
 
     /**
-     * Method used by system to set Application Context. 
-     * This method is security protected in Cloud installation.
+     * Method used by system to set Application Context. This method is security
+     * protected in Cloud installation.
+     *
      * @param appContext
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext appContext) throws BeansException {
         if (appContext instanceof WebApplicationContext) {
-            String realContextPath = ((WebApplicationContext)appContext).getServletContext().getRealPath("/");
+            String realContextPath = ((WebApplicationContext) appContext).getServletContext().getRealPath("/");
             String cPath = "/jw";
             if (realContextPath != null) {
                 File contextPathFile = new File(realContextPath);

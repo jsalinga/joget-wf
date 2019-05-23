@@ -30,7 +30,7 @@ import org.json.JSONArray;
  * Utility class containing methods to create datalist from JSON
  */
 public class JsonUtil {
-    
+
     public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_LABEL = "label";
@@ -63,7 +63,9 @@ public class JsonUtil {
     public static final String PROPERTY_CONSIDER_FILTER_WHEN_GET_TOTAL = "considerFilterWhenGetTotal";
 
     /**
-     * Converts from JSON string into an object. Specifically to support data list model classes.
+     * Converts from JSON string into an object. Specifically to support data
+     * list model classes.
+     *
      * @param <T>
      * @param json
      * @param classOfT
@@ -82,13 +84,15 @@ public class JsonUtil {
         if (json.endsWith(")")) {
             json = json.substring(0, json.length() - 1);
         }
-        
+
         Object object = parseElementFromJson(json);
         return (T) object;
     }
 
     /**
-     * Converts from JSON string into an object. Specifically to support data list model classes.
+     * Converts from JSON string into an object. Specifically to support data
+     * list model classes.
+     *
      * @param json
      * @return
      */
@@ -100,24 +104,25 @@ public class JsonUtil {
 
             // parse json object
             Object object = parseElementFromJsonObject(obj);
-            
+
             return object;
         } catch (Exception ex) {
             LogUtil.error(JsonUtil.class.getName(), ex, "");
         }
         return null;
     }
-    
+
     /**
      * Used to creates Datalist object from JSON Object
+     *
      * @param obj
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static Object parseElementFromJsonObject(JSONObject obj) throws Exception {
         DataList object = (DataList) new DataList();
         if (object != null) {
-            
+
             if (obj.has(PROPERTY_ID)) {
                 object.setId(obj.getString(PROPERTY_ID));
             }
@@ -175,30 +180,31 @@ public class JsonUtil {
             Collection<DataListFilter> filters = parseFiltersFromJsonObject(obj);
             DataListFilter[] temp4 = (DataListFilter[]) filters.toArray(new DataListFilter[filters.size()]);
             object.setFilters(temp4);
-            
+
         }
-        
+
         return object;
     }
-    
+
     /**
      * Used to retrieves datalist filters from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static Collection<DataListFilter> parseFiltersFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         Collection<DataListFilter> property = new ArrayList<DataListFilter>();
-        
+
         if (!obj.isNull(PROPERTY_FILTERS)) {
             JSONArray filters = obj.getJSONArray(PROPERTY_FILTERS);
-            
+
             for (int i = 0; i < filters.length(); i++) {
                 JSONObject filter = filters.getJSONObject(i);
                 DataListFilter dataListFilter = new DataListFilter();
-                
+
                 if (filter.has(PROPERTY_NAME)) {
                     dataListFilter.setName(filter.getString(PROPERTY_NAME));
                 }
@@ -215,27 +221,28 @@ public class JsonUtil {
                 if (filter.has(PROPERTY_HIDDEN)) {
                     dataListFilter.setHidden("true".equalsIgnoreCase(filter.getString(PROPERTY_HIDDEN)));
                 }
-                
+
                 property.add(dataListFilter);
             }
         }
         return property;
     }
-    
+
     /**
      * Used to retrieves datalist row actions from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static Collection<DataListAction> parseRowActionsFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         Collection<DataListAction> property = new ArrayList<DataListAction>();
-        
+
         if (!obj.isNull(PROPERTY_ROW_ACTIONS)) {
             JSONArray actions = obj.getJSONArray(PROPERTY_ROW_ACTIONS);
-            
+
             for (int i = 0; i < actions.length(); i++) {
                 JSONObject action = actions.getJSONObject(i);
                 if (action.has(PROPERTY_CLASS_NAME)) {
@@ -251,21 +258,22 @@ public class JsonUtil {
         }
         return property;
     }
-    
+
     /**
      * Used to retrieves datalist actions from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static Collection<DataListAction> parseActionsFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         Collection<DataListAction> property = new ArrayList<DataListAction>();
-        
+
         if (!obj.isNull(PROPERTY_ACTIONS)) {
             JSONArray actions = obj.getJSONArray(PROPERTY_ACTIONS);
-            
+
             for (int i = 0; i < actions.length(); i++) {
                 JSONObject action = actions.getJSONObject(i);
                 if (action.has(PROPERTY_CLASS_NAME)) {
@@ -281,14 +289,15 @@ public class JsonUtil {
         }
         return property;
     }
-    
+
     /**
      * Used to retrieves datalist binder from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static DataListBinder parseBinderFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         if (!obj.isNull(PROPERTY_BINDER)) {
@@ -304,14 +313,15 @@ public class JsonUtil {
         }
         return null;
     }
-    
+
     /**
-     * Used to retrieves datalist action from JSON Object 
+     * Used to retrieves datalist action from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static DataListAction parseActionFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         try {
@@ -331,14 +341,15 @@ public class JsonUtil {
         }
         return null;
     }
-    
+
     /**
      * Used to retrieves datalist formatter from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static DataListColumnFormat parseFormatterFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         try {
@@ -358,25 +369,26 @@ public class JsonUtil {
         }
         return null;
     }
-    
+
     /**
      * Used to retrieves datalist column from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static Collection<DataListColumn> parseColumnsFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         Collection<DataListColumn> property = new ArrayList<DataListColumn>();
-        
+
         if (!obj.isNull(PROPERTY_COLUMNS)) {
             JSONArray columns = obj.getJSONArray(PROPERTY_COLUMNS);
-            
+
             for (int i = 0; i < columns.length(); i++) {
                 JSONObject column = columns.getJSONObject(i);
                 DataListColumn dataListColumn = new DataListColumn();
-                
+
                 if (column.has(PROPERTY_NAME) && !column.isNull(PROPERTY_NAME)) {
                     dataListColumn.setName(column.getString(PROPERTY_NAME));
                 }
@@ -409,28 +421,29 @@ public class JsonUtil {
                     Collection<DataListColumnFormat> formatCollection = new ArrayList<DataListColumnFormat>();
                     DataListColumnFormat format = parseFormatterFromJsonObject(column);
                     formatCollection.add(format);
-                    
+
                     dataListColumn.setFormats(formatCollection);
                 }
                 if (column.has(PROPERTY_RENDER_HTML) && !column.isNull(PROPERTY_RENDER_HTML) && !column.getString(PROPERTY_RENDER_HTML).isEmpty()) {
                     dataListColumn.setRenderHtml(column.getBoolean(PROPERTY_RENDER_HTML));
                 }
-                
+
                 dataListColumn.setProperties(PropertyUtil.getProperties(column));
-                
+
                 property.add(dataListColumn);
             }
         }
         return property;
     }
-    
+
     /**
      * Used to retrieves datalist filter type from JSON Object
+     *
      * @param obj
      * @return
      * @throws JSONException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     public static DataListFilterType parseFilterTypeFromJsonObject(JSONObject obj) throws JSONException, InstantiationException, IllegalAccessException {
         if (!obj.isNull(PROPERTY_FILTER_TYPE)) {
@@ -440,29 +453,32 @@ public class JsonUtil {
                 DataListFilterType dataListFilterType = (DataListFilterType) loadPlugin(className);
                 if (dataListFilterType != null) {
                     dataListFilterType.setProperties(PropertyUtil.getProperties(filterTypeObj.getJSONObject(PROPERTY_PROPERTIES)));
-                    return dataListFilterType;                    
+                    return dataListFilterType;
                 }
             }
         }
         return null;
     }
-    
+
     /**
      * Used to generate a datalist definition JSON
+     *
      * @param listId
      * @param datalistDef
-     * @return 
+     * @return
      */
     public static String generateDefaultList(String listId, DatalistDefinition datalistDef) {
         return generateDefaultList(listId, datalistDef, null);
     }
-    
+
     /**
-     * Used to generate a datalist definition JSON based on another datalist definition
+     * Used to generate a datalist definition JSON based on another datalist
+     * definition
+     *
      * @param listId
      * @param datalistDef
      * @param copyDatalistDef
-     * @return 
+     * @return
      */
     public static String generateDefaultList(String listId, DatalistDefinition datalistDef, DatalistDefinition copyDatalistDef) {
         String name = "";
@@ -473,7 +489,7 @@ public class JsonUtil {
             name = datalistDef.getName();
             desc = datalistDef.getDescription();
         }
-        
+
         if (copyDatalistDef != null) {
             String copyJson = copyDatalistDef.getJson();
             try {
@@ -495,7 +511,7 @@ public class JsonUtil {
 
         return json;
     }
-    
+
     public static String buildMobileActionLink(Object actionObject, Object row, Object menuId) {
         String link = "";
         if (actionObject != null && actionObject instanceof DataListAction && row != null) {
@@ -504,12 +520,12 @@ public class JsonUtil {
             String hrefParam = (action.getHrefParam() != null && action.getHrefParam().trim().length() > 0) ? action.getHrefParam() : "";
             String hrefColumn = (action.getHrefColumn() != null && action.getHrefColumn().trim().length() > 0) ? action.getHrefColumn() : "";
             link = href;
-            
+
             if (hrefParam != null && hrefColumn != null && !hrefColumn.isEmpty()) {
                 String[] params = hrefParam.split(";");
                 String[] columns = hrefColumn.split(";");
-                
-                for (int i = 0; i < columns.length; i++ ) {
+
+                for (int i = 0; i < columns.length; i++) {
                     if (columns[i] != null && !columns[i].isEmpty()) {
                         boolean isValid = false;
                         if (params.length > i && params[i] != null && !params[i].isEmpty()) {
@@ -521,18 +537,19 @@ public class JsonUtil {
                             link += StringEscapeUtils.escapeHtml(params[i]);
                             link += "=";
                             isValid = true;
-                        } if (!link.contains("?")) {
+                        }
+                        if (!link.contains("?")) {
                             if (!link.endsWith("/")) {
                                 link += "/";
                             }
                             isValid = true;
                         }
-                        
+
                         if (isValid) {
                             Object paramValue = "";
                             try {
                                 paramValue = LookupUtil.getBeanProperty(row, columns[i]);
-                                
+
                                 //handle for lowercase propertyName
                                 if (paramValue == null) {
                                     paramValue = LookupUtil.getBeanProperty(row, columns[i].toLowerCase());
@@ -540,8 +557,9 @@ public class JsonUtil {
                                 if (paramValue != null && paramValue instanceof Date) {
                                     paramValue = TimeZoneUtil.convertToTimeZone((Date) paramValue, null, AppUtil.getAppDateFormat());
                                 }
-                            } catch (Exception e) { }
-                            
+                            } catch (Exception e) {
+                            }
+
                             if (paramValue == null) {
                                 paramValue = StringEscapeUtils.escapeHtml(columns[i]);
                             }
@@ -560,7 +578,7 @@ public class JsonUtil {
         }
         return link;
     }
-    
+
     private static Plugin loadPlugin(String className) {
         Plugin plugin = null;
         if (className != null && !className.isEmpty()) {

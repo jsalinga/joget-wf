@@ -19,15 +19,18 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
 specific language governing permissions and limitations under the License.
  */
 /**
- * Replaces Spring's AntPathMatcher, adding the capacity to recognize parameters with the path.
+ * Replaces Spring's AntPathMatcher, adding the capacity to recognize parameters
+ * with the path.
  * <br />
- * The ParameterizedPathMather should return the same result as AntPathMatcher when given any pattern and URL
- * that AntPathMatcher supports.  See {@link carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping}
+ * The ParameterizedPathMather should return the same result as AntPathMatcher
+ * when given any pattern and URL that AntPathMatcher supports. See
+ * {@link carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping}
  * for details on how to specify parameterized path patterns.
  * <br />
- * <strong>NOTE:</strong> For performance reasons, this class caches information for all patterns (not paths) it
- * encounters.  This should not be a problem unless the patterns are being generated or user submitted at runtime
- * (a rather strange idea).
+ * <strong>NOTE:</strong> For performance reasons, this class caches information
+ * for all patterns (not paths) it encounters. This should not be a problem
+ * unless the patterns are being generated or user submitted at runtime (a
+ * rather strange idea).
  *
  * @author alex cruikshank
  */
@@ -46,6 +49,7 @@ public class ParameterizedPathMatcher extends AntPathMatcher {
 
     /**
      * Return true if the given path matches the given pattern.
+     *
      * @param pattern pattern in Ant path syntax (plus parameters)
      * @param path path to test against pattern
      * @return true if the pattern matches, false otherwise.
@@ -56,10 +60,13 @@ public class ParameterizedPathMatcher extends AntPathMatcher {
     }
 
     /**
-     * Return a map containing all parameters found in the given path according to the given pattern.
+     * Return a map containing all parameters found in the given path according
+     * to the given pattern.
+     *
      * @param pattern given pattern containing parameter specification
      * @param path to test against pattern
-     * @return A map with the specified parameter as key and the matched path segement as a value.
+     * @return A map with the specified parameter as key and the matched path
+     * segement as a value.
      */
     public Map<String, String> namedParameters(String pattern, String path) {
         String key = pattern + "_" + path;
@@ -83,7 +90,9 @@ public class ParameterizedPathMatcher extends AntPathMatcher {
     }
 
     /**
-     * Return the initial path segments of the given path up to the first wildcard of the given pattern
+     * Return the initial path segments of the given path up to the first
+     * wildcard of the given pattern
+     *
      * @param pattern pattern that may contain wildcards
      * @param path path to test against pattern
      * @return in regex: ^[\\\/]?([^(\*\?\\\/]*[\\\/])*([^\(\*\?\\\/]*$)?
@@ -159,6 +168,7 @@ public class ParameterizedPathMatcher extends AntPathMatcher {
 
         /**
          * Convert an ant style pattern into a regex expression
+         *
          * @param pattern ant style pattern to translate
          * @param nextSeparatorOptional BitSet containing 1 if
          * @return

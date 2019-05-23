@@ -42,9 +42,9 @@ import org.enhydra.shark.xpdl.elements.Participant;
 import org.enhydra.shark.xpdl.elements.Transition;
 
 /**
- *  Container for displaying menubar, toolbar, process graphs ...
+ * Container for displaying menubar, toolbar, process graphs ...
  *
- *  @author Sasa Bojanic
+ * @author Sasa Bojanic
  */
 public class GraphControllerPanel extends JPanel implements JaWEComponentView {
 
@@ -120,10 +120,10 @@ public class GraphControllerPanel extends JPanel implements JaWEComponentView {
                 try {
                     String clsName = "org.enhydra.jawe.components.graph.actions.SetParticipantModeCommonExpression";
                     ActionBase action = (ActionBase) Class.forName(clsName).getConstructor(new Class[]{
-                                GraphController.class
-                            }).newInstance(new Object[]{
-                                controller
-                            });
+                        GraphController.class
+                    }).newInstance(new Object[]{
+                        controller
+                    });
                     ja.setAction(action);
                 } catch (Exception ex) {
                 }
@@ -260,7 +260,7 @@ public class GraphControllerPanel extends JPanel implements JaWEComponentView {
 
     protected void decorateToolboxButton(final JButton b, final JaWEAction ja) {
         b.setText(ja.getLangDepName());
-        b.setFont(new Font("sansserif",Font.PLAIN,10));
+        b.setFont(new Font("sansserif", Font.PLAIN, 10));
         b.setHorizontalTextPosition(SwingConstants.CENTER);
         b.setVerticalTextPosition(SwingConstants.BOTTOM);
         b.setMinimumSize(new Dimension(70, 40));
@@ -287,21 +287,21 @@ public class GraphControllerPanel extends JPanel implements JaWEComponentView {
                 Graph graph = controller.getSelectedGraph();
                 PointerInfo pointerInfo = MouseInfo.getPointerInfo();
                 Point location = graph.getLocationOnScreen();
-                int pointerX = (int)pointerInfo.getLocation().getX();
-                int pointerY = (int)pointerInfo.getLocation().getY();
-                int graphX = (int)graph.getParent().getLocationOnScreen().getX();
-                int x = (int)pointerX - (int)location.getX();
-                int y = (int)pointerY -  (int)location.getY();
+                int pointerX = (int) pointerInfo.getLocation().getX();
+                int pointerY = (int) pointerInfo.getLocation().getY();
+                int graphX = (int) graph.getParent().getLocationOnScreen().getX();
+                int x = (int) pointerX - (int) location.getX();
+                int y = (int) pointerY - (int) location.getY();
                 if (pressed && x > 0 && pointerX > graphX) {
                     if (graph.isEditable()) {
-                        GraphMarqueeHandler marquee = (GraphMarqueeHandler)graph.getMarqueeHandler();
+                        GraphMarqueeHandler marquee = (GraphMarqueeHandler) graph.getMarqueeHandler();
                         int status = marquee.getStatus();
                         if (status == JaWEGraphUI.INSERT_PARTICIPANT) {
                             marquee.insertParticipant();
                         } else if (status == JaWEGraphUI.INSERT_ELEMENT) {
                             marquee.insertElement((Point) graph.fromScreen(new Point(x, y)));
                         } else if (status == JaWEGraphUI.INSERT_TRANSITION_START) {
-                            JaWEGraphUI ui = (JaWEGraphUI)graph.getUI();
+                            JaWEGraphUI ui = (JaWEGraphUI) graph.getUI();
                             ui.insertTransitionStart(x, y);
                         }
                         // reset to selection mode for non-transitions

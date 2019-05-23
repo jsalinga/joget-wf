@@ -15,11 +15,12 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 /**
- * Utility methods to quick access to Directory Manager 
- * 
+ * Utility methods to quick access to Directory Manager
+ *
  */
 @Service("directoryUtil")
 public class DirectoryUtil implements ApplicationContextAware {
+
     public final static String CUSTOM_IMPL_PROPERTIES = "customDirectoryManagerImplProperties";
     public final static String IMPL_PROPERTIES = "directoryManagerImplProperties";
     public final static String ROLE_ANONYMOUS = "roleAnonymous";
@@ -28,8 +29,9 @@ public class DirectoryUtil implements ApplicationContextAware {
 
     /**
      * Used by system to set an ApplicationContext object
+     *
      * @param ac
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext ac) throws BeansException {
         appContext = ac;
@@ -37,21 +39,23 @@ public class DirectoryUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return appContext;
     }
-    
+
     /**
      * Flag to indicate there is a custom Directory Manager in used
-     * @return 
+     *
+     * @return
      */
     public static boolean isOverridden() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
-        if (directoryManager != null && directoryManager.getDirectoryManagerImpl() != null 
-            && directoryManager.getCustomDirectoryManagerClassName() != null) {
-            
+        if (directoryManager != null && directoryManager.getDirectoryManagerImpl() != null
+                && directoryManager.getCustomDirectoryManagerClassName() != null) {
+
             SetupManager setupManager = (SetupManager) appContext.getBean("setupManager");
             if (setupManager != null) {
                 Setting setting = setupManager.getSettingByProperty("directoryManagerImpl");
@@ -66,10 +70,11 @@ public class DirectoryUtil implements ApplicationContextAware {
         }
         return false;
     }
-    
+
     /**
      * Get the class name of the custom Directory Manager in used
-     * @return 
+     *
+     * @return
      */
     public static String getOverriddenDirectoryManagerClassName() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
@@ -77,9 +82,10 @@ public class DirectoryUtil implements ApplicationContextAware {
     }
 
     /**
-     * Flag to indicate the custom Directory Manager in used is implemented the 
+     * Flag to indicate the custom Directory Manager in used is implemented the
      * ExtDirectoryManager interface
-     * @return 
+     *
+     * @return
      */
     public static boolean isExtDirectoryManager() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
@@ -87,9 +93,10 @@ public class DirectoryUtil implements ApplicationContextAware {
     }
 
     /**
-     * Flag to indicate the custom Directory Manager in used is a extend implementation of
-     * the Joget default internal directory manager
-     * @return 
+     * Flag to indicate the custom Directory Manager in used is a extend
+     * implementation of the Joget default internal directory manager
+     *
+     * @return
      */
     public static boolean isCustomDirectoryManager() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
@@ -98,8 +105,9 @@ public class DirectoryUtil implements ApplicationContextAware {
 
     /**
      * Flag to indicate the user return by the directory manager is readonly
+     *
      * @param username
-     * @return 
+     * @return
      */
     public static Boolean userIsReadonly(String username) {
         if (username != null && !username.isEmpty() && !ROLE_ANONYMOUS.equals(username)) {
@@ -117,10 +125,12 @@ public class DirectoryUtil implements ApplicationContextAware {
         }
         return false;
     }
-    
+
     /**
-     * Get the user security enhancements implementation of the directory manager in used
-     * @return 
+     * Get the user security enhancements implementation of the directory
+     * manager in used
+     *
+     * @return
      */
     public static UserSecurity getUserSecurity() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
@@ -130,11 +140,12 @@ public class DirectoryUtil implements ApplicationContextAware {
         }
         return null;
     }
-    
+
     /**
-     * Get the HTML template to inject after a login form from user security 
+     * Get the HTML template to inject after a login form from user security
      * enhancements implementation.
-     * @return 
+     *
+     * @return
      */
     public static String getLoginFormFooter() {
         UserSecurity us = getUserSecurity();
@@ -146,7 +157,8 @@ public class DirectoryUtil implements ApplicationContextAware {
 
     /**
      * Convenient method to retrieve all users in a map of id-value pair
-     * @return 
+     *
+     * @return
      */
     public static Map<String, User> getUsersMap() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
@@ -162,7 +174,8 @@ public class DirectoryUtil implements ApplicationContextAware {
 
     /**
      * Convenient method to retrieve all groups in a map of id-value pair
-     * @return 
+     *
+     * @return
      */
     public static Map<String, Group> getGroupsMap() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");
@@ -178,7 +191,8 @@ public class DirectoryUtil implements ApplicationContextAware {
 
     /**
      * Convenient method to retrieve all departments in a map of id-value pair
-     * @return 
+     *
+     * @return
      */
     public static Map<String, Department> getDepartmentsMap() {
         DirectoryManagerProxyImpl directoryManager = (DirectoryManagerProxyImpl) appContext.getBean("directoryManager");

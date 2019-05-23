@@ -24,6 +24,5 @@ public class Undo extends ActionBase {
         JaWEController jc = JaWEManager.getInstance().getJaWEController();
         jc.undo();
 
-
     }
 }

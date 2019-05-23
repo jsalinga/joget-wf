@@ -11,8 +11,9 @@ import org.joget.workflow.model.service.WorkflowUserManager;
 import org.springframework.context.ApplicationContext;
 
 public class CurrentUserHashVariable extends DefaultHashVariablePlugin {
+
     private User user = null;
-    
+
     @Override
     public String processHashVariable(String variableKey) {
         ApplicationContext appContext = AppUtil.getApplicationContext();
@@ -24,7 +25,7 @@ public class CurrentUserHashVariable extends DefaultHashVariablePlugin {
         if (WorkflowUserManager.ROLE_ANONYMOUS.equals(username)) {
             return "";
         }
-        
+
         return getUserAttribute(username, attribute);
     }
 
@@ -53,7 +54,7 @@ public class CurrentUserHashVariable extends DefaultHashVariablePlugin {
                 WorkflowUserManager workflowUserManager = (WorkflowUserManager) appContext.getBean("workflowUserManager");
                 user = workflowUserManager.getCurrentUser();
             }
-            
+
             if (user != null) {
                 //convert first character to upper case
                 char firstChar = attribute.charAt(0);
@@ -81,11 +82,11 @@ public class CurrentUserHashVariable extends DefaultHashVariablePlugin {
     public String getClassName() {
         return this.getClass().getName();
     }
-    
+
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();
@@ -95,7 +96,7 @@ public class CurrentUserHashVariable extends DefaultHashVariablePlugin {
         syntax.add("currentUser.email");
         syntax.add("currentUser.active");
         syntax.add("currentUser.timeZone");
-        
+
         return syntax;
     }
 }

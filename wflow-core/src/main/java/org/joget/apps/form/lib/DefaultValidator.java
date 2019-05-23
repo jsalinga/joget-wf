@@ -99,7 +99,7 @@ public class DefaultValidator extends FormValidator {
         if (message == null || message.isEmpty()) {
             message = ResourceBundleUtil.getMessage("form.defaultvalidator.err.missingValue");
         }
-        
+
         if (values == null || values.length == 0) {
             result = false;
             if (id != null) {
@@ -122,7 +122,7 @@ public class DefaultValidator extends FormValidator {
         if (message == null || message.isEmpty()) {
             message = ResourceBundleUtil.getMessage("form.defaultvalidator.err.alphanumeric");
         }
-        
+
         if (values != null && values.length > 0) {
             for (String val : values) {
                 if (val != null && !val.matches("^[a-zA-Z0-9]*$")) {
@@ -140,7 +140,7 @@ public class DefaultValidator extends FormValidator {
         if (message == null || message.isEmpty()) {
             message = ResourceBundleUtil.getMessage("form.defaultvalidator.err.alphabets");
         }
-        
+
         if (values != null && values.length > 0) {
             for (String val : values) {
                 if (val != null && !val.matches("^[a-zA-Z]*$")) {
@@ -158,7 +158,7 @@ public class DefaultValidator extends FormValidator {
         if (message == null || message.isEmpty()) {
             message = ResourceBundleUtil.getMessage("form.defaultvalidator.err.numbers");
         }
-        
+
         if (values != null && values.length > 0) {
             for (String val : values) {
                 if (val != null && !val.isEmpty() && !val.matches("^[-]?\\d+(\\.\\d+)?$")) {
@@ -190,13 +190,13 @@ public class DefaultValidator extends FormValidator {
         }
         return result;
     }
-    
+
     protected boolean validateCustom(FormData data, String id, String label, String[] values, String regex, String message) {
         boolean result = true;
         if (message == null || message.isEmpty()) {
             message = ResourceBundleUtil.getMessage("form.defaultvalidator.err.invalid");
         }
-        
+
         if (values != null && values.length > 0) {
             for (String val : values) {
                 if (val != null && !val.isEmpty()) {

@@ -423,7 +423,6 @@ public class JaWETypes extends JaWEComponentSettings {
         ImageIcon defIcon = new ImageIcon(JaWETypes.class.getClassLoader().getResource("org/enhydra/jawe/images/default.gif"));
         Color defColor = Color.LIGHT_GRAY;
 
-
         id = JaWEConstants.ACTIVITY_TYPE_NO;
         dispName = controller.getSettings().getLanguageDependentString("NoKey");
         ImageIcon icon = new ImageIcon(JaWETypes.class.getClassLoader().getResource("org/enhydra/jawe/images/genericactivity.gif"));
@@ -435,7 +434,6 @@ public class JaWETypes extends JaWEComponentSettings {
         activityTypes.add(jtype);
         allTypes.put(id, jtype);
         allTypesMapping.put("JaWETypes.ActivityType.Id.no_impl", id);
-
 
         id = JaWEConstants.ACTIVITY_TYPE_TOOL;
         dispName = controller.getSettings().getLanguageDependentString("ToolKey");
@@ -888,7 +886,7 @@ public class JaWETypes extends JaWEComponentSettings {
                     return null;
                 }
                 FileInputStream fis = null;
-                try{
+                try {
                     fis = new FileInputStream(f);
                     parser.parse(new InputSource(fis));
                 } finally {
@@ -915,8 +913,8 @@ public class JaWETypes extends JaWEComponentSettings {
         XMLElement el = null;
         if (!elName.endsWith("Package")) {
             el = (XMLElement) Class.forName(elName).getConstructors()[0].newInstance(new Object[]{
-                        null
-                    });
+                null
+            });
         } else {
             el = new Package();
         }

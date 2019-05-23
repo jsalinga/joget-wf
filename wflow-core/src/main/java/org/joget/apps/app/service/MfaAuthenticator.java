@@ -30,70 +30,76 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 public abstract class MfaAuthenticator extends ExtDefaultPlugin implements PropertyEditable {
-    
+
     /**
      * Return Key used to store MFA status & data
-     * @return 
+     *
+     * @return
      */
     public abstract String getKey();
-    
+
     /**
      * URL to show when OTP (one-time password) is required.
+     *
      * @param username
-     * @return 
+     * @return
      */
     public abstract String validateOtpUrl(String username);
-    
+
     /**
      * Message to show when OTP (one-time password) is required.
+     *
      * @param username
-     * @return 
+     * @return
      */
     public abstract String validateOtpMessage(String username);
-    
+
     /**
      * URL to activate OTP (one-time password).
+     *
      * @param username
-     * @return 
+     * @return
      */
     public abstract String activateOtpUrl(String username);
-    
+
     /**
      * HTML for rendering the MFA interface to activate/deactivate the MFA
+     *
      * @param username
-     * @return 
+     * @return
      */
     public String userProfileHtml(String username, HttpServletRequest request) {
         Map model = new HashMap();
         model.put("request", WorkflowUtil.getHttpServletRequest());
         model.put("mfaActivateURL", activateOtpUrl(username));
         model.put("name", getKey().toLowerCase());
-        
+
         UserMetaDataDao dao = (UserMetaDataDao) AppUtil.getApplicationContext().getBean("userMetaDataDao");
         UserMetaData data = dao.getUserMetaData(username, getKey());
         String submittedValue = request.getParameter(getKey().toLowerCase());
         if (submittedValue == null || submittedValue.isEmpty()) {
-            model.put("data", (data != null)?PropertyUtil.PASSWORD_PROTECTED_VALUE:"");
+            model.put("data", (data != null) ? PropertyUtil.PASSWORD_PROTECTED_VALUE : "");
         } else {
             model.put("data", submittedValue);
         }
-        
+
         model.put("mfaEnabled", !model.get("data").toString().isEmpty());
-        
+
         return getTemplate("mfaDefaultTemplate", model);
     }
-    
+
     /**
      * Processing after a user profile is updated to update MFA status.
+     *
      * @param username
      * @param request
-     * @return 
+     * @return
      */
     public void updateUserProfileProcessing(String username, HttpServletRequest request) {
         UserMetaDataDao dao = (UserMetaDataDao) AppUtil.getApplicationContext().getBean("userMetaDataDao");
         UserMetaData data = dao.getUserMetaData(username, getKey());
         String submittedValue = request.getParameter(getKey().toLowerCase());
-        
+
         if (PropertyUtil.PASSWORD_PROTECTED_VALUE.equals(submittedValue)) {
             //ignore
         } else if (submittedValue != null & !submittedValue.isEmpty()) {
@@ -114,9 +120,10 @@ public abstract class MfaAuthenticator extends ExtDefaultPlugin implements Prope
 
     /**
      * Checks whether OTP is required (MFA is enabled) for a user.
+     *
      * @param username
-     * @return 
-     */    
+     * @return
+     */
     public boolean isOtpRequired(String username) {
         UserMetaDataDao dao = (UserMetaDataDao) AppUtil.getApplicationContext().getBean("userMetaDataDao");
         return dao.getUserMetaData(username, getKey()) != null;
@@ -124,20 +131,22 @@ public abstract class MfaAuthenticator extends ExtDefaultPlugin implements Prope
 
     /**
      * Deletes the current OTP for the user.
-     * @param username 
+     *
+     * @param username
      */
     public void clearOtp(String username) {
         UserMetaDataDao dao = (UserMetaDataDao) AppUtil.getApplicationContext().getBean("userMetaDataDao");
         dao.deleteUserMetaData(username, getKey());
     }
-    
+
     /**
      * Login the user
+     *
      * @param username
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
-    public String loginUser (String username) throws IOException {
+    public String loginUser(String username) throws IOException {
         ExtDirectoryManager dm = (ExtDirectoryManager) DirectoryUtil.getApplicationContext().getBean("directoryManager");
         User user = dm.getUserByUsername(username);
 
@@ -155,10 +164,10 @@ public abstract class MfaAuthenticator extends ExtDefaultPlugin implements Prope
         UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(user.getUsername(), "", gaList);
         result.setDetails(details);
         SecurityContextHolder.getContext().setAuthentication(result);
-        
-        return "<script>parent.window.location = '"+getRedirectUrl()+"';</script>";
+
+        return "<script>parent.window.location = '" + getRedirectUrl() + "';</script>";
     }
-    
+
     protected String getRedirectUrl() {
         String savedUrl = "";
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
@@ -210,12 +219,13 @@ public abstract class MfaAuthenticator extends ExtDefaultPlugin implements Prope
         }
         return "";
     }
-    
+
     /**
      * Method to retrieve the html template
+     *
      * @param template
      * @param model
-     * @return 
+     * @return
      */
     protected String getTemplate(String template, Map model) {
         // display license page

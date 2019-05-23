@@ -6,6 +6,7 @@ import java.util.Collection;
  * Class to represent the result when starting a process.
  */
 public class WorkflowProcessResult {
+
     private WorkflowProcess process;
     private Collection<WorkflowActivity> activities;
     private String status;
@@ -51,7 +52,5 @@ public class WorkflowProcessResult {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    
 
 }

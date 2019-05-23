@@ -3,7 +3,7 @@
 <%@ tag import="org.joget.apps.app.service.AppUtil"%>
 <%@ include file="/WEB-INF/jsp/includes/taglibs.jsp" %>
 
-    </div>
+</div>
 </div>
 
 <div id="footer">
@@ -24,16 +24,16 @@
 </jsp:include>
 
 <style>
-<%= WorkflowUtil.getSystemSetupValue("customCss") %>
+    <%= WorkflowUtil.getSystemSetupValue("customCss") %>
 </style>
 
 <script>
     if (window.parent !== self && window.parent.name !== "quickOverlayFrame") {
-        $("body").addClass("quickOverlayFrame");
-        $("#main-header, #main-menu, #header, #footer, #adminBar, #beta").hide();
-        $("#container, #nav, #menu-popup").css("top", "0px");
+    $("body").addClass("quickOverlayFrame");
+    $("#main-header, #main-menu, #header, #footer, #adminBar, #beta").hide();
+    $("#container, #nav, #menu-popup").css("top", "0px");
     } else {
-        $("#main-header, #header, #footer, #adminBar, #beta").show();
+    $("#main-header, #header, #footer, #adminBar, #beta").show();
     }
 </script>
 

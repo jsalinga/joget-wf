@@ -35,32 +35,32 @@ public class User implements Serializable, Auditable {
     private String address;
     private String publicKey;
     private String privateKey;
-    
+
     public String getAddress() {
-		return address;
-	}
+        return address;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getPublicKey() {
-		return publicKey;
-	}
+    public String getPublicKey() {
+        return publicKey;
+    }
 
-	public void setPublicKey(String publicKey) {
-		this.publicKey = publicKey;
-	}
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
 
-	public String getPrivateKey() {
-		return privateKey;
-	}
+    public String getPrivateKey() {
+        return privateKey;
+    }
 
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
-	}
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
 
-	public static final String LOGIN_HASH_DELIMINATOR = "::";
+    public static final String LOGIN_HASH_DELIMINATOR = "::";
 
     public String getId() {
         return id;
@@ -125,7 +125,7 @@ public class User implements Serializable, Auditable {
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
-    
+
     public String getLocale() {
         return locale;
     }

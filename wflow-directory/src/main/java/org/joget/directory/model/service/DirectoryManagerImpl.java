@@ -297,7 +297,7 @@ public class DirectoryManagerImpl implements ExtDirectoryManager {
         }
         return null;
     }
-    
+
     protected User getDepartmentHod(Department department) {
         if (department != null && department.getHod() != null) {
             return employmentDao.getEmployment(department.getHod().getId()).getUser();

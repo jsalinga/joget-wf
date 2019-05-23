@@ -24,14 +24,14 @@ public class DynamicDataSourceManager {
     public static final String SECURE_FIELD = "workflowPassword";
 
     private static DatasourceProfilePropertyManager profilePropertyManager;
-    
+
     /**
      * The property manager is initialized via spring injection.
      */
     public DynamicDataSourceManager(DatasourceProfilePropertyManager propertyManager) {
         DynamicDataSourceManager.profilePropertyManager = propertyManager;
     }
-    
+
     public static boolean testConnection(String driver, String url, String user, String password) {
         Connection conn = null;
         try {

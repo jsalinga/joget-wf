@@ -38,7 +38,7 @@ public class WorkflowDeadline {
                     String matchedValue = matcher.group(1);
                     matchedValue = matchedValue.replace("(", "");
                     matchedValue = matchedValue.replace(")", "");
-                    
+
                     String number[] = matchedValue.split("\\*");
                     String value = getWorkflowVariable(number[0]);
                     deadlineLimit = Integer.parseInt(value);
@@ -76,7 +76,7 @@ public class WorkflowDeadline {
     public void setContext(Map context) {
         this.context = context;
     }
-    
+
     private String getWorkflowVariable(String key) {
         if (context != null && context.containsKey(key)) {
             return context.get(key).toString();

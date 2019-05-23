@@ -72,19 +72,20 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
         } else {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         }
-            
+
         // output content
         PrintWriter writer = response.getWriter();
         writer.write(content);
-    }    
+    }
 
     /**
      * Content to be added to the web console header.
+     *
      * @param path Current JSP path e.g. /WEB-INF/jsp/console/home.jsp
-     * @return 
+     * @return
      */
     public String getHeader(String path) {
-        MessageSource messageSource = (MessageSource)AppUtil.getApplicationContext().getBean("messageSource");
+        MessageSource messageSource = (MessageSource) AppUtil.getApplicationContext().getBean("messageSource");
         Locale locale = LocaleContextHolder.getLocale();
         String header = messageSource.getMessage("console.header.top.title", null, "", locale);
         return header;
@@ -92,11 +93,12 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
 
     /**
      * Content to be added to the web console header.
+     *
      * @param path Current JSP path e.g. /WEB-INF/jsp/console/home.jsp
-     * @return 
+     * @return
      */
     public String getLogo(String path) {
-        MessageSource messageSource = (MessageSource)AppUtil.getApplicationContext().getBean("messageSource");
+        MessageSource messageSource = (MessageSource) AppUtil.getApplicationContext().getBean("messageSource");
         Locale locale = LocaleContextHolder.getLocale();
         String header = messageSource.getMessage("console.header.top.logo", null, "", locale);
         return header;
@@ -104,20 +106,22 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
 
     /**
      * Content to be added to the web console footer.
+     *
      * @param path Current JSP path e.g. /WEB-INF/jsp/console/home.jsp
-     * @return 
+     * @return
      */
     public String getFooter(String path) {
-        MessageSource messageSource = (MessageSource)AppUtil.getApplicationContext().getBean("messageSource");
+        MessageSource messageSource = (MessageSource) AppUtil.getApplicationContext().getBean("messageSource");
         Locale locale = LocaleContextHolder.getLocale();
         String revision = messageSource.getMessage("console.footer.label.revision", null, "", locale);
         String footer = "&copy; Joget Workflow - Joget Inc. All Rights Reserved. " + revision;
         return footer;
     }
-    
+
     /**
      * Additional content in the login page
-     * @return 
+     *
+     * @return
      */
     protected String getLogin() {
         return "";
@@ -125,7 +129,8 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
 
     /**
      * Additional content in the home page
-     * @return 
+     *
+     * @return
      */
     protected String getHome() {
         return "";
@@ -133,7 +138,8 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
 
     /**
      * Welcome content in the home page.
-     * @return 
+     *
+     * @return
      */
     protected String getWelcome() {
         String content = "<div id=\"getting-started\">"
@@ -143,26 +149,28 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
                 + "<script>$(window).on(\"load\", function() { $(\"#welcomeFrame\").attr(\"src\", \"//www.joget.org/updates/welcome/?src=v6\"); });</script>";
         return content;
     }
-    
+
     /**
      * Returns information regarding an app.
+     *
      * @param appId
      * @param version
-     * @return 
+     * @return
      */
     public String getAppInfo(String appId, String version) {
         return "";
     }
-    
+
     /**
      * Verify valid app license, to return the appropriate page.
+     *
      * @param appId
      * @param version
-     * @return 
+     * @return
      */
     public String verifyAppVersion(String appId, String version) {
-        AppService appService = (AppService)AppUtil.getApplicationContext().getBean("appService");
-        AppDefinitionDao appDefinitionDao = (AppDefinitionDao)AppUtil.getApplicationContext().getBean("appDefinitionDao");
+        AppService appService = (AppService) AppUtil.getApplicationContext().getBean("appService");
+        AppDefinitionDao appDefinitionDao = (AppDefinitionDao) AppUtil.getApplicationContext().getBean("appDefinitionDao");
         AppDefinition appDef = appService.getAppDefinition(appId, version);
         if (appDef != null) {
             return null;
@@ -176,18 +184,19 @@ public class ConsoleWebPlugin extends ExtDefaultPlugin implements PluginWebSuppo
             return "redirect:/web/console/home";
         }
     }
-    
+
     /**
      * System info in the System Settings
+     *
      * @param request
      * @param response
-     * @return 
+     * @return
      */
     public String getSettings(HttpServletRequest request, HttpServletResponse response) {
         HashMap model = new HashMap();
-        PluginManager pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+        PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
         String content = pluginManager.getPluginFreeMarkerTemplate(model, getClass().getName(), "/templates/settings.ftl", null);
         return content;
     }
-    
+
 }

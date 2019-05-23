@@ -22,7 +22,7 @@ public class AppDefinitionDaoImpl extends AbstractVersionedObjectDao<AppDefiniti
     public void setCache(Cache cache) {
         this.cache = cache;
     }
-    
+
     public void clearCache(AppDefinition obj) {
         cache.removeAll();
     }
@@ -73,12 +73,12 @@ public class AppDefinitionDaoImpl extends AbstractVersionedObjectDao<AppDefiniti
         q.setParameter(0, appId);
 
         Iterator it = q.iterate();
-        return (it.hasNext()) ? ((Long)it.next()).longValue() : null;
+        return (it.hasNext()) ? ((Long) it.next()).longValue() : null;
     }
-    
+
     public AppDefinition getPublishedAppDefinition(final String appId) {
         Collection list = super.find(getEntityName(), " WHERE e.published = true and e.id = ?", new String[]{appId}, null, null, null, 1);
-        
+
         if (list != null && !list.isEmpty()) {
             return (AppDefinition) list.iterator().next();
         }

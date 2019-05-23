@@ -10,9 +10,9 @@
     <c:set var="css" value="<%= css %>"/>
     <c:set var="customCss" value="<%= customCss %>"/>
     <c:if test="${!empty css}">
-    <link rel="stylesheet" type="text/css" href="<c:out value="${css}"/>?build=<fmt:message key="build.number"/>">
+        <link rel="stylesheet" type="text/css" href="<c:out value="${css}"/>?build=<fmt:message key="build.number"/>">
     </c:if>
     <style>
-    <c:out value="${customCss}"/>
+        <c:out value="${customCss}"/>
     </style>
 </c:if>

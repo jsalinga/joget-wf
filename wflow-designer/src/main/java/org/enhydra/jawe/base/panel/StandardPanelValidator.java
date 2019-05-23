@@ -28,7 +28,7 @@ import org.enhydra.shark.xpdl.elements.Package;
 
 /**
  * Class used to validate panels for all XPDL entities.
- * 
+ *
  * @author Sasa Bojanic
  */
 public class StandardPanelValidator implements PanelValidator {
@@ -562,7 +562,7 @@ public class StandardPanelValidator implements PanelValidator {
         boolean isValid = XMLUtil.isIdValid(newId);
 
         //check for period (.)
-        if(isValid && newId != null && newId.contains(".")){
+        if (isValid && newId != null && newId.contains(".")) {
             isValid = false;
         }
 
@@ -703,8 +703,8 @@ public class StandardPanelValidator implements PanelValidator {
         }
 
         boolean isExcTra = false;
-        if (newType.equals(XPDLConstants.CONDITION_TYPE_EXCEPTION) ||
-                newType.equals(XPDLConstants.CONDITION_TYPE_DEFAULTEXCEPTION)) {
+        if (newType.equals(XPDLConstants.CONDITION_TYPE_EXCEPTION)
+                || newType.equals(XPDLConstants.CONDITION_TYPE_DEFAULTEXCEPTION)) {
             isExcTra = true;
         }
 

@@ -23,7 +23,7 @@ public class SessionFactoryCacheListener implements CacheEventListener {
 
     protected void closeSessionFactory(Element element) throws HibernateException {
         if (element.getObjectValue() instanceof SessionFactory) {
-            final SessionFactory sf = (SessionFactory)element.getObjectValue();
+            final SessionFactory sf = (SessionFactory) element.getObjectValue();
             if (!sf.isClosed()) {
                 new Thread() {
                     @Override
@@ -53,10 +53,10 @@ public class SessionFactoryCacheListener implements CacheEventListener {
 
     public void dispose() {
     }
-    
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
 }

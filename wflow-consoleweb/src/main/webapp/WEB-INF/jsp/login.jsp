@@ -36,16 +36,16 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                     <tr><td><fmt:message key="console.login.label.password" /> </td><td><input class="input" type='password' id='j_password' name='j_password'></td></tr>
                     <tr><td></td><td class="buttons"><input name="submit" class="form-button" type="submit" value="<fmt:message key="console.login.label.login" />" /></td></tr>
                     <tr><td colspan="2">
-                        <%= DirectoryUtil.getLoginFormFooter() %>
-                    </td></tr>
+                            <%= DirectoryUtil.getLoginFormFooter() %>
+                        </td></tr>
                 </table>
             </form>
-                    
+
             <script type="text/javascript">
                 $(document).ready(
-                    function() {
-                        $("#loginForm #j_username").focus();
-                    }
+                function() {
+                $("#loginForm #j_username").focus();
+                }
                 );
             </script>
         </div>

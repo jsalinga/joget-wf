@@ -7,43 +7,44 @@ import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 
 /**
- * Metadata definition for an App. An App that consists of a workflow package, forms, lists, userviews.
+ * Metadata definition for an App. An App that consists of a workflow package,
+ * forms, lists, userviews.
  */
 @Root
 public class AppDefinition extends AbstractVersionedObject {
 
     @Path("packageDefinitionList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<PackageDefinition> packageDefinitionList;
 
     @Path("formDefinitionList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<FormDefinition> formDefinitionList;
 
     @Path("userviewDefinitionList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<UserviewDefinition> userviewDefinitionList;
 
     @Path("datalistDefinitionList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<DatalistDefinition> datalistDefinitionList;
 
     @Path("pluginDefaultPropertiesList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<PluginDefaultProperties> pluginDefaultPropertiesList;
 
     @Path("environmentVariableList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<EnvironmentVariable> environmentVariableList;
 
     @Path("messageList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<Message> messageList;
-    
+
     @Path("resourceList")
-    @ElementList(required = false,inline=true)
+    @ElementList(required = false, inline = true)
     private Collection<AppResource> resourceList;
-    
+
     private Boolean published;
     @Element(required = false)
     private String license;
@@ -54,6 +55,7 @@ public class AppDefinition extends AbstractVersionedObject {
 
     /**
      * For an App, the package ID is equivalent to the ID.
+     *
      * @return
      */
     @Override
@@ -69,6 +71,7 @@ public class AppDefinition extends AbstractVersionedObject {
 
     /**
      * Convenience method to return the first package definition for this app.
+     *
      * @return null if there is none defined.
      */
     public PackageDefinition getPackageDefinition() {
@@ -119,7 +122,7 @@ public class AppDefinition extends AbstractVersionedObject {
     public void setMessageList(Collection<Message> messageList) {
         this.messageList = messageList;
     }
-    
+
     public Collection<AppResource> getResourceList() {
         return resourceList;
     }

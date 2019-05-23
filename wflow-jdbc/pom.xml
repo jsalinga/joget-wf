@@ -33,7 +33,7 @@
             <version>1.6.5</version>
             <scope>compile</scope>
         </dependency>
-       <!--  <dependency>
+        <!--  <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>12.1.0.2</version>

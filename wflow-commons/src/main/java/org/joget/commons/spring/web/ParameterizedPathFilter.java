@@ -17,17 +17,20 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
 specific language governing permissions and limitations under the License.
  */
 /**
- * Wraps the servlet request with an HttpServletRequestWrapper that, when given a request
- * attribute with the key "ParameterizedUrlHandlerMapping.path-parameters" whose value is a map,
- * will take all the Map's key/value pairs and add them as request parameters.  The parameters
- * will be available to all subsequent Filters, Servlet, Controllers, JSP's etc.
+ * Wraps the servlet request with an HttpServletRequestWrapper that, when given
+ * a request attribute with the key
+ * "ParameterizedUrlHandlerMapping.path-parameters" whose value is a map, will
+ * take all the Map's key/value pairs and add them as request parameters. The
+ * parameters will be available to all subsequent Filters, Servlet, Controllers,
+ * JSP's etc.
  * <br />
- * This filter should be mapped to all URLs that will be handled by a Spring DispatcherServlet
- * which is using the {@link carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping}
- * to route its requests.
+ * This filter should be mapped to all URLs that will be handled by a Spring
+ * DispatcherServlet which is using the
+ * {@link carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping} to
+ * route its requests.
  * <br />
- * Since this filter uses the {@link HttpServletRequestWrapper}, it may only be used in Servlet 2.3
- * applications.
+ * Since this filter uses the {@link HttpServletRequestWrapper}, it may only be
+ * used in Servlet 2.3 applications.
  *
  * @author alex cruikshank
  */
@@ -37,8 +40,9 @@ public class ParameterizedPathFilter implements Filter {
     }
 
     /**
-     * Wraps the request with one that will add request parameters when given a request attribute
-     * with the appropriate key.
+     * Wraps the request with one that will add request parameters when given a
+     * request attribute with the appropriate key.
+     *
      * @param request
      * @param response
      * @param filterChain

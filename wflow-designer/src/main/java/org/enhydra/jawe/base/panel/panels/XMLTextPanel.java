@@ -95,7 +95,7 @@ public class XMLTextPanel extends XMLBasicPanel {
         //CUSTOM
         if (JaWE.BASIC_MODE && myOwner.toName().equalsIgnoreCase("Type")) {
             jtf.setEnabled(false);
-        }else if(JaWE.BASIC_MODE && myOwner.toName().equalsIgnoreCase("Id") && Designer.isPackageFixed() && myOwner.getParent() instanceof org.enhydra.shark.xpdl.elements.Package){
+        } else if (JaWE.BASIC_MODE && myOwner.toName().equalsIgnoreCase("Id") && Designer.isPackageFixed() && myOwner.getParent() instanceof org.enhydra.shark.xpdl.elements.Package) {
             jtf.setEnabled(false);
         } else {
             jtf.setEnabled(isEnabled);

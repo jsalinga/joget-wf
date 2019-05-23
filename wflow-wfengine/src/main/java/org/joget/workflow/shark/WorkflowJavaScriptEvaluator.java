@@ -16,10 +16,10 @@ import org.mozilla.javascript.Scriptable;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Implementation of the Evaluator interface which evaluates the condition body as a java
- * script expression.
+ * Implementation of the Evaluator interface which evaluates the condition body
+ * as a java script expression.
  */
- public class WorkflowJavaScriptEvaluator implements Evaluator {
+public class WorkflowJavaScriptEvaluator implements Evaluator {
 
     private static final String LOG_CHANNEL = "Scripting";
     private CallbackUtilities cus;
@@ -29,8 +29,8 @@ import org.springframework.context.ApplicationContext;
     }
 
     /**
-     * Evaluate the condition using java script as the expression language. This method
-     * returns true if the condition is satisfied.
+     * Evaluate the condition using java script as the expression language. This
+     * method returns true if the condition is satisfied.
      *
      * @param condition The condition
      * @param context The context
@@ -68,7 +68,8 @@ import org.springframework.context.ApplicationContext;
      *
      * @param expr The expression String
      * @param context The workflow context
-     * @param resultClass Returned object should be the instance of this Java class
+     * @param resultClass Returned object should be the instance of this Java
+     * class
      * @return The result of expression evaluation.
      */
     public java.lang.Object evaluateExpression(WMSessionHandle shandle,
@@ -80,19 +81,19 @@ import org.springframework.context.ApplicationContext;
 
         ApplicationContext appContext = WorkflowUtil.getApplicationContext();
         WorkflowHelper workflowMapper = (WorkflowHelper) appContext.getBean("workflowHelper");
-            
-        WorkflowAssignment ass= null;
+
+        WorkflowAssignment ass = null;
         if (procId != null && !procId.isEmpty()) {
             ass = new WorkflowAssignment(); //dummy assignment object for form hash variable
             ass.setActivityId(actId);
             ass.setProcessId(procId);
         }
         expr = workflowMapper.processHashVariable(expr, ass, null, null);
-            
+
         if (context.containsKey(SharkConstants.PROCESS_STARTED_TIME)
                 && context.containsKey(SharkConstants.ACTIVITY_ACCEPTED_TIME)
                 && context.containsKey(SharkConstants.ACTIVITY_ACTIVATED_TIME)) {
-            
+
             try {
                 WorkflowDeadline workflowDeadline = new WorkflowDeadline();
                 workflowDeadline.setContext(context);

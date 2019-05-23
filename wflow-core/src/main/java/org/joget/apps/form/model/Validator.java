@@ -11,21 +11,23 @@ public abstract class Validator extends ExtDefaultPlugin implements PropertyEdit
     private Element element;
 
     /**
-     *  Gets Element that this validator is tied to.
+     * Gets Element that this validator is tied to.
      */
     public Element getElement() {
         return element;
     }
 
     /**
-     *  Sets Element that this validator is tied to.
+     * Sets Element that this validator is tied to.
      */
     public void setElement(Element element) {
         this.element = element;
     }
-    
+
     /**
-     * Return the HTML decoration for the attached element, e.g. marking a required field.
+     * Return the HTML decoration for the attached element, e.g. marking a
+     * required field.
+     *
      * @return
      */
     public String getElementDecoration(Element element, FormData formData) {
@@ -33,7 +35,9 @@ public abstract class Validator extends ExtDefaultPlugin implements PropertyEdit
     }
 
     /**
-     * Return the HTML decoration for the attached element, e.g. marking a required field.
+     * Return the HTML decoration for the attached element, e.g. marking a
+     * required field.
+     *
      * @return
      */
     public String getElementDecoration() {
@@ -42,6 +46,7 @@ public abstract class Validator extends ExtDefaultPlugin implements PropertyEdit
 
     /**
      * Validate the submitted values for an element
+     *
      * @param element
      * @param data
      * @param values The values to validate

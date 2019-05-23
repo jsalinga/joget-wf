@@ -1,6 +1,7 @@
 package org.joget.workflow.shark.model;
 
 public class SharkActivityState {
+
     private long id;
     private String name;
 

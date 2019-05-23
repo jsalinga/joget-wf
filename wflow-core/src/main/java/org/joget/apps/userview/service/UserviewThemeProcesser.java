@@ -39,7 +39,7 @@ public class UserviewThemeProcesser {
     public UserviewThemeProcesser(Userview userview, HttpServletRequest request) {
         this.userview = userview;
         this.request = request;
-        
+
         isAuthorized = userview.getSetting().getPermission() == null || (userview.getSetting().getPermission() != null && userview.getSetting().getPermission().isAuthorize());
         if (!isAuthorized) {
             this.userview.setCurrent(null);
@@ -60,7 +60,7 @@ public class UserviewThemeProcesser {
         if (userview.getSetting().getTheme() != null && !(userview.getSetting().getTheme() instanceof UserviewV5Theme)) {
             return "ubuilder/login";
         }
-        
+
         String loginRedirection = loginRedirection();
         if (loginRedirection != null) {
             return loginRedirection;
@@ -73,7 +73,7 @@ public class UserviewThemeProcesser {
     }
 
     public String getView() {
-        
+
         if (userview.getSetting().getTheme() != null && !(userview.getSetting().getTheme() instanceof UserviewV5Theme)) {
             return "ubuilder/view";
         }
@@ -215,7 +215,7 @@ public class UserviewThemeProcesser {
         if (mobileAgent && !disableMobileView && !desktopCookie) {
             String url = "/web/mobile/" + userview.getParamString("appId") + "/" + userview.getPropertyString("id") + "/" + userview.getParamString("key") + "/";
             if (!userview.getParamString("menuId").isEmpty()) {
-                url += userview.getParamString("menuId"); 
+                url += userview.getParamString("menuId");
             }
             return "redirect:" + url;
         }
@@ -228,7 +228,7 @@ public class UserviewThemeProcesser {
         }
         return null;
     }
-    
+
     protected String loginRedirection() {
         boolean isAnonymous = WorkflowUtil.isCurrentUserAnonymous();
         if (!isAnonymous) {
@@ -265,15 +265,15 @@ public class UserviewThemeProcesser {
             }
             if (isExist) {
                 if (!userview.getParamString("menuId").isEmpty()) {
-                    url += menuId; 
+                    url += menuId;
                 }
                 if (request.getQueryString() != null) {
                     url += "?" + request.getQueryString();
                 }
             } else {
-                url += userview.getProperty("homeMenuId"); 
+                url += userview.getProperty("homeMenuId");
             }
-            
+
             return "redirect:" + url;
         }
         return null;
@@ -368,9 +368,9 @@ public class UserviewThemeProcesser {
         }
 
         html += "UI.base = \"" + request.getContextPath() + "\";\n"
-                + "        UI.userview_app_id = '"+userview.getParamString("appId")+"';\n"
-                + "        UI.userview_id = '"+userview.getPropertyString("id")+"';\n"
-                + "        UI.locale = '"+AppUtil.getAppLocale()+"';\n";
+                + "        UI.userview_app_id = '" + userview.getParamString("appId") + "';\n"
+                + "        UI.userview_id = '" + userview.getPropertyString("id") + "';\n"
+                + "        UI.locale = '" + AppUtil.getAppLocale() + "';\n";
 
         if (alertMessage != null && !alertMessage.isEmpty()) {
             html += "alert(\"" + alertMessage + "\");\n";
@@ -378,30 +378,30 @@ public class UserviewThemeProcesser {
 
         html += "</script>\n";
 
-        html += "    <script>\n" +
-                "        ConnectionManager.tokenName = \"" + SecurityUtil.getCsrfTokenName() + "\";\n" +
-                "        ConnectionManager.tokenValue = \"" + SecurityUtil.getCsrfTokenValue(request) + "\";\n" +
-                "        JPopup.tokenName = \"" + SecurityUtil.getCsrfTokenName() + "\";\n" +
-                "        JPopup.tokenValue = \"" + SecurityUtil.getCsrfTokenValue(request) + "\";\n" +
-                "    </script>";
-        
+        html += "    <script>\n"
+                + "        ConnectionManager.tokenName = \"" + SecurityUtil.getCsrfTokenName() + "\";\n"
+                + "        ConnectionManager.tokenValue = \"" + SecurityUtil.getCsrfTokenValue(request) + "\";\n"
+                + "        JPopup.tokenName = \"" + SecurityUtil.getCsrfTokenName() + "\";\n"
+                + "        JPopup.tokenValue = \"" + SecurityUtil.getCsrfTokenValue(request) + "\";\n"
+                + "    </script>";
+
         return html;
     }
 
     protected String getJogetFooter() {
         String html = "";
-        
+
         if (!"true".equalsIgnoreCase(theme.getPropertyString("disableHelpGuide"))) {
             html = "<script type=\"text/javascript\">\n"
-                + "            HelpGuide.base = \"" + request.getContextPath() + "\"\n"
-                + "            HelpGuide.attachTo = \"#help-container\";\n"
-                + "            HelpGuide.key = \"help.web.userview."+userview.getParamString("appId")+"."+userview.getParamString("userviewId")+"."+getBodyId()+"\";\n"
-                + "            $(window).on('load', function() {\n"
-                + "                setTimeout(function() {"
-                + "                    HelpGuide.show();\n"
-                + "                }, 0);"
-                + "            });\n"
-                + "        </script>\n";
+                    + "            HelpGuide.base = \"" + request.getContextPath() + "\"\n"
+                    + "            HelpGuide.attachTo = \"#help-container\";\n"
+                    + "            HelpGuide.key = \"help.web.userview." + userview.getParamString("appId") + "." + userview.getParamString("userviewId") + "." + getBodyId() + "\";\n"
+                    + "            $(window).on('load', function() {\n"
+                    + "                setTimeout(function() {"
+                    + "                    HelpGuide.show();\n"
+                    + "                }, 0);"
+                    + "            });\n"
+                    + "        </script>\n";
         }
 
         html += AppUtil.getSystemAlert() + "\n";
@@ -414,16 +414,16 @@ public class UserviewThemeProcesser {
         html += UserviewUtil.renderJspAsString("ubuilder/adminBar.jsp", modelMap) + "\n\n";
 
         if ("true".equalsIgnoreCase(userview.getParamString("isPreview"))) {
-            html += "<!--[if IE]><div id=\"preview-label\" class=\"ie\">"+ResourceBundleUtil.getMessage("fbuilder.preview")+"</div><![endif]-->\n"
-                    + "        <!--[if !IE]><!--><div id=\"preview-label\">"+ResourceBundleUtil.getMessage("fbuilder.preview")+"</div><!--<![endif]-->        \n"
+            html += "<!--[if IE]><div id=\"preview-label\" class=\"ie\">" + ResourceBundleUtil.getMessage("fbuilder.preview") + "</div><![endif]-->\n"
+                    + "        <!--[if !IE]><!--><div id=\"preview-label\">" + ResourceBundleUtil.getMessage("fbuilder.preview") + "</div><!--<![endif]-->        \n"
                     + "        <div style=\"display:none\" id=\"preview-form\">\n"
                     + "            <form id=\"preview\" action=\"\" method=\"post\">\n"
                     + "                <input type=\"hidden\" name=\"json\" value=\"" + StringEscapeUtils.escapeHtml(userview.getParamString("json")) + "\"/>\"/>\n"
                     + "            </form>\n"
                     + "        </div>\n";
         } else if ("true".equals(userview.getSetting().getPropertyString("tempDisablePermissionChecking"))) {
-            html += "<!--[if IE]><div id=\"preview-label\" class=\"ie testing\"><a onclick=\"$('#preview-label').remove()\">x</a> "+ResourceBundleUtil.getMessage("ubuilder.permissionDisabled")+"</div><![endif]-->\n";
-            html += "<!--[if !IE]><!--><div id=\"preview-label\" class=\"testing\"><a onclick=\"$('#preview-label').remove()\">x</a> "+ResourceBundleUtil.getMessage("ubuilder.permissionDisabled")+"</div><!--<![endif]-->";
+            html += "<!--[if IE]><div id=\"preview-label\" class=\"ie testing\"><a onclick=\"$('#preview-label').remove()\">x</a> " + ResourceBundleUtil.getMessage("ubuilder.permissionDisabled") + "</div><![endif]-->\n";
+            html += "<!--[if !IE]><!--><div id=\"preview-label\" class=\"testing\"><a onclick=\"$('#preview-label').remove()\">x</a> " + ResourceBundleUtil.getMessage("ubuilder.permissionDisabled") + "</div><!--<![endif]-->";
         }
 
         return html;
@@ -437,7 +437,7 @@ public class UserviewThemeProcesser {
 
         return StringUtil.stripAllHtmlTag(title);
     }
-    
+
     protected String getBaseLink() {
         String key = userview.getParamString("key");
         if (key.isEmpty()) {
@@ -580,7 +580,7 @@ public class UserviewThemeProcesser {
             if (isLoginPage) {
                 return getLoginForm(data);
             } else if (!isAuthorized) {
-                return "<h3>"+ResourceBundleUtil.getMessage("ubuilder.noAuthorize")+"</h3>";
+                return "<h3>" + ResourceBundleUtil.getMessage("ubuilder.noAuthorize") + "</h3>";
             } else if (userview.getCurrent() != null) {
                 if (isQuickEditEnabled) {
                     String label = ResourceBundleUtil.getMessage("adminBar.label.page") + ": " + userview.getCurrent().getPropertyString("label");
@@ -625,7 +625,8 @@ public class UserviewThemeProcesser {
                 menuAlertMessage = menu.getPropertyString(UserviewMenu.ALERT_MESSAGE_PROPERTY);
                 menuRedirectUrl = menu.getPropertyString(UserviewMenu.REDIRECT_URL_PROPERTY);
                 redirectParent = menu.getPropertyString(UserviewMenu.REDIRECT_PARENT_PROPERTY);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         if ((menuAlertMessage != null && !menuAlertMessage.isEmpty()) || (redirectParent != null && "true".equalsIgnoreCase(redirectParent))) {

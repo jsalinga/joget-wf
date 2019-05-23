@@ -24,29 +24,33 @@ import org.joget.workflow.model.service.WorkflowUserManager;
 import org.joget.workflow.util.WorkflowUtil;
 
 public class SharkUtil {
-    
+
     public static WorkflowProcess getWorkflowProcess(WMSessionHandle shandle, String processDefId) {
         try {
             String arg[] = processDefId.split("#");
             return SharkUtilities.getWorkflowProcess(shandle, arg[0], arg[1], arg[2]);
-        } catch (Exception e) {}
-        
+        } catch (Exception e) {
+        }
+
         return null;
     }
-    
+
     public static WMEntity createBasicEntity(XMLComplexElement el) throws Exception {
         return SharkUtilities.createBasicEntity(el);
     }
-    
+
     /**
      * Get the next potential activities based on the current activity
+     *
      * @param processDefId
      * @param activityDefId
      * @param processId
      * @param activityId
-     * @param includeTools Set to true to also include Tool elements in the results
-     * @param activities Optional Collection to add results into, used for recursion
-     * @return 
+     * @param includeTools Set to true to also include Tool elements in the
+     * results
+     * @param activities Optional Collection to add results into, used for
+     * recursion
+     * @return
      */
     public static Collection<WorkflowActivity> getNextActivities(String processDefId, String activityDefId, String processId, String activityId, boolean includeTools, Collection<WorkflowActivity> activities) {
         SharkConnection sc = null;
@@ -57,7 +61,7 @@ public class SharkUtil {
             Shark shark = Shark.getInstance();
             AdminMisc admin = shark.getAdminMisc();
             WMSessionHandle sessionHandle = sc.getSessionHandle();
-            WMEntity processEntity = admin.getProcessDefinitionInfoByUniqueProcessDefinitionName(sessionHandle, processDefId);                        
+            WMEntity processEntity = admin.getProcessDefinitionInfoByUniqueProcessDefinitionName(sessionHandle, processDefId);
             XMLInterface xmlInterface = SharkEngineManager.getInstance().getXMLInterface();
             // get current activity
             Activity currentActivity = SharkUtilities.getActivityDefinition(sessionHandle, processEntity.getPkgId(), processEntity.getPkgVer(), processEntity.getId(), activityDefId);
@@ -65,17 +69,17 @@ public class SharkUtil {
             List transitions = currentActivity.getNonExceptionalOutgoingTransitions();
             if (!transitions.isEmpty()) {
                 // handle normal outgoing transitions
-                for (Iterator i=transitions.iterator(); i.hasNext();) {
-                    Transition transition = (Transition)i.next();
+                for (Iterator i = transitions.iterator(); i.hasNext();) {
+                    Transition transition = (Transition) i.next();
                     Activity nextActivity = transition.getToActivity();
                     evaluateActivity(xmlInterface, processEntity, nextActivity, processDefId, processId, activityId, includeTools, nextActivities);
-                }                         
+                }
             } else {
                 // handle subflow exit
                 WfActivityWrapper wfActivity = null;
                 Object wfRequester = sc.getProcess(processId).requester();
                 if (wfRequester instanceof WfActivityWrapper) {
-                    wfActivity = (WfActivityWrapper)wfRequester;
+                    wfActivity = (WfActivityWrapper) wfRequester;
                 }
                 if (wfActivity != null) {
                     WfProcess requesterProcess = wfActivity.container();
@@ -98,11 +102,12 @@ public class SharkUtil {
             }
         }
         return nextActivities;
-    }    
+    }
 
     /**
      * Evaluates an activity to determine the cause of action
-     * @param xmlInterface 
+     *
+     * @param xmlInterface
      * @param processEntity
      * @param activity
      * @param processDefId
@@ -113,7 +118,7 @@ public class SharkUtil {
      */
     static void evaluateActivity(XMLInterface xmlInterface, WMEntity processEntity, Activity activity, String processDefId, String processId, String activityId, boolean includeTools, Collection<WorkflowActivity> nextActivities) {
         String activityType;
-        switch(activity.getActivityType()) {
+        switch (activity.getActivityType()) {
             case XPDLConstants.ACTIVITY_TYPE_ROUTE:
                 // it's a route, ignore and proceed to the next activity
                 activityType = "Route";
@@ -132,8 +137,8 @@ public class SharkUtil {
                 activityType = "Subflow";
                 WorkflowProcess subflow = XMLUtil.getSubflowProcess(xmlInterface, activity);
                 ArrayList subflowActivities = subflow.getStartingActivities();
-                for (Iterator j=subflowActivities.iterator(); j.hasNext();) {
-                    Activity subflowActivity = (Activity)j.next();
+                for (Iterator j = subflowActivities.iterator(); j.hasNext();) {
+                    Activity subflowActivity = (Activity) j.next();
                     evaluateActivity(xmlInterface, processEntity, subflowActivity, processDefId, processId, activityId, includeTools, nextActivities);
                 }
                 if (!activity.isSubflowSynchronous()) {
@@ -149,7 +154,9 @@ public class SharkUtil {
     }
 
     /**
-     * Converts an Activity into a WorkflowActivity and adds into the Collection of results.
+     * Converts an Activity into a WorkflowActivity and adds into the Collection
+     * of results.
+     *
      * @param activityToAdd
      * @param activityType
      * @param packageId
@@ -157,7 +164,7 @@ public class SharkUtil {
      * @param processVersion
      * @param processId
      * @param activityId
-     * @param activities 
+     * @param activities
      */
     static void addActivity(Activity activityToAdd, String activityType, String packageId, String processDefId, String processVersion, String processId, String activityId, Collection<WorkflowActivity> activities) {
         WorkflowActivity activity = new WorkflowActivity();
@@ -167,7 +174,7 @@ public class SharkUtil {
         activity.setPerformer(activityToAdd.getPerformer());
         activity.setProcessDefId(processDefId);
         activity.setProcessVersion(processVersion);
-        activity.setProcessName(((WorkflowProcess)activityToAdd.getParent().getParent()).getName());
+        activity.setProcessName(((WorkflowProcess) activityToAdd.getParent().getParent()).getName());
         List<String> assignmentUsers = WorkflowUtil.getAssignmentUsers(packageId, processDefId, processId, processVersion, activityId, "", activityToAdd.getPerformer());
         if (assignmentUsers != null) {
             activity.setAssignmentUsers(assignmentUsers.toArray(new String[0]));
@@ -188,10 +195,11 @@ public class SharkUtil {
         }
         activities.add(activity);
     }
-    
+
     /*--- Internal methods to Shark ---*/
     /**
      * Connect to the Shark engine using the current username.
+     *
      * @return
      * @throws Exception
      */
@@ -201,6 +209,7 @@ public class SharkUtil {
 
     /**
      * Connect to the Shark.
+     *
      * @param username
      * @return
      * @throws Exception
@@ -208,7 +217,7 @@ public class SharkUtil {
     static SharkConnection connect(String username) throws Exception {
         SharkConnection sConn = Shark.getInstance().getSharkConnection();
         if (username == null) {
-            WorkflowUserManager workflowUserManager = (WorkflowUserManager)WorkflowUtil.getApplicationContext().getBean("workflowUserManager");
+            WorkflowUserManager workflowUserManager = (WorkflowUserManager) WorkflowUtil.getApplicationContext().getBean("workflowUserManager");
             username = workflowUserManager.getCurrentUsername();
         }
         WMConnectInfo wmconnInfo = new WMConnectInfo(username, username, "WorkflowManager", "");
@@ -218,6 +227,7 @@ public class SharkUtil {
 
     /**
      * Disconnect from the Shark engine. Must be called in a finally block.
+     *
      * @param sConn
      * @throws Exception
      */
@@ -225,5 +235,5 @@ public class SharkUtil {
         if (sConn != null) {
             sConn.disconnect();
         }
-    }    
+    }
 }

@@ -56,8 +56,6 @@ public class XMLMultiLineTextPanel extends XMLBasicPanel {
             boolean wrapLines,
             boolean isEnabled) {
 
-
-
         super(pc, myOwner, "", false, false, true);
 
         this.falseRequiredForCC = isFalseRequired;
@@ -75,7 +73,6 @@ public class XMLMultiLineTextPanel extends XMLBasicPanel {
             }
 
         }
-
 
         JScrollPane jsp = new JScrollPane();
         jsp.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -120,7 +117,6 @@ public class XMLMultiLineTextPanel extends XMLBasicPanel {
         }
 
         //END CUSTOM
-
         jta.setBackground(bkgCol);
 
         final XMLPanel p = this;
@@ -171,8 +167,6 @@ public class XMLMultiLineTextPanel extends XMLBasicPanel {
         if (isVertical) {
             add(mainPanel);
         }
-
-
 
     }
 

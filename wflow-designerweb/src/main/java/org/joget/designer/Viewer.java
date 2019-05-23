@@ -129,7 +129,7 @@ public class Viewer {
                 LogFactory.getLog(Viewer.class.getName()).info("Completed generating process image");
 
                 return img;
-            }catch(Exception e){
+            } catch (Exception e) {
                 LogFactory.getLog(Viewer.class.getName()).error(e);
                 return null;
             } finally {

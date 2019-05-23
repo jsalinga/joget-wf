@@ -17,6 +17,7 @@ import org.joget.workflow.util.WorkflowUtil;
 import org.springframework.context.ApplicationContext;
 
 public class FormHashVariable extends DefaultHashVariablePlugin {
+
     Map<String, FormRow> formDataCache = new HashMap<String, FormRow>();
 
     @Override
@@ -25,28 +26,28 @@ public class FormHashVariable extends DefaultHashVariablePlugin {
         if (variableKey.contains("[") && variableKey.contains("]")) {
             primaryKey = variableKey.substring(variableKey.indexOf("[") + 1, variableKey.indexOf("]"));
             variableKey = variableKey.substring(0, variableKey.indexOf("["));
-            
+
             if (primaryKey.isEmpty()) {
                 LogUtil.debug(FormHashVariable.class.getName(), "#form." + variableKey + "# is NULL");
                 return "";
             }
         }
-        
+
         //get from request parameter if exist
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (primaryKey == null && request != null && request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
             primaryKey = request.getParameter("id");
         }
-        
+
         String temp[] = variableKey.split("\\.");
-        
+
         String tableName = temp[0];
         String columnName = temp[1];
-        
+
         if (tableName == null || !tableName.matches("^[a-zA-Z0-9_]+$") || columnName == null || !columnName.matches("^[a-zA-Z0-9_]+$")) {
             return null;
         }
-        
+
         WorkflowAssignment wfAssignment = (WorkflowAssignment) this.getProperty("workflowAssignment");
         if ((primaryKey != null && !primaryKey.isEmpty()) || wfAssignment != null) {
             try {
@@ -68,7 +69,7 @@ public class FormHashVariable extends DefaultHashVariablePlugin {
 
                     String cacheKey = tableName + "##" + primaryKey;
                     FormRow row = formDataCache.get(cacheKey);
-                    if (row == null) {        
+                    if (row == null) {
                         row = formDataDao.loadByTableNameAndColumnName(tableName, columnName, primaryKey);
                         formDataCache.put(cacheKey, row);
                     }
@@ -83,7 +84,8 @@ public class FormHashVariable extends DefaultHashVariablePlugin {
                         }
                     }
                 }
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
         return null;
     }
@@ -109,19 +111,19 @@ public class FormHashVariable extends DefaultHashVariablePlugin {
     }
 
     public String getClassName() {
-       return this.getClass().getName();
+        return this.getClass().getName();
     }
 
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();
         syntax.add("form.TABLE.COLUMN");
         syntax.add("form.TABLE.COLUMN[PRIMARY_KEY]");
-        
+
         return syntax;
     }
 }

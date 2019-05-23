@@ -7,5 +7,5 @@
 <c:if test="${empty var}"><c:set var="var" value="popupDialog"/></c:if>
 <c:if test="${empty title}"><c:set var="title" value=" "/></c:if>
 
-UI.base = "${pageContext.request.contextPath}";
+    UI.base = "${pageContext.request.contextPath}";
 var ${var} = new PopupDialog("${src}", "${title}");

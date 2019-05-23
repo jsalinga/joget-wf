@@ -20,7 +20,7 @@ import org.joget.workflow.util.WorkflowUtil;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class DatePicker extends Element implements FormBuilderPaletteElement {
-    
+
     @Override
     public String getName() {
         return "Date Picker";
@@ -39,7 +39,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
     @Override
     public String renderTemplate(FormData formData, Map dataModel) {
         String template = "datePicker.ftl";
-        
+
         String displayFormat = getJavaDateFormat(getPropertyString("format"));
         String timeformat = getTimeFormat();
         if ("timeOnly".equalsIgnoreCase(getPropertyString("datePickerType"))) {
@@ -47,24 +47,24 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
         } else if ("dateTime".equalsIgnoreCase(getPropertyString("datePickerType"))) {
             displayFormat = displayFormat + " " + timeformat;
         }
-        
+
         // set value
         String value = FormUtil.getElementPropertyValue(this, formData);
-        
+
         if (FormUtil.isReadonly(this, formData)) {
             value = formattedDisplayValue(value, displayFormat, formData);
         } else {
             value = formattedValue(value, displayFormat, formData);
         }
-        
+
         dataModel.put("displayFormat", displayFormat.toUpperCase());
-        
+
         dataModel.put("value", value);
 
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
         return html;
     }
-    
+
     public FormRowSet formatData(FormData formData) {
         FormRowSet rowSet = null;
 
@@ -72,7 +72,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
         String id = getPropertyString(FormUtil.PROPERTY_ID);
         if (id != null) {
             String value = FormUtil.getElementPropertyValue(this, formData);
-            if (!FormUtil.isReadonly(this, formData) && getPropertyString("dataFormat") != null && !getPropertyString("dataFormat").isEmpty() 
+            if (!FormUtil.isReadonly(this, formData) && getPropertyString("dataFormat") != null && !getPropertyString("dataFormat").isEmpty()
                     && ("dateTime".equalsIgnoreCase(getPropertyString("datePickerType")) || getPropertyString("datePickerType").isEmpty())) {
                 String binderValue = formData.getLoadBinderDataProperty(this, id);
                 if (value != null && !value.equals(binderValue)) {
@@ -83,13 +83,14 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                             if ("dateTime".equalsIgnoreCase(getPropertyString("datePickerType"))) {
                                 timeformat = " " + getTimeFormat();
                             }
-                            
+
                             SimpleDateFormat data = new SimpleDateFormat(getPropertyString("dataFormat") + timeformat);
                             SimpleDateFormat display = new SimpleDateFormat(displayFormat + timeformat);
                             Date date = display.parse(value);
                             value = data.format(date);
                         }
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                 }
             }
             if (value != null) {
@@ -138,7 +139,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
     public String getFormBuilderIcon() {
         return "/plugin/org.joget.apps.form.lib.TextField/images/textField_icon.gif";
     }
-    
+
     protected String getTimeFormat() {
         if ("timeOnly".equalsIgnoreCase(getPropertyString("datePickerType")) || "dateTime".equalsIgnoreCase(getPropertyString("datePickerType"))) {
             if ("true".equalsIgnoreCase(getPropertyString("format24hr"))) {
@@ -149,7 +150,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
         }
         return "";
     }
-    
+
     protected String getJavaDateFormat(String format) {
         if (format == null || format.isEmpty()) {
             Locale locale = LocaleContextHolder.getLocale();
@@ -160,71 +161,71 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                 return "MM/dd/yyyy";
             }
         }
-        
+
         if (format.contains("DD")) {
             format = format.replaceAll("DD", "EEEE");
         } else {
             format = format.replaceAll("D", "EEE");
         }
-        
+
         if (format.contains("MM")) {
             format = format.replaceAll("MM", "MMMMM");
         } else {
             format = format.replaceAll("M", "MMM");
         }
-        
+
         if (format.contains("mm")) {
             format = format.replaceAll("mm", "MM");
         } else {
             format = format.replaceAll("m", "M");
         }
-        
+
         if (format.contains("yy")) {
             format = format.replaceAll("yy", "yyyy");
         } else {
             format = format.replaceAll("y", "yy");
         }
-        
+
         if (format.contains("tt") || format.contains("TT")) {
-            format = format.replaceAll("tt","a");
-            format = format.replaceAll("TT","a");
+            format = format.replaceAll("tt", "a");
+            format = format.replaceAll("TT", "a");
         }
-        
+
         return format;
     }
-    
+
     @Override
     public Boolean selfValidate(FormData formData) {
         Boolean valid = true;
         String id = FormUtil.getElementParameterName(this);
         String value = FormUtil.getElementPropertyValue(this, formData);
-               
+
         if (value != null && !value.isEmpty()) {
             String displayFormat = getJavaDateFormat(getPropertyString("format"));
-            
+
             String timeformat = getTimeFormat();
             if ("timeOnly".equalsIgnoreCase(getPropertyString("datePickerType"))) {
                 displayFormat = timeformat;
             } else if ("dateTime".equalsIgnoreCase(getPropertyString("datePickerType"))) {
                 displayFormat = displayFormat + " " + timeformat;
             }
-            
+
             String formattedValue = formattedValue(value, displayFormat, formData);
             valid = DateUtil.validateDateFormat(formattedValue, displayFormat);
-            
+
             if (!valid) {
                 formData.addFormError(id, ResourceBundleUtil.getMessage("form.datepicker.error.invalidFormat"));
             }
-            
+
             Form form = null;
-            if (!getPropertyString("startDateFieldId").isEmpty() ||
-                !getPropertyString("endDateFieldId").isEmpty()) {
+            if (!getPropertyString("startDateFieldId").isEmpty()
+                    || !getPropertyString("endDateFieldId").isEmpty()) {
                 form = FormUtil.findRootForm(this);
             }
-            
+
             String startDate = "";
             String endDate = "";
-            
+
             if (!getPropertyString("startDateFieldId").isEmpty()) {
                 Element e = FormUtil.findElement(getPropertyString("startDateFieldId"), form, formData);
                 if (e != null) {
@@ -241,7 +242,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                     }
                 }
             }
-            
+
             if (!getPropertyString("endDateFieldId").isEmpty()) {
                 Element e = FormUtil.findElement(getPropertyString("endDateFieldId"), form, formData);
                 if (e != null) {
@@ -251,14 +252,14 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                         if (e instanceof DatePicker) {
                             formattedCompare = formatCompareValue(compareValue, displayFormat);
                         }
-                        if (!DateUtil.compare(formattedValue, formattedCompare , displayFormat) && !formattedCompare.equals(value)) {
+                        if (!DateUtil.compare(formattedValue, formattedCompare, displayFormat) && !formattedCompare.equals(value)) {
                             valid = false;
                             endDate = formattedCompare;
                         }
                     }
                 }
             }
-            
+
             String type = getPropertyString("currentDateAs");
             if (!type.isEmpty()) {
                 String formattedCompare = TimeZoneUtil.convertToTimeZone(new Date(), null, displayFormat);
@@ -270,10 +271,10 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                     start = formattedValue;
                     end = formattedCompare;
                 }
-                
-                if (!DateUtil.compare(start, end , displayFormat) && !formattedCompare.equals(formattedValue)) {
+
+                if (!DateUtil.compare(start, end, displayFormat) && !formattedCompare.equals(formattedValue)) {
                     valid = false;
-                    
+
                     if ("minDate".equals(type)) {
                         if (startDate.isEmpty() || !DateUtil.compare(formattedCompare, startDate, displayFormat)) {
                             startDate = formattedCompare;
@@ -285,7 +286,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                     }
                 }
             }
-                
+
             if (!startDate.isEmpty()) {
                 formData.addFormError(id, ResourceBundleUtil.getMessage("form.datepicker.error.minDate", new String[]{startDate}));
             }
@@ -294,34 +295,35 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                 formData.addFormError(id, ResourceBundleUtil.getMessage("form.datepicker.error.maxDate", new String[]{endDate}));
             }
         }
-        
+
         return valid;
     }
-    
+
     private String formatCompareValue(String value, String displayFormat) {
         String dataFormat = getPropertyString("dataFormat");
-        
+
         String timeformat = getTimeFormat();
         if ("timeOnly".equalsIgnoreCase(getPropertyString("datePickerType"))) {
             dataFormat = timeformat;
         } else if ("dateTime".equalsIgnoreCase(getPropertyString("datePickerType"))) {
             dataFormat = dataFormat + " " + timeformat;
         }
-        
+
         String tempValue = value.replaceAll("[0-9]", "x");
         String tempFormat = dataFormat.replaceAll("[a-zA-Z]", "x");
-            
+
         if (!displayFormat.equals(dataFormat) && tempValue.equals(tempFormat)) {
             try {
                 SimpleDateFormat data = new SimpleDateFormat(dataFormat);
                 SimpleDateFormat display = new SimpleDateFormat(displayFormat);
                 Date date = data.parse(value);
                 value = display.format(date);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return value;
     }
-    
+
     private String formattedDisplayValue(String value, String displayFormat, FormData formData) {
         if (getPropertyString("dataFormat") != null && !getPropertyString("dataFormat").isEmpty()) {
             try {
@@ -332,7 +334,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
                 } else if ("dateTime".equalsIgnoreCase(getPropertyString("datePickerType"))) {
                     dataFormat = dataFormat + " " + timeformat;
                 }
-                    
+
                 if (!displayFormat.equals(dataFormat)) {
                     SimpleDateFormat data = new SimpleDateFormat(dataFormat);
                     SimpleDateFormat display = new SimpleDateFormat(displayFormat);
@@ -344,7 +346,7 @@ public class DatePicker extends Element implements FormBuilderPaletteElement {
         }
         return value;
     }
-    
+
     private String formattedValue(String value, String displayFormat, FormData formData) {
         if (!FormUtil.isFormSubmitted(this, formData)) {
             value = formattedDisplayValue(value, displayFormat, formData);

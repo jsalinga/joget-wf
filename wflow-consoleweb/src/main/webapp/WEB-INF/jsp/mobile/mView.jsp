@@ -69,68 +69,68 @@
 </c:choose>
 
 <c:catch var="bodyError">
-<c:set var="bodyContent">
-    <c:choose>
-        <c:when test="${!empty userview.current}">
-            <c:set var="menuUrl" value="${userview.current.url}"/>
-            <c:set var="menuUrl" value="${fn:replace(menuUrl, '/userview/', '/mobile/')}"/>
-            <c:set target="${userview.current}" property="url" value="${menuUrl}"/>
+    <c:set var="bodyContent">
+        <c:choose>
+            <c:when test="${!empty userview.current}">
+                <c:set var="menuUrl" value="${userview.current.url}"/>
+                <c:set var="menuUrl" value="${fn:replace(menuUrl, '/userview/', '/mobile/')}"/>
+                <c:set target="${userview.current}" property="url" value="${menuUrl}"/>
 
-            <c:set var="properties" scope="request" value="${userview.current.properties}"/>
-            <c:set var="requestParameters" scope="request" value="${userview.current.requestParameters}"/>
-            <c:set var="readyJspPage" value="${userview.current.readyJspPage}"/>
+                <c:set var="properties" scope="request" value="${userview.current.properties}"/>
+                <c:set var="requestParameters" scope="request" value="${userview.current.requestParameters}"/>
+                <c:set var="readyJspPage" value="${userview.current.readyJspPage}"/>
+                <c:choose>
+                    <c:when test="${!empty readyJspPage}">
+                        <jsp:include page="../${readyJspPage}" flush="true"/>
+                    </c:when>
+                    <c:otherwise>
+                        ${userview.current.readyRenderPage}
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+            <c:when test="${menuId != landingPage}">
+                <h3><fmt:message key="ubuilder.pageNotFound"/></h3>
+
+                <fmt:message key="ubuilder.pageNotFound.message"/>
+                <br><br>
+                <fmt:message key="ubuilder.pageNotFound.explanation"/>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>
+                    <a href="${pageContext.request.contextPath}/web/mobile/${appId}/${userview.properties.id}/<c:out value="${key}"/>/${userview.properties.homeMenuId}"><fmt:message key="ubuilder.pageNotFound.backToMain"/></a>
+                </p>
+            </c:when>
+        </c:choose>
+    </c:set>
+
+    <c:set var="alertMessageProperty" value="<%= UserviewMenu.ALERT_MESSAGE_PROPERTY %>"/>
+    <c:set var="alertMessageValue" value="${userview.current.properties[alertMessageProperty]}"/>
+    <c:set var="redirectUrlProperty" value="<%= UserviewMenu.REDIRECT_URL_PROPERTY %>"/>
+    <c:set var="redirectUrlValue" value="${userview.current.properties[redirectUrlProperty]}"/>
+    <c:set var="redirectParentProperty" value="<%= UserviewMenu.REDIRECT_PARENT_PROPERTY %>"/>
+    <c:set var="redirectParentValue" value="${userview.current.properties[redirectParentProperty]}"/>
+    <c:choose>
+        <c:when test="${!empty redirectUrlValue}">
             <c:choose>
-                <c:when test="${!empty readyJspPage}">
-                    <jsp:include page="../${readyJspPage}" flush="true"/>
+                <c:when test="${redirectParentValue}">
                 </c:when>
                 <c:otherwise>
-                    ${userview.current.readyRenderPage}
+                    <c:if test="${!fn:containsIgnoreCase(redirectUrlValue, 'http') && !fn:startsWith(redirectUrlValue, '/')}">
+                        <c:set var="redirectBaseUrlValue" scope="request" value="/web/"/>
+                        <c:if test="${embed}">
+                            <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}embed/"/>
+                        </c:if>
+                        <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}mobile/${appId}/${userview.properties.id}/${key}/"/>
+                        <c:set var="redirectUrlValue" value="${redirectBaseUrlValue}${redirectUrlValue}"/>
+                    </c:if>
+                    <c:if test="${fn:startsWith(redirectUrlValue, pageContext.request.contextPath)}">
+                        <c:set var="redirectUrlValue" value="${fn:replace(redirectUrlValue, pageContext.request.contextPath, '')}"/>
+                    </c:if>
+                    <c:redirect url="${redirectUrlValue}"/>
                 </c:otherwise>
             </c:choose>
         </c:when>
-        <c:when test="${menuId != landingPage}">
-            <h3><fmt:message key="ubuilder.pageNotFound"/></h3>
-
-            <fmt:message key="ubuilder.pageNotFound.message"/>
-            <br><br>
-            <fmt:message key="ubuilder.pageNotFound.explanation"/>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p>
-                <a href="${pageContext.request.contextPath}/web/mobile/${appId}/${userview.properties.id}/<c:out value="${key}"/>/${userview.properties.homeMenuId}"><fmt:message key="ubuilder.pageNotFound.backToMain"/></a>
-            </p>
-        </c:when>
     </c:choose>
-</c:set>
-
-<c:set var="alertMessageProperty" value="<%= UserviewMenu.ALERT_MESSAGE_PROPERTY %>"/>
-<c:set var="alertMessageValue" value="${userview.current.properties[alertMessageProperty]}"/>
-<c:set var="redirectUrlProperty" value="<%= UserviewMenu.REDIRECT_URL_PROPERTY %>"/>
-<c:set var="redirectUrlValue" value="${userview.current.properties[redirectUrlProperty]}"/>
-<c:set var="redirectParentProperty" value="<%= UserviewMenu.REDIRECT_PARENT_PROPERTY %>"/>
-<c:set var="redirectParentValue" value="${userview.current.properties[redirectParentProperty]}"/>
-<c:choose>
-<c:when test="${!empty redirectUrlValue}">
-    <c:choose>
-        <c:when test="${redirectParentValue}">
-        </c:when>
-        <c:otherwise>
-            <c:if test="${!fn:containsIgnoreCase(redirectUrlValue, 'http') && !fn:startsWith(redirectUrlValue, '/')}">
-                <c:set var="redirectBaseUrlValue" scope="request" value="/web/"/>
-                <c:if test="${embed}">
-                    <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}embed/"/>
-                </c:if>
-                <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}mobile/${appId}/${userview.properties.id}/${key}/"/>
-                <c:set var="redirectUrlValue" value="${redirectBaseUrlValue}${redirectUrlValue}"/>
-            </c:if>
-            <c:if test="${fn:startsWith(redirectUrlValue, pageContext.request.contextPath)}">
-                <c:set var="redirectUrlValue" value="${fn:replace(redirectUrlValue, pageContext.request.contextPath, '')}"/>
-            </c:if>
-            <c:redirect url="${redirectUrlValue}"/>
-        </c:otherwise>
-    </c:choose>
-</c:when>
-</c:choose>
 </c:catch>
 <!DOCTYPE html>
 <html class="ui-mobile" manifest="${pageContext.request.contextPath}/web/mobilecache/${appId}/${userview.properties.id}">
@@ -147,10 +147,10 @@
         <jsp:include page="mScripts.jsp" flush="true"/>
         <script>
             function desktopSite() {
-                var path = "${pageContext.request.contextPath}/web/userview/${appId}/";
-                var href = "${pageContext.request.contextPath}/web/userview/${appId}/${userview.properties.id}/<c:out value="${key}"/>";
-                Mobile.viewFullSite(path, href);
-                return false;
+            var path = "${pageContext.request.contextPath}/web/userview/${appId}/";
+            var href = "${pageContext.request.contextPath}/web/userview/${appId}/${userview.properties.id}/<c:out value="${key}"/>";
+            Mobile.viewFullSite(path, href);
+            return false;
             }
             Mobile.contextPath = "${pageContext.request.contextPath}";
             Mobile.updateCache();  
@@ -165,26 +165,26 @@
                     <a href="${pageContext.request.contextPath}/web/mobile/${appId}/${userview.properties.id}/<c:out value="${key}"/>/${landingPage}" data-icon="home" data-direction="reverse"><fmt:message key="console.header.menu.label.home"/></a>
                 </c:if>
                 <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">
-                <c:choose>
-                    <c:when test="${!empty userview.setting.theme.header}">
-                        <ui:stripTag html="${userview.setting.theme.header}"/>
-                    </c:when>
-                    <c:otherwise>
-                        <c:out value="${userview.properties.name}"/>
-                    </c:otherwise>
-                </c:choose>                    
+                    <c:choose>
+                        <c:when test="${!empty userview.setting.theme.header}">
+                            <ui:stripTag html="${userview.setting.theme.header}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:out value="${userview.properties.name}"/>
+                        </c:otherwise>
+                    </c:choose>                    
                 </h1>
                 <c:if test="${empty menuId || menuId == landingPage}">    
                     <c:choose>
                         <c:when test="${isAnonymous}">
                             <a href="${pageContext.request.contextPath}/web/mlogin/${appId}/${userview.properties.id}/<c:out value="${key}"/>" data-icon="gear" data-theme="a"><span id="loginText"><fmt:message key="console.login.label.login"/></span></a>
-                        </c:when>
-                        <c:otherwise>
+                            </c:when>
+                            <c:otherwise>
                             <a href="#" onclick="return Mobile.logout()" data-icon="back" data-theme="a" data-direction="reverse" rel="external"><span id="logoutText"><c:out value="${userview.properties.logoutText}"/></span></a>
-                        </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                        <c:when test="${showDesktopButton ne 'false' && showAllAppsButton eq 'true'}">
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${showDesktopButton ne 'false' && showAllAppsButton eq 'true'}">
                             <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right"> 
                                 <a href="${pageContext.request.contextPath}/web/mobile" rel="external" target="_self" id="all-apps" data-role="button" data-icon="grid"><fmt:message key="mobile.apps.allApps"/></a>
                                 <a href="#" onclick="return desktopSite()" id="desktop-site" data-role="button" data-icon="home" rel="external"><fmt:message key="mobile.apps.desktop"/></a>
@@ -236,7 +236,7 @@
                                 <ul style="text-align:left; display:inline-block">
                                     <li><fmt:message key="console.footer.label.revision"/></li>
                                     <li><fmt:message key="general.error.date"/>: <fmt:formatDate pattern="d MMM yyyy HH:mm:ss" value="<%= new java.util.Date() %>"/></li>
-                                    <fmt:message key="general.error.errorDetails"/>
+                                        <fmt:message key="general.error.errorDetails"/>
                                 </ul>
                                 <p>&nbsp;</p>
                             </div>
@@ -250,7 +250,7 @@
             </div>		
 
         </div>
-                    
+
         <div class="ui-loader" style="top: 332px; "></div>
         <div id="online-status"></div>
         <%= AppUtil.getSystemAlert() %> 

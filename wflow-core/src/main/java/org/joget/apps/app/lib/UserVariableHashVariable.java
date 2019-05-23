@@ -15,8 +15,9 @@ import org.joget.workflow.model.service.WorkflowManager;
 import org.springframework.context.ApplicationContext;
 
 public class UserVariableHashVariable extends DefaultHashVariablePlugin {
+
     private Map<String, User> userCache = new HashMap<String, User>();
-    
+
     @Override
     public String processHashVariable(String variableKey) {
         WorkflowAssignment wfAssignment = (WorkflowAssignment) this.getProperty("workflowAssignment");
@@ -93,7 +94,7 @@ public class UserVariableHashVariable extends DefaultHashVariablePlugin {
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         return null;

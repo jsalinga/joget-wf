@@ -20,7 +20,8 @@ import org.joget.workflow.model.service.WorkflowManager;
 import org.joget.workflow.util.WorkflowUtil;
 
 /**
- * Data binder that loads/stores data from the form database and also workflow variables.
+ * Data binder that loads/stores data from the form database and also workflow
+ * variables.
  */
 public class WorkflowFormBinder extends DefaultFormBinder implements FormLoadElementBinder, FormStoreElementBinder, FormDataDeletableBinder {
 
@@ -62,11 +63,11 @@ public class WorkflowFormBinder extends DefaultFormBinder implements FormLoadEle
             if (activityId != null && !activityId.isEmpty()) {
                 variableList = workflowManager.getActivityVariableList(activityId);
             } else if (processId != null && !processId.isEmpty()) {
-                variableList = workflowManager.getProcessVariableList(processId); 
+                variableList = workflowManager.getProcessVariableList(processId);
             } else {
                 variableList = new ArrayList<WorkflowVariable>();
             }
-            
+
             if (variableList != null && !variableList.isEmpty()) {
                 FormRow row = null;
                 if (rows.isEmpty()) {
@@ -75,7 +76,7 @@ public class WorkflowFormBinder extends DefaultFormBinder implements FormLoadEle
                 } else {
                     row = rows.iterator().next();
                 }
-                
+
                 Map<String, String> variableMap = new HashMap<String, String>();
                 for (WorkflowVariable variable : variableList) {
                     Object val = variable.getVal();
@@ -121,6 +122,7 @@ public class WorkflowFormBinder extends DefaultFormBinder implements FormLoadEle
 
     /**
      * Recursive into elements to set workflow variable values to be loaded.
+     *
      * @param element
      * @param row The current row of data to be loaded
      * @param variableMap The variable name=value pairs.
@@ -143,7 +145,9 @@ public class WorkflowFormBinder extends DefaultFormBinder implements FormLoadEle
     }
 
     /**
-     * Recursive into elements to retrieve workflow variable values to be stored.
+     * Recursive into elements to retrieve workflow variable values to be
+     * stored.
+     *
      * @param element
      * @param row The current row of data
      * @param variableMap The variable name=value pairs to be stored.

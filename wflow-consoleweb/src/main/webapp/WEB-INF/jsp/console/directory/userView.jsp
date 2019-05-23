@@ -20,9 +20,9 @@
             <li><button onclick="onEdit()"><fmt:message key="console.directory.user.edit.label"/></button></li>
             <li><button onclick="onDelete()"><fmt:message key="console.directory.user.delete.label"/></button></li>
             <li><button onclick="assignReportTo()"><fmt:message key="console.directory.user.reportTo.assign.label"/></button></li>
-            <c:if test="${!empty employment.employmentReportTo && !empty employment.employmentReportTo.reportTo}">
+                <c:if test="${!empty employment.employmentReportTo && !empty employment.employmentReportTo.reportTo}">
                 <li><button onclick="unassignReportTo()"><fmt:message key="console.directory.user.reportTo.unassign.label"/></button></li>
-            </c:if>
+                </c:if>
             <li><button onclick="assignGroups()"><fmt:message key="console.directory.user.group.assign.label"/></button></li>
         </ul>
         <c:if test="${!empty addOnButtons}">
@@ -136,109 +136,109 @@
         </fieldset>
         <div class="view">
             <div class="main-body-content-subheader"><span><fmt:message key="console.directory.user.common.label.groupList"/><span></div>
-            <ui:jsontable url="${pageContext.request.contextPath}/web/json/directory/admin/user/group/list?userId=${user.id}&${pageContext.request.queryString}"
-                       var="JsonDataTable"
-                       divToUpdate="groupList"
-                       jsonData="data"
-                       rowsPerPage="15"
-                       width="100%"
-                       sort="name"
-                       desc="false"
-                       href="${pageContext.request.contextPath}/web/console/directory/group/view"
-                       hrefParam="id"
-                       hrefSuffix="."
-                       hrefQuery="false"
-                       hrefDialog="false"
-                       hrefDialogWidth="600px"
-                       hrefDialogHeight="400px"
-                       hrefDialogTitle="Process Dialog"
-                       checkbox="${!isCustomDirectoryManager}"
-                       checkboxButton1="console.directory.user.group.assign.label"
-                       checkboxCallback1="assignGroups"
-                       checkboxOptional1="true"
-                       checkboxButton2="console.directory.user.group.unassign.label"
-                       checkboxCallback2="unassignGroups"
-                       searchItems="name|Name"
-                       fields="['id','name','description','organization.name']"
-                       column1="{key: 'id', label: 'console.directory.group.common.label.id', sortable: true}"
-                       column2="{key: 'name', label: 'console.directory.group.common.label.name', sortable: true}"
-                       column3="{key: 'description', label: 'console.directory.group.common.label.description', sortable: false}"
-                       column4="{key: 'organization.name', label: 'console.directory.group.common.label.organization', sortable: false}"
-                       />
-        </div>
-    </div>
-</div>
+                        <ui:jsontable url="${pageContext.request.contextPath}/web/json/directory/admin/user/group/list?userId=${user.id}&${pageContext.request.queryString}"
+                                      var="JsonDataTable"
+                                      divToUpdate="groupList"
+                                      jsonData="data"
+                                      rowsPerPage="15"
+                                      width="100%"
+                                      sort="name"
+                                      desc="false"
+                                      href="${pageContext.request.contextPath}/web/console/directory/group/view"
+                                      hrefParam="id"
+                                      hrefSuffix="."
+                                      hrefQuery="false"
+                                      hrefDialog="false"
+                                      hrefDialogWidth="600px"
+                                      hrefDialogHeight="400px"
+                                      hrefDialogTitle="Process Dialog"
+                                      checkbox="${!isCustomDirectoryManager}"
+                                      checkboxButton1="console.directory.user.group.assign.label"
+                                      checkboxCallback1="assignGroups"
+                                      checkboxOptional1="true"
+                                      checkboxButton2="console.directory.user.group.unassign.label"
+                                      checkboxCallback2="unassignGroups"
+                                      searchItems="name|Name"
+                                      fields="['id','name','description','organization.name']"
+                                      column1="{key: 'id', label: 'console.directory.group.common.label.id', sortable: true}"
+                                      column2="{key: 'name', label: 'console.directory.group.common.label.name', sortable: true}"
+                                      column3="{key: 'description', label: 'console.directory.group.common.label.description', sortable: false}"
+                                      column4="{key: 'organization.name', label: 'console.directory.group.common.label.organization', sortable: false}"
+                                      />
+                        </div>
+                        </div>
+                        </div>
 
-<script>
-    $(document).ready(function(){
-        $('#JsonDataTable_searchTerm').hide();
+                        <script>
+                            $(document).ready(function(){
+                            $('#JsonDataTable_searchTerm').hide();
 
-        <c:if test="${isCustomDirectoryManager || user.readonly}">
-            $('#main-action-buttons').remove();
-            $('#JsonDataTable_groupList-buttons').remove();
-        </c:if>
-    });
-    
-    <ui:popupdialog var="popupDialog" src="${pageContext.request.contextPath}/web/console/directory/user/edit/${user.id}."/>
-    <ui:popupdialog var="popupDialog2" src="${pageContext.request.contextPath}/web/console/directory/user/${user.id}/group/assign/view"/>
-    <ui:popupdialog var="popupDialog3" src="${pageContext.request.contextPath}/web/console/directory/user/${user.id}/reportTo/assign/view"/>
+                            <c:if test="${isCustomDirectoryManager || user.readonly}">
+                                $('#main-action-buttons').remove();
+                                $('#JsonDataTable_groupList-buttons').remove();
+                            </c:if>
+                            });
 
-    function onEdit(){
-        popupDialog.init();
-    }
+                            <ui:popupdialog var="popupDialog" src="${pageContext.request.contextPath}/web/console/directory/user/edit/${user.id}."/>
+                            <ui:popupdialog var="popupDialog2" src="${pageContext.request.contextPath}/web/console/directory/user/${user.id}/group/assign/view"/>
+                            <ui:popupdialog var="popupDialog3" src="${pageContext.request.contextPath}/web/console/directory/user/${user.id}/reportTo/assign/view"/>
 
-    function closeDialog() {
-        popupDialog.close();
-        popupDialog2.close();
-        popupDialog3.close();
-    }
+                            function onEdit(){
+                            popupDialog.init();
+                            }
 
-    function onDelete(){
-         if (confirm('<fmt:message key="console.directory.user.delete.label.confirmation"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/directory/users';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/user/delete', callback, 'ids=${user.id}');
-        }
-    }
+                            function closeDialog() {
+                            popupDialog.close();
+                            popupDialog2.close();
+                            popupDialog3.close();
+                            }
 
-    function assignGroups(dummy){
-        popupDialog2.init();
-    }
+                            function onDelete(){
+                            if (confirm('<fmt:message key="console.directory.user.delete.label.confirmation"/>')) {
+                            var callback = {
+                            success : function() {
+                            document.location = '${pageContext.request.contextPath}/web/console/directory/users';
+                            }
+                            }
+                            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/user/delete', callback, 'ids=${user.id}');
+                            }
+                            }
 
-    function assignReportTo(){
-        popupDialog3.init();
-    }
+                            function assignGroups(dummy){
+                            popupDialog2.init();
+                            }
 
-    function unassignReportTo(){
-         if (confirm('<fmt:message key="console.directory.user.reportTo.unassign.label.confirmation"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/directory/user/view/${user.id}.';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/user/${user.id}/reportTo/unassign', callback, '');
-        }
-    }
+                            function assignReportTo(){
+                            popupDialog3.init();
+                            }
 
-    function unassignGroups(selectedIds){
-         if (confirm('<fmt:message key="console.directory.user.group.unassign.label.confirmation"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/directory/user/view/${user.id}.';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/user/${user.id}/group/unassign', callback, 'ids='+ selectedIds);
-        }
-    }
-</script>
+                            function unassignReportTo(){
+                            if (confirm('<fmt:message key="console.directory.user.reportTo.unassign.label.confirmation"/>')) {
+                            var callback = {
+                            success : function() {
+                            document.location = '${pageContext.request.contextPath}/web/console/directory/user/view/${user.id}.';
+                            }
+                            }
+                            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/user/${user.id}/reportTo/unassign', callback, '');
+                            }
+                            }
 
-<script>
-    Template.init("#menu-users", "#nav-users-users");
-</script>
+                            function unassignGroups(selectedIds){
+                            if (confirm('<fmt:message key="console.directory.user.group.unassign.label.confirmation"/>')) {
+                            var callback = {
+                            success : function() {
+                            document.location = '${pageContext.request.contextPath}/web/console/directory/user/view/${user.id}.';
+                            }
+                            }
+                            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/user/${user.id}/group/unassign', callback, 'ids='+ selectedIds);
+                            }
+                            }
+                        </script>
 
-<commons:footer />
+                        <script>
+                            Template.init("#menu-users", "#nav-users-users");
+                        </script>
+
+                        <commons:footer />
 
 

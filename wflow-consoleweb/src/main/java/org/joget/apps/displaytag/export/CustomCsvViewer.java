@@ -28,6 +28,7 @@ import org.joget.apps.datalist.model.DataListCsvWriter;
 import org.w3c.www.mime.Utils;
 
 public class CustomCsvViewer implements TextExportView {
+
     /**
      * TableModel to render.
      */
@@ -67,20 +68,19 @@ public class CustomCsvViewer implements TextExportView {
      * A map hold the column number and its formatter
      */
     private Map<Integer, DataListCsvExportFormatter> formatter = new HashMap<Integer, DataListCsvExportFormatter>();
-    
+
     @Override
     public void setParameters(TableModel tableModel, boolean exportFullList, boolean includeHeader,
-        boolean decorateValues)
-    {
+            boolean decorateValues) {
         this.model = tableModel;
         this.exportFull = exportFullList;
         this.header = includeHeader;
         this.decorated = decorateValues;
-        
+
         PageContext pageContext = (new TableModelWrapper(tableModel)).getPageContext();
         if (pageContext != null) {
             datalist = (DataList) pageContext.findAttribute("dataList");
-            
+
             if (datalist != null) {
                 DataListColumn[] columns = datalist.getColumns();
                 Collection<DataListColumnFormat> formats;
@@ -105,12 +105,12 @@ public class CustomCsvViewer implements TextExportView {
             }
         }
     }
-    
+
     @Override
     public String getMimeType() {
         String localeCode = AppUtil.getAppLocale();
-        
-        try{
+
+        try {
             if (!"en_US".equals(localeCode)) {
                 Locale locale = null;
                 String[] temp = localeCode.split("_");
@@ -123,7 +123,7 @@ public class CustomCsvViewer implements TextExportView {
                     locale = new Locale(temp[0], temp[1], temp[2]);
                 }
 
-                if (locale != null) {    
+                if (locale != null) {
                     String charset = Utils.getCharset(locale);
 
                     if (charset != null && !charset.isEmpty()) {
@@ -134,15 +134,13 @@ public class CustomCsvViewer implements TextExportView {
         } catch (Exception e) {
             //ignore
         }
-        
+
         return "text/csv;charset=UTF-8"; //$NON-NLS-1$
     }
-    
-    public void doExport(Writer out) throws IOException, JspException
-    {
+
+    public void doExport(Writer out) throws IOException, JspException {
         writer = new DataListCsvWriter(out);
-        if (this.header)
-        {
+        if (this.header) {
             Iterator iterator = this.model.getHeaderCellList().iterator();
             HeaderCell headerCell;
             String columnHeader;
@@ -167,10 +165,9 @@ public class CustomCsvViewer implements TextExportView {
         int col = 0;
         ColumnIterator columnIterator;
         // iterator on rows
-        while (rowIterator.hasNext())
-        {
+        while (rowIterator.hasNext()) {
             row = rowIterator.next();
-            
+
             if (isBeforeRow) {
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -192,10 +189,10 @@ public class CustomCsvViewer implements TextExportView {
                 column = columnIterator.nextColumn();
 
                 // Get the value to be displayed for the column
-                value =  column.getValue(this.decorated);
+                value = column.getValue(this.decorated);
                 writer.addCell(value);
             }
-            
+
             if (isAfterRow) {
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());

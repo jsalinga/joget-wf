@@ -42,25 +42,25 @@ public class PropertyJsonController {
 
     @Autowired
     PluginManager pluginManager;
-    
+
     @Autowired
     AppService appService;
-    
+
     @Autowired
     PluginDefaultPropertiesDao pluginDefaultPropertiesDao;
-    
+
     @Resource
     AppResourceDao appResourceDao;
 
     @RequestMapping("/property/json/getElements")
     public void getElements(Writer writer, @RequestParam("classname") String className, @RequestParam(value = "exclude", required = false) String exclude) throws Exception {
         JSONArray jsonArray = new JSONArray();
-        
+
         Collection<String> excludeList = new ArrayList<String>();
         if (exclude != null && !exclude.isEmpty()) {
             excludeList.addAll(Arrays.asList(exclude.split(";")));
         }
-        
+
         try {
             // get available elements from the plugin manager
             Collection<Plugin> elementList = pluginManager.list(Class.forName(className));
@@ -95,7 +95,7 @@ public class PropertyJsonController {
 
         writer.write(json);
     }
-    
+
     @RequestMapping("/property/json/(*:appId)/(~:version)/getPropertyOptions")
     public void getProperties(Writer writer, @RequestParam(value = "appId", required = true) String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("value") String value, @RequestParam(value = "callback", required = false) String callback) throws IOException {
         if (appId != null && !appId.trim().isEmpty()) {
@@ -108,28 +108,28 @@ public class PropertyJsonController {
             json = PropertyUtil.injectHelpLink(((Plugin) element).getHelpLink(), element.getPropertyOptions());
         }
 
-        writer.write(json);        
+        writer.write(json);
     }
-    
+
     @RequestMapping("/property/json/(*:appId)/(~:version)/getDefaultProperties")
     public void getDefaultProperties(Writer writer, @RequestParam(value = "appId", required = true) String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("value") String value, @RequestParam(value = "callback", required = false) String callback) throws IOException {
         String json = "";
         if (appId != null && !appId.trim().isEmpty()) {
             AppDefinition appDef = appService.getAppDefinition(appId, version);
-            
+
             Plugin plugin = pluginManager.getPlugin(value);
             if (plugin != null) {
-                    PluginDefaultProperties pluginDefaultProperties = pluginDefaultPropertiesDao.loadById(value, appDef);
+                PluginDefaultProperties pluginDefaultProperties = pluginDefaultPropertiesDao.loadById(value, appDef);
 
-                    if (pluginDefaultProperties != null) {
-                        json = pluginDefaultProperties.getPluginProperties();
-                        json = PropertyUtil.propertiesJsonLoadProcessing(json);
-                    }
+                if (pluginDefaultProperties != null) {
+                    json = pluginDefaultProperties.getPluginProperties();
+                    json = PropertyUtil.propertiesJsonLoadProcessing(json);
+                }
             }
         }
-        writer.write(json);        
+        writer.write(json);
     }
-    
+
     @RequestMapping("/property/json/(*:appId)/(~:version)/getAppResources")
     public void getAppResources(HttpServletRequest request, Writer writer, @RequestParam(value = "appId", required = true) String appId, @RequestParam(value = "version", required = false) String version, @RequestParam(value = "callback", required = false) String callback) throws IOException {
         try {
@@ -142,12 +142,13 @@ public class PropertyJsonController {
                     Map<String, String> option = new HashMap<String, String>();
                     option.put("value", r.getId());
                     option.put("permission", r.getPermissionClass());
-                    
+
                     String filename = r.getId();
                     try {
                         filename = URLEncoder.encode(filename, "UTF-8");
-                    } catch (Exception e){}
-            
+                    } catch (Exception e) {
+                    }
+
                     option.put("url", request.getContextPath() + "/web/app/" + appId + "/" + appDef.getVersion() + "/resources/" + filename);
                     jsonArray.put(option);
                 }
@@ -157,7 +158,7 @@ public class PropertyJsonController {
             LogUtil.error(this.getClass().getName(), ex, "getAppResources Error!");
         }
     }
-    
+
     @RequestMapping(value = "/property/json/(*:appId)/(~:version)/appResourceUpload", method = RequestMethod.POST)
     public void appResourcesUpload(HttpServletRequest request, Writer writer, @RequestParam(value = "appId", required = true) String appId, @RequestParam(value = "version", required = false) String version, @RequestParam(value = "isPublic", required = false) Boolean isPublic) throws IOException, JSONException {
         JSONObject obj = new JSONObject();
@@ -169,7 +170,7 @@ public class PropertyJsonController {
                     file = FileStore.getFile("app_resource");
                     if (file != null && file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
                         AppResource appResource = AppResourceUtil.storeFile(appDef, file, isPublic);
-            
+
                         obj.put("value", appResource.getId());
                         obj.put("permission", appResource.getPermissionClass());
                         obj.put("url", request.getContextPath() + "/web/app/" + appId + "/" + appDef.getVersion() + "/resources/" + appResource.getId());

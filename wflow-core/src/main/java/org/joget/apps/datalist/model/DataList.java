@@ -80,7 +80,7 @@ public class DataList {
         try {
             rows = getRows();
             size = getSize();
-        } catch(Exception e) {
+        } catch (Exception e) {
             LogUtil.error(DataList.class.getName(), e, "");
         }
 
@@ -104,7 +104,7 @@ public class DataList {
             if (getDataListParamString(PARAMETER_PAGE_SIZE) != null) {
                 queryString2 += getDataListEncodedParamName(PARAMETER_PAGE_SIZE) + "=" + getDataListParamString(PARAMETER_PAGE_SIZE) + "&";
             }
-            actionResult.setUrl("?"+ StringUtil.mergeRequestQueryString(queryString, queryString2));
+            actionResult.setUrl("?" + StringUtil.mergeRequestQueryString(queryString, queryString2));
         }
     }
 
@@ -193,7 +193,7 @@ public class DataList {
                 }
             }
         }
-        
+
         this.columns = columns;
     }
 
@@ -209,7 +209,7 @@ public class DataList {
                 }
             }
         }
-        
+
         this.filters = filters;
     }
 
@@ -280,7 +280,7 @@ public class DataList {
             if (queryString == null) {
                 queryString = "";
             }
-            for (int i = 0; i <  rowActions.length; i++) {
+            for (int i = 0; i < rowActions.length; i++) {
                 DataListAction r = rowActions[i];
                 if (r.getHref() == null || (r.getHref() != null && r.getHref().isEmpty())) {
                     r.setProperty("href", "?" + StringUtil.mergeRequestQueryString(queryString, getActionParamName() + "=" + r.getPropertyString("id")));
@@ -297,10 +297,10 @@ public class DataList {
                 rowActions[i] = r;
             }
         }
-        
+
         return rowActions;
     }
-    
+
     public DataListAction getColumnAction(DataListColumn column) {
         DataListAction action = column.getAction();
         if (getBinder() != null && action != null) {
@@ -334,7 +334,7 @@ public class DataList {
                 }
             }
         }
-        
+
         this.rowActions = rowActions;
     }
 
@@ -366,7 +366,7 @@ public class DataList {
         if (sessionKeyPrefix == null || sessionKeyPrefix.isEmpty()) {
             sessionKeyPrefix = AppUtil.processHashVariable("#request.requestURI#", null, null, null);
         }
-        
+
         return sessionKeyPrefix;
     }
 
@@ -392,19 +392,19 @@ public class DataList {
         String page = getDataListParamString(TableTagParameters.PARAMETER_PAGE);
         String order = getDataListParamString(TableTagParameters.PARAMETER_ORDER);
         String sort = getDataListParamString(TableTagParameters.PARAMETER_SORT);
-        
+
         // determine start and size
         Integer recordSize = getPageSize();
         Integer start = 0;
-        
+
         try {
-            if (page != null && page.trim().length() > 0 && getSize() <= ((Integer.parseInt(page)-1) * recordSize)) {
+            if (page != null && page.trim().length() > 0 && getSize() <= ((Integer.parseInt(page) - 1) * recordSize)) {
                 page = null;
             }
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             page = null;
         }
-        
+
         if (getDataListParam(TableTagParameters.PARAMETER_EXPORTTYPE) != null && getDataListParam(TableTagParameters.PARAMETER_EXPORTING) != null) {
             // exporting, set full list
             page = "1";
@@ -455,7 +455,7 @@ public class DataList {
         if (isReturnNoDataWhenFilterNotSet()) {
             return null;
         }
-        
+
         if (rows == null) {
             rows = getRows(null, null);
         }
@@ -481,7 +481,7 @@ public class DataList {
         if (isReturnNoDataWhenFilterNotSet()) {
             return 0;
         }
-        
+
         if (size == null) {
             try {
                 if (getBinder() != null) {
@@ -504,12 +504,12 @@ public class DataList {
     public void setSize(Integer size) {
         this.size = size;
     }
-    
+
     public int getTotal() {
         if (isConsiderFilterWhenGetTotal()) {
             return getSize();
         }
-        
+
         if (total == null) {
             try {
                 if (getBinder() != null) {
@@ -530,7 +530,7 @@ public class DataList {
     public void setTotal(Integer total) {
         this.total = total;
     }
-    
+
     public DataListDecorator getPrimaryKeyDecorator() {
         if (getBinder() != null) {
             String key = getBinder().getPrimaryKeyColumnName();
@@ -550,7 +550,7 @@ public class DataList {
         if (actionResult != null) {
             return actionResult;
         }
-        
+
         if (isUseSession()) {
             init();
         }
@@ -568,7 +568,7 @@ public class DataList {
                     break;
                 }
             }
-            
+
             for (DataListAction action : getRowActions()) {
                 String actionId = action.getPropertyString("id");
                 if (actionParamValue.equals(actionId)) {
@@ -577,19 +577,19 @@ public class DataList {
                     break;
                 }
             }
-            
+
             //look from column action as well
             if (actionParamValue.startsWith("ca_column_")) {
                 for (DataListColumn column : columns) {
                     DataListAction action = column.getAction();
-                    if (action != null && actionParamValue.equals("ca_"+column.getPropertyString("id"))) {
+                    if (action != null && actionParamValue.equals("ca_" + column.getPropertyString("id"))) {
                         // invoke action
                         actionResult = action.executeAction(this, selectedKeys);
                         break;
                     }
                 }
             }
-            
+
         }
         return actionResult;
     }
@@ -611,7 +611,7 @@ public class DataList {
         }
         return dataListFilterQueryObjectList.toArray(new DataListFilterQueryObject[dataListFilterQueryObjectList.size()]);
     }
-    
+
     public void addFilterQueryObject(DataListFilterQueryObject filterQueryObject) {
         dataListFilterQueryObjectList.add(filterQueryObject);
     }
@@ -619,7 +619,7 @@ public class DataList {
     public String[] getDataListParam(String paramName) {
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         String param = getDataListEncodedParamName(paramName);
-        String[] values = null; 
+        String[] values = null;
         if (requestParamMap != null) {
             values = requestParamMap.get(param);
         } else {
@@ -666,9 +666,9 @@ public class DataList {
 
             //reset page value when filter is submit
             templates.add("<input type='hidden' id='" + getDataListEncodedParamName(TableTagParameters.PARAMETER_PAGE) + "' name='" + getDataListEncodedParamName(TableTagParameters.PARAMETER_PAGE) + "' value='1'/>");
-            
+
             if (isShowPageSizeSelector()) {
-                templates.add("<span class=\"filter-cell\">"+getPageSizeSelectorTemplate()+"</span>");
+                templates.add("<span class=\"filter-cell\">" + getPageSizeSelectorTemplate() + "</span>");
             }
 
             DataListFilter[] filterList = getFilters();
@@ -678,7 +678,7 @@ public class DataList {
                     cssClass = "hidden-filter";
                 }
                 String label = filterList[i].getLabel();
-                templates.add("<span class=\"filter-cell "+cssClass+"\">"+filterList[i].getType().getTemplate(this, filterList[i].getName(), label)+"</span>");
+                templates.add("<span class=\"filter-cell " + cssClass + "\">" + filterList[i].getType().getTemplate(this, filterList[i].getName(), label) + "</span>");
             }
             filterTemplates = (String[]) templates.toArray(new String[0]);
         }
@@ -757,7 +757,7 @@ public class DataList {
     public void setPageSizeList(String pageSizeList) {
         this.pageSizeList = pageSizeList;
     }
-    
+
     public String getActionParamName() {
         return getDataListEncodedParamName(PARAMETER_ACTION);
     }
@@ -765,7 +765,7 @@ public class DataList {
     private String getPageSizeSelectorTemplate() {
         String template = "<select id='" + getDataListEncodedParamName(PARAMETER_PAGE_SIZE) + "' name='" + getDataListEncodedParamName(PARAMETER_PAGE_SIZE) + "'>";
         String value = getPageSize().toString();
-            
+
         String[] list = getPageSizeList().split(",");
 
         for (String o : list) {
@@ -775,7 +775,7 @@ public class DataList {
             }
             boolean isInteger = true;
             try {
-                Integer.parseInt(o); 
+                Integer.parseInt(o);
             } catch (Exception e) {
                 isInteger = false;
             }
@@ -803,7 +803,7 @@ public class DataList {
     public void setShowDataWhenFilterSet(boolean showDataWhenFilterSet) {
         this.showDataWhenFilterSet = showDataWhenFilterSet;
     }
-    
+
     public boolean isReturnNoDataWhenFilterNotSet() {
         if (isShowDataWhenFilterSet() && (getFilterQueryObjects() == null || getFilterQueryObjects().length == 0)) {
             return true;
@@ -821,10 +821,11 @@ public class DataList {
     public void setConsiderFilterWhenGetTotal(Boolean considerFilterWhenGetTotal) {
         this.considerFilterWhenGetTotal = considerFilterWhenGetTotal;
     }
-    
+
     /**
      * Retrieve current request map
-     * @return 
+     *
+     * @return
      */
     public Map<String, String[]> getRequestParamMap() {
         return requestParamMap;
@@ -832,7 +833,8 @@ public class DataList {
 
     /**
      * Set current request map
-     * @return 
+     *
+     * @return
      */
     public void setRequestParamMap(Map<String, String[]> requestParamMap) {
         this.requestParamMap = requestParamMap;

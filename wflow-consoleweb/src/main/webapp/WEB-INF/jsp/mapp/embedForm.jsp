@@ -10,16 +10,16 @@
     <c:set var="errorCount" scope="request" value="${errorCount}"/>
     <c:set var="submitted" scope="request" value="${submitted}"/>
     <c:set var="stay" scope="request" value="${stay}"/>
-    
+
     <c:choose>
         <c:when test="${!stay && submitted && errorCount == 0}">
             <script type="text/javascript">
                 $(document).ready(function(){
-                    var setting = <ui:stripTag html="${setting}" relaxed="true"/>;
-                    setting['result'] = '${jsonResult}';
-                    if(<ui:stripTag html="${callback}"/>){
-                        <ui:stripTag html="${callback}"/>(setting);
-                    }
+                var setting = <ui:stripTag html="${setting}" relaxed="true"/>;
+                setting['result'] = '${jsonResult}';
+                if(<ui:stripTag html="${callback}"/>){
+                <ui:stripTag html="${callback}"/>(setting);
+                }
                 });
             </script>
         </c:when>

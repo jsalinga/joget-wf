@@ -9,9 +9,9 @@ import org.joget.workflow.model.WorkflowProcessLink;
 
 public class WorkflowProcessLinkDao extends AbstractSpringDao {
 
-    public final static String ENTITY_NAME="WorkflowProcessLink";
-    
-    public void addWorkflowProcessLink(String parentProcessId, String processInstanceId){
+    public final static String ENTITY_NAME = "WorkflowProcessLink";
+
+    public void addWorkflowProcessLink(String parentProcessId, String processInstanceId) {
         WorkflowProcessLink wfProcessLink = new WorkflowProcessLink();
         WorkflowProcessLink parentWfProcessLink = getWorkflowProcessLink(parentProcessId);
         wfProcessLink.setParentProcessId(parentProcessId);
@@ -27,41 +27,41 @@ public class WorkflowProcessLinkDao extends AbstractSpringDao {
         addWorkflowProcessLink(wfProcessLink);
     }
 
-    public void addWorkflowProcessLink(WorkflowProcessLink wfProcessLink){
+    public void addWorkflowProcessLink(WorkflowProcessLink wfProcessLink) {
         saveOrUpdate(ENTITY_NAME, wfProcessLink);
     }
 
-    public WorkflowProcessLink getWorkflowProcessLink(String processId){
+    public WorkflowProcessLink getWorkflowProcessLink(String processId) {
         return (WorkflowProcessLink) find(ENTITY_NAME, processId);
     }
 
     public void delete(WorkflowProcessLink wfProcessLink) {
         super.delete(ENTITY_NAME, wfProcessLink);
     }
-    
+
     public Map<String, Collection<String>> getOriginalIds(Collection<String> ids) {
         Map<String, Collection<String>> originalIds = new HashMap<String, Collection<String>>();
         Collection<String> existIds = new ArrayList<String>();
-        
+
         if (ids.size() > 0) {
             String conditions = "";
             Collection<WorkflowProcessLink> links = null;
             Collection<String> values = null;
-            
+
             int i = 0;
             for (String id : ids) {
                 if (i % 1000 == 0) {
                     values = new ArrayList<String>();
                     conditions = "where e.processId in (";
                 }
-                
+
                 conditions += "?,";
                 values.add(id);
-                
-                if (i % 1000 == 999 || i == ids.size() -1) {
+
+                if (i % 1000 == 999 || i == ids.size() - 1) {
                     conditions = conditions.substring(0, conditions.length() - 1) + ")";
                     links = super.find(ENTITY_NAME, conditions, values.toArray(new String[0]), null, null, null, null);
-                    
+
                     for (WorkflowProcessLink link : links) {
                         String orgId = link.getOriginProcessId();
                         String pid = link.getProcessId();
@@ -78,7 +78,7 @@ public class WorkflowProcessLinkDao extends AbstractSpringDao {
                 }
                 i++;
             }
-            
+
             // for those does not has link
             for (String id : ids) {
                 if (!existIds.contains(id)) {
@@ -92,10 +92,10 @@ public class WorkflowProcessLinkDao extends AbstractSpringDao {
                 }
             }
         }
-        
+
         return originalIds;
     }
-    
+
     public Collection<WorkflowProcessLink> getLinks(String processId) {
         Collection<WorkflowProcessLink> links = new ArrayList<WorkflowProcessLink>();
         WorkflowProcessLink processLink = getWorkflowProcessLink(processId);
@@ -108,7 +108,7 @@ public class WorkflowProcessLinkDao extends AbstractSpringDao {
         origin.setParentProcessId(processId);
         origin.setOriginProcessId(processId);
         links.add(origin);
-        
+
         Collection<WorkflowProcessLink> temp = super.find(ENTITY_NAME, conditions, new String[]{processId}, null, null, null, null);
         if (temp != null && !temp.isEmpty()) {
             links.addAll(temp);

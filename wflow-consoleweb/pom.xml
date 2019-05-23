@@ -11,8 +11,8 @@
         <connection>scm:git:ssh://git@repo.joget.org/opt/git/jw-community</connection>
         <developerConnection>scm:git:ssh://git@repo.joget.org/opt/git/jw-community</developerConnection>
         <url>ssh://git@repo.joget.org/opt/git/jw-community</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>

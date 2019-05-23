@@ -188,126 +188,126 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/json/util.js"></script>
         <script type="text/javascript">
             var Setup = {
-                currentDbType: "",
-                setupStatusCallback: {
-                    success: function(data) {
-                        $("#setupProgress").empty();
-                        var obj = JSON.parse(data);
-                        var success = (obj.result === "true");
-                        var label = success ? "<%= ResourceBundleUtil.getMessage("setup.datasource.label.success")%>" : '<%= ResourceBundleUtil.getMessage("setup.datasource.label.errorWithDetails")%>';
-                        var labelClass = success ? "setupSuccess" : "setupError";
-                        var setupResult = $("<div id='setupResult' class='" + labelClass + "'>" + label + "</div>");
-//                        $("#setupStatus").append(setupResult);
-                        $("#setupNotice").after(setupResult);
-                        if (!success) {
-                            var setupDetails = "<div id='setupErrorDetails' style='display:none'>" + obj.message + "</div>";
-                            var setupDetailsLink = $("<a id='setupDetailsLink'><%= ResourceBundleUtil.getMessage("setup.datasource.label.details")%></a>");
-                            $("#setupResult").append(setupDetailsLink);
-                            $("#setupResult").append(setupDetails);
-                            $("#setupDetailsLink").on("click", function() {
-                                $("#setupErrorDetails").show();
-                            });
-                        }
-                        $("#setupButton").show();
-                        $("#setupButton").removeAttr("disabled");
-                        if (success) {
-                            $("#setupButton").val("<%= ResourceBundleUtil.getMessage("setup.datasource.label.done")%>");
-                            $("#setupButton").off("click");
-                            $("#setupButton").on("click", function() {
-                                location.href = "${pageContext.request.contextPath}";
-                            });
-                        } else {
-                            $("#setupForm input, #setupForm select").removeAttr("disabled");
-                        }                            
-                    },
-                    error: function(data) {
-                        $("#setupProgress").empty();
-                        var label = '<%= ResourceBundleUtil.getMessage("setup.datasource.label.error")%>: ';
-                        label += data.statusText;
-                        var labelClass = "setupError";
-                        var setupResult = $("<div id='setupResult' class='" + labelClass + "'>" + label + "</div>");
-//                        $("#setupStatus").append(setupResult);
-                        $("#setupNotice").after(setupResult);
-                        $("#setupButton").show();
-                        $("#setupForm input, #setupForm select").removeAttr("disabled");
-                    }
-                },    
-                setupStatus: function() {
-                    $("#setupResult").remove();
-                    $("#setupButton").hide();
-                    $("#setupForm input, #setupForm select").attr("disabled", "disabled")
-                    $("#setupProgress").append($("<b><%= ResourceBundleUtil.getMessage("setup.datasource.label.inProgress")%></b> <img src='${pageContext.request.contextPath}/images/v3/loading.gif'/>"));
-                    $("#setupStatus").show();
-                    var dbType = $("#dbType").val();
-                    var dbName = $("#dbName").val();
-                    var jdbcDriver = $("#jdbcDriver").val();
-                    var jdbcUrl = $("#jdbcUrl").val();
-                    var jdbcFullUrl = (dbType !== "custom") ? $("#jdbcFullUrl").val(): "";
-                    var jdbcUser = $("#jdbcUser").val();
-                    var jdbcPassword = $("#jdbcPassword").val();
-                    var sampleApps = $("#sampleApps:checked").length > 0;
-                    var sampleUsers = $("#sampleUsers:checked").length > 0;
-                    var setupParams = "dbType=" + encodeURIComponent(dbType) + "&dbName=" + encodeURIComponent(dbName) + "&jdbcDriver=" + encodeURIComponent(jdbcDriver) + "&jdbcUrl=" + encodeURIComponent(jdbcUrl) + "&jdbcFullUrl=" + encodeURIComponent(jdbcFullUrl) + "&jdbcUser=" + encodeURIComponent(jdbcUser) + "&jdbcPassword=" + encodeURIComponent(jdbcPassword);
-                    if (sampleApps) {
-                        setupParams += "&sampleApps=true";
-                    }
-                    if (sampleUsers) {
-                        setupParams += "&sampleUsers=true";
-                    }
-                    var setupUrl = "${pageContext.request.contextPath}/setup/init";
-                    ConnectionManager.post(setupUrl, Setup.setupStatusCallback, setupParams);
-                },
-                selectType: function() {
-                    var dbType = $("#dbType").val();
-                    var dbName = $("#dbName").val();
-                    var dbHost = $("#dbHost").val();
-                    var dbPort = $("#dbPort").val();
-                    var dbUser = $("#dbUser").val();
-                    var dbPassword = $("#dbPassword").val();
-                    if (dbType === "oracle") {
-                        $("#jdbcSetup").hide();
-                        $("#dbSetup").show();
-                        $("#jdbcDriver").val("oracle.jdbc.driver.OracleDriver");
-                        if (Setup.currentDbType !== dbType) {
-                            $("#dbPort").val("1521");
-                            dbPort = 1521;
-                        }
-                        $("#jdbcUrl").val("jdbc:oracle:thin:@" + dbHost + ":" + dbPort + ":" + dbName);
-                        $("#jdbcFullUrl").val("jdbc:oracle:thin:@" + dbHost + ":" + dbPort + ":" + dbName);
-                    } else if (dbType === "sqlserver") {
-                        $("#jdbcSetup").hide();
-                        $("#dbSetup").show();
-                        $("#jdbcDriver").val("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                        if (Setup.currentDbType !== dbType) {
-                            $("#dbPort").val("1433");
-                            dbPort = 1433;
-                        }
-                        $("#jdbcUrl").val("jdbc:sqlserver://" + dbHost + ":" + dbPort + ";SelectMethod=cursor");
-                        $("#jdbcFullUrl").val("jdbc:sqlserver://" + dbHost + ":" + dbPort + ";SelectMethod=cursor;DatabaseName=" + dbName);
-                    } else if (dbType === "mysql") {
-                        $("#jdbcSetup").hide();
-                        $("#dbSetup").show();
-                        $("#jdbcDriver").val("com.mysql.jdbc.Driver");
-                        if (Setup.currentDbType !== dbType) {
-                            $("#dbPort").val("3306");
-                            dbPort = 3306;
-                        }
-                        $("#jdbcUrl").val("jdbc:mysql://" + dbHost + ":" + dbPort + "/?characterEncoding=UTF-8&useSSL=false");
-                        $("#jdbcFullUrl").val("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?characterEncoding=UTF-8&useSSL=false");
-                    } else {
-                        $("#jdbcUrl").val($("#jdbcFullUrl").val());
-                        $("#jdbcSetup").show();
-                        $("#dbSetup").hide();
-                    }
-                    Setup.currentDbType = dbType;
-                    $("#jdbcUser").val(dbUser);
-                    $("#jdbcPassword").val(dbPassword);
-                }
+            currentDbType: "",
+            setupStatusCallback: {
+            success: function(data) {
+            $("#setupProgress").empty();
+            var obj = JSON.parse(data);
+            var success = (obj.result === "true");
+            var label = success ? "<%= ResourceBundleUtil.getMessage("setup.datasource.label.success")%>" : '<%= ResourceBundleUtil.getMessage("setup.datasource.label.errorWithDetails")%>';
+            var labelClass = success ? "setupSuccess" : "setupError";
+            var setupResult = $("<div id='setupResult' class='" + labelClass + "'>" + label + "</div>");
+            //                        $("#setupStatus").append(setupResult);
+            $("#setupNotice").after(setupResult);
+            if (!success) {
+            var setupDetails = "<div id='setupErrorDetails' style='display:none'>" + obj.message + "</div>";
+            var setupDetailsLink = $("<a id='setupDetailsLink'><%= ResourceBundleUtil.getMessage("setup.datasource.label.details")%></a>");
+            $("#setupResult").append(setupDetailsLink);
+            $("#setupResult").append(setupDetails);
+            $("#setupDetailsLink").on("click", function() {
+            $("#setupErrorDetails").show();
+            });
+            }
+            $("#setupButton").show();
+            $("#setupButton").removeAttr("disabled");
+            if (success) {
+            $("#setupButton").val("<%= ResourceBundleUtil.getMessage("setup.datasource.label.done")%>");
+            $("#setupButton").off("click");
+            $("#setupButton").on("click", function() {
+            location.href = "${pageContext.request.contextPath}";
+            });
+            } else {
+            $("#setupForm input, #setupForm select").removeAttr("disabled");
+            }                            
+            },
+            error: function(data) {
+            $("#setupProgress").empty();
+            var label = '<%= ResourceBundleUtil.getMessage("setup.datasource.label.error")%>: ';
+            label += data.statusText;
+            var labelClass = "setupError";
+            var setupResult = $("<div id='setupResult' class='" + labelClass + "'>" + label + "</div>");
+            //                        $("#setupStatus").append(setupResult);
+            $("#setupNotice").after(setupResult);
+            $("#setupButton").show();
+            $("#setupForm input, #setupForm select").removeAttr("disabled");
+            }
+            },    
+            setupStatus: function() {
+            $("#setupResult").remove();
+            $("#setupButton").hide();
+            $("#setupForm input, #setupForm select").attr("disabled", "disabled")
+            $("#setupProgress").append($("<b><%= ResourceBundleUtil.getMessage("setup.datasource.label.inProgress")%></b> <img src='${pageContext.request.contextPath}/images/v3/loading.gif'/>"));
+            $("#setupStatus").show();
+            var dbType = $("#dbType").val();
+            var dbName = $("#dbName").val();
+            var jdbcDriver = $("#jdbcDriver").val();
+            var jdbcUrl = $("#jdbcUrl").val();
+            var jdbcFullUrl = (dbType !== "custom") ? $("#jdbcFullUrl").val(): "";
+            var jdbcUser = $("#jdbcUser").val();
+            var jdbcPassword = $("#jdbcPassword").val();
+            var sampleApps = $("#sampleApps:checked").length > 0;
+            var sampleUsers = $("#sampleUsers:checked").length > 0;
+            var setupParams = "dbType=" + encodeURIComponent(dbType) + "&dbName=" + encodeURIComponent(dbName) + "&jdbcDriver=" + encodeURIComponent(jdbcDriver) + "&jdbcUrl=" + encodeURIComponent(jdbcUrl) + "&jdbcFullUrl=" + encodeURIComponent(jdbcFullUrl) + "&jdbcUser=" + encodeURIComponent(jdbcUser) + "&jdbcPassword=" + encodeURIComponent(jdbcPassword);
+            if (sampleApps) {
+            setupParams += "&sampleApps=true";
+            }
+            if (sampleUsers) {
+            setupParams += "&sampleUsers=true";
+            }
+            var setupUrl = "${pageContext.request.contextPath}/setup/init";
+            ConnectionManager.post(setupUrl, Setup.setupStatusCallback, setupParams);
+            },
+            selectType: function() {
+            var dbType = $("#dbType").val();
+            var dbName = $("#dbName").val();
+            var dbHost = $("#dbHost").val();
+            var dbPort = $("#dbPort").val();
+            var dbUser = $("#dbUser").val();
+            var dbPassword = $("#dbPassword").val();
+            if (dbType === "oracle") {
+            $("#jdbcSetup").hide();
+            $("#dbSetup").show();
+            $("#jdbcDriver").val("oracle.jdbc.driver.OracleDriver");
+            if (Setup.currentDbType !== dbType) {
+            $("#dbPort").val("1521");
+            dbPort = 1521;
+            }
+            $("#jdbcUrl").val("jdbc:oracle:thin:@" + dbHost + ":" + dbPort + ":" + dbName);
+            $("#jdbcFullUrl").val("jdbc:oracle:thin:@" + dbHost + ":" + dbPort + ":" + dbName);
+            } else if (dbType === "sqlserver") {
+            $("#jdbcSetup").hide();
+            $("#dbSetup").show();
+            $("#jdbcDriver").val("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            if (Setup.currentDbType !== dbType) {
+            $("#dbPort").val("1433");
+            dbPort = 1433;
+            }
+            $("#jdbcUrl").val("jdbc:sqlserver://" + dbHost + ":" + dbPort + ";SelectMethod=cursor");
+            $("#jdbcFullUrl").val("jdbc:sqlserver://" + dbHost + ":" + dbPort + ";SelectMethod=cursor;DatabaseName=" + dbName);
+            } else if (dbType === "mysql") {
+            $("#jdbcSetup").hide();
+            $("#dbSetup").show();
+            $("#jdbcDriver").val("com.mysql.jdbc.Driver");
+            if (Setup.currentDbType !== dbType) {
+            $("#dbPort").val("3306");
+            dbPort = 3306;
+            }
+            $("#jdbcUrl").val("jdbc:mysql://" + dbHost + ":" + dbPort + "/?characterEncoding=UTF-8&useSSL=false");
+            $("#jdbcFullUrl").val("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?characterEncoding=UTF-8&useSSL=false");
+            } else {
+            $("#jdbcUrl").val($("#jdbcFullUrl").val());
+            $("#jdbcSetup").show();
+            $("#dbSetup").hide();
+            }
+            Setup.currentDbType = dbType;
+            $("#jdbcUser").val(dbUser);
+            $("#jdbcPassword").val(dbPassword);
+            }
             }
             $("#dbType, #dbSetup input").on("change", Setup.selectType)
             $("#setupButton").on("click", Setup.setupStatus);
             $(function() {
-                Setup.selectType();
+            Setup.selectType();
             });
         </script>
     </body>

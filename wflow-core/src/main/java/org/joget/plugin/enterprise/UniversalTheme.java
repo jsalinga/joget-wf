@@ -34,10 +34,11 @@ import org.joget.workflow.model.service.WorkflowManager;
 import org.json.JSONObject;
 
 public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport {
-    protected final static String PROFILE = "_ja_profile"; 
-    protected final static String INBOX = "_ja_inbox"; 
+
+    protected final static String PROFILE = "_ja_profile";
+    protected final static String INBOX = "_ja_inbox";
     protected static LessEngine lessEngine = new LessEngine();
-    
+
     public enum Color {
         RED("#F44336", "#D32F2F", ""),
         PINK("#E91E63", "#C2185B", ""),
@@ -82,17 +83,18 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         SILVER("#C0C0C0", "", ""),
         BLACK("#000000", "#222222", ""),
         WHITE("#FFFFFF", "", "#DDDDDD");
-        
-        private final String color;  
-        private final String dark; 
+
+        private final String color;
+        private final String dark;
         private final String light;
+
         Color(String color, String dark, String light) {
             this.color = color;
             this.dark = dark;
             this.light = light;
         }
     }
-    
+
     @Override
     public String getName() {
         return "V6 Universal Theme";
@@ -122,7 +124,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
     public String getPropertyOptions() {
         return AppUtil.readPluginResource(getClass().getName(), "/properties/userview/universalTheme.json", null, true, null);
     }
-    
+
     @Override
     public String getMetas(Map<String, Object> data) {
 
@@ -131,7 +133,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         meta += "<meta name=\"msapplication-tap-highlight\" content=\"no\"/>\n";
         return meta;
     }
-    
+
     @Override
     public String getCss(Map<String, Object> data) {
         String css = getPropertyString("css");
@@ -140,12 +142,12 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         }
         return css;
     }
-    
+
     @Override
     public String getJs(Map<String, Object> data) {
         return getPropertyString("js");
     }
-    
+
     @Override
     public String getJsCssLib(Map<String, Object> data) {
         String path = data.get("context_path") + "/universal";
@@ -153,17 +155,17 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         String jsCssLink = "";
         jsCssLink += "<link href=\"" + data.get("context_path") + "/wro/universal.preload.min.css" + "\" rel=\"stylesheet\" />\n";
         jsCssLink += "<script>loadCSS(\"" + data.get("context_path") + "/wro/universal.min.css" + "\")</script>\n";
-        
+
         jsCssLink += "<style>" + generateLessCss() + "</style>";
 
         jsCssLink += "<script src=\"" + data.get("context_path") + "/wro/universal.preload.min.js\"></script>\n";
         jsCssLink += "<script src=\"" + data.get("context_path") + "/wro/universal.min.js\" async></script>\n";
-        
+
         if (enableResponsiveSwitch()) {
             jsCssLink += "<script src=\"" + path + "/lib/responsive-switch.min.js\" defer></script>\n";
-        }        
+        }
         jsCssLink += "<script>var _enableResponsiveTable = true;</script>\n";
-        
+
         return jsCssLink;
     }
 
@@ -178,7 +180,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         String button = "#D8DADA";
         String buttonText = "#333";
         String font = "";
-        
+
         if ("custom".equals(getPropertyString("primaryColor"))) {
             primary = getPropertyString("customPrimary");
             if (!getPropertyString("customPrimaryDark").isEmpty()) {
@@ -188,74 +190,74 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
                 light = getPropertyString("customPrimaryLight");
             }
         } else {
-            Color p = Color.valueOf(getPropertyString("primaryColor")); 
+            Color p = Color.valueOf(getPropertyString("primaryColor"));
             if (p != null) {
                 primary = p.color;
-                dark = (p.dark.isEmpty())?dark:p.dark;
+                dark = (p.dark.isEmpty()) ? dark : p.dark;
                 if ("light".equals(getPropertyString("themeScheme"))) {
                     light = "screen(@primary, #eeeeee)";
                 } else {
-                    light = (p.light.isEmpty())?light:p.light;
+                    light = (p.light.isEmpty()) ? light : p.light;
                 }
             }
         }
-        
+
         if ("custom".equals(getPropertyString("accentColor"))) {
             accent = getPropertyString("customAccent");
             if (!getPropertyString("customAccentLight").isEmpty()) {
                 lightAccent = getPropertyString("customAccentLight");
             }
         } else {
-            Color a = Color.valueOf(getPropertyString("accentColor")); 
+            Color a = Color.valueOf(getPropertyString("accentColor"));
             if (a != null) {
                 accent = a.color;
-                lightAccent = (a.light.isEmpty())?lightAccent:a.light;
+                lightAccent = (a.light.isEmpty()) ? lightAccent : a.light;
             }
         }
-        
+
         if ("custom".equals(getPropertyString("buttonColor"))) {
             button = getPropertyString("customButton");
         } else if (!getPropertyString("buttonColor").isEmpty()) {
-            Color a = Color.valueOf(getPropertyString("buttonColor")); 
+            Color a = Color.valueOf(getPropertyString("buttonColor"));
             if (a != null) {
                 button = a.color;
             }
         }
-        
+
         if ("custom".equals(getPropertyString("buttonTextColor"))) {
             buttonText = getPropertyString("customButtonText");
         } else if (!getPropertyString("buttonColor").isEmpty()) {
-            Color a = Color.valueOf(getPropertyString("buttonTextColor")); 
+            Color a = Color.valueOf(getPropertyString("buttonTextColor"));
             if (a != null) {
                 buttonText = a.color;
             }
         }
-        
+
         if ("custom".equals(getPropertyString("fontColor"))) {
             font = getPropertyString("customFontColor");
         } else {
-            Color a = Color.valueOf(getPropertyString("fontColor")); 
+            Color a = Color.valueOf(getPropertyString("fontColor"));
             if (a != null) {
                 font = a.color;
             }
         }
-        
+
         if ("light".equals(getPropertyString("themeScheme"))) {
             String menuFont = "#000000";
             if ("custom".equals(getPropertyString("menuFontColor"))) {
                 menuFont = getPropertyString("customMenuFontColor");
             } else if (!getPropertyString("menuFontColor").isEmpty()) {
-                Color a = Color.valueOf(getPropertyString("menuFontColor")); 
+                Color a = Color.valueOf(getPropertyString("menuFontColor"));
                 if (a != null) {
                     menuFont = a.color;
                 }
             }
-            
+
             lessVariables += "@primary: " + primary + "; @darkPrimary: " + dark + "; @lightPrimary: " + light + "; @accent: " + accent + "; @lightAccent: " + lightAccent + "; @menuFont: " + menuFont + "; @button: " + button + "; @buttonText: " + buttonText + "; @defaultFontColor : " + font + ";";
         } else {
             lessVariables += "@primary: " + primary + "; @darkPrimary: " + dark + "; @lightPrimary: " + light + "; @accent: " + accent + "; @lightAccent: " + lightAccent + "; @button: " + button + "; @buttonText: " + buttonText + "; @defaultFontColor : " + font + ";";
         }
-        
+
         // process LESS
         String less = AppUtil.readPluginResource(getClass().getName(), "resources/themes/universal/" + getPropertyString("themeScheme") + ".less");
         less = lessVariables + "\n" + less;
@@ -283,13 +285,13 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         String css = "";
         try {
             css = lessEngine.compile(less);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LogUtil.error(this.getClass().getName(), e, "Error compiling LESS");
             LogUtil.debug(this.getClass().getName(), "LESS: " + less);
         }
         return css;
     }
-    
+
     @Override
     public String getHeader(Map<String, Object> data) {
         if ("true".equals(getPropertyString("horizontal_menu"))) {
@@ -297,34 +299,34 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         } else if ("horizontal_inline".equals(getPropertyString("horizontal_menu"))) {
             data.put("header_name_inner_after", UserviewUtil.getTemplate(this, data, "/templates/universalTheme_horizontalMenu.ftl"));
         }
-        
+
         data.put("header_classes", "navbar");
         data.put("header_inner_before", "<div class=\"navbar-inner\"><div class=\"container-fluid\"><div class=\"hi-trigger ma-trigger\" id=\"sidebar-trigger\"><div class=\"line-wrap\"><div class=\"line top\"></div><div class=\"line center\"></div><div class=\"line bottom\"></div></div></div>");
         data.put("header_inner_after", "</div></div>" + getPropertyString("subheader"));
         data.put("header_link_classes", "brand");
         data.put("header_info_classes", "inline-block");
         data.put("header_name_classes", "inline-block");
-        
+
         if (!getPropertyString("logo").isEmpty()) {
-            data.put("header_name_inner_before", "<img class=\"logo\" src=\""+getPropertyString("logo")+"\" />");
+            data.put("header_name_inner_before", "<img class=\"logo\" src=\"" + getPropertyString("logo") + "\" />");
         }
-        
+
         data.put("header_description_classes", "inline-block visible-desktop");
         data.put("header_description_span_classes", "brand");
         data.put("header_message_after", getNavbar(data));
         return UserviewUtil.getTemplate(this, data, "/templates/userview/header.ftl");
     }
-    
+
     @Override
     public String getContentContainer(Map<String, Object> data) {
         if (!getPropertyString("horizontal_menu").isEmpty()) {
             data.put("hide_nav", true);
         }
-        
+
         if ((getRequestParameter("menuId") == null || getUserview().getPropertyString("homeMenuId").equals(getRequestParameter("menuId"))) && !getPropertyString("homeAttractBanner").isEmpty()) {
-            data.put("main_container_before", "<div class=\"home_banner\"><div class=\"home_banner_inner\">"+getPropertyString("homeAttractBanner")+"</div></div>");
+            data.put("main_container_before", "<div class=\"home_banner\"><div class=\"home_banner_inner\">" + getPropertyString("homeAttractBanner") + "</div></div>");
         }
-        
+
         data.put("main_container_classes", "container-fluid-full");
         data.put("main_container_inner_classes", "row-fluid");
         data.put("sidebar_classes", "span2");
@@ -337,30 +339,30 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         data.put("content_inner_before", getBreadcrumb(data));
         return super.getContentContainer(data);
     }
-    
+
     @Override
     public String getLayout(Map<String, Object> data) {
         if ("true".equals(getPropertyString("horizontal_menu"))) {
             data.put("body_classes", data.get("body_classes").toString() + " horizontal_menu");
-        } else if ("horizontal_inline".equals(getPropertyString("horizontal_menu"))){
+        } else if ("horizontal_inline".equals(getPropertyString("horizontal_menu"))) {
             data.put("body_classes", data.get("body_classes").toString() + " horizontal_menu inline_menu");
         } else if ("no".equals(getPropertyString("horizontal_menu"))) {
             data.put("body_classes", data.get("body_classes").toString() + " horizontal_menu no_menu");
         }
-        
+
         if ((getRequestParameter("menuId") == null || getUserview().getPropertyString("homeMenuId").equals(getRequestParameter("menuId"))) && !getPropertyString("homeAttractBanner").isEmpty()) {
             data.put("body_classes", data.get("body_classes").toString() + " has_home_banner");
         }
-        
+
         data.put("body_inner_before", "<div class=\"page-loader\"><div class=\"preloader pl-xl\" style=\"width:80px\"><svg class=\"pl-circular\" viewBox=\"25 25 50 50\"><circle class=\"plc-path\" cx=\"50\" cy=\"50\" r=\"20\" /></svg></div></div>");
         return UserviewUtil.getTemplate(this, data, "/templates/userview/layout.ftl");
     }
-    
+
     public String getLoginForm(Map<String, Object> data) {
         data.put("hide_nav", true);
         return super.getLoginForm(data);
     }
-    
+
     @Override
     public String handlePageNotFound(Map<String, Object> data) {
         if (PROFILE.equals(userview.getParamString("menuId"))) {
@@ -371,7 +373,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
             return super.handlePageNotFound(data);
         }
     }
-    
+
     protected String getUserMenu(Map<String, Object> data) {
         if (!getPropertyString("horizontal_menu").isEmpty()) {
             String html = "";
@@ -391,60 +393,60 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
                 String profileImageTag = "";
                 if (getPropertyString("userImage").isEmpty()) {
                     String url = new Gravatar()
-                        .setSize(30)
-                        .setHttps(true)
-                        .setRating(Rating.PARENTAL_GUIDANCE_SUGGESTED)
-                        .setStandardDefaultImage(DefaultImage.IDENTICON)
-                        .getUrl(email);
-                    profileImageTag = "<img class=\"gravatar\" src=\""+url+"\" /> ";
+                            .setSize(30)
+                            .setHttps(true)
+                            .setRating(Rating.PARENTAL_GUIDANCE_SUGGESTED)
+                            .setStandardDefaultImage(DefaultImage.IDENTICON)
+                            .getUrl(email);
+                    profileImageTag = "<img class=\"gravatar\" src=\"" + url + "\" /> ";
                 } else if ("hashVariable".equals(getPropertyString("userImage"))) {
                     String url = AppUtil.processHashVariable(getPropertyString("userImageUrlHash"), null, StringUtil.TYPE_HTML, null, AppUtil.getCurrentAppDefinition());
                     if (AppUtil.containsHashVariable(url) || url == null || url.isEmpty()) {
                         url = data.get("context_path") + "/universal/user.png";
                     }
-                    profileImageTag = "<img src=\""+url+"\" /> ";
+                    profileImageTag = "<img src=\"" + url + "\" /> ";
                 }
-                
+
                 html += "<li class=\"user-link dropdown\">\n"
-                      + "    <a data-toggle=\"dropdown\" class=\"btn dropdown-toggle\">\n"
-                      + "	     " + profileImageTag + StringUtil.stripHtmlTag(user.getFirstName(), new String[]{}) + " " + StringUtil.stripHtmlTag(user.getLastName(), new String[]{}) + "\n"
-                      + "	     <span class=\"caret\"></span>\n"
-                      + "    </a>\n";
+                        + "    <a data-toggle=\"dropdown\" class=\"btn dropdown-toggle\">\n"
+                        + "	     " + profileImageTag + StringUtil.stripHtmlTag(user.getFirstName(), new String[]{}) + " " + StringUtil.stripHtmlTag(user.getLastName(), new String[]{}) + "\n"
+                        + "	     <span class=\"caret\"></span>\n"
+                        + "    </a>\n";
 
                 html += "<ul class=\"dropdown-menu\">\n";
                 if (!"true".equals(getPropertyString("profile")) && !user.getReadonly()) {
-                    html += "    <li><a href=\"" + data.get("base_link") + PROFILE +"\"><i class=\"fa fa-user\"></i> " + ResourceBundleUtil.getMessage("theme.universal.profile") + "</a></li>\n";
+                    html += "    <li><a href=\"" + data.get("base_link") + PROFILE + "\"><i class=\"fa fa-user\"></i> " + ResourceBundleUtil.getMessage("theme.universal.profile") + "</a></li>\n";
                 }
-                
+
                 Object[] shortcut = (Object[]) getProperty("userMenu");
                 if (shortcut != null && shortcut.length > 0) {
                     for (Object o : shortcut) {
                         Map link = (HashMap) o;
                         String href = link.get("href").toString();
                         String label = link.get("label").toString();
-                        String target = (link.get("target") == null)?"":link.get("target").toString();
+                        String target = (link.get("target") == null) ? "" : link.get("target").toString();
 
                         if ("divider".equalsIgnoreCase(label)) {
                             html += "<li class=\"divider\"></li>\n";
                         } else if (href.isEmpty()) {
-                             html += "<li class=\"dropdown-menu-title\"><span>" + label + "</span></li>\n";
+                            html += "<li class=\"dropdown-menu-title\"><span>" + label + "</span></li>\n";
                         } else {
                             if (!href.contains("/")) {
                                 href = data.get("base_link") + href;
                             }
-                            html += "<li><a href=\"" + href + "\" target=\""+target+"\">" + label + "</a></li>\n";
+                            html += "<li><a href=\"" + href + "\" target=\"" + target + "\">" + label + "</a></li>\n";
                         }
                     }
                 }
-                
+
                 html += "    <li><a href=\"" + data.get("logout_link") + "\"><i class=\"fa fa-power-off\"></i> " + ResourceBundleUtil.getMessage("theme.universal.logout") + "</a></li>\n"
-                      + "</ul>";
+                        + "</ul>";
 
             } else {
                 html += "<li class=\"user-link\">\n"
-                      + "    <a href=\"" + data.get("login_link") + "\" class=\"btn\">\n"
-                      + "	     <i class=\"fa fa-user white\"></i> " + ResourceBundleUtil.getMessage("ubuilder.login") + "\n"
-                      + "    </a>\n";
+                        + "    <a href=\"" + data.get("login_link") + "\" class=\"btn\">\n"
+                        + "	     <i class=\"fa fa-user white\"></i> " + ResourceBundleUtil.getMessage("ubuilder.login") + "\n"
+                        + "    </a>\n";
             }
             html += "</li>";
             return html;
@@ -452,7 +454,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
             return "";
         }
     }
-    
+
     protected String getSidebarUserMenu(Map<String, Object> data) {
         String html = "<ul class=\"user-menu nav nav-tabs nav-stacked main-menu\">";
         if ((Boolean) data.get("is_logged_in")) {
@@ -467,61 +469,61 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
             if (email.contains(",")) {
                 email = email.split(",")[0];
             }
-            
+
             String profileImageTag = "";
             if (getPropertyString("userImage").isEmpty()) {
                 String url = new Gravatar()
-                    .setSize(30)
-                    .setHttps(true)
-                    .setRating(Rating.PARENTAL_GUIDANCE_SUGGESTED)
-                    .setStandardDefaultImage(DefaultImage.IDENTICON)
-                    .getUrl(email);
-                profileImageTag = "<img class=\"gravatar\" src=\""+url+"\" /> ";
+                        .setSize(30)
+                        .setHttps(true)
+                        .setRating(Rating.PARENTAL_GUIDANCE_SUGGESTED)
+                        .setStandardDefaultImage(DefaultImage.IDENTICON)
+                        .getUrl(email);
+                profileImageTag = "<img class=\"gravatar\" src=\"" + url + "\" /> ";
             } else if ("hashVariable".equals(getPropertyString("userImage"))) {
                 String url = AppUtil.processHashVariable(getPropertyString("userImageUrlHash"), null, StringUtil.TYPE_HTML, null, AppUtil.getCurrentAppDefinition());
                 if (AppUtil.containsHashVariable(url) || url == null || url.isEmpty()) {
                     url = data.get("context_path") + "/universal/user.png";
                 }
-                profileImageTag = "<img src=\""+url+"\" /> ";
+                profileImageTag = "<img src=\"" + url + "\" /> ";
             }
-            
+
             html += "<li class=\"mm-profile user-link\">\n"
-                  + "    <a class=\"dropdown\">\n"
-                  + "        "+profileImageTag+"\n"  
-                  + "	     <span>" + StringUtil.stripHtmlTag(user.getFirstName(), new String[]{}) + " " + StringUtil.stripHtmlTag(user.getLastName(), new String[]{}) + "</span>\n"
-                  + "	     <small>" + email + "</small>\n"
-                  + "    </a>\n";
-            
+                    + "    <a class=\"dropdown\">\n"
+                    + "        " + profileImageTag + "\n"
+                    + "	     <span>" + StringUtil.stripHtmlTag(user.getFirstName(), new String[]{}) + " " + StringUtil.stripHtmlTag(user.getLastName(), new String[]{}) + "</span>\n"
+                    + "	     <small>" + email + "</small>\n"
+                    + "    </a>\n";
+
             html += "<ul>\n";
             if (!"true".equals(getPropertyString("profile")) && !user.getReadonly()) {
                 String activeCss = "";
                 if (PROFILE.equals(userview.getParamString("menuId"))) {
                     activeCss = " class=\"active\"";
                 }
-                html += "    <li "+activeCss+"><a href=\"" + data.get("base_link") + PROFILE +"\"><span><i class=\"fa fa-user\"></i> " + ResourceBundleUtil.getMessage("theme.universal.profile") + "</span></a></li>\n";
+                html += "    <li " + activeCss + "><a href=\"" + data.get("base_link") + PROFILE + "\"><span><i class=\"fa fa-user\"></i> " + ResourceBundleUtil.getMessage("theme.universal.profile") + "</span></a></li>\n";
             }
-            
+
             Object[] shortcut = (Object[]) getProperty("userMenu");
             if (shortcut != null && shortcut.length > 0) {
                 for (Object o : shortcut) {
                     Map link = (HashMap) o;
                     String href = link.get("href").toString();
                     String label = link.get("label").toString();
-                    String target = (link.get("target") == null)?"":link.get("target").toString();
+                    String target = (link.get("target") == null) ? "" : link.get("target").toString();
 
                     if ("divider".equalsIgnoreCase(label)) {
                         html += "<li class=\"divider\"></li>\n";
                     } else if (href.isEmpty()) {
-                         html += "<li class=\"dropdown-menu-title\"><span>" + label + "</span></li>\n";
+                        html += "<li class=\"dropdown-menu-title\"><span>" + label + "</span></li>\n";
                     } else {
                         if (!href.contains("/")) {
                             href = data.get("base_link") + href;
                         }
-                        html += "<li><a href=\"" + href + "\" target=\""+target+"\">" + label + "</a></li>\n";
+                        html += "<li><a href=\"" + href + "\" target=\"" + target + "\">" + label + "</a></li>\n";
                     }
                 }
             }
-            
+
             html += "    <li><a href=\"" + data.get("logout_link") + "\"><span><i class=\"fa fa-power-off\"></i> " + ResourceBundleUtil.getMessage("theme.universal.logout") + "</span></a></li>\n";
             html += "</ul>";
 
@@ -529,42 +531,42 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
             String profileImageTag = "";
             if (getPropertyString("userImage").isEmpty() || "hashVariable".equals(getPropertyString("userImage"))) {
                 String url = data.get("context_path") + "/universal/user.png";
-                profileImageTag = "<img src=\""+url+"\" /> ";
+                profileImageTag = "<img src=\"" + url + "\" /> ";
             }
-            
+
             html += "<li class=\"mm-profile user-link\">\n"
-                  + "    <a href=\"" + data.get("login_link") + "\" >\n"
-                  + "        "+profileImageTag+"\n" 
-                  + "	     <span>Visitor</span>\n"  
-                  + "	     <small class=\"login_link\">" + ResourceBundleUtil.getMessage("ubuilder.login") + "</small>\n"
-                  + "    </a>\n";
+                    + "    <a href=\"" + data.get("login_link") + "\" >\n"
+                    + "        " + profileImageTag + "\n"
+                    + "	     <span>Visitor</span>\n"
+                    + "	     <small class=\"login_link\">" + ResourceBundleUtil.getMessage("ubuilder.login") + "</small>\n"
+                    + "    </a>\n";
         }
         html += "</li></ul>";
         return html;
     }
-    
+
     @Override
     public String getMenus(Map<String, Object> data) {
         data.put("combine_single_menu_category", true);
         data.put("categories_container_before", getSidebarUserMenu(data));
-        
+
         return super.getMenus(data);
     }
-    
+
     @Override
     public String getFooter(Map<String, Object> data) {
         if (enableResponsiveSwitch()) {
-            data.put("footer_inner_after", "<div id=\"responsiveSwitch\"><p><a href=\"#\" class=\"rs-link\" data-link-desktop=\""+ ResourceBundleUtil.getMessage("theme.universal.switchDesktop") +"\" data-link-responsive=\""+ ResourceBundleUtil.getMessage("theme.universal.switchMobile") +"\"></a></p></div>" + getPropertyString("subfooter"));
+            data.put("footer_inner_after", "<div id=\"responsiveSwitch\"><p><a href=\"#\" class=\"rs-link\" data-link-desktop=\"" + ResourceBundleUtil.getMessage("theme.universal.switchDesktop") + "\" data-link-responsive=\"" + ResourceBundleUtil.getMessage("theme.universal.switchMobile") + "\"></a></p></div>" + getPropertyString("subfooter"));
         } else {
             data.put("footer_inner_after", getPropertyString("subfooter"));
         }
         return super.getFooter(data);
     }
-    
+
     protected String getHomeLink(Map<String, Object> data) {
         return "<li class=\"\"><a class=\"btn\" href=\"" + data.get("home_page_link") + "\"><i class=\"fa fa-home\"></i></a></li>\n";
     }
-    
+
     protected String getNavbar(Map<String, Object> data) {
         String html = "<div class=\"nav-no-collapse header-nav\"><ul class=\"nav pull-right\">\n";
         html += getHomeLink(data);
@@ -576,75 +578,76 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         html += "</ul></div>\n";
         return html;
     }
-    
+
     protected String getInbox(Map<String, Object> data) {
         String html = "";
-        
+
         if (!getPropertyString("inbox").isEmpty()) {
             String url = data.get("context_path") + "/web/json/plugin/org.joget.plugin.enterprise.UniversalTheme/service?_a=getAssignment";
             if ("current".equals(getPropertyString("inbox"))) {
                 try {
                     url += "&appId=" + URLEncoder.encode(userview.getParamString("appId"), "UTF-8");
-                } catch (UnsupportedEncodingException e){}
+                } catch (UnsupportedEncodingException e) {
+                }
             }
             html += "<li class=\"inbox-notification dropdown\" data-url=\"" + url + "\">\n"
-                  + "    <a data-toggle=\"dropdown\" class=\"btn dropdown-toggle\">\n"
-                  + "	 <i class=\"fa fa-tasks white\"></i><span class=\"badge red\">0</span>\n"
-                  + "    </a>\n"
-                  + "    <ul class=\"dropdown-menu notifications\">\n"
-                  + "        <li class=\"dropdown-menu-title\"><span>" + ResourceBundleUtil.getMessage("theme.universal.inboxTaskMessage") + "</span><a href=\"#\" class=\"refresh\"><i class=\"fa fa-refresh\"></i></a></li>"
-                  + "        <li class=\"loading\"><a><span><i class=\"fa fa-spinner fa-spin fa-3x\"></i></span></a></li>\n"
-                  + "        <li><a href=\"" + data.get("base_link") + INBOX + "\" class=\"dropdown-menu-sub-footer\">" + ResourceBundleUtil.getMessage("theme.universal.viewAllTask") + "</a></li>\n"  
-                  + "    </ul>\n"
-                  + "<li>";
+                    + "    <a data-toggle=\"dropdown\" class=\"btn dropdown-toggle\">\n"
+                    + "	 <i class=\"fa fa-tasks white\"></i><span class=\"badge red\">0</span>\n"
+                    + "    </a>\n"
+                    + "    <ul class=\"dropdown-menu notifications\">\n"
+                    + "        <li class=\"dropdown-menu-title\"><span>" + ResourceBundleUtil.getMessage("theme.universal.inboxTaskMessage") + "</span><a href=\"#\" class=\"refresh\"><i class=\"fa fa-refresh\"></i></a></li>"
+                    + "        <li class=\"loading\"><a><span><i class=\"fa fa-spinner fa-spin fa-3x\"></i></span></a></li>\n"
+                    + "        <li><a href=\"" + data.get("base_link") + INBOX + "\" class=\"dropdown-menu-sub-footer\">" + ResourceBundleUtil.getMessage("theme.universal.viewAllTask") + "</a></li>\n"
+                    + "    </ul>\n"
+                    + "<li>";
         }
-        
+
         return html;
     }
-    
+
     protected String getShortcut(Map<String, Object> data) {
         String shortcutHtml = "";
-        
+
         Object[] shortcut = (Object[]) getProperty("shortcut");
         if (shortcut != null && shortcut.length > 0) {
             for (Object o : shortcut) {
                 Map link = (HashMap) o;
                 String href = link.get("href").toString();
                 String label = link.get("label").toString();
-                String target = (link.get("target") == null)?"":link.get("target").toString();
+                String target = (link.get("target") == null) ? "" : link.get("target").toString();
                 boolean isPublic = "true".equalsIgnoreCase((String) link.get("isPublic"));
-                
+
                 if ((Boolean) data.get("is_logged_in") || (!((Boolean) data.get("is_logged_in")) && isPublic)) {
                     if ("divider".equalsIgnoreCase(label)) {
                         shortcutHtml += "<li class=\"divider\"></li>\n";
                     } else if (href.isEmpty()) {
-                         shortcutHtml += "<li class=\"dropdown-menu-title\"><span>" + label + "</span></li>\n";
+                        shortcutHtml += "<li class=\"dropdown-menu-title\"><span>" + label + "</span></li>\n";
                     } else {
                         if (!href.contains("/")) {
                             href = data.get("base_link") + href;
                         }
-                        shortcutHtml += "<li><a href=\"" + href + "\" target=\""+target+"\">" + label + "</a></li>\n";
+                        shortcutHtml += "<li><a href=\"" + href + "\" target=\"" + target + "\">" + label + "</a></li>\n";
                     }
                 }
             }
         }
-        
+
         String html = "";
         if (!shortcutHtml.isEmpty()) {
             html = "<li class=\"shortcut-link dropdown\">\n"
-                  + "    <a data-toggle=\"dropdown\" class=\"btn dropdown-toggle\">\n"
-                  + "	     <i class=\"fa fa-th-list white\"></i> " + getPropertyString("shortcutLinkLabel") + "\n"
-                  + "	     <span class=\"caret\"></span>\n"
-                  + "    </a>\n";
-            
+                    + "    <a data-toggle=\"dropdown\" class=\"btn dropdown-toggle\">\n"
+                    + "	     <i class=\"fa fa-th-list white\"></i> " + getPropertyString("shortcutLinkLabel") + "\n"
+                    + "	     <span class=\"caret\"></span>\n"
+                    + "    </a>\n";
+
             html += "<ul class=\"dropdown-menu\">\n";
             html += shortcutHtml;
             html += "</ul></li>";
         }
-        
+
         return html;
     }
-    
+
     protected String getBreadcrumb(Map<String, Object> data) {
         String breadcrumb = "<ul class=\"breadcrumb\"><li><i class=\"fa fa-home\"></i> <a href=\"" + data.get("home_page_link") + "\">" + ResourceBundleUtil.getMessage("theme.universal.home") + "</a> <i class=\"fa fa-angle-right\"></i></li>";
         if ((Boolean) data.get("is_login_page") || (Boolean) data.get("embed")) {
@@ -666,7 +669,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
 
         return breadcrumb;
     }
-    
+
     protected String getCategoryLink(UserviewCategory category, Map<String, Object> data) {
         UserviewMenu menu = category.getMenus().iterator().next();
         if (menu.isHomePageSupported()) {
@@ -674,11 +677,11 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         }
         return "";
     }
-    
+
     protected boolean enableResponsiveSwitch() {
         return MobileUtil.isMobileUserAgent() && "true".equals(getPropertyString("enableResponsiveSwitch"));
     }
-    
+
     protected String pageProfile(Map<String, Object> data) {
         String html = "";
         try {
@@ -700,7 +703,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
         }
         return html;
     }
-    
+
     protected String pageInbox(Map<String, Object> data) {
         String html = "";
         try {
@@ -717,11 +720,11 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
                 props.put("customId", INBOX);
                 props.put("menuId", INBOX);
                 props.put("label", "");
-                
+
                 if ("current".equals(getPropertyString("inbox"))) {
                     props.put(InboxMenu.PROPERTY_FILTER, InboxMenu.PROPERTY_FILTER_ALL);
                 }
-                
+
                 menu.setRequestParameters(userview.getParams());
                 menu.setProperties(props);
                 menu.setUserview(userview);
@@ -747,10 +750,10 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
                 }
                 int count = wm.getAssignmentSize(appId, null, null);
                 Collection<WorkflowAssignment> assignments = wm.getAssignmentListLite(appId, null, null, null, "a.activated", true, 0, 5);
-        
+
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.accumulate("count", count);
-                
+
                 String format = AppUtil.getAppDateFormat();
                 Collection<Map<String, String>> datas = new ArrayList<Map<String, String>>();
                 for (WorkflowAssignment a : assignments) {
@@ -767,7 +770,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
                     data.put("dateCreated", TimeZoneUtil.convertToTimeZone(a.getDateCreated(), null, format));
                     datas.add(data);
                 }
-                
+
                 jsonObj.put("data", datas);
 
                 jsonObj.write(response.getWriter());
@@ -779,7 +782,7 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         }
     }
-    
+
     @Override
     public String getFavIconLink(Map<String, Object> data) {
         String fav = getPropertyString("fav_icon");
@@ -789,14 +792,14 @@ public class UniversalTheme extends UserviewV5Theme implements PluginWebSupport 
             return super.getFavIconLink(data);
         }
     }
-    
+
     @Override
     public boolean isMobileViewDisabled() {
         return true;
     }
-    
+
     @Override
     public String[] themeDefinedMenusId() {
-        return new String[] {PROFILE, INBOX};
+        return new String[]{PROFILE, INBOX};
     }
 }

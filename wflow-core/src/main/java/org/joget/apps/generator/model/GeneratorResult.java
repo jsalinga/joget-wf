@@ -2,16 +2,18 @@ package org.joget.apps.generator.model;
 
 /**
  * Result of a generator
- * 
+ *
  */
 public class GeneratorResult {
+
     private boolean error = false;
     private String message;
     private String itemId;
 
     /**
      * Flag to indicate an error
-     * @return 
+     *
+     * @return
      */
     public boolean isError() {
         return error;
@@ -19,7 +21,8 @@ public class GeneratorResult {
 
     /**
      * Sets a flag to indicate an error
-     * @param error 
+     *
+     * @param error
      */
     public void setError(boolean error) {
         this.error = error;
@@ -27,7 +30,8 @@ public class GeneratorResult {
 
     /**
      * Gets the message of the generation outcome
-     * @return 
+     *
+     * @return
      */
     public String getMessage() {
         return message;
@@ -35,7 +39,8 @@ public class GeneratorResult {
 
     /**
      * Sets the message of the generation outcome
-     * @param message 
+     *
+     * @param message
      */
     public void setMessage(String message) {
         this.message = message;
@@ -43,7 +48,8 @@ public class GeneratorResult {
 
     /**
      * Gets the id of the generated item for other generator to reuse
-     * @return 
+     *
+     * @return
      */
     public String getItemId() {
         return itemId;
@@ -51,7 +57,8 @@ public class GeneratorResult {
 
     /**
      * Stes the id of the generated item for other generator to reuse
-     * @param itemId 
+     *
+     * @param itemId
      */
     public void setItemId(String itemId) {
         this.itemId = itemId;

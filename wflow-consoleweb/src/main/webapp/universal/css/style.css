@@ -453,14 +453,14 @@ ul#category-container {
         padding-right: 283px;
         padding-left: 15px;
     }
-    
+
     body.embeded #page #content {
         padding-left: 20px;
     }
     body.rtl.embeded #page #content {
         padding-right: 20px;
     }
-    
+
     body:not(.horizontal_menu) .home_banner {
         padding-left: 268px;
     }   
@@ -468,7 +468,7 @@ ul#category-container {
         padding-left: auto;
         padding-right: 268px;
     }
-    
+
     body .home_banner {
         padding-top: 0;
         margin-top: 0;
@@ -989,7 +989,7 @@ body#login #page > footer {
         width: 100%;
         z-index: 10;
     }
-    
+
 }
 @media (max-width:767px) {
     body.horizontal_menu #sidebar li.toggled>a.dropdown:before {

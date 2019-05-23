@@ -7,16 +7,19 @@ import org.joget.apps.form.model.Form;
 import org.joget.apps.form.model.FormData;
 
 /**
- * Service methods used to creates form from json and performs form feature actions 
- * 
+ * Service methods used to creates form from json and performs form feature
+ * actions
+ *
  */
 public interface FormService {
+
     String PREFIX_FOREIGN_KEY = "fk_";
     String PREFIX_FOREIGN_KEY_EDITABLE = "fke_";
     String PREVIEW_MODE = "_PREVIEW_MODE";
 
     /**
      * Creates an element object from a JSON definition
+     *
      * @param elementJson
      * @return
      */
@@ -24,6 +27,7 @@ public interface FormService {
 
     /**
      * Creates an element object from a JSON definition
+     *
      * @param elementJson
      * @param processHashVariable
      * @return
@@ -32,6 +36,7 @@ public interface FormService {
 
     /**
      * Invokes actions (e.g. buttons) in the form
+     *
      * @param form
      * @param formData
      * @return
@@ -39,7 +44,9 @@ public interface FormService {
     FormData executeFormActions(Form form, FormData formData);
 
     /**
-     * Loads data for a specific row into an element by calling all load binders in the element.
+     * Loads data for a specific row into an element by calling all load binders
+     * in the element.
+     *
      * @param element
      * @param formData
      * @return
@@ -47,7 +54,9 @@ public interface FormService {
     FormData executeFormLoadBinders(Element element, FormData formData);
 
     /**
-     * Preloads data for an element, e.g. field options, etc. by calling all option binders in the element.
+     * Preloads data for an element, e.g. field options, etc. by calling all
+     * option binders in the element.
+     *
      * @param element
      * @param formData
      * @return
@@ -56,6 +65,7 @@ public interface FormService {
 
     /**
      * Executes store binders for a form
+     *
      * @param form
      * @param formData
      * @return
@@ -64,6 +74,7 @@ public interface FormService {
 
     /**
      * Generates HTML for the form element to be used in the Form Builder
+     *
      * @param element
      * @param formData
      * @return
@@ -72,6 +83,7 @@ public interface FormService {
 
     /**
      * Generates error HTML for the form element
+     *
      * @param element
      * @param formData
      * @return
@@ -80,6 +92,7 @@ public interface FormService {
 
     /**
      * Generates HTML for the form element
+     *
      * @param element
      * @param formData
      * @return
@@ -88,6 +101,7 @@ public interface FormService {
 
     /**
      * Generates the JSON definition for the specified form element
+     *
      * @param element
      * @return
      */
@@ -95,6 +109,7 @@ public interface FormService {
 
     /**
      * Main method to load a form with data loaded.
+     *
      * @param form
      * @param formData
      * @return
@@ -103,6 +118,7 @@ public interface FormService {
 
     /**
      * Load a form from its JSON definition, with data loaded.
+     *
      * @param formJson
      * @param formData
      * @return
@@ -111,6 +127,7 @@ public interface FormService {
 
     /**
      * Use case to generate HTML from a JSON element definition.
+     *
      * @param json
      * @return
      */
@@ -118,23 +135,27 @@ public interface FormService {
 
     /**
      * Use case to generate HTML from a JSON element definition.
+     *
      * @param json
-     * @param includeMetaData true to include metadata required for use in the form builder.
+     * @param includeMetaData true to include metadata required for use in the
+     * form builder.
      * @return
      */
     String previewElement(String json, boolean includeMetaData);
 
     /**
      * Recursively executes all the store binders in a form
+     *
      * @param form
      * @param element
      * @param formData
-     * @return 
+     * @return
      */
     FormData recursiveExecuteFormStoreBinders(Form form, Element element, FormData formData);
 
     /**
      * Retrieves form data submitted via a HTTP servlet request
+     *
      * @param formData
      * @param request
      * @return
@@ -143,39 +164,44 @@ public interface FormService {
 
     /**
      * Retrieves form data submitted via a HTTP servlet request parameters map
+     *
      * @param formData
      * @param requestMap
-     * @return 
+     * @return
      */
     FormData retrieveFormDataFromRequestMap(FormData formData, Map requestMap);
 
     /**
      * Used to retrieves the Form HTML when there is errors in form
+     *
      * @param form
      * @param formData
-     * @return 
+     * @return
      */
     String retrieveFormErrorHtml(Form form, FormData formData);
 
     /**
-     * Used to retrieves the Form HTML 
+     * Used to retrieves the Form HTML
+     *
      * @param form
      * @param formData
-     * @return 
+     * @return
      */
     String retrieveFormHtml(Form form, FormData formData);
-    
+
     /**
      * Store the data of a form field element
+     *
      * @param form
      * @param element
      * @param formData
-     * @return 
+     * @return
      */
     FormData storeElementData(Form form, Element element, FormData formData);
 
     /**
      * Process form submission
+     *
      * @param form
      * @param formData
      * @param ignoreValidation
@@ -185,6 +211,7 @@ public interface FormService {
 
     /**
      * Validates form data submitted for a specific form
+     *
      * @param form
      * @param formData
      * @return
@@ -193,6 +220,7 @@ public interface FormService {
 
     /**
      * Use case to load and view a form, with data loaded
+     *
      * @param form
      * @param primaryKeyValue
      * @return
@@ -201,10 +229,11 @@ public interface FormService {
 
     /**
      * Use case to view a form from its JSON definition, with data loaded
+     *
      * @param formJson
      * @param primaryKeyValue
      * @return
      */
     String viewFormFromJson(String formJson, String primaryKeyValue);
-    
+
 }

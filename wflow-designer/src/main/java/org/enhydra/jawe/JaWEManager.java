@@ -60,6 +60,7 @@ import org.joget.designer.Designer;
 
 /**
  * This class is used to get all jawe's managers.
+ *
  * @author Sasa Bojanic
  * @author Miroslav Popov
  *
@@ -202,7 +203,7 @@ public class JaWEManager {
                 if (fis != null) {
                     try {
                         fis.close();
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                     }
                 }
             }
@@ -248,7 +249,7 @@ public class JaWEManager {
             URL u = JaWEManager.class.getClassLoader().getResource(JaWEConstants.JAWE_BASIC_PROPERTYFILE_PATH + JaWEConstants.JAWE_BASIC_PROPERTYFILE_NAME);
             URLConnection urlConnection = u.openConnection();
             InputStream is = urlConnection.getInputStream();
-            
+
             try {
                 properties = new Properties();
                 properties.load(is);
@@ -487,11 +488,11 @@ public class JaWEManager {
             cs.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(jcClass).getConstructor(new Class[]{
-                        ControllerSettings.class
-                    });
+                ControllerSettings.class
+            });
             jaweController = (JaWEController) c.newInstance(new Object[]{
-                        cs
-                    });
+                cs
+            });
             jaweController.init();
             loggingManager.info("JaWEManager -> Working with '" + jcClass + "' implementation of JaWE Controller");
         } catch (Exception ex) {
@@ -510,11 +511,11 @@ public class JaWEManager {
             ls.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(lgClass).getConstructor(new Class[]{
-                        LabelGeneratorSettings.class
-                    });
+                LabelGeneratorSettings.class
+            });
             labelGenerator = (StandardLabelGenerator) c.newInstance(new Object[]{
-                        ls
-                    });
+                ls
+            });
             loggingManager.info("JaWEManager -> Working with '" + lgClass + "' implementation of Label Generator");
         } catch (Exception ex) {
             labelGenerator = new StandardLabelGenerator();
@@ -531,11 +532,11 @@ public class JaWEManager {
             ts.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(thClass).getConstructor(new Class[]{
-                        TransitionHandlerSettings.class
-                    });
+                TransitionHandlerSettings.class
+            });
             transitionHandler = (TransitionHandler) c.newInstance(new Object[]{
-                        ts
-                    });
+                ts
+            });
             loggingManager.info("JaWEManager -> Working with '" + thClass + "' implementation of Transition Handler");
         } catch (Exception ex) {
             transitionHandler = new TransitionHandler();
@@ -552,11 +553,11 @@ public class JaWEManager {
             is.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(idfClass).getConstructor(new Class[]{
-                        IdFactorySettings.class
-                    });
+                IdFactorySettings.class
+            });
             idFactory = (IdFactory) c.newInstance(new Object[]{
-                        is
-                    });
+                is
+            });
             loggingManager.info("JaWEManager -> Working with '" + idfClass + "' implementation of Id Factory");
         } catch (Exception ex) {
             idFactory = new IdFactory();
@@ -573,11 +574,11 @@ public class JaWEManager {
             os.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(xpdlofClass).getConstructor(new Class[]{
-                        XPDLObjectFactorySettings.class
-                    });
+                XPDLObjectFactorySettings.class
+            });
             xpdlObjectFactory = (XPDLObjectFactory) c.newInstance(new Object[]{
-                        os
-                    });
+                os
+            });
             loggingManager.info("JaWEManager -> Working with '" + xpdlofClass + "' implementation of XPDL Object Factory");
         } catch (Exception ex) {
             xpdlObjectFactory = new XPDLObjectFactory();
@@ -608,11 +609,11 @@ public class JaWEManager {
             xvs.init(null);
 
             Constructor c = Class.forName(xpdlvClass).getConstructor(new Class[]{
-                        Properties.class
-                    });
+                Properties.class
+            });
             xpdlValidator = (StandardPackageValidator) c.newInstance(new Object[]{
-                        xvs.getProperties()
-                    });
+                xvs.getProperties()
+            });
             loggingManager.info("JaWEManager -> Working with '" + xpdlvClass + "' implementation of XPDL Validator");
         } catch (Exception ex) {
             XPDLValidatorSettings vs = new XPDLValidatorSettings();
@@ -638,11 +639,11 @@ public class JaWEManager {
             ds.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(dngClass).getConstructor(new Class[]{
-                        DisplayNameGeneratorSettings.class
-                    });
+                DisplayNameGeneratorSettings.class
+            });
             displayNameGenerator = (StandardDisplayNameGenerator) c.newInstance(new Object[]{
-                        ds
-                    });
+                ds
+            });
             loggingManager.info("JaWEManager -> Working with '" + dngClass + "' implementation of Display Name Generator");
         } catch (Exception ex) {
             displayNameGenerator = new StandardDisplayNameGenerator();
@@ -681,11 +682,11 @@ public class JaWEManager {
             ps.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(xpdleeClass).getConstructor(new Class[]{
-                        PanelSettings.class
-                    });
+                PanelSettings.class
+            });
             xpdlElementEditor = (XPDLElementEditor) c.newInstance(new Object[]{
-                        ps
-                    });
+                ps
+            });
             loggingManager.info("JaWEManager -> Working with '" + xpdleeClass + "' implementation of XPDL Element Editor ");
         } catch (Exception ex) {
             //CUSTOM
@@ -708,11 +709,11 @@ public class JaWEManager {
             ts.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(teClass).getConstructor(new Class[]{
-                        TableEditorSettings.class
-                    });
+                TableEditorSettings.class
+            });
             tableEditor = (TableEditor) c.newInstance(new Object[]{
-                        ts
-                    });
+                ts
+            });
             loggingManager.info("JaWEManager -> Working with '" + teClass + "' implementation of Table Editor ");
         } catch (Exception ex) {
             //CUSTOM
@@ -735,11 +736,11 @@ public class JaWEManager {
             ts.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(ttgClass).getConstructor(new Class[]{
-                        TooltipGeneratorSettings.class
-                    });
+                TooltipGeneratorSettings.class
+            });
             tooltipGenerator = (StandardTooltipGenerator) c.newInstance(new Object[]{
-                        ts
-                    });
+                ts
+            });
             loggingManager.info("JaWEManager -> Working with '" + ttgClass + "' implementation of Tooltip Generator");
         } catch (Exception ex) {
             tooltipGenerator = new StandardTooltipGenerator();
@@ -812,7 +813,7 @@ public class JaWEManager {
         if (Designer.TITLE != null && Designer.TITLE.trim().length() > 0) {
             return Designer.TITLE;
         }
-        
+
         if (JaWE.getJaWEVersion() == JaWE.COMMUNITY_VERSION) {
             return "Together Workflow Editor Community Edition";
         }
@@ -843,11 +844,11 @@ public class JaWEManager {
             hs.setPropertyMgr(propertyMgr);
 
             Constructor c = Class.forName(xpdlhClass).getConstructor(new Class[]{
-                        XPDLHandlerSettings.class
-                    });
+                XPDLHandlerSettings.class
+            });
             xpdlh = (XPDLHandler) c.newInstance(new Object[]{
-                        hs
-                    });
+                hs
+            });
         } catch (Exception ex) {
             String msg = "JaweManager -> Problems while instantiating XPDL Handler class '" + xpdlhClass + "' - using default!";
             xpdlh = new XPDLHandler();
@@ -939,7 +940,6 @@ public class JaWEManager {
         if (showSplash) {
             splashScr = new JaWESplash();
         }
-
 
         JaWEManager.getInstance().init();
 
@@ -1145,7 +1145,7 @@ public class JaWEManager {
     protected static void prependBasicConfiguration() throws FileNotFoundException, IOException {
         String filename = JaWEConstants.JAWE_USER_HOME + "/" + JaWEConstants.JAWE_BASIC_PROPERTYFILE_NAME;
         if (new File(filename).isFile()) {
-            InputStream in = null; 
+            InputStream in = null;
             try {
                 in = new FileInputStream(filename);
                 Properties props = new Properties(properties);
@@ -1163,7 +1163,7 @@ public class JaWEManager {
         String filename = JaWEConstants.JAWE_USER_HOME + "/" + JaWEConstants.JAWE_AUTOSAVE_PROPERTYFILE_NAME;
         Properties props = new Properties(properties);
         if (new File(filename).isFile()) {
-            InputStream in = null; 
+            InputStream in = null;
             try {
                 in = new FileInputStream(filename);
                 props.load(in);

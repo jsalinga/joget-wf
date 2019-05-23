@@ -9,11 +9,12 @@ import static org.joget.apps.app.service.AppUtil.getCurrentAppDefinition;
 import org.joget.workflow.util.WorkflowUtil;
 
 public class AppResourceHashVariable extends DefaultHashVariablePlugin {
+
     @Override
     public String processHashVariable(String variableKey) {
         AppResourceDao dao = (AppResourceDao) AppUtil.getApplicationContext().getBean("appResourceDao");
         AppDefinition appDef = getCurrentAppDefinition();
-        
+
         if (dao.loadById(variableKey, appDef) != null) {
             HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
             if (appDef != null && request != null) {
@@ -47,7 +48,7 @@ public class AppResourceHashVariable extends DefaultHashVariablePlugin {
     public String getClassName() {
         return this.getClass().getName();
     }
-    
+
     public String getPropertyOptions() {
         return "";
     }

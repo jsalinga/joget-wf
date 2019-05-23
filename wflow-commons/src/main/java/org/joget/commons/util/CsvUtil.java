@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * Utility method used to deal with comma separated value (CSV)
- * 
+ *
  */
 public class CsvUtil {
 
@@ -17,8 +17,9 @@ public class CsvUtil {
 
     /**
      * Convert a String array as CSV
+     *
      * @param array
-     * @return 
+     * @return
      */
     public static String getDeliminatedString(String[] array) {
         return getDeliminatedString(array, DEFAULT_DELIMINATOR);
@@ -26,21 +27,23 @@ public class CsvUtil {
 
     /**
      * Convert a String array as CSV with custom deliminator
+     *
      * @param array
      * @param deliminator
-     * @return 
+     * @return
      */
     public static String getDeliminatedString(String[] array, String deliminator) {
         return getDeliminatedString(array, deliminator, false);
     }
 
     /**
-     * Convert a String array as CSV with custom deliminator. 
-     * Option to remove empty String from result.
+     * Convert a String array as CSV with custom deliminator. Option to remove
+     * empty String from result.
+     *
      * @param array
      * @param deliminator
      * @param ignoreEmptyValue
-     * @return 
+     * @return
      */
     public static String getDeliminatedString(String[] array, String deliminator, boolean ignoreEmptyValue) {
         String result = "";
@@ -65,13 +68,14 @@ public class CsvUtil {
 
     /**
      * Retrieve plugin properties from a CSV string
-     * 
-     * @deprecated method used by Joget v2 to parse plugin properties from a CSV string. Since Joget v3,
-     * Joget introduced a better UI for plugin configuration, the properties are store in JSON format.
-     * 
+     *
+     * @deprecated method used by Joget v2 to parse plugin properties from a CSV
+     * string. Since Joget v3, Joget introduced a better UI for plugin
+     * configuration, the properties are store in JSON format.
+     *
      * @param propertyString
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static Map<String, String> getPluginPropertyMap(String propertyString) throws IOException {
         Map propertyMap = new HashMap();

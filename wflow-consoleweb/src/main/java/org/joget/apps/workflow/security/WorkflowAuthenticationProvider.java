@@ -30,9 +30,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class WorkflowAuthenticationProvider implements AuthenticationProvider, MessageSourceAware {
 
     public static final int PASSWORD_MAX_LENGTH = 512;
-    
-    transient
-    @Autowired
+
+    transient @Autowired
     @Qualifier("main")
     private DirectoryManager directoryManager;
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
@@ -48,11 +47,11 @@ public class WorkflowAuthenticationProvider implements AuthenticationProvider, M
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // reset profile and set hostname
         HostManager.initHost();
-            
+
         // Determine username
         String username = (authentication.getPrincipal() == null) ? "NONE_PROVIDED" : authentication.getName();
         String password = authentication.getCredentials().toString();
-        
+
         String ip = "";
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (request != null) {
@@ -71,16 +70,16 @@ public class WorkflowAuthenticationProvider implements AuthenticationProvider, M
             throw new BadCredentialsException(e.getMessage());
         }
         if (!validLogin) {
-            LogUtil.info(getClass().getName(), "Authentication for user " + username + " ("+ip+") : " + false);
+            LogUtil.info(getClass().getName(), "Authentication for user " + username + " (" + ip + ") : " + false);
             WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-            workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " ("+ip+") : " + false, new Class[]{String.class}, new Object[]{username}, false);
+            workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " (" + ip + ") : " + false, new Class[]{String.class}, new Object[]{username}, false);
             throw new BadCredentialsException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         }
 
         // add audit trail
-        LogUtil.info(getClass().getName(), "Authentication for user " + username + " ("+ip+") : " + true);
+        LogUtil.info(getClass().getName(), "Authentication for user " + username + " (" + ip + ") : " + true);
         WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-        workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " ("+ip+") : " + true, new Class[]{String.class}, new Object[]{username}, true);
+        workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " (" + ip + ") : " + true, new Class[]{String.class}, new Object[]{username}, true);
 
         // get authorities
         Collection<Role> roles = directoryManager.getUserRoles(username);

@@ -108,7 +108,7 @@ public class StandardPanelGenerator implements PanelGenerator {
         XMLPanel p = null;
         List panelElements = new ArrayList();
 
-        switch(no) {
+        switch (no) {
             case 1:
                 // get workflow variables and formal parameters
                 WorkflowProcess process = (WorkflowProcess) el.getParent().getParent();
@@ -122,8 +122,8 @@ public class StandardPanelGenerator implements PanelGenerator {
                 }
                 // make updateable
                 ExtendedAttributes ea = el.getExtendedAttributes();
-                for(Iterator it=fieldMap.keySet().iterator(); it.hasNext();) {
-                    String id = (String)it.next();
+                for (Iterator it = fieldMap.keySet().iterator(); it.hasNext();) {
+                    String id = (String) it.next();
                     ExtendedAttribute attrib = new ExtendedAttribute(ea);
                     attrib.setName("VariableToProcess_UPDATE");
                     attrib.setVValue(id);
@@ -1407,8 +1407,8 @@ public class StandardPanelGenerator implements PanelGenerator {
             Method m = null;
             try {
                 m = this.getClass().getMethod("getPanel", new Class[]{
-                            cl
-                        });
+                    cl
+                });
             } catch (Exception ex) {
                 if (!(cl == XMLSimpleElement.class || cl == XMLAttribute.class || cl == XMLComplexChoice.class || cl == XMLComplexElement.class || cl == XMLCollectionElement.class || cl == XMLCollection.class)) {
                     if (XMLComplexChoice.class.isAssignableFrom(cl)) {
@@ -1426,11 +1426,11 @@ public class StandardPanelGenerator implements PanelGenerator {
             }
 
             m = this.getClass().getMethod("getPanel", new Class[]{
-                        cl
-                    });
+                cl
+            });
             return (XMLPanel) m.invoke(this, new Object[]{
-                        el
-                    });
+                el
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

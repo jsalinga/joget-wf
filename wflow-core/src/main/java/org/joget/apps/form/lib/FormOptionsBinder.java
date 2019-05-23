@@ -21,7 +21,7 @@ import org.joget.commons.util.SecurityUtil;
  * Form load binder that loads the data rows of a form.
  */
 public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBinder, FormAjaxOptionsBinder {
-    
+
     @Override
     public String getName() {
         return "Default Form Options Binder";
@@ -57,13 +57,13 @@ public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBind
         } else {
             formDefField = "{name:'formDefId',label:'@@form.defaultformoptionbinder.formId@@',type:'textfield',required : 'True'}";
         }
-        
+
         String useAjax = "";
         if (SecurityUtil.getDataEncryption() != null && SecurityUtil.getNonceGenerator() != null) {
             useAjax = ",{name:'useAjax',label:'@@form.defaultformoptionbinder.useAjax@@',type:'checkbox',value :'false',options :[{value :'true',label :''}]}";
         }
-        
-        Object[] arguments = new Object[]{formDefField,useAjax};
+
+        Object[] arguments = new Object[]{formDefField, useAjax};
         String json = AppUtil.readPluginResource(getClass().getName(), "/properties/form/formOptionsBinder.json", arguments, true, "message/form/DefaultFormOptionsBinder");
         return json;
     }
@@ -75,8 +75,9 @@ public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBind
 
     /**
      * Retrieves table name for a specific form ID.
+     *
      * @param formDefId
-     * @return 
+     * @return
      */
     protected String getTableName(String formDefId) {
         String tableName = null;
@@ -87,7 +88,7 @@ public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBind
         }
         return tableName;
     }
-    
+
     public boolean useAjax() {
         return "true".equalsIgnoreCase(getPropertyString("useAjax"));
     }
@@ -98,7 +99,7 @@ public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBind
         //Using filtered formset to ensure the returned result is clean with no unnecessary nulls
         FormRowSet filtered = new FormRowSet();
         filtered.setMultiRow(true);
-        
+
         try {
             // get form
             String formDefId = (String) getProperty("formDefId");
@@ -107,26 +108,26 @@ public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBind
 
                 String condition = null;
                 Object[] conditionParams = null;
-                
+
                 String extraCondition = (String) getProperty("extraCondition");
                 if (extraCondition != null && !extraCondition.trim().isEmpty()) {
                     condition = " WHERE " + extraCondition;
                 }
-                
+
                 if (dependencyValues != null && getProperty("groupingColumn") != null) {
                     if (extraCondition == null || extraCondition.trim().isEmpty()) {
                         condition = " WHERE ";
                     } else {
                         condition += " AND ";
                     }
-                    
+
                     if (dependencyValues.length > 0) {
                         condition += "e.customProperties." + getProperty("groupingColumn").toString() + " in (";
                         for (String s : dependencyValues) {
                             condition += "?,";
                         }
-                        condition = condition.substring(0, condition.length()-1) + ")";
-                        
+                        condition = condition.substring(0, condition.length() - 1) + ")";
+
                         conditionParams = dependencyValues;
                     } else {
                         condition += "e.customProperties." + getProperty("groupingColumn").toString() + " is empty";
@@ -164,13 +165,13 @@ public class FormOptionsBinder extends FormBinder implements FormLoadOptionsBind
                             grouping = row.getProperty(groupingColumn);
                         }
 
-                        if (!exists.contains(id+":"+label+":"+grouping) && id != null && !id.isEmpty() && label != null && !label.isEmpty()) {
+                        if (!exists.contains(id + ":" + label + ":" + grouping) && id != null && !id.isEmpty() && label != null && !label.isEmpty()) {
                             newRow.setProperty(FormUtil.PROPERTY_VALUE, id);
                             newRow.setProperty(FormUtil.PROPERTY_LABEL, label);
                             newRow.setProperty(FormUtil.PROPERTY_GROUPING, grouping);
 
                             filtered.add(newRow);
-                            exists.add(id+":"+label+":"+grouping);
+                            exists.add(id + ":" + label + ":" + grouping);
                         }
                     }
                 }

@@ -53,9 +53,9 @@ import org.springframework.util.ClassUtils;
 
 @Service("workflowHelper")
 public class AppWorkflowHelper implements WorkflowHelper {
-    
+
     protected Map<String, AppDefinition> deadlineAppDefinitionCache = new HashMap<String, AppDefinition>();
-    
+
     @Override
     public boolean executeTool(WorkflowAssignment assignment) {
         ApplicationContext appContext = AppUtil.getApplicationContext();
@@ -63,7 +63,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
         AppDefinition appDef = null;
         AppDefinition originalAppDef = null;
         PackageDefinition packageDef = null;
-        
+
         try {
             if (assignment != null) {
                 WorkflowManager workflowManager = (WorkflowManager) appContext.getBean("workflowManager");
@@ -81,7 +81,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
                     if (appDef != null) {
                         packageDef = appDef.getPackageDefinition();
 
-                        if (!process.getPackageId().equals(appDef.getAppId()) || !process.getVersion().equals(packageDef.getVersion().toString()) ) {
+                        if (!process.getPackageId().equals(appDef.getAppId()) || !process.getVersion().equals(packageDef.getVersion().toString())) {
                             packageDef = packageDefinitionDao.loadPackageDefinition(process.getPackageId(), Long.parseLong(process.getVersion()));
                             if (packageDef != null) {
                                 originalAppDef = appDef;
@@ -168,9 +168,9 @@ public class AppWorkflowHelper implements WorkflowHelper {
                     }
                 }
             }
-            
+
             procDefId = WorkflowUtil.getProcessDefIdWithoutVersion(procDefId);
-            
+
             if (packageDef != null) {
                 PackageParticipant participant = packageDef.getPackageParticipant(procDefId, participantId);
 
@@ -216,7 +216,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
                 AppUtil.setCurrentAppDefinition(originalAppDef);
             }
         }
-        
+
         // remove duplicates
         if (resultList != null) {
             HashSet<String> resultSet = new HashSet<String>(resultList);
@@ -227,8 +227,9 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve participants mapped to one or more usernames.
+     *
      * @param participant
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByUsers(PackageParticipant participant) {
         List<String> resultList = new ArrayList<String>();
@@ -248,8 +249,9 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve participants mapped to one or more groups.
+     *
      * @param participant
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByGroups(PackageParticipant participant) {
         List<String> resultList = new ArrayList<String>();
@@ -271,11 +273,12 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve a participant based on a performer of a previous activity.
+     *
      * @param participant
      * @param processDefId
      * @param processId
      * @param requesterUsername
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByRequester(PackageParticipant participant, String processDefId, String processId, String requesterUsername) {
         List<String> resultList = new ArrayList<String>();
@@ -296,12 +299,14 @@ public class AppWorkflowHelper implements WorkflowHelper {
     }
 
     /**
-     * Retrieve a participant based on the HOD of the performer of a previous activity.
+     * Retrieve a participant based on the HOD of the performer of a previous
+     * activity.
+     *
      * @param participant
      * @param processDefId
      * @param processId
      * @param requesterUsername
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByRequesterHod(PackageParticipant participant, String processDefId, String processId, String requesterUsername) {
         List<String> resultList = new ArrayList<String>();
@@ -319,7 +324,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
         }
         return resultList;
     }
-    
+
     protected List<String> getParticipantsByRequesterHodIgnoreReportTo(PackageParticipant participant, String processDefId, String processId, String requesterUsername) {
         List<String> resultList = new ArrayList<String>();
         ApplicationContext appContext = AppUtil.getApplicationContext();
@@ -328,30 +333,32 @@ public class AppWorkflowHelper implements WorkflowHelper {
             WorkflowManager workflowManager = (WorkflowManager) appContext.getBean("workflowManager");
             requesterUsername = workflowManager.getUserByProcessIdAndActivityDefId(processDefId, processId, participant.getValue());
         }
-        
+
         User requester = directoryManager.getUserByUsername(requesterUsername);
         if (requester != null && requester.getEmployments() != null && !requester.getEmployments().isEmpty()) {
             Employment employment = (Employment) requester.getEmployments().iterator().next();
             if (employment != null && employment.getDepartment() != null) {
                 Department dept = employment.getDepartment();
                 User hod = directoryManager.getDepartmentHod(dept.getId());
-                
+
                 if (hod != null) {
                     resultList.add(hod.getUsername());
                 }
             }
         }
-        
+
         return resultList;
     }
 
     /**
-     * Retrieve the participants based on the subordinates of the performer of a previous activity.
+     * Retrieve the participants based on the subordinates of the performer of a
+     * previous activity.
+     *
      * @param participant
      * @param processDefId
      * @param processId
      * @param requesterUsername
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByRequesterSubordinates(PackageParticipant participant, String processDefId, String processId, String requesterUsername) {
         List<String> resultList = new ArrayList<String>();
@@ -371,12 +378,14 @@ public class AppWorkflowHelper implements WorkflowHelper {
     }
 
     /**
-     * Retrieve the participants based on the department members of the performer of a previous activity.
+     * Retrieve the participants based on the department members of the
+     * performer of a previous activity.
+     *
      * @param participant
      * @param processDefId
      * @param processId
      * @param requesterUsername
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByRequesterDepartment(PackageParticipant participant, String processDefId, String processId, String requesterUsername) {
         List<String> resultList = new ArrayList<String>();
@@ -398,8 +407,9 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve the participants based on members of a specific department.
+     *
      * @param participant
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByDepartment(PackageParticipant participant) {
         List<String> resultList = new ArrayList<String>();
@@ -417,8 +427,9 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve the participant based on the HOD of a specific department.
+     *
      * @param participant
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByHod(PackageParticipant participant) {
         List<String> resultList = new ArrayList<String>();
@@ -434,9 +445,10 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve the participants based on the value of a workflow variable.
+     *
      * @param participant
      * @param activityId
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByWorkflowVariable(PackageParticipant participant, String activityId) {
         List<String> resultList = new ArrayList<String>();
@@ -457,7 +469,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
         }
         //if is workflow variable
         Collection<WorkflowVariable> varList = workflowManager.getActivityVariableList(activityId);
-        for (WorkflowVariable va : varList) {
+        for (WorkflowVariable va  : varList) {
             if (va.getName() != null && va.getName().equals(variableName)) {
                 String variableValue = (String) va.getVal();
                 variableValue = variableValue.replace(",", ";");
@@ -496,13 +508,14 @@ public class AppWorkflowHelper implements WorkflowHelper {
 
     /**
      * Retrieve the participants via a participant plugin.
+     *
      * @param participant
      * @param activityId
      * @param participantId
      * @param processId
      * @param version
      * @param processDefId
-     * @return 
+     * @return
      */
     protected List<String> getParticipantsByPlugin(PackageParticipant participant, String processDefId, String processId, String version, String activityId) {
         List<String> resultList = new ArrayList<String>();
@@ -514,19 +527,19 @@ public class AppWorkflowHelper implements WorkflowHelper {
         try {
             AppDefinition appDef = AppUtil.getCurrentAppDefinition();
             ParticipantPlugin plugin = (ParticipantPlugin) pluginManager.getPlugin(participant.getValue());
-            
+
             //create a mock assignemnt for Form Hash Variable
             WorkflowAssignment ass = new WorkflowAssignment();
             ass.setProcessId(processId);
-            
-            Map propertyMap = AppPluginUtil.getDefaultProperties((Plugin)plugin, properties, appDef, ass);
+
+            Map propertyMap = AppPluginUtil.getDefaultProperties((Plugin) plugin, properties, appDef, ass);
             propertyMap.put("pluginManager", pluginManager);
             WorkflowActivity activity = workflowManager.getActivityById(activityId);
             propertyMap.put("workflowActivity", activity);
             if (plugin instanceof PropertyEditable) {
                 ((PropertyEditable) plugin).setProperties(propertyMap);
             }
-            
+
             Collection<String> pluginResult = plugin.getActivityAssignments(propertyMap);
             if (pluginResult != null && pluginResult.size() > 0) {
                 resultList.addAll(pluginResult);
@@ -537,10 +550,11 @@ public class AppWorkflowHelper implements WorkflowHelper {
         }
         return resultList;
     }
-    
+
     /**
      * Retrieve the participants based on current user (Including anonymous)
-     * @return 
+     *
+     * @return
      */
     protected List<String> getParticipantsByCurrentUser() {
         List<String> resultList = new ArrayList<String>();
@@ -548,10 +562,11 @@ public class AppWorkflowHelper implements WorkflowHelper {
         resultList.add(workflowUserManager.getCurrentUsername());
         return resultList;
     }
-    
+
     /**
      * Retrieve the participants based on logged in user
-     * @return 
+     *
+     * @return
      */
     protected List<String> getParticipantsByLoggedInUser() {
         List<String> resultList = new ArrayList<String>();
@@ -561,10 +576,11 @@ public class AppWorkflowHelper implements WorkflowHelper {
         }
         return resultList;
     }
-    
+
     /**
      * Retrieve the participants based on admin user
-     * @return 
+     *
+     * @return
      */
     protected List<String> getParticipantsByAdminUser() {
         List<String> resultList = new ArrayList<String>();
@@ -579,7 +595,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
     public String processHashVariable(String content, WorkflowAssignment wfAssignment, String escapeFormat, Map<String, String> replaceMap) {
         return AppUtil.processHashVariable(content, wfAssignment, escapeFormat, replaceMap);
     }
-    
+
     @Override
     public void addAuditTrail(String clazz, String method, String message) {
         addAuditTrail(clazz, method, message, null, null, null);
@@ -654,7 +670,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
                         propertiesMap.put("activityAcceptedTime", activityAcceptedTime);
                         propertiesMap.put("activityActivatedTime", activityActivatedTime);
                         propertiesMap.put("pluginManager", pluginManager);
-                        
+
                         if (p instanceof PropertyEditable) {
                             ((PropertyEditable) p).setProperties(propertiesMap);
                         }
@@ -672,12 +688,12 @@ public class AppWorkflowHelper implements WorkflowHelper {
         }
         return deadline;
     }
-    
+
     @Override
     public String getPublishedPackageVersion(String packageId) {
         //appID same with packageId
         AppService appService = (AppService) AppUtil.getApplicationContext().getBean("appService");
-        
+
         AppDefinition appDef = appService.getPublishedAppDefinition(packageId);
         if (appDef != null) {
             PackageDefinition packageDef = appDef.getPackageDefinition();
@@ -695,7 +711,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
         String profile = DynamicDataSourceManager.getCurrentProfile();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         String cacheKey = profile + ":USER_REPLACEMENT_" + username + "_" + sf.format(new Date());
-        
+
         Cache cache = (Cache) AppUtil.getApplicationContext().getBean("setupManagerCache");
         if (cache != null) {
             Element element = cache.get(cacheKey);
@@ -704,7 +720,7 @@ public class AppWorkflowHelper implements WorkflowHelper {
                 return replacements;
             }
         }
-        
+
         Collection<UserReplacement> userReplacements = userReplacementDao.getTodayUserReplacements(username);
         for (UserReplacement ur : userReplacements) {
             Collection<String> processes = replacements.get(ur.getUsername());
@@ -718,33 +734,33 @@ public class AppWorkflowHelper implements WorkflowHelper {
                     processes.addAll(Arrays.asList(ur.getAppId().split(";")));
                 }
             }
-            
+
             replacements.put(ur.getUsername(), processes);
             if (cache != null) {
                 Element element = new Element(cacheKey, replacements);
                 cache.put(element);
             }
         }
-        
+
         return replacements;
     }
-    
+
     @Override
     public Map<String, String> getPublishedPackageVersions() {
         AppDefinitionDao appDefinitionDao = (AppDefinitionDao) WorkflowUtil.getApplicationContext().getBean("appDefinitionDao");
         Collection<AppDefinition> list = appDefinitionDao.findPublishedApps(null, null, null, null);
         Map<String, String> map = new HashMap<String, String>();
-        
+
         for (AppDefinition appDef : list) {
             PackageDefinition packageDefiniton = appDef.getPackageDefinition();
             if (packageDefiniton != null) {
                 map.put(packageDefiniton.getAppId(), packageDefiniton.getVersion().toString());
             }
         }
-        
+
         return map;
     }
-    
+
     public void cleanDeadlineAppDefinitionCache(String packageId, String packageVersion) {
         deadlineAppDefinitionCache.remove(HostManager.getCurrentProfile() + ":" + packageId + ":" + packageVersion);
     }

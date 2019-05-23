@@ -98,75 +98,75 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
 </c:choose>
 
 <c:catch var="bodyError">
-<c:set var="bodyContent">
-    <c:choose>
-        <c:when test="${!empty userview.current}">
-            <c:set var="isQuickEditEnabled" value="<%= AppUtil.isQuickEditEnabled() %>"/>
-            <c:if test="${isQuickEditEnabled}">
-            <div class="quickEdit" style="display: none">
-                <a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/userview/builder/${userview.properties.id}?menuId=${userview.current.properties.id}" target="_blank"><i class="fa fa-pencil"></i> <fmt:message key="adminBar.label.page"/>: <c:out value="${userview.current.properties.label}"/></a>
-            </div>            
-            </c:if>
-            <c:set var="currentPage" value="${userview.current}"/>
-            <% 
-            UserviewMenu menu = (UserviewMenu)pageContext.findAttribute("currentPage");
-            out.print(UserviewUtil.getUserviewMenuHtml(menu));
-            %>
-        </c:when>
-        <c:otherwise>
-            <h3><fmt:message key="ubuilder.pageNotFound"/></h3>
+    <c:set var="bodyContent">
+        <c:choose>
+            <c:when test="${!empty userview.current}">
+                <c:set var="isQuickEditEnabled" value="<%= AppUtil.isQuickEditEnabled() %>"/>
+                <c:if test="${isQuickEditEnabled}">
+                    <div class="quickEdit" style="display: none">
+                        <a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/userview/builder/${userview.properties.id}?menuId=${userview.current.properties.id}" target="_blank"><i class="fa fa-pencil"></i> <fmt:message key="adminBar.label.page"/>: <c:out value="${userview.current.properties.label}"/></a>
+                    </div>            
+                </c:if>
+                <c:set var="currentPage" value="${userview.current}"/>
+                <% 
+                UserviewMenu menu = (UserviewMenu)pageContext.findAttribute("currentPage");
+                out.print(UserviewUtil.getUserviewMenuHtml(menu));
+                %>
+            </c:when>
+            <c:otherwise>
+                <h3><fmt:message key="ubuilder.pageNotFound"/></h3>
 
-            <fmt:message key="ubuilder.pageNotFound.message"/>
-            <br><br>
-            <fmt:message key="ubuilder.pageNotFound.explanation"/>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p>
-                <a href="${pageContext.request.contextPath}/web/userview/${appId}/${userview.properties.id}/<c:out value="${key}"/>/${userview.properties.homeMenuId}"><fmt:message key="ubuilder.pageNotFound.backToMain"/></a>
-            </p>
-        </c:otherwise>
-    </c:choose>
-</c:set>
+                <fmt:message key="ubuilder.pageNotFound.message"/>
+                <br><br>
+                <fmt:message key="ubuilder.pageNotFound.explanation"/>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>
+                    <a href="${pageContext.request.contextPath}/web/userview/${appId}/${userview.properties.id}/<c:out value="${key}"/>/${userview.properties.homeMenuId}"><fmt:message key="ubuilder.pageNotFound.backToMain"/></a>
+                </p>
+            </c:otherwise>
+        </c:choose>
+    </c:set>
 
-<c:set var="alertMessageProperty" value="<%= UserviewMenu.ALERT_MESSAGE_PROPERTY %>"/>
-<c:set var="alertMessageValue" value="${userview.current.properties[alertMessageProperty]}"/>
-<c:set var="redirectUrlProperty" value="<%= UserviewMenu.REDIRECT_URL_PROPERTY %>"/>
-<c:set var="redirectUrlValue" value="${userview.current.properties[redirectUrlProperty]}"/>
-<c:set var="redirectParentProperty" value="<%= UserviewMenu.REDIRECT_PARENT_PROPERTY %>"/>
-<c:set var="redirectParentValue" value="${userview.current.properties[redirectParentProperty]}"/>
-<c:choose>
-<c:when test="${!empty alertMessageValue}">
-    <script>
-        alert("<ui:escape value="${alertMessageValue}" format="javascript"/>");
-    <c:if test="${!empty redirectUrlValue}">
-        <c:if test="${redirectParentValue}">parent.</c:if>location.href = "${redirectUrlValue}";
-    </c:if>
-    </script>
-</c:when>
-<c:when test="${!empty redirectUrlValue}">
+    <c:set var="alertMessageProperty" value="<%= UserviewMenu.ALERT_MESSAGE_PROPERTY %>"/>
+    <c:set var="alertMessageValue" value="${userview.current.properties[alertMessageProperty]}"/>
+    <c:set var="redirectUrlProperty" value="<%= UserviewMenu.REDIRECT_URL_PROPERTY %>"/>
+    <c:set var="redirectUrlValue" value="${userview.current.properties[redirectUrlProperty]}"/>
+    <c:set var="redirectParentProperty" value="<%= UserviewMenu.REDIRECT_PARENT_PROPERTY %>"/>
+    <c:set var="redirectParentValue" value="${userview.current.properties[redirectParentProperty]}"/>
     <c:choose>
-        <c:when test="${redirectParentValue}">
+        <c:when test="${!empty alertMessageValue}">
             <script>
-                parent.location.href = "${redirectUrlValue}";
+                alert("<ui:escape value="${alertMessageValue}" format="javascript"/>");
+                <c:if test="${!empty redirectUrlValue}">
+                    <c:if test="${redirectParentValue}">parent.</c:if>location.href = "${redirectUrlValue}";
+                </c:if>
             </script>
         </c:when>
-        <c:otherwise>
-            <c:if test="${!fn:containsIgnoreCase(redirectUrlValue, 'http') && !fn:startsWith(redirectUrlValue, '/')}">
-                <c:set var="redirectBaseUrlValue" scope="request" value="/web/"/>
-                <c:if test="${embed}">
-                    <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}embed/"/>
-                </c:if>
-                <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}userview/${appId}/${userview.properties.id}/${key}/"/>
-                <c:set var="redirectUrlValue" value="${redirectBaseUrlValue}${redirectUrlValue}"/>
-            </c:if>
-            <c:if test="${fn:startsWith(redirectUrlValue, pageContext.request.contextPath)}">
-                <c:set var="redirectUrlValue" value="${fn:substring(redirectUrlValue, fn:length(pageContext.request.contextPath), fn:length(redirectUrlValue))}"/>
-            </c:if>
-            <c:redirect url="${redirectUrlValue}"/>
-        </c:otherwise>
+        <c:when test="${!empty redirectUrlValue}">
+            <c:choose>
+                <c:when test="${redirectParentValue}">
+                    <script>
+                        parent.location.href = "${redirectUrlValue}";
+                    </script>
+                </c:when>
+                <c:otherwise>
+                    <c:if test="${!fn:containsIgnoreCase(redirectUrlValue, 'http') && !fn:startsWith(redirectUrlValue, '/')}">
+                        <c:set var="redirectBaseUrlValue" scope="request" value="/web/"/>
+                        <c:if test="${embed}">
+                            <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}embed/"/>
+                        </c:if>
+                        <c:set var="redirectBaseUrlValue" scope="request" value="${redirectBaseUrlValue}userview/${appId}/${userview.properties.id}/${key}/"/>
+                        <c:set var="redirectUrlValue" value="${redirectBaseUrlValue}${redirectUrlValue}"/>
+                    </c:if>
+                    <c:if test="${fn:startsWith(redirectUrlValue, pageContext.request.contextPath)}">
+                        <c:set var="redirectUrlValue" value="${fn:substring(redirectUrlValue, fn:length(pageContext.request.contextPath), fn:length(redirectUrlValue))}"/>
+                    </c:if>
+                    <c:redirect url="${redirectUrlValue}"/>
+                </c:otherwise>
+            </c:choose>
+        </c:when>
     </c:choose>
-</c:when>
-</c:choose>
 </c:catch>
 
 <html>
@@ -190,20 +190,20 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                 display: none;
             }
         </style>
-        
+
         <script type="text/javascript">
             function userviewPrint(){
-                $('head').append('<link id="userview_print_css" rel="stylesheet" href="${pageContext.request.contextPath}/wro/userview_print.min.css" type="text/css" media="print"/>');
-                $('body').addClass("userview_print");
-                setTimeout("do_print()", 1000); 
+            $('head').append('<link id="userview_print_css" rel="stylesheet" href="${pageContext.request.contextPath}/wro/userview_print.min.css" type="text/css" media="print"/>');
+            $('body').addClass("userview_print");
+            setTimeout("do_print()", 1000); 
             }
 
             function do_print(){
-                window.print();
-                $('body').removeClass("userview_print");
-                $('#userview_print_css').remove();
+            window.print();
+            $('body').removeClass("userview_print");
+            $('#userview_print_css').remove();
             }
-            
+
             ${userview.setting.theme.javascript}
             UI.base = "${pageContext.request.contextPath}";
             UI.userview_app_id = '${appId}';
@@ -218,8 +218,8 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
     </head>
 
     <body id="${bodyId}" class="<c:if test="${embed}">embeded</c:if><c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}"> rtl</c:if>">
-        <div id="page">
-            <div id="header">
+            <div id="page">
+                <div id="header">
 
                 <c:choose>
                     <c:when test="${!empty userview.setting.theme.header}">
@@ -246,11 +246,11 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                         <c:choose>
                             <c:when test="${isAnonymous}">
                                 <a href="${pageContext.request.contextPath}/web/ulogin/${appId}/${userview.properties.id}/<c:out value="${key}"/>"><span id="loginText"><fmt:message key="ubuilder.login"/></span></a>
-                            </c:when>
-                            <c:otherwise>
+                                </c:when>
+                                <c:otherwise>
                                 <a href="${pageContext.request.contextPath}/j_spring_security_logout"><span id="logoutText"><ui:stripTag html="${userview.properties.logoutText}" relaxed="true"/></span></a>
-                            </c:otherwise>
-                        </c:choose>
+                                </c:otherwise>
+                            </c:choose>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -267,65 +267,65 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                             ${userview.setting.theme.pageTop}
                         </c:if>
                         <c:if test="${!embed}">
-                        <div id="navigation">
-                            <c:if test="${isQuickEditEnabled}">
-                            <div class="quickEdit" style="display: none">
-                                <a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/userview/builder/${userview.properties.id}" target="_blank"><i class="fa fa-pencil"></i> <fmt:message key="adminBar.label.menu"/>: <c:out value="${userview.properties.name}"/></a>
-                            </div>
-                            </c:if>
-                            <div id="category-container">
-                                <c:forEach items="${userview.categories}" var="category" varStatus="cStatus">
-                                    <c:if test="${category.properties.hide ne 'yes'}">
-                                        <c:set var="c_class" value=""/>
+                            <div id="navigation">
+                                <c:if test="${isQuickEditEnabled}">
+                                    <div class="quickEdit" style="display: none">
+                                        <a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/userview/builder/${userview.properties.id}" target="_blank"><i class="fa fa-pencil"></i> <fmt:message key="adminBar.label.menu"/>: <c:out value="${userview.properties.name}"/></a>
+                                    </div>
+                                </c:if>
+                                <div id="category-container">
+                                    <c:forEach items="${userview.categories}" var="category" varStatus="cStatus">
+                                        <c:if test="${category.properties.hide ne 'yes'}">
+                                            <c:set var="c_class" value=""/>
 
-                                        <c:if test="${cStatus.first}">
-                                            <c:set var="c_class" value="${c_class} first"/>
-                                        </c:if>
-                                        <c:if test="${cStatus.last}">
-                                            <c:set var="c_class" value="${c_class} last"/>
-                                        </c:if>
-                                        <c:if test="${!empty userview.currentCategory && category.properties.id eq userview.currentCategory.properties.id}">
-                                            <c:set var="c_class" value="${c_class} current-category"/>
-                                        </c:if>
+                                            <c:if test="${cStatus.first}">
+                                                <c:set var="c_class" value="${c_class} first"/>
+                                            </c:if>
+                                            <c:if test="${cStatus.last}">
+                                                <c:set var="c_class" value="${c_class} last"/>
+                                            </c:if>
+                                            <c:if test="${!empty userview.currentCategory && category.properties.id eq userview.currentCategory.properties.id}">
+                                                <c:set var="c_class" value="${c_class} current-category"/>
+                                            </c:if>
 
-                                        <div id="${category.properties.id}" class="category ${c_class}">
-                                            <div class="category-label">
-                                                <c:set var="firstMenuItem" value="${category.menus[0]}"/>
-                                                <c:choose>
-                                                    <c:when test="${!empty firstMenuItem && firstMenuItem.homePageSupported}">
-                                                        <c:set var="menuItemId" value="${firstMenuItem.properties.menuId}"/>
-                                                        <a href="${firstMenuItem.url}"><span><ui:stripTag html="${category.properties.label}" relaxed="true"/></span></a>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span><ui:stripTag html="${category.properties.label}" relaxed="true"/></span>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                            <div id="${category.properties.id}" class="category ${c_class}">
+                                                <div class="category-label">
+                                                    <c:set var="firstMenuItem" value="${category.menus[0]}"/>
+                                                    <c:choose>
+                                                        <c:when test="${!empty firstMenuItem && firstMenuItem.homePageSupported}">
+                                                            <c:set var="menuItemId" value="${firstMenuItem.properties.menuId}"/>
+                                                            <a href="${firstMenuItem.url}"><span><ui:stripTag html="${category.properties.label}" relaxed="true"/></span></a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                            <span><ui:stripTag html="${category.properties.label}" relaxed="true"/></span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                                <div class="clear"></div>
+                                                <div class="menu-container">
+                                                    <c:forEach items="${category.menus}" var="menu" varStatus="mStatus">
+                                                        <c:set var="m_class" value=""/>
+
+                                                        <c:if test="${mStatus.first}">
+                                                            <c:set var="m_class" value="${m_class} first"/>
+                                                        </c:if>
+                                                        <c:if test="${mStatus.last}">
+                                                            <c:set var="m_class" value="${m_class} last"/>
+                                                        </c:if>
+                                                        <c:if test="${!empty userview.current && menu.properties.id eq userview.current.properties.id}">
+                                                            <c:set var="m_class" value="${m_class} current"/>
+                                                        </c:if>
+
+                                                        <div id="${menu.properties.id}" class="menu ${m_class}">
+                                                            ${menu.menu}
+                                                        </div>
+                                                    </c:forEach>
+                                                </div>
                                             </div>
-                                            <div class="clear"></div>
-                                            <div class="menu-container">
-                                                <c:forEach items="${category.menus}" var="menu" varStatus="mStatus">
-                                                    <c:set var="m_class" value=""/>
-
-                                                    <c:if test="${mStatus.first}">
-                                                        <c:set var="m_class" value="${m_class} first"/>
-                                                    </c:if>
-                                                    <c:if test="${mStatus.last}">
-                                                        <c:set var="m_class" value="${m_class} last"/>
-                                                    </c:if>
-                                                    <c:if test="${!empty userview.current && menu.properties.id eq userview.current.properties.id}">
-                                                        <c:set var="m_class" value="${m_class} current"/>
-                                                    </c:if>
-
-                                                    <div id="${menu.properties.id}" class="menu ${m_class}">
-                                                        ${menu.menu}
-                                                    </div>
-                                                </c:forEach>
-                                            </div>
-                                        </div>
-                                    </c:if>
-                                </c:forEach>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
                             </div>
-                        </div>
                         </c:if>
                         <div id="content">
                             <c:if test="${!empty userview.setting.theme.beforeContent}">
@@ -334,7 +334,7 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                             ${bodyContent}
                             <c:if test="${!empty bodyError}">
                                 <c:out value="${bodyError}" escapeXml="true"/>
-                                
+
                                 <h1 id="title">
                                     <fmt:message key="general.error.error500"/>
                                 </h1>
@@ -345,7 +345,7 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                                     <ul style="text-align:left; display:inline-block">
                                         <li><fmt:message key="console.footer.label.revision"/></li>
                                         <li><fmt:message key="general.error.date"/>: <fmt:formatDate pattern="d MMM yyyy HH:mm:ss" value="<%= new java.util.Date() %>"/></li>
-                                        <fmt:message key="general.error.errorDetails"/>
+                                            <fmt:message key="general.error.errorDetails"/>
                                     </ul>
                                     <p>&nbsp;</p>
                                 </div>
@@ -374,7 +374,7 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                         </div>
                     </c:otherwise>
                 </c:choose>
-                        
+
                 <c:if test="${mobileUserAgent && !mobileViewDisabled && (cookie['desktopSite'].value == 'true')}">
                     <a href='#' class="footer-mobile-link" onclick='$.cookie("desktopSite", null, { path: "${pageContext.request.contextPath}/web/userview/<c:out value="${appId}"/>/", expires: -1 });location.reload();return false'><fmt:message key="appCenter.label.mobileEdition"/></a>
                 </c:if>
@@ -388,7 +388,7 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
                 HelpGuide.show();
             </script>
         </c:if>    
-            
+
         <c:if test="${!empty userview.setting.properties.tempDisablePermissionChecking}">
             <c:if test="${userview.setting.properties.tempDisablePermissionChecking eq 'true'}">
                 <!--[if IE]><div id="preview-label" class="ie testing"><a onclick="$('#preview-label').remove()">x</a> <fmt:message key="ubuilder.permissionDisabled"/></div><![endif]-->
@@ -397,19 +397,19 @@ if (!MobileUtil.isMobileDisabled() && MobileUtil.isMobileUserAgent(request)) {
         </c:if>    
 
         <%= AppUtil.getSystemAlert() %>   
-        
+
         <%
             sw.stop();
             long duration = sw.getTotalTimeMillis();
             pageContext.setAttribute("duration", duration);
         %>    
         <%--div class="small">[${duration}ms]</div--%>
-        
+
         <jsp:include page="/WEB-INF/jsp/console/apps/adminBar.jsp" flush="true">
             <jsp:param name="appId" value="${appId}"/>
             <jsp:param name="appVersion" value="${appVersion}"/>
             <jsp:param name="userviewId" value="${userview.properties.id}"/>
         </jsp:include>    
     </body>
-    
+
 </html>

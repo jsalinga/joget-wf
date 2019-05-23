@@ -37,7 +37,9 @@ public class FormBuilderPalette {
     }
 
     /**
-     * Retrieves the elements available in the Form Builder palette grouped by category.
+     * Retrieves the elements available in the Form Builder palette grouped by
+     * category.
+     *
      * @return
      */
     public Map<String, List<FormBuilderPaletteElement>> getElementCategoryMap() {
@@ -78,7 +80,9 @@ public class FormBuilderPalette {
     }
 
     /**
-     * Retrieves the elements available for property editing in the Form Builder.
+     * Retrieves the elements available for property editing in the Form
+     * Builder.
+     *
      * @return
      */
     public Collection<Plugin> getEditableElementList() {

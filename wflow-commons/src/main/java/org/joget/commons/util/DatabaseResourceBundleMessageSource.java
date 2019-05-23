@@ -17,11 +17,11 @@ public class DatabaseResourceBundleMessageSource extends ResourceBundleMessageSo
     public void setResourceBundleMessageDao(ResourceBundleMessageDao resourceBundleMessageDao) {
         this.resourceBundleMessageDao = resourceBundleMessageDao;
     }
-    
+
     @Override
     protected String resolveCodeWithoutArguments(String code, Locale locale) {
         String localeToUse = locale.toString();
-        
+
         ResourceBundleMessage resourceBundleMessage = null;
         try {
             resourceBundleMessage = resourceBundleMessageDao.getMessage(code, localeToUse);

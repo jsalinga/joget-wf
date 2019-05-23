@@ -10,7 +10,7 @@ import org.springframework.beans.support.PropertyComparator;
 
 /**
  * Utility method used for sorting and paging an ordered list of data
- * 
+ *
  */
 public class PagingUtils {
 
@@ -18,10 +18,11 @@ public class PagingUtils {
     }
 
     /**
-     * Sorts a list based on a field value of object in the list 
+     * Sorts a list based on a field value of object in the list
+     *
      * @param list
      * @param field
-     * @param desc 
+     * @param desc
      */
     public static void sort(List list, String field, Boolean desc) {
         if (list != null && field != null) {
@@ -29,19 +30,20 @@ public class PagingUtils {
             Collections.sort(list, new PropertyComparator(field, true, asc));
         }
     }
-    
+
     /**
      * Sorts a map based on a value
+     *
      * @param map
-     * @param desc 
+     * @param desc
      */
     public static Map sortMapByValue(Map map, Boolean desc) {
         // Convert Map to List
-	List<Map.Entry> list = new LinkedList<Map.Entry>(map.entrySet());
-        
+        List<Map.Entry> list = new LinkedList<Map.Entry>(map.entrySet());
+
         boolean asc = (desc == null || !desc);
         Collections.sort(list, new PropertyComparator("value", true, asc));
-        
+
         // Convert sorted map back to a Map
         Map sortedMap = new LinkedHashMap();
         for (Map.Entry entry : list) {
@@ -52,10 +54,11 @@ public class PagingUtils {
 
     /**
      * Gets the results of a page from a List
+     *
      * @param list
      * @param start
      * @param rows
-     * @return 
+     * @return
      */
     public static List subList(List list, Integer start, Integer rows) {
         if (list == null) {
@@ -84,14 +87,15 @@ public class PagingUtils {
     }
 
     /**
-     * Orders the list based on a field value of object in the list and returns 
+     * Orders the list based on a field value of object in the list and returns
      * the results of a page
+     *
      * @param list
      * @param field
      * @param desc
      * @param start
      * @param rows
-     * @return 
+     * @return
      */
     public static List sortAndPage(List list, String field, Boolean desc, Integer start, Integer rows) {
         sort(list, field, desc);

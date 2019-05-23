@@ -16,7 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Controller to convert output into unicode escaped sequences output via JavaScript document.write
+ * Controller to convert output into unicode escaped sequences output via
+ * JavaScript document.write
  */
 @Controller
 public class WorkflowJavaScriptController {
@@ -58,6 +59,7 @@ public class WorkflowJavaScriptController {
 
     /**
      * Encode a String into unicode escaped sequence
+     *
      * @param source
      * @param out Output will be written to this OutputStream if provided
      * @param writer Output will be printed to this Writer if provided
@@ -85,6 +87,7 @@ public class WorkflowJavaScriptController {
 
     /**
      * Encode a single character into unicode escaped sequence
+     *
      * @param c
      * @return
      */
@@ -110,7 +113,9 @@ public class WorkflowJavaScriptController {
     }
 
     /**
-     * Encode a URL within the context (using RequestDispatcher.include) into unicode escaped sequence
+     * Encode a URL within the context (using RequestDispatcher.include) into
+     * unicode escaped sequence
+     *
      * @param writer Output will be printed to this Writer
      * @param request
      * @param response

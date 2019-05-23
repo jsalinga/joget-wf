@@ -145,9 +145,9 @@
                 <configuration>
                     <outputDirectoryName>webstart</outputDirectoryName>
                            
-                 <!--
-                 Set to true to exclude all transitive dependencies. Default is false.
-                 -->
+                    <!--
+                    Set to true to exclude all transitive dependencies. Default is false.
+                    -->
                     <excludeTransitive>true</excludeTransitive>
                     <jnlpFiles>
                         <jnlpFile>
@@ -249,7 +249,7 @@
                         <storepass>wflow123</storepass> <!-- ${storepass} -->
                         <alias>wflow</alias> <!-- alias of the key to  use -->
 
-                    <!-- the following key-settings are only used if the keystore and key has to be generated at build-time -->
+                        <!-- the following key-settings are only used if the keystore and key has to be generated at build-time -->
                         <!--storetype>jks</storetype>
                         <validity>365</validity>
                         <dnameCn>wfdesigner</dnameCn>
@@ -259,7 +259,7 @@
                         <dnameSt>KUL</dnameSt>
                         <dnameC>MY</dnameC-->
 
-                    <!-- KEYSTORE MANAGEMENT -->
+                        <!-- KEYSTORE MANAGEMENT -->
                         <keystoreConfig>
                             <delete>false</delete> <!-- delete the keystore at build time -->
                             <gen>false</gen>       <!-- generate keystore and key at build time -->

@@ -115,7 +115,7 @@ public class FormMenu extends UserviewMenu {
             if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
                 return "userview/plugin/unauthorized.jsp";
             }
-            
+
             // submit form
             submitForm();
         } else {
@@ -131,10 +131,11 @@ public class FormMenu extends UserviewMenu {
     }
 
     /**
-     * Display either an assignment form or data form, depending on availability.
-     * If an "activityId" parameter is available, a matching assignment form is loaded.
-     * Otherwise, based on the "id" parameter, a matching assignment for the processID is loaded.
-     * If no assignment is available, a matching data form is loaded with a matching primary key.
+     * Display either an assignment form or data form, depending on
+     * availability. If an "activityId" parameter is available, a matching
+     * assignment form is loaded. Otherwise, based on the "id" parameter, a
+     * matching assignment for the processID is loaded. If no assignment is
+     * available, a matching data form is loaded with a matching primary key.
      */
     protected void displayForm() {
 
@@ -233,15 +234,15 @@ public class FormMenu extends UserviewMenu {
         if (redirectUrl != null && redirectUrl.trim().length() > 0 && getPropertyString("fieldPassover") != null && getPropertyString("fieldPassover").trim().length() > 0) {
             String passoverFieldName = getPropertyString("fieldPassover");
             Element passoverElement = FormUtil.findElement(passoverFieldName, form, formData);
-            
+
             String passoverValue = "";
-            
+
             if (passoverElement != null) {
                 passoverValue = FormUtil.getElementPropertyValue(passoverElement, formData);
             } else if (FormUtil.PROPERTY_ID.equals(passoverFieldName)) {
                 passoverValue = formData.getPrimaryKeyValue();
             }
-            
+
             try {
                 if ("append".equals(getPropertyString("fieldPassoverMethod"))) {
                     if (!redirectUrl.endsWith("/")) {
@@ -256,7 +257,8 @@ public class FormMenu extends UserviewMenu {
                     }
                     redirectUrl += URLEncoder.encode(getPropertyString("paramName"), "UTF-8") + "=" + URLEncoder.encode(passoverValue, "UTF-8");
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         if (form != null) {
@@ -277,7 +279,7 @@ public class FormMenu extends UserviewMenu {
                 formHtml = formService.generateElementErrorHtml(form, formData);
                 errorCount = errors.size();
             }
-            
+
             if (formData.getStay()) {
                 setAlertMessage("");
                 setRedirectUrl("");
@@ -315,6 +317,7 @@ public class FormMenu extends UserviewMenu {
 
     /**
      * Retrieves form mapped to an assignment
+     *
      * @param formData
      * @param assignment
      * @return
@@ -326,15 +329,16 @@ public class FormMenu extends UserviewMenu {
         ApplicationContext ac = AppUtil.getApplicationContext();
         AppService appService = (AppService) ac.getBean("appService");
         FormService formService = (FormService) ac.getBean("formService");
-        
+
         formData = formService.retrieveFormDataFromRequestMap(formData, getRequestParameters());
-        
+
         PackageActivityForm activityForm = appService.viewAssignmentForm(appDef, assignment, formData, formUrl);
         return activityForm;
     }
 
     /**
      * Retrieves the form mapped to this menu item.
+     *
      * @param formData
      * @return
      */
@@ -388,7 +392,7 @@ public class FormMenu extends UserviewMenu {
                 cancelLabel = ResourceBundleUtil.getMessage("general.method.label.cancel");
             }
         }
-        
+
         Boolean readonlyLabel = "true".equalsIgnoreCase(getPropertyString("readonlyLabel"));
 
         form = appService.viewDataForm(appDef.getId(), appDef.getVersion().toString(), formId, null, submitLabel, cancelLabel, getPropertyString("redirectTargetOnCancel"), formData, formUrl, cancelUrl);
@@ -421,6 +425,7 @@ public class FormMenu extends UserviewMenu {
 
     /**
      * Handles assignment form submission
+     *
      * @param formData
      * @param assignment
      * @param activityForm
@@ -433,7 +438,7 @@ public class FormMenu extends UserviewMenu {
         WorkflowManager workflowManager = (WorkflowManager) ac.getBean("workflowManager");
         String activityId = assignment.getActivityId();
         String processId = assignment.getProcessId();
-        
+
         // get form
         Form currentForm = activityForm.getForm();
 
@@ -449,7 +454,7 @@ public class FormMenu extends UserviewMenu {
             formData = appService.completeAssignmentForm(currentForm, assignment, formData, variableMap);
 
             Map<String, String> errors = formData.getFormErrors();
-            
+
             setProperty("submitted", Boolean.TRUE);
             if (!formData.getStay() && (errors == null || errors.isEmpty()) && activityForm.isAutoContinue()) {
                 setProperty("redirectUrlAfterComplete", getPropertyString("redirectUrlAfterComplete"));

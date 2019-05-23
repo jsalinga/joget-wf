@@ -9,50 +9,50 @@ import org.enhydra.shark.xpdl.elements.Activity;
 import org.enhydra.shark.xpdl.elements.WorkflowProcess;
 
 public class CustomWfActivityWrapper extends WfActivityWrapper {
+
     protected WfActivityInternal internal;
     protected Activity activityDefinition;
     protected WorkflowProcess processDefinition;
     protected String packageId;
     protected String packageVer;
     protected WfProcessInternal process;
-    
+
     public CustomWfActivityWrapper(WMSessionHandle shandle, String processDefId, String processId, String id) {
         super(shandle, processDefId, processId, id);
     }
-    
+
     public WfProcessInternal getProcessImpl() throws Exception {
         if (process == null) {
             process = SharkUtilities.getProcess(shandle, processId, SharkUtilities.READ_ONLY_MODE);
         }
         return process;
     }
-    
+
     public WfActivityInternal getActivityImpl() throws Exception {
         if (internal == null) {
             internal = getProcessImpl().getActivity(shandle, id);
         }
         return internal;
     }
-    
+
     public List<String> getAssignmentResourceIds() throws Exception {
         return getActivityImpl().getAssignmentResourceIds(shandle);
     }
-    
+
     public Activity getActivityDefinition() throws Exception {
         if (activityDefinition == null) {
             activityDefinition = SharkUtilities.getActivityDefinition(shandle, getActivityImpl(), getProcessDefinition());
         }
         return activityDefinition;
     }
-    
-    public WorkflowProcess getProcessDefinition() throws Exception
-    {
+
+    public WorkflowProcess getProcessDefinition() throws Exception {
         if (processDefinition == null) {
-            processDefinition =  SharkUtilities.getWorkflowProcess(shandle, getProcessImpl().package_id(shandle), getProcessImpl().manager_version(shandle), getProcessImpl().process_definition_id(shandle));
+            processDefinition = SharkUtilities.getWorkflowProcess(shandle, getProcessImpl().package_id(shandle), getProcessImpl().manager_version(shandle), getProcessImpl().process_definition_id(shandle));
         }
         return this.processDefinition;
     }
-    
+
     public String getSubflowProcessId() throws Exception {
         if (isSubflow()) {
             String performerId = getActivityImpl().getPerformerId(shandle);
@@ -62,21 +62,21 @@ public class CustomWfActivityWrapper extends WfActivityWrapper {
         }
         return null;
     }
-    
+
     public boolean isSubflow() throws Exception {
         int type = getActivityDefinition().getActivityType();
         return 3 == type;
     }
-    
+
     public static List<String> getAssignmentResourceIds(WMSessionHandle shandle,
-                               String mgrName,
-                               String processId,
-                               String id) throws Exception{
+            String mgrName,
+            String processId,
+            String id) throws Exception {
         WfActivityWrapper wrapper = new WfActivityWrapper(shandle, mgrName, processId, id);
         WfActivityInternal internal = wrapper.getActivityImpl(processId, id, SharkUtilities.READ_ONLY_MODE);
         return internal.getAssignmentResourceIds(shandle);
     }
-    
+
     @Override
     public void complete() throws Exception, CannotComplete {
         long tStamp = SharkUtilities.methodStart(this.shandle, "WfActivityWrapper.complete");
@@ -84,7 +84,7 @@ public class CustomWfActivityWrapper extends WfActivityWrapper {
             checkSecurity("complete", null);
 
             WfActivityInternal actInternal = getActivityImpl(this.processId, this.id, 1);
-            
+
             int type = getActivityDefinition().getActivityType();
             if (type == 2) {
                 actInternal.finish(this.shandle);

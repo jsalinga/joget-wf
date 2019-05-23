@@ -38,16 +38,16 @@ public class DataListDecorator extends CheckboxTableDecorator {
     String id;
     String fieldName;
     Boolean listRenderHtml = true;
-    
+
     private int index = 0;
 
     public DataListDecorator() {
     }
-    
+
     public DataListDecorator(DataList dataList) {
         this.dataList = dataList;
     }
-    
+
     @Override
     public void init(PageContext pageContext, Object decorated, TableModel tableModel) {
         super.init(pageContext, decorated, tableModel);
@@ -63,11 +63,11 @@ public class DataListDecorator extends CheckboxTableDecorator {
         } else {
             checkedIds = new ArrayList(0);
         }
-        
+
         String disableListRenderHtml = WorkflowUtil.getSystemSetupValue("disableListRenderHtml");
         if (disableListRenderHtml != null && disableListRenderHtml.equals("true")) {
             listRenderHtml = false;
-        } 
+        }
     }
 
     @Override
@@ -108,7 +108,7 @@ public class DataListDecorator extends CheckboxTableDecorator {
 
         return buffer.toString();
     }
-    
+
     public String getRadio() {
         // Override this method to fix DisplayTag bug
         String evaluatedId = "";
@@ -135,6 +135,7 @@ public class DataListDecorator extends CheckboxTableDecorator {
 
     /**
      * Decorator method for a column to display links. TODO: formatting?
+     *
      * @param columnName
      * @return
      */
@@ -175,6 +176,7 @@ public class DataListDecorator extends CheckboxTableDecorator {
 
     /**
      * Decorator method to display row actions as links
+     *
      * @return
      */
     public Object getActions() {
@@ -196,12 +198,12 @@ public class DataListDecorator extends CheckboxTableDecorator {
 
     protected DataListColumn findColumn(String columnName) {
         boolean skipHidden = false;
-        String export =  dataList.getDataListParamString(TableTagParameters.PARAMETER_EXPORTING);
+        String export = dataList.getDataListParamString(TableTagParameters.PARAMETER_EXPORTING);
         String exportType = dataList.getDataListParamString(TableTagParameters.PARAMETER_EXPORTTYPE);
         if (("1".equals(export) && (exportType.equals("1") || exportType.equals("2") || exportType.equals("3") || exportType.equals("5")))) {
             skipHidden = true;
         }
-        
+
         // get column, temporarily just iterate thru to find
         DataListColumn column = null;
         DataListColumn[] columns = dataList.getColumns();
@@ -214,7 +216,7 @@ public class DataListDecorator extends CheckboxTableDecorator {
         if (!column.getName().equals(columnName) && ((skipHidden && column.isHidden()) || (!column.isHidden() && "true".equals(column.getPropertyString("exclude_export"))))) {
             column = findColumn(columnName);
         }
-        
+
         return column;
     }
 
@@ -230,8 +232,8 @@ public class DataListDecorator extends CheckboxTableDecorator {
             if (hrefParam != null && hrefColumn != null && !hrefColumn.isEmpty()) {
                 String[] params = hrefParam.split(";");
                 String[] columns = hrefColumn.split(";");
-                
-                for (int i = 0; i < columns.length; i++ ) {
+
+                for (int i = 0; i < columns.length; i++) {
                     if (columns[i] != null && !columns[i].isEmpty()) {
                         boolean isValid = false;
                         if (params.length > i && params[i] != null && !params[i].isEmpty()) {
@@ -243,15 +245,16 @@ public class DataListDecorator extends CheckboxTableDecorator {
                             link += StringEscapeUtils.escapeHtml(params[i]);
                             link += "=";
                             isValid = true;
-                        } if (!link.contains("?")) {
+                        }
+                        if (!link.contains("?")) {
                             if (!link.endsWith("/")) {
                                 link += "/";
                             }
                             isValid = true;
                         }
-                        
+
                         if (isValid) {
-                            Object paramValue =evaluate(columns[i]);
+                            Object paramValue = evaluate(columns[i]);
                             if (paramValue == null) {
                                 paramValue = StringEscapeUtils.escapeHtml(columns[i]);
                             }
@@ -264,7 +267,7 @@ public class DataListDecorator extends CheckboxTableDecorator {
                     }
                 }
             }
-            
+
             if (target != null && "popup".equalsIgnoreCase(target)) {
                 if (confirmation == null) {
                     confirmation = "";
@@ -293,13 +296,13 @@ public class DataListDecorator extends CheckboxTableDecorator {
 
     public String formatColumn(DataListColumn column, Object row, Object value) {
         Object result = value;
-        
+
         // decrypt protected data 
         if (result != null && result instanceof String) {
             result = SecurityUtil.decrypt(result.toString());
-            
+
             // sanitize output
-            String export =  dataList.getDataListParamString(TableTagParameters.PARAMETER_EXPORTING);
+            String export = dataList.getDataListParamString(TableTagParameters.PARAMETER_EXPORTING);
             String exportType = dataList.getDataListParamString(TableTagParameters.PARAMETER_EXPORTTYPE);
             if (!("1".equals(export) && (exportType.equals("1") || exportType.equals("2") || exportType.equals("3") || exportType.equals("5")))) {
                 if (isRenderHtml(column)) {
@@ -322,29 +325,29 @@ public class DataListDecorator extends CheckboxTableDecorator {
         String text = (result != null) ? result.toString() : null;
         return text;
     }
-    
+
     @Override
     protected Object evaluate(String propertyName) {
         return DataListService.evaluateColumnValueFromRow(getCurrentRowObject(), propertyName);
     }
-    
+
     protected boolean isRowActionVisible(DataListAction rowAction) {
         boolean visible = true;
-        
+
         Object[] rules = (Object[]) rowAction.getProperty("rules");
         if (rules != null && rules.length > 0) {
             String visibleRules = "";
-            
+
             for (Object o : rules) {
                 Map ruleMap = (HashMap) o;
-                
+
                 String join = ruleMap.get("join").toString();
                 String fieldId = ruleMap.get("field").toString();
                 String operator = ruleMap.get("operator").toString();
                 String compareValue = ruleMap.get("value").toString();
                 Object tempValue = evaluate(fieldId);
-                String value = (tempValue != null)?tempValue.toString():"";
-                
+                String value = (tempValue != null) ? tempValue.toString() : "";
+
                 if (!visibleRules.isEmpty() && !visibleRules.endsWith("(") && !")".equals(fieldId)) {
                     if ("OR".equals(join)) {
                         visibleRules += " || ";
@@ -355,7 +358,7 @@ public class DataListDecorator extends CheckboxTableDecorator {
                 if (!")".equals(fieldId)) {
                     visibleRules += " ";
                 }
-                if ("(".equals(fieldId) || ")".equals(fieldId) ) {
+                if ("(".equals(fieldId) || ")".equals(fieldId)) {
                     visibleRules += fieldId;
                 } else {
                     boolean result = false;
@@ -378,7 +381,8 @@ public class DataListDecorator extends CheckboxTableDecorator {
                                 } else if ("<=".equals(operator) && valueNum <= compareValueNum) {
                                     result = true;
                                 }
-                            } catch (NumberFormatException e) {}
+                            } catch (NumberFormatException e) {
+                            }
                         } else if ("LIKE".equals(operator) && value.toLowerCase().contains(compareValue.toLowerCase())) {
                             result = true;
                         } else if ("NOT LIKE".equals(operator) && !value.toLowerCase().contains(compareValue.toLowerCase())) {
@@ -400,7 +404,8 @@ public class DataListDecorator extends CheckboxTableDecorator {
                                 } else if ("IS FALSE".equals(operator) && !valueBoolean) {
                                     result = true;
                                 }
-                            } catch(Exception e) {}
+                            } catch (Exception e) {
+                            }
                         } else if ("IS NOT EMPTY".equals(operator)) {
                             result = true;
                         } else if ("REGEX".equals(operator) || "NOT REGEX".equals(operator)) {
@@ -417,11 +422,11 @@ public class DataListDecorator extends CheckboxTableDecorator {
                     } else if ("IS EMPTY".equals(operator)) {
                         result = true;
                     }
-                    
+
                     visibleRules += result;
                 }
             }
-            
+
             org.mozilla.javascript.Context cx = org.mozilla.javascript.Context.enter();
             Scriptable scope = cx.initStandardObjects(null);
             try {
@@ -430,10 +435,10 @@ public class DataListDecorator extends CheckboxTableDecorator {
                 org.mozilla.javascript.Context.exit();
             }
         }
-        
+
         return visible;
     }
-    
+
     protected boolean isRenderHtml(DataListColumn column) {
         if (column != null && column.isRenderHtml() != null) {
             return column.isRenderHtml();

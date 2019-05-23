@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ExpireFilter implements Filter {
-    
+
     public static final long DEFAULT_HEADER_CACHE_EXPIRY = 300000L; // 5 minutes
     public static long expires = DEFAULT_HEADER_CACHE_EXPIRY;
-    
+
     private final static List<String> EXTS = Arrays.asList(new String[]{"css", "less", "js", "jpeg", "jpg", "png", "gif", "ico", "otf", "eot", "svg", "ttf", "woff"});
-    
+
     public void init(FilterConfig filterConfig) throws ServletException {
         String sysExpireStr = System.getProperty("resources.expires");
         if (sysExpireStr != null && !sysExpireStr.trim().isEmpty()) {
@@ -36,19 +36,19 @@ public class ExpireFilter implements Filter {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             if (isWebResouces(httpRequest.getRequestURI())) {
                 httpResponse.addDateHeader("Expires", System.currentTimeMillis() + expires);
-                httpResponse.addHeader("Cache-Control", "private, max-age=" + expires/1000);
+                httpResponse.addHeader("Cache-Control", "private, max-age=" + expires / 1000);
             }
         }
-        
+
         // Continue
         chain.doFilter(request, response);
     }
 
     public void destroy() {
-        
+
     }
-    
-    protected boolean isWebResouces (String url) {
+
+    protected boolean isWebResouces(String url) {
         if (url != null) {
             if (url.endsWith(".")) {
                 url = url.substring(0, url.length() - 1);

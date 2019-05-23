@@ -20,7 +20,7 @@ public class ReportWorkflowPackageDaoImpl extends AbstractSpringDao implements R
             return false;
         }
     }
-    
+
     public ReportWorkflowPackage getReportWorkflowPackage(String appId, String appVersion, String packageId, String packageVersion) {
         String condition = " WHERE e.reportApp.appId = ? AND e.reportApp.appVersion = ? AND e.packageId = ? AND e.packageVersion = ?";
         Collection params = new ArrayList();

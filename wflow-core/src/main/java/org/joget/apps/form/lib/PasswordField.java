@@ -12,7 +12,8 @@ import org.joget.apps.form.service.FormUtil;
 import org.joget.commons.util.SecurityUtil;
 
 public class PasswordField extends Element implements FormBuilderPaletteElement {
-    public static final String SECURE_VALUE = "****SECURE VALUE****";  
+
+    public static final String SECURE_VALUE = "****SECURE VALUE****";
 
     @Override
     public String getName() {
@@ -36,17 +37,17 @@ public class PasswordField extends Element implements FormBuilderPaletteElement 
         // set value
         String value = FormUtil.getElementPropertyValue(this, formData);
         String binderValue = getBinderValue(formData);
-        
+
         if (value != null && !value.isEmpty() && (value.equals(binderValue) || (binderValue != null && value.equals(SecurityUtil.decrypt(binderValue))))) {
             value = SECURE_VALUE;
         }
-        
+
         dataModel.put("value", value);
 
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
         return html;
     }
-    
+
     @Override
     public FormData formatDataForValidation(FormData formData) {
         String id = FormUtil.getElementParameterName(this);
@@ -55,7 +56,7 @@ public class PasswordField extends Element implements FormBuilderPaletteElement 
             if (value != null) {
                 if (value.equals(SECURE_VALUE)) {
                     value = getBinderValue(formData);
-                    
+
                     if (value != null) {
                         value = SecurityUtil.decrypt(value);
                         formData.addRequestParameterValues(id, new String[]{value});
@@ -65,10 +66,10 @@ public class PasswordField extends Element implements FormBuilderPaletteElement 
                 }
             }
         }
-        
+
         return formData;
     }
-    
+
     @Override
     public FormRowSet formatData(FormData formData) {
         FormRowSet rowSet = null;
@@ -92,7 +93,7 @@ public class PasswordField extends Element implements FormBuilderPaletteElement 
                 } else {
                     value = SecurityUtil.encrypt(value);
                 }
-                
+
                 // set value into Properties and FormRowSet object
                 FormRow result = new FormRow();
                 result.setProperty(id, value);
@@ -103,11 +104,11 @@ public class PasswordField extends Element implements FormBuilderPaletteElement 
 
         return rowSet;
     }
-    
+
     protected String getBinderValue(FormData formData) {
         String id = getPropertyString(FormUtil.PROPERTY_ID);
         String value = getPropertyString(FormUtil.PROPERTY_VALUE);
-        
+
         // load from binder if available
         if (formData != null) {
             String binderValue = formData.getLoadBinderDataProperty(this, id);
@@ -115,7 +116,7 @@ public class PasswordField extends Element implements FormBuilderPaletteElement 
                 value = binderValue;
             }
         }
-        
+
         return value;
     }
 

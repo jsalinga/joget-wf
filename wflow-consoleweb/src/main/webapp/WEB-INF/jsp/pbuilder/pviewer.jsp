@@ -12,7 +12,7 @@
         <title><fmt:message key="console.monitoring.common.label.viewGraph"/>: ${wfProcess.instanceId}</title>
 
         <jsp:include page="/WEB-INF/jsp/includes/scripts.jsp" />
-        
+
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico"/>
         <link href="${pageContext.request.contextPath}/js/font-awesome4/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="${pageContext.request.contextPath}/pbuilder/css/pbuilder.css" rel="stylesheet" />
@@ -36,25 +36,25 @@
         <script src="${pageContext.request.contextPath}/pbuilder/js/pbuilder.js"></script>
         <script>
             $(function() {
-                //init ApiClient base url (add to support different context path)
-                ProcessBuilder.ApiClient.baseUrl = "${pageContext.request.contextPath}";
-                ProcessBuilder.ApiClient.designerBaseUrl = "${pageContext.request.contextPath}";
-                ProcessBuilder.Designer.setZoom(1);
-                ProcessBuilder.Designer.editable = false;
-                var xpdl = $("#xpdl").val();
-                if (xpdl && xpdl !== '') {
-                    ProcessBuilder.Designer.init(xpdl);
-                    ProcessBuilder.Designer.setZoom(0.7);
-                    ProcessBuilder.Actions.viewProcess('<c:out value="${wfProcess.idWithoutVersion}"/>');
-                    
-                    var selectedNodes = new Array();
-                    <c:forEach var="activityId" items="${runningActivityIds}">
-                    selectedNodes.push("<c:out value="${activityId}"/>");
-                    </c:forEach>
-                    for (var i=0; i<selectedNodes.length; i++) {
-                        $("#node_" + selectedNodes[i]).addClass("node_active");
-                    }
-                }
+            //init ApiClient base url (add to support different context path)
+            ProcessBuilder.ApiClient.baseUrl = "${pageContext.request.contextPath}";
+            ProcessBuilder.ApiClient.designerBaseUrl = "${pageContext.request.contextPath}";
+            ProcessBuilder.Designer.setZoom(1);
+            ProcessBuilder.Designer.editable = false;
+            var xpdl = $("#xpdl").val();
+            if (xpdl && xpdl !== '') {
+            ProcessBuilder.Designer.init(xpdl);
+            ProcessBuilder.Designer.setZoom(0.7);
+            ProcessBuilder.Actions.viewProcess('<c:out value="${wfProcess.idWithoutVersion}"/>');
+
+            var selectedNodes = new Array();
+            <c:forEach var="activityId" items="${runningActivityIds}">
+                selectedNodes.push("<c:out value="${activityId}"/>");
+            </c:forEach>
+            for (var i=0; i<selectedNodes.length; i++) {
+            $("#node_" + selectedNodes[i]).addClass("node_active");
+            }
+            }
             });
         </script>
     </head>
@@ -82,6 +82,6 @@
 
         <div id="builder-message"></div>
         <div id="builder-screenshot"></div>
-        
+
     </body>
 </html>

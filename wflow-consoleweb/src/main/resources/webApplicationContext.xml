@@ -17,9 +17,9 @@
     <context:component-scan base-package="org.joget"/>
     
     <bean id="configurationLoader"
-            class="org.springmodules.validation.bean.conf.loader.annotation.AnnotationBeanValidationConfigurationLoader"/>
+          class="org.springmodules.validation.bean.conf.loader.annotation.AnnotationBeanValidationConfigurationLoader"/>
     <bean id="validator" class="org.springmodules.validation.bean.BeanValidator"
-            p:configurationLoader-ref="configurationLoader"/>
+          p:configurationLoader-ref="configurationLoader"/>
 
     <bean class="org.joget.commons.spring.web.ParameterizedAnnotationMethodHandlerAdapter"/>
     <bean id="multipartHandlerInterceptor" class="org.joget.commons.spring.web.MultipartHandlerInterceptor" />
@@ -28,7 +28,7 @@
             <list>
                 <ref bean="multipartHandlerInterceptor"/>
             </list>
-       </property>
+        </property>
     </bean>
     
     <bean id="multipartResolver" class="org.joget.commons.util.JogetCommonsMultipartResolver">
@@ -52,7 +52,7 @@
     
     <bean id="messageSource" class="org.joget.commons.util.DatabaseResourceBundleMessageSource">
         <property name="basenames">
-             <list>
+            <list>
                 <value>custom</value>
                 <value>console</value>
                 <value>peditor</value>
@@ -65,7 +65,7 @@
                 <value>helpdef</value>
                 <value>help</value>
                 <value>advtool</value>
-             </list>
+            </list>
         </property>
         <property name="resourceBundleMessageDao" ref="resourceBundleMessageDao"/>
     </bean>

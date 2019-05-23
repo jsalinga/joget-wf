@@ -60,51 +60,51 @@ public class ControllerSettings extends JaWEComponentSettings {
 
         componentSettings.put("AllowInvalidPackageSaving",
                 new Boolean(properties.getProperty("AllowInvalidPackageSaving",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("AskOnDeletion",
                 new Boolean(properties.getProperty("AskOnDeletion", "false").equals("true")));
         componentSettings.put("AskOnDeletionOfReferencedElements",
                 new Boolean(properties.getProperty("AskOnDeletionOfReferencedElements",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("DoNotAskOnDeletionOfReferencedElementTypes",
                 properties.getProperty("DoNotAskOnDeletionOfReferencedElementTypes",
-                "Activity Transition"));
+                        "Activity Transition"));
         componentSettings.put("DesignTimeValidation",
                 new Boolean(properties.getProperty("DesignTimeValidation",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("InitialXPDLValidation",
                 new Boolean(properties.getProperty("InitialXPDLValidation",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("StartMaximized",
                 new Boolean(properties.getProperty("StartMaximized", "true").equals("true")));
         componentSettings.put("ShowTooltip",
                 new Boolean(properties.getProperty("ShowTooltip", "true").equals("true")));
         componentSettings.put("UndoHistoryManager.Class",
                 properties.getProperty("UndoHistoryManager.Class",
-                "org.enhydra.jawe.UndoHistoryMgr"));
+                        "org.enhydra.jawe.UndoHistoryMgr"));
         componentSettings.put("UndoHistorySize",
                 new Integer(properties.getProperty("UndoHistorySize", "-1")));
 
         componentSettings.put("Encoding", properties.getProperty("Encoding", "UTF-8"));
         componentSettings.put("FrameSettings",
                 properties.getProperty("FrameSettings",
-                "V; special H tree; main H other"));
+                        "V; special H tree; main H other"));
         componentSettings.put("DefaultActionsEditOrder",
                 properties.getProperty("DefaultActions.Edit.ActionOrder",
-                "Undo Redo - Cut Copy Paste Delete - EditProperties"));
+                        "Undo Redo - Cut Copy Paste Delete - EditProperties"));
         componentSettings.put("TypeResolverClass",
                 properties.getProperty("TypeResolverClass",
-                "org.enhydra.jawe.base.controller.JaWETypeResolver"));
+                        "org.enhydra.jawe.base.controller.JaWETypeResolver"));
 
         componentSettings.put("MainDividerLocation",
                 new Integer(properties.getProperty("MainDividerLocation",
-                "230")));
+                        "230")));
         componentSettings.put("FirstSmallDividerLocation",
                 new Integer(properties.getProperty("FirstSmallDividerLocation",
-                "230")));
+                        "230")));
         componentSettings.put("SecondSmallDividerLocation",
                 new Integer(properties.getProperty("SecondSmallDividerLocation",
-                "400")));
+                        "400")));
 
         ImageIcon appIcon;
         URL iconURL = ResourceManager.getResource(properties, "ApplicationIcon");
@@ -209,7 +209,7 @@ public class ControllerSettings extends JaWEComponentSettings {
         // menus, toolbars and actions
         componentSettings.put("MainMenu",
                 properties.getProperty("MainMenu.ActionOrder",
-                "*File jawe_editmenu *Search *Package *Process *ExternalPackages *Settings *Help"));
+                        "*File jawe_editmenu *Search *Package *Process *ExternalPackages *Settings *Help"));
         //END CUSTOM
 
         loadDefaultMenusToolbarsAndActions(comp);
@@ -310,7 +310,6 @@ public class ControllerSettings extends JaWEComponentSettings {
         } catch (Exception ex) {
         }
          */
-
         // Language Switcher
         componentSettings.put("LanguageSwitcherClassName",
                 "org.enhydra.jawe.components.languageswitcher.LanguageSwitcherManager");
@@ -377,10 +376,10 @@ public class ControllerSettings extends JaWEComponentSettings {
             String clsName = "org.enhydra.jawe.base.controller.actions.Search";
             try {
                 action = (ActionBase) Class.forName(clsName).getConstructor(new Class[]{
-                            JaWEComponent.class
-                        }).newInstance(new Object[]{
-                            comp
-                        });
+                    JaWEComponent.class
+                }).newInstance(new Object[]{
+                    comp
+                });
             } catch (Exception e) {
                 action = null;
             }

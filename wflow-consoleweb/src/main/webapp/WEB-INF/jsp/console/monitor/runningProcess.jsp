@@ -57,69 +57,69 @@
             <fmt:message key="console.monitoring.common.label.activityList"/>
         </div>
         <ui:jsontable url="${pageContext.request.contextPath}/web/json/console/monitor/activity/list?processId=${wfProcess.instanceId}"
-                       var="JsonDataTable"
-                       divToUpdate="activityList"
-                       jsonData="data"
-                       rowsPerPage="15"
-                       width="100%"
-                       sort="dateCreated"
-                       desc="true"
-                       href="${pageContext.request.contextPath}/web/console/monitor/running/process/activity/view"
-                       hrefParam="id"
-                       hrefQuery="false"
-                       hrefDialog="false"
-                       hrefDialogWidth="600px"
-                       hrefDialogHeight="400px"
-                       hrefDialogTitle="Process Dialog"
-                       fields="['id','name','serviceLevelMonitor']"
-                       column1="{key: 'id', label: 'console.app.activity.common.label.id', sortable: true}"
-                       column2="{key: 'name', label: 'console.app.activity.common.label.name', sortable: true}"
-                       column3="{key: 'state', label: 'console.app.activity.common.label.state', sortable: false}"
-                       column4="{key: 'dateCreated', label: 'console.app.activity.common.label.createdTime', sortable: true}"
-                       column5="{key: 'serviceLevelMonitor', label: 'console.app.activity.common.label.serviceLevelMonitor', sortable: false, relaxed: true}"
-                       />
+                      var="JsonDataTable"
+                      divToUpdate="activityList"
+                      jsonData="data"
+                      rowsPerPage="15"
+                      width="100%"
+                      sort="dateCreated"
+                      desc="true"
+                      href="${pageContext.request.contextPath}/web/console/monitor/running/process/activity/view"
+                      hrefParam="id"
+                      hrefQuery="false"
+                      hrefDialog="false"
+                      hrefDialogWidth="600px"
+                      hrefDialogHeight="400px"
+                      hrefDialogTitle="Process Dialog"
+                      fields="['id','name','serviceLevelMonitor']"
+                      column1="{key: 'id', label: 'console.app.activity.common.label.id', sortable: true}"
+                      column2="{key: 'name', label: 'console.app.activity.common.label.name', sortable: true}"
+                      column3="{key: 'state', label: 'console.app.activity.common.label.state', sortable: false}"
+                      column4="{key: 'dateCreated', label: 'console.app.activity.common.label.createdTime', sortable: true}"
+                      column5="{key: 'serviceLevelMonitor', label: 'console.app.activity.common.label.serviceLevelMonitor', sortable: false, relaxed: true}"
+                      />
     </div>
 </div>
 
 <script>
     function removeProcessInstance(){
-         if (confirm('<fmt:message key="console.monitoring.common.label.removeProcess.confirm"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/monitor/running';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/monitor/process/delete', callback, 'ids=${wfProcess.instanceId}');
-        }
+    if (confirm('<fmt:message key="console.monitoring.common.label.removeProcess.confirm"/>')) {
+    var callback = {
+    success : function() {
+    document.location = '${pageContext.request.contextPath}/web/console/monitor/running';
+    }
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/monitor/process/delete', callback, 'ids=${wfProcess.instanceId}');
+    }
     }
 
     function viewGraph(){
-        var url = '${pageContext.request.contextPath}/web/console/monitor/process/graph/${wfProcess.instanceId}';
-        window.open(url);
+    var url = '${pageContext.request.contextPath}/web/console/monitor/process/graph/${wfProcess.instanceId}';
+    window.open(url);
     }
 
     function abortProcessInstance(){
-        if (confirm('<fmt:message key="console.monitoring.running.label.abortProcess.confirm"/>')) {
-            var callback = {
-                success : function() {
-                    alert("<fmt:message key='console.monitoring.running.label.abortProcess.success'/>");
-                    document.location = '${pageContext.request.contextPath}/web/console/monitor/running';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/monitor/running/process/abort/${wfProcess.instanceId}', callback, '');
-        }
+    if (confirm('<fmt:message key="console.monitoring.running.label.abortProcess.confirm"/>')) {
+    var callback = {
+    success : function() {
+    alert("<fmt:message key='console.monitoring.running.label.abortProcess.success'/>");
+    document.location = '${pageContext.request.contextPath}/web/console/monitor/running';
+    }
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/monitor/running/process/abort/${wfProcess.instanceId}', callback, '');
+    }
     }
 
     function reevaluateProcessInstance(){
-        if (confirm('<fmt:message key="console.monitoring.running.label.reevaluate.confirm"/>')) {
-            var callback = {
-                success : function() {
-                    alert("<fmt:message key='console.monitoring.running.label.reevaluate.success'/>");
-                    document.location.reload(true);
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/monitor/running/process/reevaluate/${wfProcess.instanceId}', callback, '');
-        }
+    if (confirm('<fmt:message key="console.monitoring.running.label.reevaluate.confirm"/>')) {
+    var callback = {
+    success : function() {
+    alert("<fmt:message key='console.monitoring.running.label.reevaluate.success'/>");
+    document.location.reload(true);
+    }
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/monitor/running/process/reevaluate/${wfProcess.instanceId}', callback, '');
+    }
     }
 
     Template.init("#menu-monitor", "#nav-monitor-running");

@@ -13,15 +13,16 @@ import org.joget.directory.model.service.DirectoryManager;
 import org.springframework.context.ApplicationContext;
 
 public class UserHashVariable extends DefaultHashVariablePlugin {
+
     private Map<String, User> userCache = new HashMap<String, User>();
-    
+
     @Override
     public String processHashVariable(String variableKey) {
         //if variableKey contains unprocessing hash variable as username
         if (variableKey.startsWith("{") && variableKey.contains("}")) {
             return null;
         }
-        
+
         String username = variableKey;
         String attribute = "";
         for (String v : availableSyntax()) {
@@ -31,7 +32,7 @@ public class UserHashVariable extends DefaultHashVariablePlugin {
                 attribute = v.substring(1);
             }
         }
-        
+
         return getUserAttribute(username, attribute);
     }
 
@@ -93,7 +94,7 @@ public class UserHashVariable extends DefaultHashVariablePlugin {
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();
@@ -102,7 +103,7 @@ public class UserHashVariable extends DefaultHashVariablePlugin {
         syntax.add("user.USERNAME.email");
         syntax.add("user.USERNAME.active");
         syntax.add("user.USERNAME.timeZone");
-        
+
         return syntax;
     }
 }

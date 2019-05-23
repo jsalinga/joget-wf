@@ -27,35 +27,35 @@ public class UserviewWebController {
     @Autowired
     UserviewDefinitionDao userviewDefinitionDao;
 
-    @RequestMapping({"/userview/(*:appId)/(*:userviewId)/(~:key)","/userview/(*:appId)/(*:userviewId)","/userview/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
+    @RequestMapping({"/userview/(*:appId)/(*:userviewId)/(~:key)", "/userview/(*:appId)/(*:userviewId)", "/userview/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
     public String view(ModelMap map, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam("userviewId") String userviewId, @RequestParam(value = "menuId", required = false) String menuId, @RequestParam(value = "key", required = false) String key, @RequestParam(value = "embed", required = false) Boolean embed) throws Exception {
         if (embed == null) {
             embed = false;
         }
         return embedView(map, request, response, appId, userviewId, menuId, key, embed, null);
     }
-    
-    @RequestMapping({"/embed/userview/(*:appId)/(*:userviewId)/(~:key)","/embed/userview/(*:appId)/(*:userviewId)","/embed/userview/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
+
+    @RequestMapping({"/embed/userview/(*:appId)/(*:userviewId)/(~:key)", "/embed/userview/(*:appId)/(*:userviewId)", "/embed/userview/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
     public String embedView(ModelMap map, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam("userviewId") String userviewId, @RequestParam(value = "menuId", required = false) String menuId, @RequestParam(value = "key", required = false) String key, Boolean embed, @RequestParam(value = "embed", required = false) Boolean embedParam) throws Exception {
         // validate input
-        appId = SecurityUtil.validateStringInput(appId);        
-        menuId = SecurityUtil.validateStringInput(menuId);        
+        appId = SecurityUtil.validateStringInput(appId);
+        menuId = SecurityUtil.validateStringInput(menuId);
         key = SecurityUtil.validateStringInput(key);
         SecurityUtil.validateBooleanInput(embed);
         SecurityUtil.validateBooleanInput(embedParam);
 
         if (embedParam != null && !embedParam) {
             //exit embed mode by param
-            return "redirect:/web/userview/" + appId + "/" + userviewId + "/" + ((key != null )?key:"") + "/" + menuId + '?' +StringUtil.decodeURL(request.getQueryString());
+            return "redirect:/web/userview/" + appId + "/" + userviewId + "/" + ((key != null) ? key : "") + "/" + menuId + '?' + StringUtil.decodeURL(request.getQueryString());
         } else if (embed == null) {
             embed = true;
         }
-        
+
         //check for empty key
         if (key != null && key.equals(Userview.USERVIEW_KEY_EMPTY_VALUE)) {
             key = "";
         }
-        
+
         // retrieve app and userview
         AppDefinition appDef = appService.getPublishedAppDefinition(appId);
         if (appDef == null) {
@@ -89,8 +89,8 @@ public class UserviewWebController {
         }
         return "ubuilder/view";
     }
-    
-    @RequestMapping({"/ulogin/(*:appId)/(*:userviewId)/(~:key)","/ulogin/(*:appId)/(*:userviewId)","/ulogin/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
+
+    @RequestMapping({"/ulogin/(*:appId)/(*:userviewId)/(~:key)", "/ulogin/(*:appId)/(*:userviewId)", "/ulogin/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
     public String login(ModelMap map, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam("userviewId") String userviewId, @RequestParam(value = "menuId", required = false) String menuId, @RequestParam(value = "key", required = false) String key, @RequestParam(value = "embed", required = false) Boolean embed) throws Exception {
         if (embed == null) {
             embed = false;
@@ -98,20 +98,20 @@ public class UserviewWebController {
         return embedLogin(map, request, response, appId, userviewId, menuId, key, embed);
     }
 
-    @RequestMapping({"/embed/ulogin/(*:appId)/(*:userviewId)/(~:key)","/embed/ulogin/(*:appId)/(*:userviewId)","/embed/ulogin/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
+    @RequestMapping({"/embed/ulogin/(*:appId)/(*:userviewId)/(~:key)", "/embed/ulogin/(*:appId)/(*:userviewId)", "/embed/ulogin/(*:appId)/(*:userviewId)/(*:key)/(*:menuId)"})
     public String embedLogin(ModelMap map, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam("userviewId") String userviewId, @RequestParam(value = "menuId", required = false) String menuId, @RequestParam(value = "key", required = false) String key, Boolean embed) throws Exception {
         if (embed == null) {
             embed = true;
         }
-        
+
         //check for empty key
         if (key != null && key.equals(Userview.USERVIEW_KEY_EMPTY_VALUE)) {
             key = null;
         }
-        
+
         // validate input
-        SecurityUtil.validateStringInput(appId);        
-        SecurityUtil.validateStringInput(menuId);        
+        SecurityUtil.validateStringInput(appId);
+        SecurityUtil.validateStringInput(menuId);
         SecurityUtil.validateStringInput(key);
         SecurityUtil.validateBooleanInput(embed);
 

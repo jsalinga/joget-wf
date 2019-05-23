@@ -24,7 +24,7 @@
         clear: both;
         overflow-x: auto;
         <c:if test="${userview.setting.getPropertyString('mobileViewTranslucent') == 'true'}">
-        opacity: 0.9;
+            opacity: 0.9;
         </c:if>
     }
     .ui-body-c .ui-link {
@@ -79,12 +79,12 @@
         list-style: none;
     }
     <c:if test="${userview.setting.getPropertyString('mobileViewTranslucent') == 'true'}">
-    .ui-html, #loginForm {
-        padding: 5px 10px;
-        background: white;
-        opacity: 0.9;
-        border-radius: 10px;
-    }
+        .ui-html, #loginForm {
+            padding: 5px 10px;
+            background: white;
+            opacity: 0.9;
+            border-radius: 10px;
+        }
     </c:if>
     .ui-html-footer {
         clear: both;
@@ -152,7 +152,7 @@
     }
     .ui-icon-loading, .ui-loader .ui-icon-loading {
         background-color: transparent;
-	background-size: 46px 46px;
+        background-size: 46px 46px;
     }
     .ui-listview > .ui-li-divider {
         background: #bbb;

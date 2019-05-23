@@ -17,17 +17,17 @@ public class PackageDefinition extends AbstractVersionedObject {
     @Element(required = false)
     private String uid;
     private AppDefinition appDefinition;
-    
+
     @Path("packageActivityFormMap")
-    @ElementMap(required = false,inline=true)
+    @ElementMap(required = false, inline = true)
     private Map<String, PackageActivityForm> packageActivityFormMap;
-    
+
     @Path("packageActivityPluginMap")
-    @ElementMap(required = false,inline=true)
+    @ElementMap(required = false, inline = true)
     private Map<String, PackageActivityPlugin> packageActivityPluginMap;
-    
+
     @Path("packageParticipantMap")
-    @ElementMap(required = false,inline=true)
+    @ElementMap(required = false, inline = true)
     private Map<String, PackageParticipant> packageParticipantMap;
 
     public String getPackageUid(String processDefId, String id) {

@@ -17,13 +17,15 @@ import org.joget.workflow.model.service.WorkflowManager;
 import org.springframework.beans.BeansException;
 
 /**
- * An abstract class to develop a Form Field element which embed a Form as its child.
- * 
+ * An abstract class to develop a Form Field element which embed a Form as its
+ * child.
+ *
  */
 public abstract class AbstractSubForm extends Element implements FormContainer {
+
     public static final String PROPERTY_PARENT_SUBFORM_ID = "parentSubFormId";
     public static final String PROPERTY_SUBFORM_PARENT_ID = "subFormParentId";
-    
+
     @Override
     public Collection<Element> getChildren(FormData formData) {
         Collection<Element> children = super.getChildren();
@@ -31,7 +33,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
             // override getChildren to return the subform
             if (checkForRecursiveForm(this, getPropertyString("formDefId"))) {
                 Form subForm = loadSubForm(formData);
-                
+
                 if (subForm != null) {
                     children = new ArrayList<Element>();
                     children.add(subForm);
@@ -41,11 +43,11 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
         }
         return children;
     }
-    
+
     /**
-     * Retrieve a Form object as subform. This method will use either value from 
+     * Retrieve a Form object as subform. This method will use either value from
      * property key "formDefId" or "json" to construct the Form object
-     * 
+     *
      * @return
      * @throws BeansException
      */
@@ -74,11 +76,11 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
                 WorkflowAssignment wfAssignment = (activityId != null && !activityId.isEmpty()) ? wm.getAssignment(activityId) : wm.getAssignmentByProcess(parentFormData.getProcessId());
                 json = AppUtil.processHashVariable(json, wfAssignment, StringUtil.TYPE_JSON, null);
             }
-            
+
             // use the json definition to create the subform
             try {
                 subForm = (Form) formService.createElementFromJson(json);
-                
+
                 //if id field not exist, automatically add an id hidden field
                 Element idElement = FormUtil.findElement(FormUtil.PROPERTY_ID, subForm, formData);
                 if (idElement == null) {
@@ -88,7 +90,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
                     idElement.setParent(subForm);
                     subFormElements.add(idElement);
                 }
-                
+
             } catch (Exception e) {
                 LogUtil.error(AbstractSubForm.class.getName(), e, null);
             }
@@ -123,12 +125,12 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
 
         return subForm;
     }
-    
+
     /**
-     * Update all the parameter name of field elements in subform with a prefix 
-     * 
+     * Update all the parameter name of field elements in subform with a prefix
+     *
      * @param element
-     * @param prefix 
+     * @param prefix
      */
     protected void updateElementParameterNames(Element element, String prefix) {
         if (prefix == null) {
@@ -137,7 +139,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
             String paramName = prefix + "_" + element.getPropertyString(FormUtil.PROPERTY_ID);
             element.setCustomParameterName(paramName);
         }
-            
+
         if (element instanceof Form || element instanceof AbstractSubForm) {
             String formId = element.getPropertyString(FormUtil.PROPERTY_ID);
             if (formId == null) {
@@ -160,18 +162,18 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
             updateElementParameterNames(child, prefix);
         }
     }
-    
+
     /**
-     * Update parent form field value with primary key of subform based on 
+     * Update parent form field value with primary key of subform based on
      * property key of this constant PROPERTY_PARENT_SUBFORM_ID.
-     * 
-     * @param formData 
+     *
+     * @param formData
      */
     protected void populateParentWithSubFormKey(FormData formData) {
         String parentSubFormId = getPropertyString(PROPERTY_PARENT_SUBFORM_ID);
         if (parentSubFormId != null && !parentSubFormId.trim().isEmpty()) {
             Form subForm = getSubForm(formData);
-            
+
             if (subForm != null) {
 
                 // get subform's primary key value
@@ -181,22 +183,22 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
                     subFormPrimaryElement.formatData(formData);
                     subFormPrimaryKeyValue = FormUtil.getElementPropertyValue(subFormPrimaryElement, formData);
                 }
-                
+
                 //try get value from parent field
                 Form rootForm = FormUtil.findRootForm(this);
                 String parentSubFormIdElementValue = "";
                 Element parentSubFormIdElement = null;
-                        
+
                 if (FormUtil.PROPERTY_ID.equals(parentSubFormId) && rootForm.getParent() == null && formData.getPrimaryKeyValue() != null && !formData.getPrimaryKeyValue().isEmpty()) {
                     parentSubFormIdElementValue = formData.getPrimaryKeyValue();
                 } else {
                     parentSubFormIdElement = FormUtil.findElement(parentSubFormId, rootForm, formData);
-                    
+
                     if (parentSubFormIdElement != null) {
                         parentSubFormIdElementValue = FormUtil.getElementPropertyValue(parentSubFormIdElement, formData);
                     }
                 }
-                
+
                 // generate new ID if empty
                 if (subFormPrimaryKeyValue == null || subFormPrimaryKeyValue.trim().isEmpty()) {
                     // generate new ID
@@ -205,7 +207,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
                     } else {
                         subFormPrimaryKeyValue = UuidGenerator.getInstance().getUuid();
                     }
-                    
+
                     if (subFormPrimaryElement != null) {
                         // add into form data
                         String paramName = FormUtil.getElementParameterName(subFormPrimaryElement);
@@ -232,7 +234,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
 
                 // set value into root form's data
                 if (subFormPrimaryKeyValue != null && !subFormPrimaryKeyValue.isEmpty() && !parentSubFormIdElementValue.equals(subFormPrimaryKeyValue)) {
-                    
+
                     FormStoreBinder rootStoreBinder = rootForm.getStoreBinder();
                     if (rootStoreBinder != null) {
                         FormRowSet rootFormRowSet = formData.getStoreBinderData(rootStoreBinder);
@@ -246,12 +248,12 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
                         String paramName = FormUtil.getElementParameterName(parentSubFormIdElement);
                         formData.addRequestParameterValues(paramName, new String[]{subFormPrimaryKeyValue});
                     }
-                    
+
                     //set to form data primary key if the parent field is id field and the parent form is root form
                     if (FormUtil.PROPERTY_ID.equals(parentSubFormId) && rootForm.getParent() == null) {
                         formData.setPrimaryKeyValue(subFormPrimaryKeyValue);
                     }
-                    
+
                     //if readonly hidden field
                     if (parentSubFormIdElement instanceof HiddenField && FormUtil.isReadonly(parentSubFormIdElement, formData)) {
                         parentSubFormIdElement.setProperty("value", subFormPrimaryKeyValue);
@@ -262,16 +264,16 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
     }
 
     /**
-     * Update subform field value with primary key of parent form based on 
+     * Update subform field value with primary key of parent form based on
      * property key of this constant PROPERTY_SUBFORM_PARENT_ID.
-     * 
-     * @param formData 
+     *
+     * @param formData
      */
     protected void populateSubFormWithParentKey(FormData formData) {
         String subFormParentId = getPropertyString(PROPERTY_SUBFORM_PARENT_ID);
         if (subFormParentId != null && !subFormParentId.trim().isEmpty()) {
             Form subForm = getSubForm(formData);
-            
+
             if (subForm != null) {
 
                 // get root form's primary key value
@@ -300,7 +302,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
                     if (subFormForeignKeyElement != null) {
                         String paramName = FormUtil.getElementParameterName(subFormForeignKeyElement);
                         formData.addRequestParameterValues(paramName, new String[]{rootFormPrimaryKeyValue});
-                        
+
                         //if readonly hidden field
                         if (subFormForeignKeyElement instanceof HiddenField && FormUtil.isReadonly(subFormForeignKeyElement, formData)) {
                             subFormForeignKeyElement.setProperty("value", rootFormPrimaryKeyValue);
@@ -311,7 +313,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
             }
         }
     }
-    
+
     @Override
     public String getPrimaryKeyValue(FormData formData) {
         String primaryKeyValue = null;
@@ -332,7 +334,7 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
         }
         return primaryKeyValue;
     }
-    
+
     @Override
     public FormRowSet formatData(FormData formData) {
         FormRowSet rowSet = null;
@@ -345,13 +347,13 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
 
         return rowSet;
     }
-    
+
     /**
      * Check the subform is not exist in the parent elements tree.
-     * 
+     *
      * @param e
      * @param id
-     * @return 
+     * @return
      */
     protected boolean checkForRecursiveForm(Element e, String id) {
         //Recursive find parent and compare
@@ -366,12 +368,12 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
         }
         return true;
     }
-    
+
     /**
      * Get From object from its children.
-     * 
+     *
      * @param formData
-     * @return 
+     * @return
      */
     protected Form getSubForm(FormData formData) {
         Collection<Element> children = getChildren(formData);
@@ -380,13 +382,13 @@ public abstract class AbstractSubForm extends Element implements FormContainer {
         }
         return null;
     }
-    
+
     @Override
     public boolean continueValidation(FormData formData) {
         if ("true".equalsIgnoreCase(getPropertyString(FormUtil.PROPERTY_READONLY))) {
             return false;
         }
-        
+
         return true;
     }
 }

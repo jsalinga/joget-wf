@@ -21,21 +21,21 @@
     </div>
     <div id="main-body">
 
-            <div id="title">
-                <fmt:message key="appCenter.label.publishedApps"/>
-            </div>
-        
-            <div id="apps" class="published-apps"></div>
-            <div class="clear"></div>
-        
+        <div id="title">
+            <fmt:message key="appCenter.label.publishedApps"/>
+        </div>
+
+        <div id="apps" class="published-apps"></div>
+        <div class="clear"></div>
+
     </div>
 </div>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/appCenter.css" />
 <script src="${pageContext.request.contextPath}/js/appCenter.js"></script>
 <script>
-AppCenter.searchFilter($("#title"), $("#apps")); 
-AppCenter.loadPublishedApps("#apps");
+    AppCenter.searchFilter($("#title"), $("#apps")); 
+    AppCenter.loadPublishedApps("#apps");
 </script>
 
 <script>

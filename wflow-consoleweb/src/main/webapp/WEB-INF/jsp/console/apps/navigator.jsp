@@ -7,39 +7,39 @@
 </style>
 <script>
     (function ($) {
-        jQuery.expr[':'].Contains = function(a,i,m){ 
-            return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0; 
-        };
+    jQuery.expr[':'].Contains = function(a,i,m){ 
+    return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0; 
+    };
 
-        function listFilter(header, list) {
-            var form = $("<form>").attr({"class":"filterform","action":"#","onsubmit":"return false"}), 
-            input = $("<input>").attr({"class":"filterinput","type":"text"}); 
-            $(form).append($("<span class='filterlabel'><i class='fa fa-search'></i></span>")).append(input).appendTo(header);
-            $(input) .change( function () { 
-                var filter = $(this).val();
-                if(filter) { 
-                    $(list).find("a:not(:Contains(" + filter + "))").parent().slideUp();
-                    $(list).find("a:Contains(" + filter + ")").parent().slideDown();
-                } else {
-                    $(list).find("li").slideDown();
-                }
-                return false;
-            }) .keyup( function () { 
-                $(this).change();
-            });
-        }
+    function listFilter(header, list) {
+    var form = $("<form>").attr({"class":"filterform","action":"#","onsubmit":"return false"}), 
+    input = $("<input>").attr({"class":"filterinput","type":"text"}); 
+    $(form).append($("<span class='filterlabel'><i class='fa fa-search'></i></span>")).append(input).appendTo(header);
+    $(input) .change( function () { 
+    var filter = $(this).val();
+    if(filter) { 
+    $(list).find("a:not(:Contains(" + filter + "))").parent().slideUp();
+    $(list).find("a:Contains(" + filter + ")").parent().slideDown();
+    } else {
+    $(list).find("li").slideDown();
+    }
+    return false;
+    }) .keyup( function () { 
+    $(this).change();
+    });
+    }
 
-        $(function () {
-            listFilter($("#nv-form h4"), $("#nv-form ul"));
-            listFilter($("#nv-list h4"), $("#nv-list ul"));
-            listFilter($("#nv-userview h4"), $("#nv-userview ul"));
-            if (parent && parent.PopupDialog.closeDialog) {
-                var locationUrl = top.location.href;
-                if (locationUrl.indexOf("/web/console/app") > 0 && locationUrl.indexOf("/builder/") > 0) {
-                    $("#nv a.nv-link").attr("target", "_top");
-                }
-            }
-        });
+    $(function () {
+    listFilter($("#nv-form h4"), $("#nv-form ul"));
+    listFilter($("#nv-list h4"), $("#nv-list ul"));
+    listFilter($("#nv-userview h4"), $("#nv-userview ul"));
+    if (parent && parent.PopupDialog.closeDialog) {
+    var locationUrl = top.location.href;
+    if (locationUrl.indexOf("/web/console/app") > 0 && locationUrl.indexOf("/builder/") > 0) {
+    $("#nv a.nv-link").attr("target", "_top");
+    }
+    }
+    });
     }(jQuery));
 </script>
 
@@ -86,84 +86,84 @@
 <script type="text/javascript">
     <ui:popupdialog var="builderwCreateDialog" src=""/>
     function navCreate(type){
-        showCreateForm(type);
+    showCreateForm(type);
     }
     function showCreateForm(type){
-        builderwCreateDialog.src = "${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/" + type + "/create?builderMode=false";
-        builderwCreateDialog.init();
+    builderwCreateDialog.src = "${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/" + type + "/create?builderMode=false";
+    builderwCreateDialog.init();
     }
     function checkUsageDelete(id, type, event) {
-        var messages = {
-            'form': '<fmt:message key="console.form.delete.label.confirmation"/>',
-            'datalist': '<fmt:message key="console.datalist.delete.label.confirmation"/>',
-            'userview': '<fmt:message key="console.userview.delete.label.confirmation"/>',
-        }
-        if (confirm(messages[type])) {
-            Usages.delete(id, type, {
-                contextPath: '${pageContext.request.contextPath}',
-                appId: '${appDef.id}',
-                appVersion: '${appDef.version}',
-                id: id,
-                builder: type,
-                confirmMessage: '<fmt:message key="dependency.usage.confirmDelete"/>',
-                confirmLabel: '<fmt:message key="dependency.usage.confirmLabel"/>',
-                cancelLabel: '<fmt:message key="dependency.usage.cencelLabel"/>'
-            }, function () {
-                window[type + 'Delete'](id, event);
-            });
-        }
+    var messages = {
+    'form': '<fmt:message key="console.form.delete.label.confirmation"/>',
+    'datalist': '<fmt:message key="console.datalist.delete.label.confirmation"/>',
+    'userview': '<fmt:message key="console.userview.delete.label.confirmation"/>',
+    }
+    if (confirm(messages[type])) {
+    Usages.delete(id, type, {
+    contextPath: '${pageContext.request.contextPath}',
+    appId: '${appDef.id}',
+    appVersion: '${appDef.version}',
+    id: id,
+    builder: type,
+    confirmMessage: '<fmt:message key="dependency.usage.confirmDelete"/>',
+    confirmLabel: '<fmt:message key="dependency.usage.confirmLabel"/>',
+    cancelLabel: '<fmt:message key="dependency.usage.cencelLabel"/>'
+    }, function () {
+    window[type + 'Delete'](id, event);
+    });
+    }
 
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
     }
     function formDelete(selectedList, event) {
-        var callback = {
-            success: function () {
-                refreshNavigator();
-            }
-        }
-        ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/form/delete', callback, 'formId=' + selectedList);
+    var callback = {
+    success: function () {
+    refreshNavigator();
+    }
+    }
+    ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/form/delete', callback, 'formId=' + selectedList);
     }
     function datalistDelete(selectedList, event) {
-        var callback = {
-            success: function () {
-                refreshNavigator();
-            }
-        }
-        ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/datalist/delete', callback, 'ids=' + selectedList);
+    var callback = {
+    success: function () {
+    refreshNavigator();
+    }
+    }
+    ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/datalist/delete', callback, 'ids=' + selectedList);
     }
     function userviewDelete(selectedList, event) {
-        var callback = {
-            success: function () {
-                refreshNavigator();
-            }
-        }
-        ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/userview/delete', callback, 'ids=' + selectedList);
+    var callback = {
+    success: function () {
+    refreshNavigator();
+    }
+    }
+    ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appDef.id}/${appDef.version}/userview/delete', callback, 'ids=' + selectedList);
     }
     function showInfo() {
-        $(".nv-link").each(function() {
-            var info = $(this).prop("title");
-            info = UI.escapeHTML(info);
-            info = info.replace(/: /g, ": <b>");
-            info = info.replace(/;/g, "</b><br/>");
-            info = info.replace(/\n/g, "<br/>");
-            var sub=$("<div class='nv-subinfo'></div>").append(info);  
-            $(this).append(sub);
-        });
-        $(".nv-link-name").addClass("nv-link-hilite");
-        $("#toggleInfo i").attr("class", "fa fa-list-ul");
+    $(".nv-link").each(function() {
+    var info = $(this).prop("title");
+    info = UI.escapeHTML(info);
+    info = info.replace(/: /g, ": <b>");
+    info = info.replace(/;/g, "</b><br/>");
+    info = info.replace(/\n/g, "<br/>");
+    var sub=$("<div class='nv-subinfo'></div>").append(info);  
+    $(this).append(sub);
+    });
+    $(".nv-link-name").addClass("nv-link-hilite");
+    $("#toggleInfo i").attr("class", "fa fa-list-ul");
     }
     function hideInfo() {
-        $(".nv-subinfo").remove();
-        $(".nv-link-name").removeClass("nv-link-hilite");
-        $("#toggleInfo i").attr("class", "fa fa-th-list");
+    $(".nv-subinfo").remove();
+    $(".nv-link-name").removeClass("nv-link-hilite");
+    $("#toggleInfo i").attr("class", "fa fa-th-list");
     }
     function toggleInfo() {
-        if ($(".nv-subinfo").length === 0) {
-            showInfo();
-        } else {
-            hideInfo();
-        }
+    if ($(".nv-subinfo").length === 0) {
+    showInfo();
+    } else {
+    hideInfo();
+    }
     }
 </script>

@@ -5,9 +5,9 @@ import org.joget.plugin.base.ExtDefaultPlugin;
 import org.joget.plugin.property.model.PropertyEditable;
 
 /**
- * A base abstract class used by Userview related plugin. Use the sub abstract class 
- * of corresponding plugin types in stead of this abstract class.
- * 
+ * A base abstract class used by Userview related plugin. Use the sub abstract
+ * class of corresponding plugin types in stead of this abstract class.
+ *
  */
 public abstract class ExtElement extends ExtDefaultPlugin implements PropertyEditable {
 
@@ -15,7 +15,8 @@ public abstract class ExtElement extends ExtDefaultPlugin implements PropertyEdi
 
     /**
      * Gets request parameters
-     * @return 
+     *
+     * @return
      */
     public Map getRequestParameters() {
         return requestParameters;
@@ -23,7 +24,8 @@ public abstract class ExtElement extends ExtDefaultPlugin implements PropertyEdi
 
     /**
      * Sets request parameters
-     * @param requestParameters 
+     *
+     * @param requestParameters
      */
     public void setRequestParameters(Map requestParameters) {
         this.requestParameters = requestParameters;
@@ -31,6 +33,7 @@ public abstract class ExtElement extends ExtDefaultPlugin implements PropertyEdi
 
     /**
      * Convenience method to get a parameter value
+     *
      * @param requestParameter
      * @return
      */
@@ -41,6 +44,7 @@ public abstract class ExtElement extends ExtDefaultPlugin implements PropertyEdi
 
     /**
      * Convenience method to get a parameter String value
+     *
      * @param requestParameter
      * @return Empty string instead of null.
      */
@@ -48,9 +52,9 @@ public abstract class ExtElement extends ExtDefaultPlugin implements PropertyEdi
         String result = null;
         Object value = (requestParameters != null) ? requestParameters.get(requestParameter) : "";
         if (value instanceof String) {
-            result = (String)value;
-        } else if (value instanceof String[] && ((String[])value).length > 0) {
-            result = ((String[])value)[0];
+            result = (String) value;
+        } else if (value instanceof String[] && ((String[]) value).length > 0) {
+            result = ((String[]) value)[0];
         }
         return result;
     }

@@ -17,8 +17,9 @@ import org.joget.apps.form.model.FormRowSet;
 import org.joget.apps.form.service.FormUtil;
 
 public class SelectBox extends Element implements FormBuilderPaletteElement, FormAjaxOptionsElement {
+
     private Element controlElement;
-    
+
     @Override
     public String getName() {
         return "Select Box";
@@ -36,6 +37,7 @@ public class SelectBox extends Element implements FormBuilderPaletteElement, For
 
     /**
      * Returns the option key=value pairs for this select box.
+     *
      * @param formData
      * @return
      */
@@ -43,7 +45,7 @@ public class SelectBox extends Element implements FormBuilderPaletteElement, For
         Collection<Map> optionMap = FormUtil.getElementPropertyOptionsMap(this, formData);
         return optionMap;
     }
-    
+
     @Override
     public FormData formatDataForValidation(FormData formData) {
         String[] paramValues = FormUtil.getRequestParameterValues(this, formData);
@@ -86,7 +88,7 @@ public class SelectBox extends Element implements FormBuilderPaletteElement, For
     @Override
     public String renderTemplate(FormData formData, Map dataModel) {
         String template = "selectBox.ftl";
-        
+
         dynamicOptions(formData);
 
         // set value
@@ -136,11 +138,11 @@ public class SelectBox extends Element implements FormBuilderPaletteElement, For
     public String getFormBuilderIcon() {
         return null;
     }
-    
+
     protected void dynamicOptions(FormData formData) {
         if (getControlElement(formData) != null) {
             setProperty("controlFieldParamName", FormUtil.getElementParameterName(getControlElement(formData)));
-            
+
             FormUtil.setAjaxOptionsElementProperties(this, formData);
         }
     }
@@ -155,4 +157,3 @@ public class SelectBox extends Element implements FormBuilderPaletteElement, For
         return controlElement;
     }
 }
-

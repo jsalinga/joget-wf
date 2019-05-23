@@ -76,7 +76,7 @@ public class DepartmentPermission extends UserviewPermission implements PluginWe
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
 
         if ("getOrgs".equals(action)) {
@@ -90,7 +90,7 @@ public class DepartmentPermission extends UserviewPermission implements PluginWe
                 empty.put("value", "");
                 empty.put("label", ResourceBundleUtil.getMessage("console.directory.user.empty.option.label"));
                 jsonArray.put(empty);
-                
+
                 Collection<Organization> orgList = directoryManager.getOrganizationsByFilter(null, "name", false, null, null);
 
                 for (Organization o : orgList) {

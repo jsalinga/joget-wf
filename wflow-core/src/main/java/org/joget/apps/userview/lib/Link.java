@@ -53,7 +53,7 @@ public class Link extends UserviewMenu {
         if (label != null) {
             label = StringUtil.stripHtmlRelaxed(label);
         }
-        
+
         if ("blank".equals(getPropertyString("target"))) {
             return "<a onclick=\"window.open('" + getPropertyString("url") + "');return false;\" class=\"menu-link\"><span>" + label + "</span></a>";
         } else if ("self".equals(getPropertyString("target"))) {

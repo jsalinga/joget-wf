@@ -5,5 +5,5 @@ package org.joget.apps.form.model;
  * Objects implementing this interface will be selectable in the Form Builder.
  */
 public interface FormLoadMultiRowElementBinder {
-    
+
 }

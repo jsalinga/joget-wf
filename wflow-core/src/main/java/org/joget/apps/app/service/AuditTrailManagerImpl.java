@@ -26,7 +26,7 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Service methods used to add audit trail and trigger audit trail event.
- * 
+ *
  */
 @Service("auditTrailManager")
 public class AuditTrailManagerImpl implements AuditTrailManager {
@@ -38,17 +38,17 @@ public class AuditTrailManagerImpl implements AuditTrailManager {
     @Autowired
     private AuditTrailDao auditTrailDao;
 
-    public static final String AUDIT_TRAIL_PLUGIN_NAME = "AUDIT_TRAIL_PLUGIN_NAME"; 
-            
+    public static final String AUDIT_TRAIL_PLUGIN_NAME = "AUDIT_TRAIL_PLUGIN_NAME";
+
     private static ThreadLocal pluginList = new ThreadLocal();
-    
+
     private static ThreadLocal pluginPropertiesList = new ThreadLocal() {
         @Override
         protected synchronized Object initialValue() {
             return new HashMap<String, List<Map>>();
         }
     };
-    
+
     /**
      * Used by system to clear audit trail plugin cache
      */
@@ -58,25 +58,26 @@ public class AuditTrailManagerImpl implements AuditTrailManager {
     }
 
     /**
-     * Simplify method to add audit trail and trigger audit trail event without 
+     * Simplify method to add audit trail and trigger audit trail event without
      * passing method parameters and returned object
-     * 
+     *
      * @param clazz
      * @param method
-     * @param message 
+     * @param message
      */
     public void addAuditTrail(String clazz, String method, String message) {
         addAuditTrail(clazz, method, message, null, null, null);
     }
-    
+
     /**
      * Method to add audit trail and trigger audit trail event
+     *
      * @param clazz
      * @param method
      * @param message
      * @param paramTypes
      * @param args
-     * @param returnObject 
+     * @param returnObject
      */
     public void addAuditTrail(String clazz, String method, String message, Class[] paramTypes, Object[] args, Object returnObject) {
         AuditTrail auditTrail = new AuditTrail();
@@ -88,31 +89,31 @@ public class AuditTrailManagerImpl implements AuditTrailManager {
         auditTrail.setArgs(args);
         auditTrail.setReturnObject(returnObject);
         auditTrail.setTimestamp(new Date());
-        
+
         AppDefinition appDef = AppUtil.getCurrentAppDefinition();
         if (appDef != null) {
             auditTrail.setAppDef(appDef);
             auditTrail.setAppId(appDef.getId());
             auditTrail.setAppVersion(appDef.getVersion().toString());
         }
-        
+
         if (dbLog(auditTrail)) {
             auditTrailDao.addAuditTrail(auditTrail);
         }
         executePlugin(auditTrail);
     }
-    
+
     protected boolean dbLog(AuditTrail auditTrail) {
         String c = auditTrail.getClazz();
         String m = auditTrail.getMethod();
-        
+
         if (c != null && m != null) {
             //login info
             if (m.equals("authenticate") || m.equals("logout") || c.startsWith("org.joget.apps.app.") || c.startsWith("org.joget.directory.dao.") || c.endsWith("WorkflowManagerImpl") || c.endsWith("WorkflowToolActivityHandler") || c.endsWith("WorkflowAssignmentManager")) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -124,20 +125,20 @@ public class AuditTrailManagerImpl implements AuditTrailManager {
             if (plugins == null) {
                 Collection<Plugin> availablePluginsList = pluginManager.list(AuditTrailPlugin.class);
                 plugins = new HashMap<String, AuditTrailPlugin>();
-                for (Plugin p: availablePluginsList) {
+                for (Plugin p : availablePluginsList) {
                     plugins.put(p.getName(), (AuditTrailPlugin) p);
                 }
                 pluginList.set(plugins);
             }
-            
+
             //get available properties setting for audit trail plugin, implemented this way for future development to accept multiple same plugin with different setting.
             String appId = appDef.getAppId();
             List<Map> propertiesList = ((HashMap<String, List<Map>>) pluginPropertiesList.get()).get(appId);
             if (propertiesList == null) {
                 propertiesList = new ArrayList<Map>();
-                
+
                 Collection<PluginDefaultProperties> pluginDefaultPropertiesList = appDef.getPluginDefaultPropertiesList();
-                
+
                 if (pluginDefaultPropertiesList != null && !pluginDefaultPropertiesList.isEmpty()) {
                     for (PluginDefaultProperties prop : pluginDefaultPropertiesList) {
                         if (plugins.containsKey(prop.getPluginName())) {
@@ -147,7 +148,8 @@ public class AuditTrailManagerImpl implements AuditTrailManager {
                             if (!(plugin instanceof PropertyEditable)) {
                                 try {
                                     propertiesMap = CsvUtil.getPluginPropertyMap(prop.getPluginProperties());
-                                } catch (IOException e) {}
+                                } catch (IOException e) {
+                                }
                             } else {
                                 String json = prop.getPluginProperties();
 
@@ -163,14 +165,14 @@ public class AuditTrailManagerImpl implements AuditTrailManager {
                 }
                 ((HashMap<String, List<Map>>) pluginPropertiesList.get()).put(appId, propertiesList);
             }
-            
+
             //execute plugins
             for (Map props : propertiesList) {
                 props.put("auditTrail", auditTrail);
                 props.put("pluginManager", pluginManager);
-                
+
                 AuditTrailPlugin plugin = (AuditTrailPlugin) plugins.get(props.get(AUDIT_TRAIL_PLUGIN_NAME).toString());
-                
+
                 try {
                     if (plugin instanceof PropertyEditable) {
                         ((PropertyEditable) plugin).setProperties(props);

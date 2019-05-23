@@ -61,7 +61,7 @@ import org.springframework.web.servlet.LocaleResolver;
 
 /**
  * Service methods used to manage plugins
- * 
+ *
  */
 public class PluginManager implements ApplicationContextAware {
 
@@ -76,9 +76,9 @@ public class PluginManager implements ApplicationContextAware {
     private Map<String, Template> templateCache = new HashMap<String, Template>();
     private List<String> noResourceBundleCache = new ArrayList<String>();
     private Map<String, ResourceBundle> resourceBundleCache = new HashMap<String, ResourceBundle>();
-    
+
     public final static String ESCAPE_JAVASCRIPT = "javascript";
-    
+
     /**
      * Used by system to initialize Plugin manager
      */
@@ -97,15 +97,16 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Used by system to retrieves a list of black list plugin classname 
+     * Used by system to retrieves a list of black list plugin classname
      */
     public Set<String> getBlackList() {
         return blackList;
     }
 
     /**
-     * Used by system to sets a list of black list plugin classname 
-     * @param blackList 
+     * Used by system to sets a list of black list plugin classname
+     *
+     * @param blackList
      */
     public void setBlackList(Set<String> blackList) {
         this.blackList = blackList;
@@ -113,7 +114,8 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Used by system to retrieves a list of custom scanning packages
-     * @return 
+     *
+     * @return
      */
     public Set<String> getScanPackageList() {
         return scanPackageList;
@@ -121,7 +123,8 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Used by system to sets a list of custom scanning packages
-     * @param blackList 
+     *
+     * @param blackList
      */
     public void setScanPackageList(Set<String> scanPackageList) {
         this.scanPackageList = scanPackageList;
@@ -160,13 +163,13 @@ public class PluginManager implements ApplicationContextAware {
                 if (in != null) {
                     in.close();
                 }
-            } catch(IOException e) {                
+            } catch (IOException e) {
             }
         }
 
         // workaround for log4j classloading issues
         System.setProperty("log4j.ignoreTCL", "true");
-        
+
         // Create a case-insensitive configuration property map.
         Map configMap = new StringMap();
         configMap.putAll(config);
@@ -239,7 +242,6 @@ public class PluginManager implements ApplicationContextAware {
             startBundle(bundle);
         }
 
-
     }
 
     protected void recurseDirectory(Collection<URL> urlList, File baseDirFile) {
@@ -279,7 +281,7 @@ public class PluginManager implements ApplicationContextAware {
             return null;
         }
     }
-    
+
     protected void clearCache() {
         pluginCache.clear();
         osgiPluginClassCache.clear();
@@ -303,6 +305,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * List registered plugins
+     *
      * @return
      */
     public Collection<Plugin> list() {
@@ -310,9 +313,12 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Returns a list of plugins, both from the OSGI container and the classpath.
-     * Plugins from the OSGI container will take priority if there are conflicting classes.
-     * @param clazz Optional filter for type of plugins to return, null will return all.
+     * Returns a list of plugins, both from the OSGI container and the
+     * classpath. Plugins from the OSGI container will take priority if there
+     * are conflicting classes.
+     *
+     * @param clazz Optional filter for type of plugins to return, null will
+     * return all.
      * @return
      */
     public Collection<Plugin> list(Class clazz) {
@@ -333,7 +339,9 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Returns a list of plugins from the OSGI container only.
-     * @param clazz Optional filter for type of plugins to return, null will return all.
+     *
+     * @param clazz Optional filter for type of plugins to return, null will
+     * return all.
      * @return
      */
     public Collection<Plugin> listOsgiPlugin(Class clazz) {
@@ -351,9 +359,12 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Returns a map of plugins with class name as key, both from the OSGI container and the classpath.
-     * Plugins from the OSGI container will take priority if there are conflicting classes.
-     * @param clazz Optional filter for type of plugins to return, null will return all.
+     * Returns a map of plugins with class name as key, both from the OSGI
+     * container and the classpath. Plugins from the OSGI container will take
+     * priority if there are conflicting classes.
+     *
+     * @param clazz Optional filter for type of plugins to return, null will
+     * return all.
      * @return
      */
     public Map<String, Plugin> loadPluginMap(Class clazz) {
@@ -365,9 +376,12 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Returns a list of plugins, both from the OSGI container and the classpath.
-     * Plugins from the OSGI container will take priority if there are conflicting classes.
-     * @param clazz Optional filter for type of plugins to return, null will return all.
+     * Returns a list of plugins, both from the OSGI container and the
+     * classpath. Plugins from the OSGI container will take priority if there
+     * are conflicting classes.
+     *
+     * @param clazz Optional filter for type of plugins to return, null will
+     * return all.
      * @return A Map of name=pluginObject
      */
     protected Map<String, Plugin> internalLoadPluginMap(Class clazz) {
@@ -380,7 +394,7 @@ public class PluginManager implements ApplicationContextAware {
         provider.addIncludeFilter(new AssignableTypeFilter(classFilter));
         Set<BeanDefinition> components = provider.findCandidateComponents("org.joget");
         if (scanPackageList != null) {
-            for (String scanPackage: scanPackageList) {
+            for (String scanPackage : scanPackageList) {
                 components.addAll(provider.findCandidateComponents(scanPackage));
             }
         }
@@ -388,7 +402,7 @@ public class PluginManager implements ApplicationContextAware {
         List<BeanDefinition> componentList = new ArrayList(components);
         Collections.sort(componentList, new Comparator() {
             public int compare(Object o1, Object o2) {
-                return ((BeanDefinition)o1).getBeanClassName().compareTo(((BeanDefinition)o2).getBeanClassName());
+                return ((BeanDefinition) o1).getBeanClassName().compareTo(((BeanDefinition) o2).getBeanClassName());
             }
         });
         for (BeanDefinition component : componentList) {
@@ -422,6 +436,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Load all plugins from the OSGI container
+     *
      * @return
      */
     protected Collection<Plugin> loadOsgiPlugins() {
@@ -446,6 +461,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Disable plugin
+     *
      * @param name
      */
     public boolean disable(String name) {
@@ -466,14 +482,15 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Install a new plugin
+     *
      * @return
      */
     public boolean upload(String filename, InputStream in) {
         String location = null;
         File outputFile = null;
-        
+
         filename = SecurityUtil.normalizedFileName(filename);
-        
+
         try {
             // check filename
             if (filename == null || filename.trim().length() == 0) {
@@ -562,6 +579,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Uninstall/remove all plugin, option to deleting the plugin file
+     *
      * @param name
      * @return
      */
@@ -574,6 +592,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Uninstall/remove a plugin, and delete the plugin file
+     *
      * @param name
      * @return
      */
@@ -583,6 +602,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Uninstall/remove a plugin, option to deleting the plugin file
+     *
      * @param name
      * @return
      */
@@ -616,7 +636,9 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Returns a plugin, from either the OSGI container and the classpath.
-     * Plugins from the OSGI container will take priority if there are conflicting classes.
+     * Plugins from the OSGI container will take priority if there are
+     * conflicting classes.
+     *
      * @param name Class name of the required plugin
      * @return
      */
@@ -624,7 +646,7 @@ public class PluginManager implements ApplicationContextAware {
         if (blackList != null && blackList.contains(name)) {
             return null;
         }
-        
+
         if (name != null && name.trim().length() > 0 && !"null".equalsIgnoreCase(name)) {
             Plugin plugin = loadOsgiPlugin(name);
             if (plugin == null) {
@@ -638,6 +660,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Retrieve a plugin from the OSGI container
+     *
      * @param name Fully qualified class name for the required plugin
      * @return
      */
@@ -679,6 +702,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Retrieve a plugin using the system classloader
+     *
      * @param name Fully qualified class name for the required plugin
      * @return
      */
@@ -695,7 +719,9 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Retrieves an InputStream to a resource from a plugin. The plugin may either be from OSGI container or system classpath.
+     * Retrieves an InputStream to a resource from a plugin. The plugin may
+     * either be from OSGI container or system classpath.
+     *
      * @param pluginName
      * @param resourceUrl
      * @return
@@ -703,7 +729,7 @@ public class PluginManager implements ApplicationContextAware {
      */
     public InputStream getPluginResource(String pluginName, String resourceUrl) throws IOException {
         InputStream result = null;
-        
+
         URL url = getPluginResourceURL(pluginName, resourceUrl);
         if (url != null) {
             // get inputstream from url
@@ -716,7 +742,9 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Reads a resource from a plugin. java.util.Formatter text patterns supported.
+     * Reads a resource from a plugin. java.util.Formatter text patterns
+     * supported.
+     *
      * @param pluginName
      * @param resourceUrl
      * @param arguments
@@ -760,7 +788,7 @@ public class PluginManager implements ApplicationContextAware {
                     LogUtil.error(PluginManager.class.getName(), e, "Error closing IO");
                 }
             }
-            
+
             // set and return output
             if (stream != null) {
                 output = new String(stream.toByteArray());
@@ -792,9 +820,11 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Reads a message bundle from a plugin.
+     *
      * @param pluginName
      * @param translationPath
-     * @return null if the resource bundle is not found or in the case of an exception
+     * @return null if the resource bundle is not found or in the case of an
+     * exception
      */
     public ResourceBundle getPluginMessageBundle(String pluginName, String translationPath) {
         String cacheKey = pluginName + "_" + translationPath;
@@ -827,27 +857,29 @@ public class PluginManager implements ApplicationContextAware {
         }
         return null;
     }
-    
+
     /**
-     * Method used to parse the message key to message in a content based on plugin
-     * message bundle
+     * Method used to parse the message key to message in a content based on
+     * plugin message bundle
+     *
      * @param content
      * @param pluginName
      * @param translationPath
-     * @return 
+     * @return
      */
     public String processPluginTranslation(String content, String pluginName, String translationPath) {
         return processPluginTranslation(content, pluginName, translationPath, null);
     }
 
     /**
-     * Method used to parse the message key to message in a content based on plugin
-     * message bundle. Option to escape javascript in the message 
+     * Method used to parse the message key to message in a content based on
+     * plugin message bundle. Option to escape javascript in the message
+     *
      * @param content
      * @param pluginName
      * @param translationPath
      * @param escapeType
-     * @return 
+     * @return
      */
     public String processPluginTranslation(String content, String pluginName, String translationPath, String escapeType) {
         if (!(content != null && content.indexOf("@@") >= 0)) {
@@ -864,7 +896,7 @@ public class PluginManager implements ApplicationContextAware {
 
         if (!keyList.isEmpty()) {
             ResourceBundle bundle = null;
-            
+
             if (translationPath != null && !translationPath.isEmpty()) {
                 bundle = getPluginMessageBundle(pluginName, translationPath);
             }
@@ -893,10 +925,11 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Method used to get message from plugin message bundle
+     *
      * @param key
      * @param pluginName
      * @param translationPath
-     * @return 
+     * @return
      */
     public String getMessage(String key, String pluginName, String translationPath) {
         return processPluginTranslation("@@" + key + "@@", pluginName, translationPath);
@@ -904,11 +937,12 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Method used to gets freemarker template from plugin jar
+     *
      * @param data
      * @param pluginName
      * @param templatePath
      * @param translationPath
-     * @return 
+     * @return
      */
     public String getPluginFreeMarkerTemplate(Map data, final String pluginName, final String templatePath, String translationPath) {
         // add request into data model
@@ -925,7 +959,7 @@ public class PluginManager implements ApplicationContextAware {
                 data.put("request", new MockRequest());
             }
         }
-        
+
         String result = "";
         try {
             String cacheKey = pluginName + "_" + templatePath;
@@ -985,7 +1019,9 @@ public class PluginManager implements ApplicationContextAware {
     }
 
     /**
-     * Retrieves a URL to a resource from a plugin. The plugin may either be from OSGI container or system classpath.
+     * Retrieves a URL to a resource from a plugin. The plugin may either be
+     * from OSGI container or system classpath.
+     *
      * @param pluginName
      * @param pluginName
      * @param resourceUrl
@@ -1018,6 +1054,7 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Execute a plugin
+     *
      * @param name The fully qualified class name of the plugin
      * @param properties
      * @return
@@ -1060,12 +1097,12 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Method used to test a plugin
-     * 
+     *
      * @param name
      * @param location
      * @param properties
      * @param override
-     * @return 
+     * @return
      */
     public Object testPlugin(String name, String location, Map properties, boolean override) {
         LogUtil.info(PluginManager.class.getName(), "====testPlugin====");
@@ -1114,7 +1151,8 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Methods used by Felix Framework
-     * @param args 
+     *
+     * @param args
      */
     public static void main(String[] args) {
 //        String pluginDirectory = "target/wflow-bundles";
@@ -1171,10 +1209,11 @@ public class PluginManager implements ApplicationContextAware {
             pm.shutdown();
         }
     }
-    
+
     /**
      * Gets the current Http Request
-     * @return 
+     *
+     * @return
      */
     public HttpServletRequest getHttpServletRequest() {
         try {
@@ -1191,8 +1230,9 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Gets a class bean from ApplicationContext
+     *
      * @param beanName
-     * @return 
+     * @return
      */
     public Object getBean(String beanName) {
         Object bean = null;
@@ -1204,14 +1244,15 @@ public class PluginManager implements ApplicationContextAware {
 
     /**
      * Method used for system to set ApplicationContext
+     *
      * @param context
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext appContext) throws BeansException {
         this.applicationContext = appContext;
         refresh();
     }
-    
+
     public static Map<String, String> getPluginType() {
         Map<String, String> pluginTypeMap = new ListOrderedMap();
         pluginTypeMap.put("org.joget.plugin.base.AuditTrailPlugin", ResourceBundleUtil.getMessage("setting.plugin.auditTrail"));
@@ -1236,10 +1277,10 @@ public class PluginManager implements ApplicationContextAware {
         pluginTypeMap.put("org.joget.apps.userview.model.UserviewTheme", ResourceBundleUtil.getMessage("setting.plugin.userviewTheme"));
         pluginTypeMap.put("org.joget.plugin.base.PluginWebSupport", ResourceBundleUtil.getMessage("setting.plugin.webService"));
         pluginTypeMap.put("org.joget.apps.app.service.MfaAuthenticator", ResourceBundleUtil.getMessage("setting.plugin.mfaAuthenticator"));
-        
+
         return PagingUtils.sortMapByValue(pluginTypeMap, false);
     }
-    
+
     public boolean isOsgi(String classname) {
         return osgiPluginClassCache.containsKey(classname);
     }

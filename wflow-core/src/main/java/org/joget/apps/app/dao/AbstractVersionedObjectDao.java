@@ -15,6 +15,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Loads an object by unique ID (primary key)
+     *
      * @param uid
      * @return
      */
@@ -29,6 +30,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Find the latest version of an object by ID
+     *
      * @param id
      * @return
      */
@@ -46,6 +48,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Find a specific version of an object by ID
+     *
      * @param id
      * @param version if null, the latest version is returned.
      * @return
@@ -79,6 +82,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Find the latest versions of matching objects
+     *
      * @param id Optional ID to filter
      * @param appId Optional package ID to filter
      * @param name Optional name to filter
@@ -125,6 +129,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Count the latest versions of matching objects
+     *
      * @param id Optional ID to filter
      * @param appId Optional package ID to filter
      * @param name Optional name to filter
@@ -152,6 +157,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Gets the latest version for an object
+     *
      * @param id
      * @return
      */
@@ -172,6 +178,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Find unique forms by specific version
+     *
      * @param id
      * @param appId
      * @param version
@@ -191,6 +198,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Total row count by specific version
+     *
      * @param id
      * @param appId
      * @param version
@@ -206,6 +214,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Generates a HQL query string for the optional conditions
+     *
      * @param id
      * @param appId
      * @param version
@@ -232,6 +241,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Generates an array of parameters for the optional conditions
+     *
      * @param id
      * @param appId
      * @param version
@@ -259,6 +269,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Find the versions for a specific ID.
+     *
      * @param id
      * @param sort
      * @param desc
@@ -278,6 +289,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Total number of versions for a specific ID.
+     *
      * @param id
      * @return
      */
@@ -293,6 +305,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Save/update an object
+     *
      * @param object
      */
     public void saveOrUpdate(T object) {
@@ -305,6 +318,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Delete an object by primary key
+     *
      * @param uid
      */
     public void delete(T obj) {
@@ -315,6 +329,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Delete a specific object version
+     *
      * @param id
      * @param version
      */
@@ -325,6 +340,7 @@ public abstract class AbstractVersionedObjectDao<T extends AbstractVersionedObje
 
     /**
      * Delete all versions of an object
+     *
      * @param appId
      */
     public void deleteAllVersions(String id) {

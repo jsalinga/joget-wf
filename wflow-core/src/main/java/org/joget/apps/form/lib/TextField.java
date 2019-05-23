@@ -13,6 +13,7 @@ import org.joget.commons.util.SecurityUtil;
 import org.joget.commons.util.StringUtil;
 
 public class TextField extends Element implements FormBuilderPaletteElement {
+
     protected String submittedValue = null;
     protected String validationValue = null;
 
@@ -37,9 +38,9 @@ public class TextField extends Element implements FormBuilderPaletteElement {
 
         // set value
         String value = FormUtil.getElementPropertyValue(this, formData);
-        
+
         value = SecurityUtil.decrypt(value);
-        
+
         if (FormUtil.isReadonly(this, formData) && "true".equalsIgnoreCase(getPropertyString("readonlyLabel"))) {
             String valueLabel = value;
             if (!getPropertyString("style").isEmpty() && "true".equalsIgnoreCase(getPropertyString("storeNumeric"))) {
@@ -48,12 +49,11 @@ public class TextField extends Element implements FormBuilderPaletteElement {
             dataModel.put("valueLabel", valueLabel);
         }
         dataModel.put("value", value);
-        
 
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
         return html;
     }
-    
+
     @Override
     public FormData formatDataForValidation(FormData formData) {
         if (!getPropertyString("style").isEmpty()) {
@@ -61,7 +61,7 @@ public class TextField extends Element implements FormBuilderPaletteElement {
             if (id != null) {
                 submittedValue = FormUtil.getElementPropertyValue(this, formData);
                 validationValue = submittedValue;
-                
+
                 validationValue = validationValue.replaceAll(" ", "");
                 if ("EURO".equalsIgnoreCase(getPropertyString("style"))) {
                     validationValue = validationValue.replaceAll(StringUtil.escapeRegex("."), "");
@@ -75,7 +75,7 @@ public class TextField extends Element implements FormBuilderPaletteElement {
         }
         return formData;
     }
-    
+
     @Override
     public FormRowSet formatData(FormData formData) {
         FormRowSet rowSet = null;
@@ -85,7 +85,7 @@ public class TextField extends Element implements FormBuilderPaletteElement {
         if (id != null) {
             String value = FormUtil.getElementPropertyValue(this, formData);
             if (value != null) {
-                
+
                 if (!getPropertyString("style").isEmpty()) {
                     if (validationValue == null) {
                         formatDataForValidation(formData);
@@ -96,11 +96,11 @@ public class TextField extends Element implements FormBuilderPaletteElement {
                         value = submittedValue;
                     }
                 }
-                
+
                 if ("true".equalsIgnoreCase(getPropertyString("encryption"))) {
                     value = SecurityUtil.encrypt(value);
                 }
-                
+
                 // set value into Properties and FormRowSet object
                 FormRow result = new FormRow();
                 result.setProperty(id, value);
@@ -134,7 +134,7 @@ public class TextField extends Element implements FormBuilderPaletteElement {
             encryption = ",{name : 'encryption', label : '@@form.textfield.encryption@@', type : 'checkbox', value : 'false', ";
             encryption += "options : [{value : 'true', label : '' }]}";
         }
-        
+
         return AppUtil.readPluginResource(getClass().getName(), "/properties/form/textField.json", new Object[]{encryption}, true, "message/form/TextField");
     }
 

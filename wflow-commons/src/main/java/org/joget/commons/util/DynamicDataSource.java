@@ -14,7 +14,7 @@ public class DynamicDataSource extends XADataSource {
     public static final String PASSWORD = "Password";
     public static final String DRIVER = "Driver";
     private String datasourceName;
-    
+
     @Override
     public Connection getConnection() throws SQLException {
         Properties properties = DynamicDataSourceManager.getProperties();
@@ -23,9 +23,9 @@ public class DynamicDataSource extends XADataSource {
         String tempUser = properties.getProperty(getDatasourceName() + USER);
         String tempPassword = properties.getProperty(getDatasourceName() + PASSWORD);
 
-        if (tempDriver == null || tempDriver.length() == 0 ||
-                tempUrl == null || tempUrl.length() == 0 ||
-                tempUser == null || tempUser.length() == 0) {
+        if (tempDriver == null || tempDriver.length() == 0
+                || tempUrl == null || tempUrl.length() == 0
+                || tempUser == null || tempUser.length() == 0) {
             throw new SQLException("No database profile configured");
         }
 
@@ -47,19 +47,20 @@ public class DynamicDataSource extends XADataSource {
         }
         return super.getConnection();
     }
-    
+
     protected void setProperties(Properties properties) {
         for (Map.Entry<Object, Object> e : properties.entrySet()) {
             String key = (String) e.getKey();
             String value = (String) e.getValue();
-            
+
             if (key.endsWith(DRIVER) || key.endsWith(URL) || key.endsWith(USER) || key.endsWith(PASSWORD) || key.endsWith("profileName") || key.endsWith("encryption")) {
                 continue;
             }
-            
+
             try {
                 BeanUtils.setProperty(this, key, value);
-            } catch (Exception ex) {/*ignore*/}
+            } catch (Exception ex) {/*ignore*/
+            }
         }
     }
 

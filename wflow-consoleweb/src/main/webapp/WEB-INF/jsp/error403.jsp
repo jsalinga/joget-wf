@@ -20,7 +20,7 @@
             <div id="icon"><i class="warning fa fa-exclamation-circle" aria-hidden="true"></i></div>
             <div id="content">
                 <h2>
-                <%= ResourceBundleUtil.getMessage("general.error.error403Description", locale) %>
+                    <%= ResourceBundleUtil.getMessage("general.error.error403Description", locale) %>
                 </h2>
                 <p>&nbsp;</p>
                 <%= ResourceBundleUtil.getMessage("general.error.error403", locale) %>

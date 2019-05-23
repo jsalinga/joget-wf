@@ -27,7 +27,7 @@ public class PluginResourceServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         // reset profile and set hostname
         HostManager.initHost();
 
@@ -60,7 +60,7 @@ public class PluginResourceServlet extends HttpServlet {
                 }
 
                 // get resource input stream
-                PluginManager pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+                PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
                 if (pluginManager != null) {
                     input = pluginManager.getPluginResource(pluginName, resourceUrl);
                 }
@@ -72,7 +72,7 @@ public class PluginResourceServlet extends HttpServlet {
                     if (contentType != null) {
                         response.setContentType(contentType);
                     }
-                    
+
                     // write output
                     stream = response.getOutputStream();
                     byte[] bbuf = new byte[BUFFER_SIZE];
@@ -105,10 +105,10 @@ public class PluginResourceServlet extends HttpServlet {
 
     @Override
     public void destroy() {
-        PluginManager pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+        PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
         if (pluginManager != null) {
             pluginManager.shutdown();
         }
     }
-    
+
 }

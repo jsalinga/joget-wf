@@ -19,13 +19,13 @@ public class ResourceBundleMessageDao extends AbstractSpringDao {
     }
 
     public void saveOrUpdate(ResourceBundleMessage message) {
-        String cacheKey = getCacheKey(message.getKey(),message.getLocale());
+        String cacheKey = getCacheKey(message.getKey(), message.getLocale());
         cache.remove(cacheKey);
         super.saveOrUpdate(ENTITY_NAME, message);
     }
 
     public void delete(ResourceBundleMessage message) {
-        String cacheKey = getCacheKey(message.getKey(),message.getLocale());
+        String cacheKey = getCacheKey(message.getKey(), message.getLocale());
         cache.remove(cacheKey);
         super.delete(ENTITY_NAME, message);
     }
@@ -36,7 +36,7 @@ public class ResourceBundleMessageDao extends AbstractSpringDao {
 
     public ResourceBundleMessage getMessage(String key, String locale) {
         Map<String, ResourceBundleMessage> messageMap;
-        String cacheKey = getCacheKey(key,locale);
+        String cacheKey = getCacheKey(key, locale);
         Element element = cache.get(cacheKey);
         if (element == null) {
             messageMap = new HashMap<String, ResourceBundleMessage>();
@@ -73,7 +73,7 @@ public class ResourceBundleMessageDao extends AbstractSpringDao {
         return super.count(ENTITY_NAME, condition, params);
     }
 
-    private String getCacheKey(String key, String locale){
-        return DynamicDataSourceManager.getCurrentProfile()+locale;
+    private String getCacheKey(String key, String locale) {
+        return DynamicDataSourceManager.getCurrentProfile() + locale;
     }
 }

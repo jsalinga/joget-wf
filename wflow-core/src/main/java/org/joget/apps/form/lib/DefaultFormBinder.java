@@ -49,7 +49,7 @@ public class DefaultFormBinder extends FormBinder implements FormLoadBinder, For
 
     @Override
     public FormRowSet load(Element element, String primaryKey, FormData formData) {
-        
+
         FormRowSet results = null;
         if (primaryKey != null && primaryKey.trim().length() > 0) {
             AppService appService = (AppService) FormUtil.getApplicationContext().getBean("appService");
@@ -69,7 +69,7 @@ public class DefaultFormBinder extends FormBinder implements FormLoadBinder, For
                         }
                     }
                 }
-                
+
                 if (results == null) {
                     results = appService.loadFormDataWithoutTransaction(form, primaryKey);
                     results.setReferenceTable(tableName);
@@ -103,8 +103,9 @@ public class DefaultFormBinder extends FormBinder implements FormLoadBinder, For
 
     /**
      * Returns the Form that is tied to this binder.
+     *
      * @param element
-     * @return 
+     * @return
      */
     protected Form findFormForLoadBinder(Element element) {
         Form form = null;
@@ -157,8 +158,8 @@ public class DefaultFormBinder extends FormBinder implements FormLoadBinder, For
         return form;
     }
 
-	public FormRowSet store(Element element, FormRowSet rows, FormData formData, String blockchainTransactionHash,
-			String blockchainDataHash) {
+    public FormRowSet store(Element element, FormRowSet rows, FormData formData, String blockchainTransactionHash,
+            String blockchainDataHash) {
 
         if (rows != null && !rows.isEmpty()) {
             // find root form
@@ -177,6 +178,6 @@ public class DefaultFormBinder extends FormBinder implements FormLoadBinder, For
             rows = appService.storeFormData(form, rows, primaryKeyValue);
         }
         return rows;
-    
-	}
+
+    }
 }

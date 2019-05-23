@@ -33,11 +33,11 @@ public class CustomHTML extends Element implements FormBuilderPaletteElement, Fo
     public String getDescription() {
         return "Custom HTML Element";
     }
-    
+
     @Override
     public Collection<String> getDynamicFieldNames() {
         Collection<String> fieldNames = new ArrayList<String>();
-        
+
         String customHTML = (String) getProperty("value");
 
         if (customHTML != null && !customHTML.isEmpty()) {
@@ -93,7 +93,7 @@ public class CustomHTML extends Element implements FormBuilderPaletteElement, Fo
     public FormRowSet formatData(FormData formData) {
         FormRowSet rowSet = null;
         FormRow result = null;
-        
+
         for (String name : getDynamicFieldNames()) {
             //create dummy element object
             Element element = new TextField();
@@ -282,7 +282,7 @@ public class CustomHTML extends Element implements FormBuilderPaletteElement, Fo
                     customHTML = customHTML.replaceFirst(StringUtil.escapeRegex(selectString), StringUtil.escapeRegex(newSelectString));
                 }
             }
-            
+
             //remove scripting in builder move
             if (dataModel.containsKey("elementMetaData") && !dataModel.get("elementMetaData").toString().isEmpty()) {
                 Pattern pattern = Pattern.compile("<script[^>]*>.*?</script>", Pattern.DOTALL);
@@ -293,7 +293,7 @@ public class CustomHTML extends Element implements FormBuilderPaletteElement, Fo
                 }
             }
         }
-        
+
         dataModel.put("value", customHTML);
 
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);

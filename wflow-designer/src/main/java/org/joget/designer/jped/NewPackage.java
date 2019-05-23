@@ -19,7 +19,7 @@ public class NewPackage extends ActionBase {
     }
 
     public void actionPerformed(ActionEvent e) {
-        JaWEController jc=JaWEManager.getInstance().getJaWEController();
+        JaWEController jc = JaWEManager.getInstance().getJaWEController();
         if (jc.tryToClosePackage(jc.getMainPackageId(), true)) {
             //jc.newPackage(JaWEConstants.PACKAGE_DEFAULT);
             NewPackageWizardList wizz = new NewPackageWizardList(jc);

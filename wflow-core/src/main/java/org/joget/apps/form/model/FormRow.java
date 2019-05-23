@@ -13,6 +13,7 @@ import org.joget.commons.util.TimeZoneUtil;
  * Represents a row of form data
  */
 public class FormRow extends Properties {
+
     Map<String, String[]> tempFilePathMap;
     Map<String, String[]> deleteFilePathMap;
 
@@ -26,6 +27,7 @@ public class FormRow extends Properties {
 
     /**
      * Used for storing/loading data via hibernate
+     *
      * @return
      */
     public Map getCustomProperties() {
@@ -47,6 +49,7 @@ public class FormRow extends Properties {
     //--- Standard row metadata properties below
     /**
      * Identifier/primary key for the row
+     *
      * @return
      */
     public String getId() {
@@ -63,6 +66,7 @@ public class FormRow extends Properties {
 
     /**
      * Date the row was created
+     *
      * @return
      */
     public Date getDateCreated() {
@@ -84,6 +88,7 @@ public class FormRow extends Properties {
 
     /**
      * Date the row was created
+     *
      * @return
      */
     public Date getDateModified() {
@@ -102,9 +107,10 @@ public class FormRow extends Properties {
             remove(FormUtil.PROPERTY_DATE_MODIFIED);
         }
     }
-    
+
     /**
-     * Username who created the row 
+     * Username who created the row
+     *
      * @return
      */
     public String getCreatedBy() {
@@ -118,9 +124,10 @@ public class FormRow extends Properties {
             remove(FormUtil.PROPERTY_CREATED_BY);
         }
     }
-    
+
     /**
-     * Username who last modified the row 
+     * Username who last modified the row
+     *
      * @return
      */
     public String getModifiedBy() {
@@ -134,11 +141,11 @@ public class FormRow extends Properties {
             remove(FormUtil.PROPERTY_MODIFIED_BY);
         }
     }
-    
+
     public String getBlockchainDataHash() {
-    	 return getProperty(FormUtil.PROPERTY_DATA_HASH);
+        return getProperty(FormUtil.PROPERTY_DATA_HASH);
     }
-    
+
     public void setBlockchainDataHash(String dataHash) {
         if (dataHash != null) {
             put(FormUtil.PROPERTY_DATA_HASH, dataHash);
@@ -146,23 +153,22 @@ public class FormRow extends Properties {
             remove(FormUtil.PROPERTY_DATA_HASH);
         }
     }
-    
-    
+
     public String getBlockchainTransactionHash() {
-   	 return getProperty(FormUtil.PROPERTY_TRANSACTION_HASH);
-   }
-   
-   public void setBlockchainTransactionHash(String TransactionHash) {
-       if (TransactionHash != null) {
-           put(FormUtil.PROPERTY_TRANSACTION_HASH, TransactionHash);
-       } else {
-           remove(FormUtil.PROPERTY_TRANSACTION_HASH);
-       }
-   }
-    
-    
+        return getProperty(FormUtil.PROPERTY_TRANSACTION_HASH);
+    }
+
+    public void setBlockchainTransactionHash(String TransactionHash) {
+        if (TransactionHash != null) {
+            put(FormUtil.PROPERTY_TRANSACTION_HASH, TransactionHash);
+        } else {
+            remove(FormUtil.PROPERTY_TRANSACTION_HASH);
+        }
+    }
+
     /**
-     * User name who created the row 
+     * User name who created the row
+     *
      * @return
      */
     public String getCreatedByName() {
@@ -176,9 +182,10 @@ public class FormRow extends Properties {
             remove(FormUtil.PROPERTY_CREATED_BY_NAME);
         }
     }
-    
+
     /**
-     * User name who last modified the row 
+     * User name who last modified the row
+     *
      * @return
      */
     public String getModifiedByName() {
@@ -206,36 +213,36 @@ public class FormRow extends Properties {
     public synchronized int hashCode() {
         return super.hashCode();
     }
-    
+
     public Map<String, String[]> getTempFilePathMap() {
         return tempFilePathMap;
     }
-    
+
     public void setTempFilePathMap(Map<String, String[]> tempFilePathMap) {
         this.tempFilePathMap = tempFilePathMap;
     }
-    
+
     public void putTempFilePath(String fieldId, String path) {
         if (tempFilePathMap == null) {
             tempFilePathMap = new HashMap<String, String[]>();
         }
         tempFilePathMap.put(fieldId, new String[]{path});
     }
-    
+
     public void putTempFilePath(String fieldId, String[] path) {
         if (tempFilePathMap == null) {
             tempFilePathMap = new HashMap<String, String[]>();
         }
         tempFilePathMap.put(fieldId, path);
     }
-    
+
     public String[] getTempFilePaths(String fieldId) {
         if (tempFilePathMap != null) {
             return tempFilePathMap.get(fieldId);
         }
         return null;
     }
-    
+
     public String getTempFilePath(String fieldId) {
         if (tempFilePathMap != null) {
             String[] paths = tempFilePathMap.get(fieldId);
@@ -245,36 +252,36 @@ public class FormRow extends Properties {
         }
         return null;
     }
-    
+
     public Map<String, String[]> getDeleteFilePathMap() {
         return deleteFilePathMap;
     }
-    
+
     public void setDeleteFilePathMap(Map<String, String[]> deleteFilePathMap) {
         this.deleteFilePathMap = deleteFilePathMap;
     }
-    
+
     public void putDeleteFilePath(String fieldId, String path) {
         if (deleteFilePathMap == null) {
             deleteFilePathMap = new HashMap<String, String[]>();
         }
         deleteFilePathMap.put(fieldId, new String[]{path});
     }
-    
+
     public void putDeleteFilePath(String fieldId, String[] path) {
         if (deleteFilePathMap == null) {
             deleteFilePathMap = new HashMap<String, String[]>();
         }
         deleteFilePathMap.put(fieldId, path);
     }
-    
+
     public String[] getDeleteFilePaths(String fieldId) {
         if (deleteFilePathMap != null) {
             return deleteFilePathMap.get(fieldId);
         }
         return null;
     }
-    
+
     public String getDeleteFilePath(String fieldId) {
         if (deleteFilePathMap != null) {
             String[] paths = deleteFilePathMap.get(fieldId);
@@ -284,7 +291,7 @@ public class FormRow extends Properties {
         }
         return null;
     }
-    
+
     public void putAll(FormRow row) {
         super.putAll(row);
         Map files = row.getTempFilePathMap();
@@ -302,15 +309,15 @@ public class FormRow extends Properties {
             deleteFilePathMap.putAll(deleteFiles);
         }
     }
-    
+
     @Override
     public String getProperty(String key) {
         if (key == null) {
             return null;
         }
-        
+
         Object oval = super.get(key);
-        
+
         if (oval != null && oval instanceof Date) {
             return TimeZoneUtil.convertToTimeZone((Date) oval, null, AppUtil.getAppDateFormat());
         } else if (!key.isEmpty() && Character.isDigit(key.charAt(0))) {

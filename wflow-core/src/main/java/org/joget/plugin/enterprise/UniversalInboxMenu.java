@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.springframework.context.ApplicationContext;
 
 public class UniversalInboxMenu extends InboxMenu implements PluginWebSupport {
+
     private DataList cacheDataList = null;
 
     @Override
@@ -164,7 +165,7 @@ public class UniversalInboxMenu extends InboxMenu implements PluginWebSupport {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-                
+
         String action = request.getParameter("action");
 
         if ("getProcesses".equals(action)) {

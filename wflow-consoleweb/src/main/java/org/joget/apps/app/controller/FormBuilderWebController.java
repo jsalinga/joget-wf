@@ -61,12 +61,12 @@ public class FormBuilderWebController {
     @RequestMapping("/console/app/(*:appId)/(~:version)/form/builder/(*:formId)")
     public String formBuilder(ModelMap model, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("formId") String formId, @RequestParam(required = false) String json) {
         // verify app version
-        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin)pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
+        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin) pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
         String page = consoleWebPlugin.verifyAppVersion(appId, version);
         if (page != null) {
             return page;
         }
-        
+
         // set flag in request
         FormUtil.setFormBuilderActive(true);
 
@@ -99,7 +99,7 @@ public class FormBuilderWebController {
             }
             if (formJson != null && formJson.trim().length() > 0) {
                 String processedformJson = PropertyUtil.propertiesJsonLoadProcessing(formJson);
-                
+
                 try {
                     FormUtil.setProcessedFormJson(processedformJson);
                     String elementHtml = formService.previewElement(formJson);
@@ -127,9 +127,9 @@ public class FormBuilderWebController {
         // add form def id
         model.addAttribute("formId", formId);
         model.addAttribute("formDef", formDef);
-        
+
         response.addHeader("X-XSS-Protection", "0");
-        
+
         return "fbuilder/formBuilder";
     }
 
@@ -158,9 +158,9 @@ public class FormBuilderWebController {
         } finally {
             FormUtil.clearProcessedFormJson();
         }
-        
+
         response.addHeader("X-XSS-Protection", "0");
-        
+
         return "fbuilder/previewForm";
     }
 
@@ -188,21 +188,21 @@ public class FormBuilderWebController {
         } finally {
             FormUtil.clearProcessedFormJson();
         }
-        
+
         response.addHeader("X-XSS-Protection", "0");
-        
+
         return "fbuilder/previewElement";
     }
-    
+
     @RequestMapping("/app/(*:appId)/(~:appVersion)/form/embed")
     public String appEmbedForm(ModelMap model, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String appVersion, @RequestParam("_submitButtonLabel") String buttonLabel, @RequestParam("_json") String json, @RequestParam("_callback") String callback, @RequestParam("_setting") String callbackSetting, @RequestParam(required = false) String id, @RequestParam(value = "_a", required = false) String action) throws JSONException, UnsupportedEncodingException {
         AppDefinition appDef = appService.getAppDefinition(appId, appVersion);
-        
+
         if (appDef == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
-        
+
         AppUtil.setCurrentAppDefinition(appDef);
         return embedForm(model, request, response, buttonLabel, json, callback, callbackSetting, id, action);
     }
@@ -210,15 +210,15 @@ public class FormBuilderWebController {
     @RequestMapping("/form/embed")
     public String embedForm(ModelMap model, HttpServletRequest request, HttpServletResponse response, @RequestParam("_submitButtonLabel") String buttonLabel, @RequestParam("_json") String json, @RequestParam("_callback") String callback, @RequestParam("_setting") String callbackSetting, @RequestParam(required = false) String id, @RequestParam(value = "_a", required = false) String action) throws JSONException, UnsupportedEncodingException {
         FormData formData = new FormData();
-        if(id != null && !id.isEmpty()){
+        if (id != null && !id.isEmpty()) {
             formData.setPrimaryKeyValue(id);
         }
         formData = formService.retrieveFormDataFromRequest(formData, request);
         String decryptedJson = SecurityUtil.decrypt(json);
         Form form = formService.loadFormFromJson(decryptedJson, formData);
-        
+
         AppDefinition appDef = AppUtil.getCurrentAppDefinition();
-        String appId  = "";
+        String appId = "";
         String appVersion = "";
         if (appDef != null) {
             appId = appDef.getAppId();
@@ -229,17 +229,16 @@ public class FormBuilderWebController {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return null;
         }
-        
 
-        if(callbackSetting == null || (callbackSetting != null && callbackSetting.isEmpty())){
+        if (callbackSetting == null || (callbackSetting != null && callbackSetting.isEmpty())) {
             callbackSetting = "{}";
         }
         String encodedCallbackSetting = URLEncoder.encode(StringEscapeUtils.escapeHtml(callbackSetting), "UTF-8");
 
         String csrfToken = SecurityUtil.getCsrfTokenName() + "=" + SecurityUtil.getCsrfTokenValue(request);
-        form.setProperty("url", "?_nonce="+URLEncoder.encode(nonce, "UTF-8")+"&_a=submit&_callback="+callback+"&_setting="+encodedCallbackSetting+"&_submitButtonLabel="+StringEscapeUtils.escapeHtml(buttonLabel) + "&" + csrfToken);
+        form.setProperty("url", "?_nonce=" + URLEncoder.encode(nonce, "UTF-8") + "&_a=submit&_callback=" + callback + "&_setting=" + encodedCallbackSetting + "&_submitButtonLabel=" + StringEscapeUtils.escapeHtml(buttonLabel) + "&" + csrfToken);
 
-        if(form != null){
+        if (form != null) {
             //if id field not exist, automatically add an id hidden field
             Element idElement = FormUtil.findElement(FormUtil.PROPERTY_ID, form, formData);
             if (idElement == null) {
@@ -249,7 +248,7 @@ public class FormBuilderWebController {
                 idElement.setParent(form);
                 formElements.add(idElement);
             }
-            
+
             // create new section for buttons
             Section section = new Section();
             section.setProperty(FormUtil.PROPERTY_ID, "section-actions");
@@ -277,14 +276,14 @@ public class FormBuilderWebController {
             submitButton.setProperty(FormUtil.PROPERTY_ID, "submit");
             submitButton.setProperty("label", buttonLabel);
             columnChildren.add((Element) submitButton);
-            
+
             model.addAttribute("readonly", FormUtil.isReadonly(form, formData));
         }
 
         // generate form HTML
         String formHtml = null;
 
-        if("submit".equals(action)){
+        if ("submit".equals(action)) {
             formData = formService.executeFormActions(form, formData);
 
             // check for validation errors
@@ -293,14 +292,14 @@ public class FormBuilderWebController {
             if (!formData.getStay() && (errors == null || errors.isEmpty())) {
                 // render normal template
                 formHtml = formService.generateElementHtml(form, formData);
-                
+
                 //convert submitted 
                 JSONObject jsonResult = new JSONObject();
-                
+
                 //get binder of main form
                 FormStoreBinder mainBinder = form.getStoreBinder();
                 FormRowSet rows = formData.getStoreBinderData(mainBinder);
-                
+
                 for (FormRow row : rows) {
                     for (Object o : row.keySet()) {
                         jsonResult.accumulate(o.toString(), row.get(o));
@@ -314,31 +313,31 @@ public class FormBuilderWebController {
                         jsonResult.put(FormUtil.PROPERTY_DELETE_FILE_PATH, deleteFilePathMap);
                     }
                 }
-                
+
                 Map<String, String[]> requestParams = formData.getRequestParams();
                 if (requestParams != null && !requestParams.isEmpty()) {
                     requestParams.remove("_json");
                     jsonResult.put(FormUtil.PROPERTY_TEMP_REQUEST_PARAMS, requestParams);
                 }
-                
+
                 model.addAttribute("jsonResult", StringEscapeUtils.escapeJavaScript(jsonResult.toString()));
             } else {
                 // render error template
                 formHtml = formService.generateElementErrorHtml(form, formData);
                 errorCount = errors.size();
             }
-            
+
             model.addAttribute("setting", callbackSetting);
             model.addAttribute("callback", callback);
             model.addAttribute("submitted", Boolean.TRUE);
             model.addAttribute("errorCount", errorCount);
             model.addAttribute("stay", formData.getStay());
-        }else{
+        } else {
             formHtml = formService.retrieveFormHtml(form, formData);
         }
 
         model.addAttribute("formHtml", formHtml);
-        
+
         if (request.getParameter("_mapp") != null) {
             String origin = request.getHeader("Origin");
             if (origin != null) {
@@ -347,18 +346,18 @@ public class FormBuilderWebController {
             response.setHeader("Access-Control-Allow-Origin", origin);
             response.setHeader("Access-Control-Allow-Credentials", "true");
             response.setHeader("Content-type", "application/xml");
-        
+
             return "mapp/embedForm";
-        } else {    
+        } else {
             return "fbuilder/embedForm";
         }
     }
-    
+
     @RequestMapping("/json/app/(*:appId)/(~:appVersion)/form/options")
     public void formAjaxOptions(Writer writer, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String appVersion, @RequestParam("_dv") String dependencyValue, @RequestParam("_n") String nonce, @RequestParam("_bd") String binderData) throws JSONException {
         AppDefinition appDef = appService.getAppDefinition(appId, appVersion);
         FormRowSet rowSet = FormUtil.getAjaxOptionsBinderData(dependencyValue, appDef, nonce, binderData);
-        
+
         JSONArray jsonArray = new JSONArray();
         if (rowSet != null) {
             for (FormRow row : rowSet) {
@@ -371,17 +370,17 @@ public class FormBuilderWebController {
                 jsonArray.put(data);
             }
         }
-        
+
         jsonArray.write(writer);
     }
-    
+
     @RequestMapping("/json/app/(*:appId)/(~:appVersion)/form/(*:formId)/columns")
     public void formAjaxColumns(Writer writer, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String appVersion, @RequestParam("formId") String formId) throws JSONException {
         AppDefinition appDef = appService.getAppDefinition(appId, appVersion);
         JSONArray jsonArray = new JSONArray();
         try {
             Collection<Map<String, String>> columns = FormUtil.getFormColumns(appDef, formId);
-            for (Map c : columns) {        
+            for (Map c : columns) {
                 jsonArray.put(c);
             }
         } catch (Exception e) {

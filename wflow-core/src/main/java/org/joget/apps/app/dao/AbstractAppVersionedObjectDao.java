@@ -28,16 +28,16 @@ public abstract class AbstractAppVersionedObjectDao<T extends AbstractAppVersion
         }
         return result;
     }
-    
+
     public T loadByIdForUpdate(String id, AppDefinition appDefinition) {
         T result = null;
-        
+
         Session session = findSession();
-        
+
         String conds = generateQueryCondition(appDefinition) + "and id=?";
         List<Object> paramsList = generateQueryParams(appDefinition);
         paramsList.add(id);
-        
+
         String query = "SELECT e FROM " + getEntityName() + " e " + conds;
 
         Query q = session.createQuery(query);

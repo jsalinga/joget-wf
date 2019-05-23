@@ -12,14 +12,14 @@ import org.joget.workflow.util.WorkflowUtil;
  * HTTP session listener to capture logout events.
  */
 public class SessionListener implements HttpSessionListener {
- 
+
     public void sessionCreated(HttpSessionEvent event) {
         // do nothing
     }
 
     public void sessionDestroyed(HttpSessionEvent event) {
         // log logout event for logged in users
-        WorkflowUserManager workflowUserManager = (WorkflowUserManager)AppUtil.getApplicationContext().getBean("workflowUserManager");
+        WorkflowUserManager workflowUserManager = (WorkflowUserManager) AppUtil.getApplicationContext().getBean("workflowUserManager");
         if (!workflowUserManager.isCurrentUserAnonymous()) {
             logout();
         }
@@ -29,7 +29,7 @@ public class SessionListener implements HttpSessionListener {
      * Logs logout in the audit trail
      */
     protected void logout() {
-        WorkflowUserManager workflowUserManager = (WorkflowUserManager)AppUtil.getApplicationContext().getBean("workflowUserManager");
+        WorkflowUserManager workflowUserManager = (WorkflowUserManager) AppUtil.getApplicationContext().getBean("workflowUserManager");
         String username = workflowUserManager.getCurrentUsername();
         WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
         String ip = "";
@@ -37,7 +37,7 @@ public class SessionListener implements HttpSessionListener {
         if (request != null) {
             ip = request.getRemoteAddr();
         }
-        workflowHelper.addAuditTrail(this.getClass().getName(), "logout", "Logout for user " + username + " ("+ip+")", new Class[]{String.class}, new Object[]{username}, false);
+        workflowHelper.addAuditTrail(this.getClass().getName(), "logout", "Logout for user " + username + " (" + ip + ")", new Class[]{String.class}, new Object[]{username}, false);
     }
- 
+
 }

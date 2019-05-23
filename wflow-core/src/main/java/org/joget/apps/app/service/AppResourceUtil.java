@@ -21,20 +21,22 @@ import org.joget.commons.util.SetupManager;
 import org.springframework.web.multipart.MultipartFile;
 
 public class AppResourceUtil {
+
     /**
      * Gets directory path to temporary files folder
-     * @return 
+     *
+     * @return
      */
     public static String getBaseDirectory() {
         return SetupManager.getBaseDirectory() + File.separator + "app_resources" + File.separator;
     }
-    
+
     public static AppResource storeFile(AppDefinition appDef, MultipartFile file, Boolean isPublic) {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             String filename = file.getOriginalFilename().replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-            
+
             AppResourceDao appResourceDao = (AppResourceDao) AppUtil.getApplicationContext().getBean("appResourceDao");
-            
+
             AppResource appResource = appResourceDao.loadById(filename, appDef);
             if (appResource != null) { //replace
                 appResource.setFilesize(file.getSize());
@@ -56,16 +58,17 @@ public class AppResourceUtil {
                 }
                 appResourceDao.add(appResource);
             }
-            
+
             storeFile(appDef.getAppId(), appDef.getVersion().toString(), file);
-            
+
             return appResource;
         }
         return null;
     }
-    
+
     /**
      * Stores files post to the HTTP request to app resources folder
+     *
      * @param appId
      * @param appVersion
      * @param file
@@ -74,12 +77,12 @@ public class AppResourceUtil {
     public static String storeFile(String appId, String appVersion, MultipartFile file) {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             String fileOrgName = file.getOriginalFilename().replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-            
+
             //delete existing before store
             deleteFile(appId, appVersion, fileOrgName);
-            
+
             FileOutputStream out = null;
-            String path =  appId + File.separator + appVersion + File.separator;
+            String path = appId + File.separator + appVersion + File.separator;
             String filename = path;
             try {
                 filename += URLDecoder.decode(fileOrgName, "UTF-8");
@@ -106,13 +109,14 @@ public class AppResourceUtil {
         }
         return null;
     }
-    
+
     /**
-     * Gets the file from app resources folder 
+     * Gets the file from app resources folder
+     *
      * @param appId
      * @param appVersion
      * @param filename
-     * @return 
+     * @return
      */
     public static File getFile(String appId, String appVersion, String filename) {
         // validate input
@@ -120,7 +124,7 @@ public class AppResourceUtil {
         if (normalizedFileName.contains("../") || normalizedFileName.contains("..\\")) {
             throw new SecurityException("Invalid filename " + normalizedFileName);
         }
-        
+
         String path = appId + File.separator + appVersion + File.separator + normalizedFileName;
         if (path != null) {
             try {
@@ -128,44 +132,43 @@ public class AppResourceUtil {
                 if (file.exists() && !file.isDirectory()) {
                     return file;
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return null;
     }
-    
+
     /**
-     * Deletes the file from app resource folder 
+     * Deletes the file from app resource folder
+     *
      * @param appId
      * @param appVersion
      * @param filename
      */
     public static void deleteFile(String appId, String appVersion, String filename) {
         File file = getFile(appId, appVersion, filename);
-        
+
         if (file != null && file.exists()) {
             file.delete();
         }
     }
-    
+
     public static void addResourcesToZip(String appId, String appVersion, ZipOutputStream zip) {
         try {
             String path = appId + File.separator + appVersion;
             File folder = new File(getBaseDirectory(), URLDecoder.decode(path, "UTF-8"));
-            
+
             if (folder.exists()) {
                 File[] files = folder.listFiles();
-                for (File file : files)
-                {
-                    if (file.canRead())
-                    {
+                for (File file : files) {
+                    if (file.canRead()) {
                         FileInputStream fis = null;
                         try {
                             zip.putNextEntry(new ZipEntry("resources/" + file.getName()));
                             fis = new FileInputStream(file);
                             byte[] buffer = new byte[4092];
                             int byteCount = 0;
-                            while ((byteCount = fis.read(buffer)) != -1)
-                            {
+                            while ((byteCount = fis.read(buffer)) != -1) {
                                 zip.write(buffer, 0, byteCount);
                             }
                             zip.closeEntry();
@@ -173,14 +176,15 @@ public class AppResourceUtil {
                             if (fis != null) {
                                 fis.close();
                             }
-                        }  
+                        }
                     }
                 }
             }
-        
-        } catch (Exception e) {}
+
+        } catch (Exception e) {
+        }
     }
-    
+
     public static void importFromZip(String appId, String appVersion, byte[] zip) {
         ZipInputStream in = null;
         String path = appId + File.separator + appVersion;
@@ -195,14 +199,14 @@ public class AppResourceUtil {
                     String filename = entry.getName().replaceFirst("resources/", "");
                     try {
                         filename = SecurityUtil.normalizedFileName(filename);
-                        
+
                         File folder = new File(getBaseDirectory(), URLDecoder.decode(path, "UTF-8"));
                         if (!folder.exists()) {
                             folder.mkdirs();
                         }
-        
+
                         File file = new File(getBaseDirectory(), URLDecoder.decode(path + File.separator + filename, "UTF-8"));
-                        
+
                         out = new FileOutputStream(file);
                         int length;
                         byte[] temp = new byte[1024];
@@ -215,54 +219,59 @@ public class AppResourceUtil {
                             try {
                                 out.flush();
                                 out.close();
-                            } catch (IOException iex) {}
+                            } catch (IOException iex) {
+                            }
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            
+
         } finally {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ex) {}
+                } catch (IOException ex) {
+                }
             }
         }
     }
-    
+
     public static void copyAppResources(String appIdFrom, String appVersionFrom, String appIdTo, String appVersionTo) {
         try {
             String pathFrom = appIdFrom + File.separator + appVersionFrom;
             String pathTo = appIdTo + File.separator + appVersionTo;
-            
+
             File folder = new File(getBaseDirectory(), URLDecoder.decode(pathFrom, "UTF-8"));
-            
+
             if (folder.exists()) {
                 FileUtils.copyDirectory(folder, new File(getBaseDirectory(), URLDecoder.decode(pathTo, "UTF-8")), null);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
-    
+
     public static void deleteAppResources(String appId, String appVersion) {
         try {
             String path = appId + File.separator + appVersion;
             File folder = new File(getBaseDirectory(), URLDecoder.decode(path, "UTF-8"));
-            
+
             if (folder.exists()) {
                 FileUtils.deleteDirectory(folder);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
-    
+
     public static void deleteAppResourcesForAllVersion(String appId) {
         try {
             String path = appId;
             File folder = new File(getBaseDirectory(), URLDecoder.decode(path, "UTF-8"));
-            
+
             if (folder.exists()) {
                 FileUtils.deleteDirectory(folder);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

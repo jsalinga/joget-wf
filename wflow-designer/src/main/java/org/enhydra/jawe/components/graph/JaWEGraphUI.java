@@ -36,12 +36,12 @@ import org.jgraph.graph.GraphLayoutCache;
 import org.jgraph.plaf.basic.BasicGraphUI;
 
 /**
- * This class and it's inner classes controls mouse actions and clipboard.
- * It is addapted to get wanted editing cell behaviour, selection behaviour
- * , to implement cell overlaping, to implement right participant adjustment
- * after cell (or group of cells) is moved, and to implement proper copying
- * and pasting/cloning of cells, as well as pasting at wanted location (along
- * with right participant adjustment).
+ * This class and it's inner classes controls mouse actions and clipboard. It is
+ * addapted to get wanted editing cell behaviour, selection behaviour , to
+ * implement cell overlaping, to implement right participant adjustment after
+ * cell (or group of cells) is moved, and to implement proper copying and
+ * pasting/cloning of cells, as well as pasting at wanted location (along with
+ * right participant adjustment).
  */
 public class JaWEGraphUI extends BasicGraphUI {
 
@@ -80,8 +80,8 @@ public class JaWEGraphUI extends BasicGraphUI {
     }
 
     /**
-     * This method is called by EditAction class, as well as by
-     * pressing F2 or clicking a mouse on a cell.
+     * This method is called by EditAction class, as well as by pressing F2 or
+     * clicking a mouse on a cell.
      */
     protected boolean startEditing(Object cell, MouseEvent event) {
         if (cell instanceof WorkflowElement) {
@@ -323,8 +323,7 @@ public class JaWEGraphUI extends BasicGraphUI {
     /**
      * Constructs the "root handle" for <code>context</code>.
      *
-     * @param context
-     *           reference to the context of the current selection.
+     * @param context reference to the context of the current selection.
      */
     public CellHandle createHandle(GraphContext context) {
         if (context != null && !context.isEmpty() && graph.isEnabled()) {
@@ -334,16 +333,15 @@ public class JaWEGraphUI extends BasicGraphUI {
     }
 
     /**
-     * Manages selection movement. It is adapted to suport proper
-     * undo in coordination with WorkflowManager class.
+     * Manages selection movement. It is adapted to suport proper undo in
+     * coordination with WorkflowManager class.
      */
     public class PERootHandle extends RootHandle {
 
         /**
-         * Creates a root handle which contains handles for the given
-         * cells. The root handle and all its childs point to the
-         * specified JGraph instance. The root handle is responsible
-         * for dragging the selection.
+         * Creates a root handle which contains handles for the given cells. The
+         * root handle and all its childs point to the specified JGraph
+         * instance. The root handle is responsible for dragging the selection.
          */
         public PERootHandle(GraphContext ctx) {
             super(ctx);
@@ -370,10 +368,9 @@ public class JaWEGraphUI extends BasicGraphUI {
                         GraphLayoutCache.translateViews(views, tmp.getX(), tmp.getY());//HM, JGraph3.4.1
                     }
 
-
                     // Harald Meister: snap activities to grid if grid is enabled
-                    if (GraphUtilities.getGraphController().getGraphSettings().shouldShowGrid() &&
-                            views[0] instanceof GraphActivityViewInterface) {
+                    if (GraphUtilities.getGraphController().getGraphSettings().shouldShowGrid()
+                            && views[0] instanceof GraphActivityViewInterface) {
                         GraphActivityViewInterface view = (GraphActivityViewInterface) views[0];
                         Rectangle2D rect = view.getBounds();//HM, JGraph3.4.1
                         int dx = 0;
@@ -398,7 +395,6 @@ public class JaWEGraphUI extends BasicGraphUI {
                     }
                     // Harald Meister
 
-
                     CellView[] all = graphLayoutCache.getAllDescendants(views);
 
                     if (graph.isMoveable()) { // Move Cells
@@ -421,16 +417,16 @@ public class JaWEGraphUI extends BasicGraphUI {
     }
 
     /**
-     * This class observes view changes and is adapted to disallow
-     * deselection of cells after dragging.
+     * This class observes view changes and is adapted to disallow deselection
+     * of cells after dragging.
      */
     public class PEGraphLayoutCacheHandler extends GraphLayoutCacheHandler {
+
         /*
          * (non-Javadoc)
          *
          * @see org.jgraph.event.GraphLayoutCacheListener#graphLayoutCacheChanged(org.jgraph.event.GraphLayoutCacheEvent)
          */
-
         public void graphLayoutCacheChanged(GraphLayoutCacheEvent e) {
             Object[] changed = e.getChange().getChanged();
             if (changed != null && changed.length > 0) {
@@ -514,9 +510,13 @@ public class JaWEGraphUI extends BasicGraphUI {
      */
     public class PEKeyHandler extends KeyAdapter implements Serializable {
 
-        /** Key code that is being generated for. */
+        /**
+         * Key code that is being generated for.
+         */
         protected Action repeatKeyAction;
-        /** Set to true while keyPressed is active. */
+        /**
+         * Set to true while keyPressed is active.
+         */
         protected boolean isKeyDown;
 
         public void keyPressed(KeyEvent e) {

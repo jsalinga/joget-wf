@@ -9,6 +9,7 @@ import org.enhydra.shark.xpdl.elements.Transition;
 
 /**
  * Factory for rendering graph objects.
+ *
  * @author Sasa Bojanic
  */
 public class GraphObjectRendererFactory {

@@ -33,7 +33,7 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
     @Override
     public String renderTemplate(FormData formData, Map dataModel) {
         String template = "form.ftl";
-        
+
         //for preview
         if (formData.getFormResult(FormService.PREVIEW_MODE) != null) {
             setFormMeta("json", new String[]{formData.getRequestParameter("json")});
@@ -45,27 +45,27 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
             dataModel.put("appId", appDef.getAppId());
             dataModel.put("appVersion", appDef.getVersion());
         }
-        
+
         // check whether in form builder
         boolean formBuilderActive = FormUtil.isFormBuilderActive();
-       
+
         // check for quick edit mode
         boolean isQuickEditEnabled = (!"true".equals(getPropertyString("removeQuickEdit")) && !formBuilderActive && AppUtil.isQuickEditEnabled()) || (formBuilderActive && getParent() != null);
         dataModel.put("quickEditEnabled", isQuickEditEnabled);
         if (((Boolean) dataModel.get("includeMetaData") == true) || isAuthorize(formData)) {
             dataModel.put("isAuthorize", true);
             dataModel.put("isRecordExist", true);
-            
+
             String paramName = FormUtil.getElementParameterName(this);
-            setFormMeta(paramName+"_SUBMITTED", new String[]{"true"});
+            setFormMeta(paramName + "_SUBMITTED", new String[]{"true"});
             String primaryKey = this.getPrimaryKeyValue(formData);
 
             if (getParent() == null) {
                 boolean isRuntimeLoad = (formData.getFormResult(FormService.PREVIEW_MODE) == null || !dataModel.containsKey("elementMetaData"))
                         && !FormUtil.isFormSubmitted(this, formData);
                 boolean urlHasId = (formData.getRequestParameter("id") != null || formData.getRequestParameter("fk_id") != null
-                            || formData.getRequestParameter("fke_id") != null || formData.getRequestParameter("recordId") != null);
-                
+                        || formData.getRequestParameter("fke_id") != null || formData.getRequestParameter("recordId") != null);
+
                 if (isRuntimeLoad && urlHasId) {
                     //check for record exist
                     FormRowSet data = formData.getLoadBinderData(this);
@@ -73,7 +73,7 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
                         dataModel.put("isRecordExist", false);
                     }
                 }
-                
+
                 if (formData.getRequestParameter("_FORM_META_ORIGINAL_ID") != null) {
                     setFormMeta("_FORM_META_ORIGINAL_ID", new String[]{formData.getRequestParameter(FormUtil.FORM_META_ORIGINAL_ID)});
                 } else if (primaryKey != null) {
@@ -81,7 +81,7 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
                 } else {
                     setFormMeta("_FORM_META_ORIGINAL_ID", new String[]{""});
                 }
-                
+
                 //store form erros
                 Map<String, String> errors = formData.getFormErrors();
                 if (errors != null && !errors.isEmpty()) {
@@ -89,7 +89,8 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
                         JSONObject errorJson = new JSONObject();
                         errorJson.put("errors", errors);
                         setFormMeta(FormUtil.FORM_ERRORS_PARAM, new String[]{errorJson.toString()});
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                 }
             } else {
                 String uniqueId = getCustomParameterName();
@@ -142,7 +143,7 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
     public Map getFormMetas() {
         return formMetas;
     }
-    
+
     @Override
     public FormRowSet formatData(FormData formData) {
         return null;
@@ -155,7 +156,7 @@ public class Form extends Element implements FormBuilderEditable, FormContainer 
     public void setActions(Collection<FormAction> actions) {
         this.actions = actions;
     }
-    
+
     public void addAction(FormAction action) {
         if (this.actions == null) {
             this.actions = new ArrayList<FormAction>();

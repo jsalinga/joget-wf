@@ -35,7 +35,7 @@
             <c:set var="html">
                 ${userview.properties.name}
                 <c:if test="${!empty userview.current}">
-                     &nbsp;&gt;&nbsp; ${userview.current.properties.label}
+                    &nbsp;&gt;&nbsp; ${userview.current.properties.label}
                 </c:if>
             </c:set>
             <ui:stripTag html="${html}"/>
@@ -52,49 +52,49 @@
                 </c:if>
                 <a href="${pageContext.request.contextPath}/web/mobile/${homePath}" data-icon="home" data-direction="reverse"><fmt:message key="console.header.menu.label.home"/></a>
                 <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">
-                <c:choose>
-                    <c:when test="${!empty userview.setting.theme.header}">
-                        <ui:stripTag html="${userview.setting.theme.header}"/>
-                    </c:when>
-                    <c:otherwise>
-                        <c:out value="${userview.properties.name}"/>
-                    </c:otherwise>
-                </c:choose>                    
+                    <c:choose>
+                        <c:when test="${!empty userview.setting.theme.header}">
+                            <ui:stripTag html="${userview.setting.theme.header}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:out value="${userview.properties.name}"/>
+                        </c:otherwise>
+                    </c:choose>                    
                 </h1>
             </div>
-                
+
             <div data-role="content" class="ui-content" role="main">
-                    <c:if test="${!empty param.login_error}">
-                        <div id="main-body-message" class="form-errors">
-                            <fmt:message key="ubuilder.loginError" /> <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
-                        </div>
-                    </c:if>
-                    <c:set var="loginUrl"><c:url value='${redirectUrl}'/></c:set>
-                    <form id="loginForm" name="loginForm" target="_self" action="${loginUrl}" method="POST">
-                        <table align="center">
-                            <tr><td><fmt:message key="console.login.label.username" />: </td><td><input type='text' id='j_username' name='j_username' value='<c:if test="${not empty param.login_error}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'/></td></tr>
-                            <tr><td><fmt:message key="console.login.label.password" />:</td><td><input type='password' id='j_password' name='j_password'></td></tr>
-                            <tr><td>&nbsp;</td><td><input name="submit" class="form-button" type="submit" value="<fmt:message key="console.login.label.login" />" /></td></tr>
-                            <tr><td colspan="2">
+                <c:if test="${!empty param.login_error}">
+                    <div id="main-body-message" class="form-errors">
+                        <fmt:message key="ubuilder.loginError" /> <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+                    </div>
+                </c:if>
+                <c:set var="loginUrl"><c:url value='${redirectUrl}'/></c:set>
+                <form id="loginForm" name="loginForm" target="_self" action="${loginUrl}" method="POST">
+                    <table align="center">
+                        <tr><td><fmt:message key="console.login.label.username" />: </td><td><input type='text' id='j_username' name='j_username' value='<c:if test="${not empty param.login_error}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'/></td></tr>
+                        <tr><td><fmt:message key="console.login.label.password" />:</td><td><input type='password' id='j_password' name='j_password'></td></tr>
+                        <tr><td>&nbsp;</td><td><input name="submit" class="form-button" type="submit" value="<fmt:message key="console.login.label.login" />" /></td></tr>
+                        <tr><td colspan="2">
                                 <%= DirectoryUtil.getLoginFormFooter() %>
                             </td></tr>
-                        </table>
-                    </form>
+                    </table>
+                </form>
 
-                    <script type="text/javascript">
-                        $(document).ready(
-                            function() {
-                                $("#j_username").focus();
-                            }
-                        );
-                    </script>
+                <script type="text/javascript">
+                    $(document).ready(
+                    function() {
+                    $("#j_username").focus();
+                    }
+                    );
+                </script>
             </div>		
 
         </div>
 
         <div class="ui-loader" style="top: 332px; "><h1><fmt:message key="mobile.apps.loading"/></h1></div>
-        <%= AppUtil.getSystemAlert() %> 
-        <jsp:include page="mFooter.jsp" flush="true" />   
+                <%= AppUtil.getSystemAlert() %> 
+                <jsp:include page="mFooter.jsp" flush="true" />   
     </body>    
 </html>
 

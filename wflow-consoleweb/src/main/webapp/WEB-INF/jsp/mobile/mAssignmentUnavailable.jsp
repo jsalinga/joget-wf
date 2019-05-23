@@ -27,6 +27,6 @@
         </div>
 
         <div class="ui-loader" style="top: 332px; "><h1><fmt:message key="mobile.apps.loading"/></h1></div>
-        <jsp:include page="mFooter.jsp" flush="true" />   
+                <jsp:include page="mFooter.jsp" flush="true" />   
     </body>    
 </html>

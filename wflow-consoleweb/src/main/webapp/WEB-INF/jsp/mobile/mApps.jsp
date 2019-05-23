@@ -11,27 +11,27 @@
         <jsp:include page="mScripts.jsp" flush="true"/>
         <script>
             function desktopSite() {
-                var path = "${pageContext.request.contextPath}/web/desktop";
-                var href = "${pageContext.request.contextPath}/web/desktop";
-                Mobile.viewFullSite(path, href);
-                return false;
+            var path = "${pageContext.request.contextPath}/web/desktop";
+            var href = "${pageContext.request.contextPath}/web/desktop";
+            Mobile.viewFullSite(path, href);
+            return false;
             }
             function showLoading(url) {
-                $.mobile.loading('show');
-                if (url) {
-                    setTimeout(function() {
-                        location.href = url;
-                    }, 1000);
-                    setTimeout(function() {
-//                        $.mobile.loading('hide');
-                    }, 2000);
-                    return false;
-                }
+            $.mobile.loading('show');
+            if (url) {
+            setTimeout(function() {
+            location.href = url;
+            }, 1000);
+            setTimeout(function() {
+            //                        $.mobile.loading('hide');
+            }, 2000);
+            return false;
+            }
             }            
             Mobile.contextPath = "${pageContext.request.contextPath}";
             Mobile.updateCache();
             $("#mobileHome").live("pageshow", function() {
-                Mobile.checkNetworkStatus();
+            Mobile.checkNetworkStatus();
             });
             <c:if test="${cordova eq 'true'}">
                 $.cookie("cordova", "true", { path: '${pageContext.request.contextPath}' });

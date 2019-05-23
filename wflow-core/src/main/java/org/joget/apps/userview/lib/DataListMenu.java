@@ -20,6 +20,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
 public class DataListMenu extends UserviewMenu {
+
     private DataList cacheDataList = null;
 
     @Override
@@ -78,7 +79,7 @@ public class DataListMenu extends UserviewMenu {
                 if (label != null) {
                     label = StringUtil.stripHtmlRelaxed(label);
                 }
-            
+
                 // generate menu link
                 menuItem = "<a href=\"" + getUrl() + "\" class=\"menu-link default\"><span>" + label + "</span> <span class='pull-right badge rowCount'>" + rowCount + "</span></a>";
             }
@@ -109,8 +110,8 @@ public class DataListMenu extends UserviewMenu {
                     if (ac.getMessage() != null && !ac.getMessage().isEmpty()) {
                         setAlertMessage(ac.getMessage());
                     }
-                    if (ac.getType() != null && DataListActionResult.TYPE_REDIRECT.equals(ac.getType()) &&
-                            ac.getUrl() != null && !ac.getUrl().isEmpty()) {
+                    if (ac.getType() != null && DataListActionResult.TYPE_REDIRECT.equals(ac.getType())
+                            && ac.getUrl() != null && !ac.getUrl().isEmpty()) {
                         if ("REFERER".equals(ac.getUrl())) {
                             HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
                             if (request != null && request.getHeader("Referer") != null) {
@@ -138,7 +139,7 @@ public class DataListMenu extends UserviewMenu {
             String message = ex.toString();
             message += "\r\n<pre class=\"stacktrace\">" + out.getBuffer() + "</pre>";
             setProperty("error", message);
-        }    
+        }
         return "userview/plugin/datalist.jsp";
     }
 

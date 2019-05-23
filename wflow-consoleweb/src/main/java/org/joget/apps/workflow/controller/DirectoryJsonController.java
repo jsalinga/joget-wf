@@ -325,7 +325,7 @@ public class DirectoryJsonController {
                 data.put("firstName", user.getFirstName());
                 data.put("lastName", user.getLastName());
                 data.put("email", user.getEmail());
-                data.put("active", (user.getActive() == 1)? ResourceBundleUtil.getMessage("console.directory.user.common.label.status.active") : ResourceBundleUtil.getMessage("console.directory.user.common.label.status.inactive"));
+                data.put("active", (user.getActive() == 1) ? ResourceBundleUtil.getMessage("console.directory.user.common.label.status.active") : ResourceBundleUtil.getMessage("console.directory.user.common.label.status.inactive"));
                 jsonObject.accumulate("data", data);
             }
         }
@@ -632,20 +632,20 @@ public class DirectoryJsonController {
     @RequestMapping("/json/directory/user/sso")
     public void singleSignOn(Writer writer, HttpServletRequest httpRequest, HttpServletResponse httpResponse, @RequestParam(value = "callback", required = false) String callback, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "hash", required = false) String hash) throws JSONException, IOException, ServletException {
         boolean loginWithFilter = false;
-        
+
         //WorkflowHttpAuthProcessingFilter
         if (httpRequest.getParameter("j_username") != null && (httpRequest.getParameter("j_password") != null || hash != null)) {
             loginWithFilter = true;
         }
-        
+
         String header = httpRequest.getHeader("Authorization");
         if ((header != null) && header.startsWith("Basic ")) {
             loginWithFilter = true;
         }
-        
+
         if (username != null && !username.isEmpty() && !loginWithFilter) {
             String ip = httpRequest.getRemoteAddr();
-            
+
             try {
                 if (password == null) {
                     password = hash;
@@ -670,20 +670,20 @@ public class DirectoryJsonController {
                 if (authenticated) {
                     workflowUserManager.clearCurrentThreadUser();
                 }
-                LogUtil.info(getClass().getName(), "Authentication for user " + username + " ("+ip+") : " + authenticated);
+                LogUtil.info(getClass().getName(), "Authentication for user " + username + " (" + ip + ") : " + authenticated);
                 WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-                workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " ("+ip+") : " + authenticated);  
-                
+                workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " (" + ip + ") : " + authenticated);
+
             } catch (AuthenticationException e) {
                 // add failure to audit trail
                 if (username != null) {
-                    LogUtil.info(getClass().getName(), "Authentication for user " + username + " ("+ip+") : false");
+                    LogUtil.info(getClass().getName(), "Authentication for user " + username + " (" + ip + ") : false");
                     WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-                    workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " ("+ip+") : false");
+                    workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + username + " (" + ip + ") : false");
                 }
             }
         }
-        
+
         if (WorkflowUtil.isCurrentUserAnonymous() && (callback == null || callback.isEmpty())) {
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -691,12 +691,12 @@ public class DirectoryJsonController {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.accumulate("username", WorkflowUtil.getCurrentUsername());
-      
+
         boolean isAdmin = WorkflowUtil.isCurrentUserInRole(WorkflowUtil.ROLE_ADMIN);
         if (isAdmin) {
             jsonObject.accumulate("isAdmin", "true");
         }
-        
+
         // csrf token
         String csrfToken = SecurityUtil.getCsrfTokenName() + "=" + SecurityUtil.getCsrfTokenValue(httpRequest);
         jsonObject.accumulate("token", csrfToken);

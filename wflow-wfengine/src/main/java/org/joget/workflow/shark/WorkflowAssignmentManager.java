@@ -32,7 +32,7 @@ public class WorkflowAssignmentManager extends HistoryRelatedAssignmentManager {
         if (migrationUser != null) {
             return migrationUser;
         }
-        
+
         String procDefId = workflowManager.getProcessDefIdByInstanceId(instanceId);
         WorkflowProcess process = workflowManager.getProcess(procDefId);
         String currentUsername = (String) shandle.getVendorData();
@@ -49,7 +49,7 @@ public class WorkflowAssignmentManager extends HistoryRelatedAssignmentManager {
             resultList = super.getDefaultAssignments(shandle, procDefId, actId, currentUsername, xpdlParticipant, xpdlResponsibleParticipants);
         }
         LogUtil.info(getClass().getName(), "[processId=" + instanceId + ", processDefId=" + procDefId + ", participantId=" + xpdlParticipant.participantIdOrExpression + ", next user=" + resultList + "]");
-        
+
         Collection<Class> paramTypes = new ArrayList<Class>();
         Collection<Object> args = new ArrayList<Object>();
         paramTypes.add(String.class);
@@ -58,7 +58,7 @@ public class WorkflowAssignmentManager extends HistoryRelatedAssignmentManager {
         args.add(actId);//activity instance id
         paramTypes.add(WorkflowProcess.class);
         args.add(process); //process object
-        
+
         //write to audit trail
         WorkflowUtil.addAuditTrail(this.getClass().getName(), "getDefaultAssignments", actId, paramTypes.toArray(new Class[]{}), args.toArray(), resultList);
 

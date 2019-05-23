@@ -6,7 +6,7 @@ import java.util.Random;
 
 /**
  * Utility methods to generate an UUID
- * 
+ *
  */
 public class UuidGenerator {
 
@@ -19,7 +19,8 @@ public class UuidGenerator {
 
     /**
      * Get the UuidGenerator instance
-     * @return 
+     *
+     * @return
      */
     public static UuidGenerator getInstance() {
         if (uuidGenerator == null) {
@@ -51,7 +52,8 @@ public class UuidGenerator {
 
     /**
      * Generate an UUID
-     * @return 
+     *
+     * @return
      */
     public synchronized String getUuid() {
         long timeNow = System.currentTimeMillis();

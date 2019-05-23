@@ -9,6 +9,7 @@ import org.joget.commons.util.LogUtil;
 import org.joget.workflow.util.WorkflowUtil;
 
 public class RequestHashVariable extends DefaultHashVariablePlugin {
+
     protected static Collection<String> list;
 
     @Override
@@ -19,7 +20,7 @@ public class RequestHashVariable extends DefaultHashVariablePlugin {
             String syntax = getPrefix() + ".";
             String attribute = variableKey;
             String headerName = null;
-            
+
             if (variableKey.contains(".")) {
                 String[] temp = variableKey.split(".");
                 attribute = variableKey.substring(0, variableKey.indexOf("."));
@@ -28,11 +29,11 @@ public class RequestHashVariable extends DefaultHashVariablePlugin {
             } else {
                 syntax += attribute;
             }
-            
+
             if (isValid(syntax)) {
                 if (headerName != null) {
                     String value = request.getHeader(headerName);
-                    return (value != null)?value:"";
+                    return (value != null) ? value : "";
                 } else {
                     try {
                         //convert first character to upper case
@@ -41,11 +42,11 @@ public class RequestHashVariable extends DefaultHashVariablePlugin {
                         attribute = firstChar + attribute.substring(1, attribute.length());
                         Method method = HttpServletRequest.class.getMethod("get" + attribute, new Class[]{});
                         Object returnResult = ((Object) method.invoke(request, new Object[]{}));
-                        
+
                         if ("queryString".equals(variableKey) && returnResult == null) {
                             return "";
                         }
-                        
+
                         if ("requestURI".equals(variableKey) || "requestURL".equals(variableKey)) {
                             String forwardUri = (String) request.getAttribute("javax.servlet.forward.request_uri");
                             if (forwardUri != null) {
@@ -57,7 +58,7 @@ public class RequestHashVariable extends DefaultHashVariablePlugin {
                                 }
                             }
                         }
-                        
+
                         if (returnResult != null) {
                             return returnResult.toString();
                         }
@@ -69,12 +70,12 @@ public class RequestHashVariable extends DefaultHashVariablePlugin {
         }
         return null;
     }
-    
+
     protected boolean isValid(String syntax) {
         Collection<String> syntaxList = availableSyntax();
         return syntaxList.contains(syntax);
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         if (list == null) {

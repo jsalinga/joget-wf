@@ -42,13 +42,13 @@ public class LoginWebController {
         } else if (request.getHeader("referer") != null) { //for userview logout
             savedUrl = request.getHeader("referer");
         }
-        
+
         if (savedUrl.contains("/web/client/app/assignment/")) {
             UserviewDefinition defaultUserview = userviewService.getDefaultUserview();
             if (UserviewUtil.checkUserviewInboxEnabled(defaultUserview)) {
-                String activityId = savedUrl.substring(savedUrl.lastIndexOf("/")+1);
+                String activityId = savedUrl.substring(savedUrl.lastIndexOf("/") + 1);
                 // redirect to app center userview
-                String path = "redirect:/web/userview/" + defaultUserview.getAppId() + "/" +  defaultUserview.getId() + "/_/_ja_inbox?_mode=assignment&activityId=" + URLEncoder.encode(activityId, "UTF-8");
+                String path = "redirect:/web/userview/" + defaultUserview.getAppId() + "/" + defaultUserview.getId() + "/_/_ja_inbox?_mode=assignment&activityId=" + URLEncoder.encode(activityId, "UTF-8");
                 return path;
             }
         }
@@ -63,11 +63,11 @@ public class LoginWebController {
                 savedUrl = savedUrl.replace("/web/embed/userview/", "");
                 embedPrefix = "embed/";
             }
-            
+
             if (request.getParameter("embed") != null && Boolean.parseBoolean((String) request.getParameter("embed"))) {
                 embedPrefix = "embed/";
             }
-            
+
             String[] urlKey = savedUrl.split("/");
             String appId = urlKey[0];
             String userviewId = urlKey[1];
@@ -87,15 +87,15 @@ public class LoginWebController {
                 savedUrl = savedUrl.replace("/web/embed/mobile/", "");
                 embedPrefix = "embed/";
             }
-            
+
             if (savedUrl.isEmpty() || "apps".equals(savedUrl)) {
                 return "redirect:/web/mobile/apps?_=" + System.currentTimeMillis();
             }
-            
+
             if (request.getParameter("embed") != null && Boolean.parseBoolean((String) request.getParameter("embed"))) {
                 embedPrefix = "embed/";
             }
-            
+
             String[] urlKey = savedUrl.split("/");
             String appId = urlKey[0];
             String userviewId = null;
@@ -117,7 +117,7 @@ public class LoginWebController {
                 savedUrl = savedUrl.replace("/web/embed/ulogin/", "");
                 embed = true;
             }
-            
+
             String[] urlKey = savedUrl.split("/");
             String appId = urlKey[0];
             String userviewId = urlKey[1];
@@ -125,16 +125,16 @@ public class LoginWebController {
             String menuId = null;
             if (urlKey.length > 2) {
                 key = urlKey[2];
-                
+
                 if (urlKey.length > 3) {
                     menuId = urlKey[3];
                 }
             }
-            
+
             if (menuId != null && menuId.contains("?")) {
-                String queryString = menuId.substring(menuId.indexOf("?")+1);
+                String queryString = menuId.substring(menuId.indexOf("?") + 1);
                 map.addAttribute("queryString", StringUtil.encodeUrlParam(queryString));
-                
+
                 menuId = menuId.substring(0, menuId.indexOf("?"));
             }
 
@@ -192,11 +192,11 @@ public class LoginWebController {
                 savedUrl = savedUrl.replace("/web/embed/mobile/", "");
                 embed = true;
             }
-            
+
             if (savedUrl.isEmpty()) {
                 return "mobile/mLogin";
             }
-            
+
             String[] urlKey = savedUrl.split("/");
             String appId = urlKey[0];
             String userviewId = urlKey[1];
@@ -204,7 +204,7 @@ public class LoginWebController {
             String menuId = null;
             if (urlKey.length > 2) {
                 key = urlKey[2];
-                
+
                 if (urlKey.length > 3) {
                     menuId = urlKey[3];
                 }
@@ -246,10 +246,10 @@ public class LoginWebController {
     public String unauthorized(ModelMap map) {
         return "unauthorized";
     }
-    
+
     @RequestMapping("/mlogin")
     public String mlogin(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
         return "mobile/mLogin";
     }
-    
+
 }

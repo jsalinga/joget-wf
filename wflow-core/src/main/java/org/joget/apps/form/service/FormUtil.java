@@ -117,17 +117,18 @@ public class FormUtil implements ApplicationContextAware {
     public static final String FORM_BUILDER_ACTIVE = "formBuilderActive";
     public static final String FORM_ERRORS_PARAM = "_FORM_ERRORS";
     public static final String FORM_RESULT_LOAD_ALL_DATA = "FORM_RESULT_LOAD_ALL_DATA";
-    
+
     static ApplicationContext appContext;
-    
-    public static ThreadLocal processedFormJson = new ThreadLocal(); 
-    
+
+    public static ThreadLocal processedFormJson = new ThreadLocal();
+
     public static Long runningNumber = 0L;
 
     /**
      * Method used for system to set ApplicationContext
+     *
      * @param ac
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext ac) throws BeansException {
         appContext = ac;
@@ -135,7 +136,8 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return appContext;
@@ -143,9 +145,10 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Parses form field element from the element json string
+     *
      * @param json
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static Element parseElementFromJson(String json) throws Exception {
         // create json object
@@ -159,9 +162,10 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Finds and parses the form field element from form json by field id
+     *
      * @param json
      * @param fieldId
-     * @return 
+     * @return
      */
     public static Element findAndParseElement(String json, String fieldId) {
         if (json != null && !json.isEmpty() && fieldId != null && !fieldId.isEmpty()) {
@@ -177,10 +181,11 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Finds and parses the form field element from form json object by field id
+     *
      * @param obj
      * @param fieldId
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static Element findAndParseElementFromJsonObject(JSONObject obj, String fieldId) throws Exception {
         if (obj != null && !obj.isNull(FormUtil.PROPERTY_PROPERTIES)) {
@@ -208,10 +213,11 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Parses form field element from the element json object
+     *
      * @param obj
      * @param parent
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static Element parseElementFromJsonObject(JSONObject obj, Element parent) throws Exception {
         PluginManager pluginManager = (PluginManager) appContext.getBean("pluginManager");
@@ -224,11 +230,11 @@ public class FormUtil implements ApplicationContextAware {
         if (element != null) {
             // check for mobile support
             boolean isMobileView = MobileUtil.isMobileView();
-            if (isMobileView && (element instanceof MobileElement) && !((MobileElement)element).isMobileSupported()) {
+            if (isMobileView && (element instanceof MobileElement) && !((MobileElement) element).isMobileSupported()) {
                 // mobile not supported, ignore this element
                 return null;
             }
-            
+
             // set element properties
             Map<String, Object> properties = FormUtil.parsePropertyFromJsonObject(obj);
             element.setProperties(properties);
@@ -244,7 +250,7 @@ public class FormUtil implements ApplicationContextAware {
                 }
                 childElements.add(element);
             }
-            
+
             // recurse into child elements
             FormUtil.parseChildElementsFromJsonObject(obj, element);
 
@@ -269,6 +275,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Parses the properties attribute from a JSON object into a Map
+     *
      * @param obj
      * @return
      * @throws JSONException
@@ -301,6 +308,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Parse child elements from element json object
+     *
      * @param obj
      * @param parent
      * @throws Exception
@@ -356,6 +364,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Parse validator object from element json object
+     *
      * @param obj
      * @return
      * @throws Exception
@@ -386,7 +395,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find and invoke option binders starting from an element.
+     * Utility method to recursively find and invoke option binders starting
+     * from an element.
+     *
      * @param element
      * @param formData
      * @return
@@ -415,7 +426,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively traverse and invoke load binders starting from an element.
+     * Utility method to recursively traverse and invoke load binders starting
+     * from an element.
+     *
      * @param element
      * @param formData
      * @return
@@ -444,7 +457,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find and invoke validators starting from an element.
+     * Utility method to recursively find and invoke validators starting from an
+     * element.
+     *
      * @param element
      * @param formData
      * @return true if all validators are successful.
@@ -452,7 +467,7 @@ public class FormUtil implements ApplicationContextAware {
     public static boolean executeValidators(Element element, FormData formData) {
         String id = FormUtil.getElementParameterName(element);
         formData.getPreviousFormErrors().remove(id);
-                
+
         boolean result = true;
         if (!FormUtil.isReadonly(element, formData) && element.continueValidation(formData)) {
             Validator validator = (Validator) element.getValidator();
@@ -462,7 +477,7 @@ public class FormUtil implements ApplicationContextAware {
                 result = validator.validate(element, formData, values) && result;
             }
             result = element.selfValidate(formData) && result;
-            
+
             Collection<Element> children = element.getChildren(formData);
             if (children != null) {
                 for (Element child : children) {
@@ -473,18 +488,18 @@ public class FormUtil implements ApplicationContextAware {
             //remove error in hidden section
             cleanPreviousErrors(element, formData);
         }
-        
+
         //add empty error to fail the submission if the result is false and there are no error message exist.  
         if (!result && !element.hasError(formData) && element instanceof Form) {
             formData.addFormError(id, "");
         }
         return result;
     }
-    
+
     private static void cleanPreviousErrors(Element element, FormData formData) {
         String id = FormUtil.getElementParameterName(element);
         formData.getPreviousFormErrors().remove(id);
-                
+
         Collection<Element> children = element.getChildren(formData);
         if (children != null) {
             for (Element child : children) {
@@ -494,11 +509,14 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find and invoke the formatData method starting from an element.
+     * Utility method to recursively find and invoke the formatData method
+     * starting from an element.
+     *
      * @param element
      * @param formData
      * @param binderRowSetMap
-     * @return A Map mapping a binder to FormRowSets containing formatted values from all elements.
+     * @return A Map mapping a binder to FormRowSets containing formatted values
+     * from all elements.
      */
     public static FormData executeElementFormatData(Element element, FormData formData) {
         // get store binder and rowset for element
@@ -526,9 +544,9 @@ public class FormUtil implements ApplicationContextAware {
                     }
                 } else {
                     Map storeBinderProp = (Map) element.getProperty(FormBinder.FORM_STORE_BINDER);
-                    
+
                     //if the store binder of this element is null, store as single row in json format
-                    if (element.getStoreBinder() == null && (storeBinderProp == null 
+                    if (element.getStoreBinder() == null && (storeBinderProp == null
                             || "".equals(storeBinderProp.get(FormUtil.PROPERTY_CLASS_NAME)))) {
                         try {
                             // create json object
@@ -540,7 +558,7 @@ public class FormUtil implements ApplicationContextAware {
                                     String value = (String) entry.getValue();
                                     jsonObject.put(key, value);
                                 }
-                                
+
                                 //File upload is not support when no binder is set.
                                 jsonArray.put(jsonObject);
                             }
@@ -585,7 +603,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find and invoke the formatDataForValidation method starting from an element.
+     * Utility method to recursively find and invoke the formatDataForValidation
+     * method starting from an element.
+     *
      * @param element
      * @param formData
      * @return the formatted data.
@@ -606,12 +626,12 @@ public class FormUtil implements ApplicationContextAware {
                 formData = FormUtil.executeHiddenElementFormatDataForValidation(element, formData);
             }
         }
-        
+
         return formData;
     }
-    
+
     protected static FormData executeHiddenElementFormatDataForValidation(Element element, FormData formData) {
-        
+
         //fix for selextbox/checkbox/radio value issue when hiddden
         if (element instanceof SelectBox) {
             String paramName = FormUtil.getElementParameterName(element);
@@ -619,7 +639,7 @@ public class FormUtil implements ApplicationContextAware {
                 formData.addRequestParameterValues(paramName, new String[]{""});
             }
         }
-        
+
         // recurse into children
         Collection<Element> children = element.getChildren(formData);
         if (children != null) {
@@ -631,7 +651,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find and invoke actions starting from an element.
+     * Utility method to recursively find and invoke actions starting from an
+     * element.
+     *
      * @param form
      * @param element
      * @param formData
@@ -664,7 +686,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find the nearest ancestor load binder for an element.
+     * Utility method to recursively find the nearest ancestor load binder for
+     * an element.
+     *
      * @param element
      * @return
      */
@@ -682,7 +706,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find the nearest ancestor options binder for an element.
+     * Utility method to recursively find the nearest ancestor options binder
+     * for an element.
+     *
      * @param element
      * @return
      */
@@ -700,7 +726,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Utility method to recursively find the nearest ancestor store binder for an element.
+     * Utility method to recursively find the nearest ancestor store binder for
+     * an element.
+     *
      * @param element
      * @return
      */
@@ -719,6 +747,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Utility method to recursively find the parent Form for an element.
+     *
      * @param element
      * @return
      */
@@ -737,6 +766,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Utility method to recursively find an element by ID.
+     *
      * @param id
      * @param rootElement
      * @param formData
@@ -748,6 +778,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Utility method to recursively find an element by ID.
+     *
      * @param id
      * @param rootElement
      * @param formData
@@ -757,12 +788,12 @@ public class FormUtil implements ApplicationContextAware {
         if (id.contains(".") && rootElement != null) {
             rootElement = FormUtil.getRootElement(id, rootElement, formData);
             id = id.substring(id.lastIndexOf(".") + 1);
-        } 
-            
+        }
+
         if (rootElement == null) {
             return null;
         }
-        
+
         Element result = null;
         String elementId = rootElement.getPropertyString(FormUtil.PROPERTY_ID);
         if (elementId != null && elementId.equals(id)) {
@@ -794,7 +825,7 @@ public class FormUtil implements ApplicationContextAware {
         }
         return result;
     }
-    
+
     private static Element getRootElement(String id, Element rootElement, FormData formData) {
         if (id.contains(".")) {
             String tempId = id.substring(0, id.indexOf("."));
@@ -808,9 +839,10 @@ public class FormUtil implements ApplicationContextAware {
             return rootElement;
         }
     }
-    
+
     /**
      * Utility method to recursively find a button by ID.
+     *
      * @param id
      * @param rootElement
      * @param formData
@@ -839,9 +871,10 @@ public class FormUtil implements ApplicationContextAware {
         }
         return result;
     }
-    
+
     /**
      * Returns the parameter name for the element.
+     *
      * @param element
      * @return
      */
@@ -855,6 +888,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Returns the request parameter value for an element
+     *
      * @param element
      * @return
      */
@@ -867,6 +901,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Returns the request parameter value for an element
+     *
      * @param element
      * @return
      */
@@ -878,9 +913,11 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Retrieves the property value for an element, first from the element's load binder.
-     * If no binder is available, the default value is used.
-     * Overrides the binder/default value when value from request parameter is available.
+     * Retrieves the property value for an element, first from the element's
+     * load binder. If no binder is available, the default value is used.
+     * Overrides the binder/default value when value from request parameter is
+     * available.
+     *
      * @param element
      * @param formData
      * @param property
@@ -894,11 +931,11 @@ public class FormUtil implements ApplicationContextAware {
             value = element.getPropertyString(FormUtil.PROPERTY_VALUE);
         }
         String paramName = FormUtil.getElementParameterName(element);
-        
+
         if (formData != null) { // handle default value from options binder
             FormRowSet rowSet = formData.getOptionsBinderData(element, id);
             if (rowSet != null) {
-                
+
                 for (FormRow row : rowSet) {
                     Iterator<String> it = row.stringPropertyNames().iterator();
                     // get the key based on the "value" property
@@ -908,8 +945,8 @@ public class FormUtil implements ApplicationContextAware {
                         String key = it.next();
                         optionValue = row.getProperty(key);
                     }
-                    
-                    if(row.getProperty(PROPERTY_SELECTED) != null && (row.getProperty(PROPERTY_SELECTED).equalsIgnoreCase("true"))){
+
+                    if (row.getProperty(PROPERTY_SELECTED) != null && (row.getProperty(PROPERTY_SELECTED).equalsIgnoreCase("true"))) {
                         value = optionValue;
                         break;
                     }
@@ -937,14 +974,16 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Retrieves the property value for an element, first from the element's load binder.
-     * If no binder is available, the default value is used.
-     * Overrides the binder/default value when value from request parameter is available.
-     * This method supports multiple values for a property.
+     * Retrieves the property value for an element, first from the element's
+     * load binder. If no binder is available, the default value is used.
+     * Overrides the binder/default value when value from request parameter is
+     * available. This method supports multiple values for a property.
+     *
      * @param element
      * @param formData
      * @param property
-     * @param nullToEmpty Set to true to default value to "" when there the request parameter value is null
+     * @param nullToEmpty Set to true to default value to "" when there the
+     * request parameter value is null
      * @return
      */
     public static String[] getElementPropertyValues(Element element, FormData formData) {
@@ -966,11 +1005,11 @@ public class FormUtil implements ApplicationContextAware {
                 values.add(val);
             }
         }
-        
+
         if (formData != null) { // handle default value from options binder
             FormRowSet rowSet = formData.getOptionsBinderData(element, id);
             if (rowSet != null) {
-                
+
                 for (FormRow row : rowSet) {
                     Iterator<String> it = row.stringPropertyNames().iterator();
                     // get the key based on the "value" property
@@ -980,14 +1019,14 @@ public class FormUtil implements ApplicationContextAware {
                         String key = it.next();
                         optionValue = row.getProperty(key);
                     }
-                    
-                    if(row.getProperty(PROPERTY_SELECTED) != null && (row.getProperty(PROPERTY_SELECTED).equalsIgnoreCase("true"))){
+
+                    if (row.getProperty(PROPERTY_SELECTED) != null && (row.getProperty(PROPERTY_SELECTED).equalsIgnoreCase("true"))) {
                         values.add(optionValue);
                     }
                 }
             }
         }
-        
+
         // read from request if available, TODO: handle null values e.g. checkbox
         if (id != null) {
             String[] paramValues = FormUtil.getRequestParameterValues(element, formData);
@@ -1018,15 +1057,16 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Utility methods to check the value of an element is changed
+     *
      * @param element
      * @param formData
      * @param updatedValues
-     * @return 
+     * @return
      */
     public static boolean isElementPropertyValuesChanges(Element element, FormData formData, String[] updatedValues) {
         // get value
         String id = element.getPropertyString(FormUtil.PROPERTY_ID);
-        
+
         String primaryKeyValue = element.getPrimaryKeyValue(formData);
         String uniqueId = "";
         Form rootForm = findRootForm(element);
@@ -1062,8 +1102,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Retrieves the property options for an element, first from the element's options binder.
-     * If no binder is available, the default options are used.
+     * Retrieves the property options for an element, first from the element's
+     * options binder. If no binder is available, the default options are used.
+     *
      * @param element
      * @param formData
      * @return
@@ -1110,6 +1151,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Generates a delimited string from an array of Strings.
+     *
      * @param values
      * @return
      */
@@ -1131,6 +1173,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Retrieve the error attached to the element
+     *
      * @param element
      * @param formData
      * @return null if there is no error.
@@ -1142,7 +1185,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Retrieve a decoration on an element by any attached validator, e.g. marking a required field.
+     * Retrieve a decoration on an element by any attached validator, e.g.
+     * marking a required field.
+     *
      * @param element
      * @param formData
      * @return
@@ -1161,6 +1206,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Generates JSON representing an element.
+     *
      * @param element
      * @return
      */
@@ -1172,6 +1218,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Generates JSON representing the properties of an element.
+     *
      * @param element
      * @return
      */
@@ -1189,6 +1236,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Generates a JSONObject to represent the properties of an element
+     *
      * @return
      */
     public static JSONObject generatePropertyJsonObject(Map<String, Object> properties) throws JSONException {
@@ -1209,10 +1257,10 @@ public class FormUtil implements ApplicationContextAware {
                         jsonArray.put(jo);
                     }
                     jsonObject.put(propertyName, jsonArray);
-                } else if (objValue != null && objValue instanceof Object[]) { 
+                } else if (objValue != null && objValue instanceof Object[]) {
                     Object[] mapArray = (Object[]) objValue;
                     JSONArray jsonArray = new JSONArray();
-                    for (Object row :  mapArray) {
+                    for (Object row : mapArray) {
                         Map m = (Map) row;
                         JSONObject jo = new JSONObject(m);
                         jsonArray.put(jo);
@@ -1231,6 +1279,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Generates a JSONObject to represent an element
+     *
      * @param element
      * @return
      * @throws Exception
@@ -1285,7 +1334,6 @@ public class FormUtil implements ApplicationContextAware {
             jsonProps.put(FormBinder.FORM_OPTIONS_BINDER, jsonOptionsBinder);
         }
 
-
         // set child elements
         JSONArray jsonChildren = new JSONArray();
         Collection<Element> children = element.getChildren();
@@ -1301,7 +1349,9 @@ public class FormUtil implements ApplicationContextAware {
     }
 
     /**
-     * Generates the HTML tag meta data for the element that is used by the form builder.
+     * Generates the HTML tag meta data for the element that is used by the form
+     * builder.
+     *
      * @param element
      * @return
      */
@@ -1314,6 +1364,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Generates HTML output using a FreeMarker template.
+     *
      * @param templatePath
      * @param dataModel
      * @return
@@ -1321,10 +1372,10 @@ public class FormUtil implements ApplicationContextAware {
     public static String generateElementHtml(final Element element, final FormData formData, final String templatePath, Map dataModel) {
         PluginManager pluginManager = (PluginManager) appContext.getBean("pluginManager");
         String content = pluginManager.getPluginFreeMarkerTemplate(dataModel, element.getClassName(), "/templates/" + templatePath, "message/form/" + element.getName().replace(" ", ""));
-        
+
         String readonly = "_EDITABLE";
         if (FormUtil.isReadonly(element, formData)) {
-             readonly = "_READONLY";
+            readonly = "_READONLY";
         }
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -1335,12 +1386,13 @@ public class FormUtil implements ApplicationContextAware {
         } catch (Exception e) {
             // ignore if servlet request is not available
         }
-        
+
         return content;
     }
 
     /**
      * Generates a standard map of data to be used within an element template.
+     *
      * @param element
      * @param formData
      * @return
@@ -1381,27 +1433,29 @@ public class FormUtil implements ApplicationContextAware {
                 dataModel.put("request", new MockRequest());
             }
         }
-        
+
         // sanitize label output
         String label = element.getPropertyString(FormUtil.PROPERTY_LABEL);
         if (label != null && !label.trim().isEmpty()) {
             label = StringUtil.stripHtmlRelaxed(label);
             element.setProperty(FormUtil.PROPERTY_LABEL, label);
         }
-        
+
         return dataModel;
     }
 
     /**
      * Recursively set the readonly property for all descendent elements.
+     *
      * @param element
      */
     public static void setReadOnlyProperty(Element element) {
         setReadOnlyProperty(element, true, null);
     }
-    
+
     /**
      * Recursively set the readonly property for all descendent elements.
+     *
      * @param element
      */
     public static void setReadOnlyProperty(Element element, Boolean readonly, Boolean label) {
@@ -1419,34 +1473,37 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Check a form is submitted or not
+     *
      * @param formData
      */
     public static boolean isFormSubmitted(Element element, FormData formData) {
         Form form = findRootForm(element);
         if (form != null) {
             String paramName = FormUtil.getElementParameterName(form);
-            if (formData != null && formData.getRequestParameter(paramName+"_SUBMITTED") != null) {
+            if (formData != null && formData.getRequestParameter(paramName + "_SUBMITTED") != null) {
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
      * Check an element is readonly or not
+     *
      * @param formData
      */
     public static boolean isReadonly(Element element, FormData formData) {
         if ("true".equalsIgnoreCase(element.getPropertyString(FormUtil.PROPERTY_READONLY))) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * Gets a running number a unique key
-     * @return 
+     *
+     * @return
      */
     public static String getUniqueKey() {
         if (runningNumber == Long.MAX_VALUE) {
@@ -1455,7 +1512,7 @@ public class FormUtil implements ApplicationContextAware {
         runningNumber++;
         return Long.toString(runningNumber);
     }
-    
+
     /**
      * Set flag in request to indicate whether is currently in the form builder.
      */
@@ -1468,25 +1525,28 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Check whether request is currently in the form builder.
-     * @return 
+     *
+     * @return
      */
     public static boolean isFormBuilderActive() {
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         boolean formBuilderActive = (request != null) ? Boolean.TRUE.equals(request.getAttribute(FORM_BUILDER_ACTIVE)) : false;
         return formBuilderActive;
     }
-    
+
     /**
      * Used by system to sets the current processing form json in current thread
-     * @param json 
+     *
+     * @param json
      */
     public static void setProcessedFormJson(String json) {
         processedFormJson.set(json);
     }
-    
+
     /**
      * Used by system to gets the current processing form json in current thread
-     * @return 
+     *
+     * @return
      */
     public static String getProcessedFormJson() {
         if (processedFormJson != null && processedFormJson.get() != null) {
@@ -1494,20 +1554,22 @@ public class FormUtil implements ApplicationContextAware {
         }
         return null;
     }
-    
+
     /**
-     * Used by system to clears the current processing form json in current thread
+     * Used by system to clears the current processing form json in current
+     * thread
      */
     public static void clearProcessedFormJson() {
         if (processedFormJson != null && processedFormJson.get() != null) {
             processedFormJson.set(null);
         }
     }
-    
+
     /**
      * Utility method to convert an element to json
+     *
      * @param element
-     * @return 
+     * @return
      */
     public static String getElementProcessedJson(Element element) {
         String properties = "";
@@ -1515,25 +1577,25 @@ public class FormUtil implements ApplicationContextAware {
             // create json object
             JSONObject obj = new JSONObject(getProcessedFormJson());
             Element temp = element;
-            
+
             // get the elements on the path to root element;
             Stack<Element> stack = new Stack<Element>();
             while (temp != null) {
                 stack.push(temp);
                 temp = temp.getParent();
             }
-            
+
             // get the first element (Root element) in stack to match with root Json Object 
             temp = stack.pop();
-            
+
             //if statck is not empty, continue find the matching json object
             while (!stack.isEmpty()) {
                 temp = stack.pop();
-                
+
                 //travel in json object's child to find matching json object
                 if (!obj.isNull(FormUtil.PROPERTY_ELEMENTS)) {
                     int position = 0;
-                    
+
                     //get position
                     Element parent = temp.getParent();
                     Collection<Element> children = parent.getChildren();
@@ -1545,7 +1607,7 @@ public class FormUtil implements ApplicationContextAware {
                             position++;
                         }
                     }
-                    
+
                     //get json object
                     JSONArray elements = obj.getJSONArray(FormUtil.PROPERTY_ELEMENTS);
                     if (elements != null && elements.length() > 0) {
@@ -1553,7 +1615,7 @@ public class FormUtil implements ApplicationContextAware {
                     }
                 }
             }
-            
+
             if (temp != null && obj != null) {
                 //get properties obj and convert to json string
                 if (!obj.isNull(FormUtil.PROPERTY_PROPERTIES)) {
@@ -1561,7 +1623,7 @@ public class FormUtil implements ApplicationContextAware {
                     properties = objProperty.toString();
                 }
             }
-            
+
         } catch (Exception e) {
             properties = FormUtil.generateElementPropertyJson(element);
         }
@@ -1570,6 +1632,7 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Similar to loadFormData, returns results in JSON format.
+     *
      * @param appId
      * @param appVersion
      * @param formDefId
@@ -1578,7 +1641,7 @@ public class FormUtil implements ApplicationContextAware {
      * @param includeReferenceElements
      * @param flatten
      * @param assignment
-     * @return 
+     * @return
      */
     public static String loadFormDataJson(String appId, String appVersion, String formDefId, String primaryKeyValue, boolean includeSubformData, boolean includeReferenceElements, boolean flatten, WorkflowAssignment assignment) throws JSONException {
         Map<String, Object> result = loadFormData(appId, appVersion, formDefId, primaryKeyValue, includeSubformData, includeReferenceElements, flatten, assignment);
@@ -1586,32 +1649,41 @@ public class FormUtil implements ApplicationContextAware {
         String json = jsonObject.toString(4);
         return json;
     }
-    
+
     /**
-     * Utility method to fetch submitted form data values including data from subforms, and reference fields.
-     * Returns a key-value pair (optionally flattened) for all the data that is part of a form submission. 
-     * The returned data includes top level form data, subform data (including recursive subforms), and data pointed by reference fields (like SelectBox pointing to a datalist item)
+     * Utility method to fetch submitted form data values including data from
+     * subforms, and reference fields. Returns a key-value pair (optionally
+     * flattened) for all the data that is part of a form submission. The
+     * returned data includes top level form data, subform data (including
+     * recursive subforms), and data pointed by reference fields (like SelectBox
+     * pointing to a datalist item)
+     *
      * @param appId
      * @param appVersion
      * @param formDefId
      * @param primaryKeyValue
      * @param includeSubformData true to recursively include subform data
-     * @param includeReferenceElements true to include data from reference elements e.g. selectbox, etc.
+     * @param includeReferenceElements true to include data from reference
+     * elements e.g. selectbox, etc.
      * @param flatten true to flatten data into a one level key-value map
-     * @param assignment Optional workflow assignment (for assignment hash variables)
-     * @return a Map<String,Object> representing the form data. The key is the element ID, and the value is either a String for an element value, Map<String,Object> representing subform data, or Collection<Map<String,Object>> for reference fields.
+     * @param assignment Optional workflow assignment (for assignment hash
+     * variables)
+     * @return a Map<String,Object> representing the form data. The key is the
+     * element ID, and the value is either a String for an element value,
+     * Map<String,Object> representing subform data, or
+     * Collection<Map<String,Object>> for reference fields.
      */
     public static Map<String, Object> loadFormData(final String appId, final String appVersion, final String formDefId, final String primaryKeyValue, final boolean includeSubformData, final boolean includeReferenceElements, final boolean flatten, final WorkflowAssignment assignment) {
 
         final Map<String, Object> result = new HashMap<String, Object>();
-        
+
         // get service and DAO objects
         ApplicationContext ac = AppUtil.getApplicationContext();
-        AppService appService = (AppService)ac.getBean("appService");
-        final FormService formService = (FormService)ac.getBean("formService");
-        final FormDefinitionDao formDefinitionDao = (FormDefinitionDao)ac.getBean("formDefinitionDao");
+        AppService appService = (AppService) ac.getBean("appService");
+        final FormService formService = (FormService) ac.getBean("formService");
+        final FormDefinitionDao formDefinitionDao = (FormDefinitionDao) ac.getBean("formDefinitionDao");
         final AppDefinition appDef = appService.getAppDefinition(appId, appVersion);
-        
+
         if (appDef != null && formDefId != null && !formDefId.isEmpty() && primaryKeyValue != null) {
             // get root form
             Form form = null;
@@ -1633,7 +1705,7 @@ public class FormUtil implements ApplicationContextAware {
         }
         return result;
     }
-    
+
     protected static void recursiveLoadFormData(String appId, String appVersion, Element e, Map<String, Object> data, FormData formData, boolean includeSubformData, boolean includeReferenceElements, boolean flatten, WorkflowAssignment assignment, int currentDepth) {
         boolean recursive = currentDepth == 0 || includeSubformData;
         Map<String, Object> result = data;
@@ -1649,8 +1721,8 @@ public class FormUtil implements ApplicationContextAware {
                     if (useSubMap) {
                         // it's data from a different form, so put data into submap
                         Map<String, Object> subMap = new HashMap<String, Object>();
-                        for (Iterator i=row.keySet().iterator(); i.hasNext();) {
-                            String key = (String)i.next();
+                        for (Iterator i = row.keySet().iterator(); i.hasNext();) {
+                            String key = (String) i.next();
                             Object value = row.get(key);
                             subMap.put(key, value.toString());
                         }
@@ -1659,8 +1731,8 @@ public class FormUtil implements ApplicationContextAware {
                         result = subMap;
                     } else {
                         // it's the same as the original form, so put data into original map
-                        for (Iterator i=row.keySet().iterator(); i.hasNext();) {
-                            String key = (String)i.next();
+                        for (Iterator i = row.keySet().iterator(); i.hasNext();) {
+                            String key = (String) i.next();
                             Object value = row.get(key);
                             data.put(key, value.toString());
                         }
@@ -1673,8 +1745,8 @@ public class FormUtil implements ApplicationContextAware {
 
             // get values
             String[] valueArray = FormUtil.getElementPropertyValues(e, formData);
-            FormRowSet options = ((FormReferenceDataRetriever)e).loadFormRows(valueArray, formData);
-            for (Map opt: options) {
+            FormRowSet options = ((FormReferenceDataRetriever) e).loadFormRows(valueArray, formData);
+            for (Map opt : options) {
                 Map optionRow = new HashMap(opt);
                 subResults.add(optionRow);
             }
@@ -1688,20 +1760,20 @@ public class FormUtil implements ApplicationContextAware {
                 Collection<Map<String, Object>> subResults = new ArrayList<Map<String, Object>>();
                 if (optionsBinder instanceof FormOptionsBinder) {
                     // element is using FormOptionsBinder, so retrieve all form data for the row
-                    String optionsFormDefId = ((FormOptionsBinder)optionsBinder).getPropertyString("formDefId");
+                    String optionsFormDefId = ((FormOptionsBinder) optionsBinder).getPropertyString("formDefId");
                     if (optionsFormDefId != null && !optionsFormDefId.isEmpty()) {
                         String[] values = FormUtil.getElementPropertyValues(e, formData);
-                        for (String value: values) {
+                        for (String value : values) {
                             Map<String, Object> optionRow = loadFormData(appId, appVersion, optionsFormDefId, value, includeSubformData, includeReferenceElements, flatten, assignment);
-                                subResults.add(optionRow);
-                            }
+                            subResults.add(optionRow);
                         }
-                    
+                    }
+
                 } else {
                     // other binder type is used, so just load available options
                     Map<String, String> optionMap = new HashMap<String, String>();
                     Collection<Map> options = FormUtil.getElementPropertyOptionsMap(e, formData);
-                    for (Map<String, String> opt: options) {
+                    for (Map<String, String> opt : options) {
                         String key = opt.get(FormUtil.PROPERTY_VALUE);
                         String label = opt.get(FormUtil.PROPERTY_LABEL);
                         optionMap.put(key, label);
@@ -1709,7 +1781,7 @@ public class FormUtil implements ApplicationContextAware {
 
                     // load reference data
                     String[] values = FormUtil.getElementPropertyValues(e, formData);
-                    for (String value: values) {
+                    for (String value : values) {
                         String label = optionMap.get(value);
                         Map<String, Object> optionRow = new HashMap<String, Object>();
                         if (value != null && label != null) {
@@ -1722,7 +1794,7 @@ public class FormUtil implements ApplicationContextAware {
                 data.put(elementKey, subResults);
             }
         }
-        
+
         Collection<Element> children = e.getChildren();
         if (children != null && !children.isEmpty()) {
             currentDepth++;
@@ -1730,71 +1802,76 @@ public class FormUtil implements ApplicationContextAware {
                 recursiveLoadFormData(appId, appVersion, c, result, formData, includeSubformData, includeReferenceElements, flatten, assignment, currentDepth);
             }
         }
-    } 
-    
+    }
+
     /**
-     * Check the element is using Ajax to load options 
+     * Check the element is using Ajax to load options
+     *
      * @param element
      * @param formData
-     * @return 
+     * @return
      */
     public static boolean isAjaxOptionsSupported(Element element, FormData formData) {
         boolean supported = true;
-        
+
         //only support ajax when data encryption and nonce generator are available
         if (!(SecurityUtil.getDataEncryption() != null && SecurityUtil.getNonceGenerator() != null)) {
             supported = false;
         }
-        
+
         //if control field not exist
         if (element.getParent() != null && !(element instanceof FormAjaxOptionsElement && ((FormAjaxOptionsElement) element).getControlElement(formData) != null)) {
             supported = false;
         } else if (element.getParent() == null && element.getPropertyString("controlField").isEmpty()) {
             supported = false;
         }
-        
+
         //if option binder not support ajax
         if (!(element.getOptionsBinder() != null && element.getOptionsBinder() instanceof FormAjaxOptionsBinder && ((FormAjaxOptionsBinder) element.getOptionsBinder()).useAjax())) {
             supported = false;
         }
         return supported;
     }
-    
+
     /**
-     * Sets security data for multi options element which using Ajax call to load options
+     * Sets security data for multi options element which using Ajax call to
+     * load options
+     *
      * @param element
-     * @param formData 
+     * @param formData
      */
     public static void setAjaxOptionsElementProperties(Element element, FormData formData) {
         if (isAjaxOptionsSupported(element, formData)) {
             FormBinder binder = (FormBinder) element.getOptionsBinder();
-            
+
             String s = null;
             try {
                 JSONObject jo = new JSONObject();
                 jo.accumulate(FormUtil.PROPERTY_CLASS_NAME, binder.getClassName());
                 jo.accumulate(FormUtil.PROPERTY_PROPERTIES, FormUtil.generatePropertyJsonObject(binder.getProperties()));
-                
+
                 s = jo.toString();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             if (s != null) {
                 AppDefinition appDef = AppUtil.getCurrentAppDefinition();
                 element.setProperty("appId", appDef.getAppId());
                 element.setProperty("appVersion", appDef.getVersion());
-                
+
                 String nonce = SecurityUtil.generateNonce(new String[]{"AjaxOptions", appDef.getAppId(), s.substring(s.length() - 20)}, 1);
                 element.setProperty("nonce", nonce);
-                
+
                 try {
                     //secure the data
                     s = SecurityUtil.encrypt(s);
                     s = URLEncoder.encode(s, "UTF-8");
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 element.setProperty("binderData", s);
             }
-            
+
             FormAjaxOptionsElement ajaxElement = (FormAjaxOptionsElement) element;
-            
+
             Element controlElement = ajaxElement.getControlElement(formData);
             if (controlElement != null) {
                 String[] controlValues = FormUtil.getElementPropertyValues(controlElement, formData);
@@ -1805,31 +1882,32 @@ public class FormUtil implements ApplicationContextAware {
             }
         }
     }
-    
+
     /**
      * Gets data from Options Binder for AJAX call
+     *
      * @param dependencyValue
      * @param appDef
      * @param nonce
      * @param binderData
-     * @return 
+     * @return
      */
     public static FormRowSet getAjaxOptionsBinderData(String dependencyValue, AppDefinition appDef, String nonce, String binderData) {
         FormRowSet rowSet = new FormRowSet();
-        
+
         if (binderData != null && !binderData.isEmpty() && nonce != null && !nonce.isEmpty() && appDef != null) {
             try {
                 binderData = URLDecoder.decode(binderData, "UTF-8");
                 binderData = SecurityUtil.decrypt(binderData);
-                
-                if (SecurityUtil.verifyNonce(nonce, new String[] {"AjaxOptions", appDef.getAppId(), binderData.substring(binderData.length() - 20)})) {
+
+                if (SecurityUtil.verifyNonce(nonce, new String[]{"AjaxOptions", appDef.getAppId(), binderData.substring(binderData.length() - 20)})) {
                     FormBinder binder = null;
-                    
+
                     JSONObject jo = new JSONObject(binderData);
                     // create binder object
                     if (!jo.isNull(FormUtil.PROPERTY_CLASS_NAME)) {
                         PluginManager pluginManager = (PluginManager) appContext.getBean("pluginManager");
-                        
+
                         String className = jo.getString(FormUtil.PROPERTY_CLASS_NAME);
                         if (className != null && className.trim().length() > 0) {
                             binder = (FormBinder) pluginManager.getPlugin(className);
@@ -1840,23 +1918,25 @@ public class FormUtil implements ApplicationContextAware {
                             }
                         }
                     }
-                    
+
                     if (binder != null) {
                         FormAjaxOptionsBinder ab = (FormAjaxOptionsBinder) binder;
                         rowSet = ab.loadAjaxOptions(dependencyValue.split(";"));
                     }
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-        
+
         return rowSet;
     }
-    
+
     /**
      * Retrieve all form fields id & label in form data table
+     *
      * @param appDef
      * @param formId
-     * @return 
+     * @return
      */
     public static Collection<Map<String, String>> getFormColumns(AppDefinition appDef, String formId) {
         Collection<Map<String, String>> columns = new ArrayList<Map<String, String>>();
@@ -1881,26 +1961,30 @@ public class FormUtil implements ApplicationContextAware {
                     columns.add(hm);
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return columns;
     }
-    
+
     /**
      * Utility method used to creates a new form definition json
+     *
      * @param formId
      * @param formDef
-     * @return 
+     * @return
      */
     public static String generateDefaultForm(String formId, FormDefinition formDef) {
         return generateDefaultForm(formId, formDef, null);
     }
-    
+
     /**
-     * Utility method used to creates a new form definition json based on another form definition
+     * Utility method used to creates a new form definition json based on
+     * another form definition
+     *
      * @param formId
      * @param formDef
      * @param copyFormDef
-     * @return 
+     * @return
      */
     public static String generateDefaultForm(String formId, FormDefinition formDef, FormDefinition copyFormDef) {
         String formName = "";
@@ -1935,7 +2019,7 @@ public class FormUtil implements ApplicationContextAware {
         if (json.isEmpty()) {
             formName = StringEscapeUtils.escapeJavaScript(formName);
             description = StringEscapeUtils.escapeJavaScript(description);
-             json = "{\"className\": \"org.joget.apps.form.model.Form\",  \"properties\":{ \"id\":\"" + formId + "\", \"name\":\"" + formName + "\", \"tableName\":\"" + tableName + "\", \"loadBinder\":{ \"className\":\"org.joget.apps.form.lib.WorkflowFormBinder\" }, \"storeBinder\":{ \"className\":\"org.joget.apps.form.lib.WorkflowFormBinder\" }, \"description\":\"" + description + "\" },\"elements\":[{\"elements\":[{\"elements\":[],\"className\":\"org.joget.apps.form.model.Column\",\"properties\":{\"width\":\"100%\"}}],\"className\":\"org.joget.apps.form.model.Section\",\"properties\":{\"label\":\"" + ResourceBundleUtil.getMessage("fbuilder.section") + "\",\"id\":\"section1\"}}]}";
+            json = "{\"className\": \"org.joget.apps.form.model.Form\",  \"properties\":{ \"id\":\"" + formId + "\", \"name\":\"" + formName + "\", \"tableName\":\"" + tableName + "\", \"loadBinder\":{ \"className\":\"org.joget.apps.form.lib.WorkflowFormBinder\" }, \"storeBinder\":{ \"className\":\"org.joget.apps.form.lib.WorkflowFormBinder\" }, \"description\":\"" + description + "\" },\"elements\":[{\"elements\":[{\"elements\":[],\"className\":\"org.joget.apps.form.model.Column\",\"properties\":{\"width\":\"100%\"}}],\"className\":\"org.joget.apps.form.model.Section\",\"properties\":{\"label\":\"" + ResourceBundleUtil.getMessage("fbuilder.section") + "\",\"id\":\"section1\"}}]}";
         }
 
         return json;
@@ -1943,8 +2027,9 @@ public class FormUtil implements ApplicationContextAware {
 
     /**
      * Utility methods to execute tool after form submission
+     *
      * @param form
-     * @param formData 
+     * @param formData
      */
     public static void executePostFormSubmissionProccessor(Form form, FormData formData) {
         try {
@@ -1977,14 +2062,14 @@ public class FormUtil implements ApplicationContextAware {
                             //create an mock workflow assignment for run process form
                             ass = new WorkflowAssignment();
                             ass.setProcessId(formData.getProcessId());
-                        } else if (primaryKey!= null && !primaryKey.isEmpty()) {
+                        } else if (primaryKey != null && !primaryKey.isEmpty()) {
                             //create an mock workflow assignment to pass record id as process id as most of the existing tool as using it to retrieve record
                             ass = new WorkflowAssignment();
                             ass.setProcessId(primaryKey);
                         }
-                        
+
                         Map propertiesMap = null;
-                        
+
                         //get form json again to retrieve plugin properties
                         FormDefinitionDao formDefinitionDao = (FormDefinitionDao) FormUtil.getApplicationContext().getBean("formDefinitionDao");
                         FormDefinition formDefinition = formDefinitionDao.loadById(form.getPropertyString(FormUtil.PROPERTY_ID), appDef);
@@ -1998,7 +2083,7 @@ public class FormUtil implements ApplicationContextAware {
                                 propertiesMap = AppPluginUtil.getDefaultProperties(p, json, appDef, ass);
                             }
                         }
-                        
+
                         if (propertiesMap == null) {
                             propertiesMap = AppPluginUtil.getDefaultProperties(p, (Map) temp.get(FormUtil.PROPERTY_PROPERTIES), appDef, ass);
                         }
@@ -2018,9 +2103,9 @@ public class FormUtil implements ApplicationContextAware {
                         } catch (Exception e) {
                             // ignore if class is not found
                         }
-                        
+
                         ApplicationPlugin appPlugin = (ApplicationPlugin) p;
-                        
+
                         if (appPlugin instanceof PropertyEditable) {
                             ((PropertyEditable) appPlugin).setProperties(propertiesMap);
                         }
@@ -2032,42 +2117,41 @@ public class FormUtil implements ApplicationContextAware {
             LogUtil.error(AppService.class.getName(), e, "Error executing Post Form Submission Processor");
         }
     }
-    
+
     public static void recursiveDeleteChildFormData(Form form, String primaryKey, boolean deleteGrid, boolean deleteSubform, boolean abortProcess, boolean deleteFiles) {
         FormData formData = new FormData();
         formData.setPrimaryKeyValue(primaryKey);
         formData.addFormResult(FormUtil.FORM_RESULT_LOAD_ALL_DATA, FormUtil.FORM_RESULT_LOAD_ALL_DATA);
-        
-        if (FormUtil.isReadonly((Element )form, formData)) {
+
+        if (FormUtil.isReadonly((Element) form, formData)) {
             return;
         }
-        
+
         formData = FormUtil.executeLoadBinders(form, formData);
-        
+
         //skip the form element and start with its child
         for (Element e : form.getChildren()) {
             recursiveExecuteFormDeleteBinders(e, formData, deleteGrid, deleteSubform, abortProcess, deleteFiles);
         }
     }
-    
+
     public static void recursiveExecuteFormDeleteBinders(Element element, FormData formData, boolean deleteGrid, boolean deleteSubform, boolean abortProcess, boolean deleteFiles) {
         if (FormUtil.isReadonly(element, formData)) {
             return;
         }
-        
+
         FormLoadBinder loadBinder = element.getLoadBinder();
         FormStoreBinder storeBinder = element.getStoreBinder();
-        
+
         FormRowSet rows = formData.getLoadBinderData(element);
         if (rows != null && !rows.isEmpty()) {
             boolean isGrid = false;
-            if (((loadBinder != null && loadBinder instanceof FormLoadMultiRowElementBinder) 
+            if (((loadBinder != null && loadBinder instanceof FormLoadMultiRowElementBinder)
                     || (storeBinder != null && storeBinder instanceof FormLoadMultiRowElementBinder))
                     || (storeBinder != null && storeBinder instanceof GridInnerDataStoreBinderWrapper)
                     || rows.isMultiRow()) {
                 isGrid = true;
             }
-
 
             if (element.getParent() == null || (isGrid && deleteGrid) || (!isGrid && deleteSubform)) {
                 boolean delete = false;
@@ -2075,17 +2159,17 @@ public class FormUtil implements ApplicationContextAware {
                     ((FormDeleteBinder) storeBinder).delete(element, rows, formData, deleteGrid, deleteSubform, abortProcess, deleteFiles);
                     delete = true;
                 } else if (loadBinder instanceof FormDataDeletableBinder) {
-                    String formId = ((FormDataDeletableBinder)loadBinder).getFormId();
-                    String tableName = ((FormDataDeletableBinder)loadBinder).getTableName();
+                    String formId = ((FormDataDeletableBinder) loadBinder).getFormId();
+                    String tableName = ((FormDataDeletableBinder) loadBinder).getTableName();
                     FormDataDao formDataDao = (FormDataDao) FormUtil.getApplicationContext().getBean("formDataDao");
                     formDataDao.delete(formId, tableName, rows);
-                    
+
                     if (deleteFiles) {
                         for (FormRow r : rows) {
                             FileUtil.deleteFiles(tableName, r.getId());
                         }
                     }
-                    
+
                     delete = true;
                 }
 
@@ -2096,12 +2180,12 @@ public class FormUtil implements ApplicationContextAware {
                 }
             }
         }
-        
+
         for (Element child : element.getChildren()) {
             recursiveExecuteFormDeleteBinders(child, formData, deleteGrid, deleteSubform, abortProcess, deleteFiles);
         }
     }
-    
+
     public static void abortRunningProcessForRecord(String recordId) {
         WorkflowProcessLinkDao linkDao = (WorkflowProcessLinkDao) AppUtil.getApplicationContext().getBean("workflowProcessLinkDao");
         WorkflowManager workflowManager = (WorkflowManager) AppUtil.getApplicationContext().getBean("workflowManager");
@@ -2119,21 +2203,21 @@ public class FormUtil implements ApplicationContextAware {
             }
         }
     }
-    
-    public static String formRowSetToJson (FormRowSet rows) {
+
+    public static String formRowSetToJson(FormRowSet rows) {
         String json = "[]";
         try {
             JSONArray jsonArray = new JSONArray();
-            
+
             for (FormRow r : rows) {
                 JSONObject obj = new JSONObject();
-                
+
                 for (Object p : r.getCustomProperties().keySet()) {
                     obj.put(p.toString(), r.getProperty(p.toString()));
                 }
                 obj.put(FormUtil.PROPERTY_DATE_CREATED, r.getDateCreated());
                 obj.put(FormUtil.PROPERTY_DATE_MODIFIED, r.getDateModified());
-                
+
                 if (r.getTempFilePathMap() != null && !r.getTempFilePathMap().isEmpty()) {
                     JSONObject filePaths = new JSONObject();
                     for (Object f : r.getTempFilePathMap().keySet()) {
@@ -2145,18 +2229,18 @@ public class FormUtil implements ApplicationContextAware {
                     }
                     obj.put(FormUtil.PROPERTY_TEMP_FILE_PATH, filePaths);
                 }
-                
+
                 jsonArray.put(obj);
             }
-            
+
             json = jsonArray.toString();
         } catch (Exception e) {
             LogUtil.error(FormUtil.class.getName(), e, "formRowSetToJson error");
         }
         return json;
     }
-    
-    public static FormRowSet jsonToFormRowSet (String json) {
+
+    public static FormRowSet jsonToFormRowSet(String json) {
         FormRowSet rowSet = new FormRowSet();
         rowSet.setMultiRow(true);
 
@@ -2173,7 +2257,7 @@ public class FormUtil implements ApplicationContextAware {
                     if (fields != null && fields.length() > 0) {
                         for (int k = 0; k < fields.length(); k++) {
                             String fieldName = fields.getString(k);
-                            
+
                             if (fieldName.equals(FormUtil.PROPERTY_TEMP_FILE_PATH)) {
                                 JSONObject tempFilePaths = jsonRow.getJSONObject(fieldName);
                                 JSONArray files = tempFilePaths.names();
@@ -2182,7 +2266,7 @@ public class FormUtil implements ApplicationContextAware {
                                         String fileFieldName = files.getString(j);
                                         JSONArray arr = tempFilePaths.getJSONArray(fileFieldName);
                                         List<String> paths = new ArrayList<String>();
-                                        for(int p = 0; p < arr.length(); p++){
+                                        for (int p = 0; p < arr.length(); p++) {
                                             paths.add(arr.getString(p));
                                         }
                                         row.putTempFilePath(fileFieldName, paths.toArray(new String[]{}));
@@ -2192,7 +2276,7 @@ public class FormUtil implements ApplicationContextAware {
                                 JSONObject deleteFilePathMap = jsonRow.getJSONObject(FormUtil.PROPERTY_DELETE_FILE_PATH);
                                 JSONArray deleteFilePaths = deleteFilePathMap.names();
                                 if (deleteFilePaths != null && deleteFilePaths.length() > 0) {
-                                    for (int l = 0; l < deleteFilePaths.length(); l++) {                        
+                                    for (int l = 0; l < deleteFilePaths.length(); l++) {
                                         List<String> pathValues = new ArrayList<String>();
                                         String deleteFilePathFieldId = deleteFilePaths.getString(l);
                                         JSONArray paths = deleteFilePathMap.getJSONArray(deleteFilePathFieldId);
@@ -2210,7 +2294,7 @@ public class FormUtil implements ApplicationContextAware {
                             }
                         }
                     }
-                    
+
                     row.setProperty("jsonrow", jsonRow.toString());
                     rowSet.add(row);
                 }

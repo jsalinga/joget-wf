@@ -308,7 +308,7 @@ button:hover, input[type=button]:hover, #menu .dropdown-btn input:hover, .form-b
 }
 #logo-title {
     display: inline-block;
-    
+
     float: left;
     margin-top: 12px;
     color: white;
@@ -482,11 +482,11 @@ body#appcenter #footer {
 }
 
 #main #nv .filterlabel, #main #nv-apps .filterlabel {
-  position: absolute;
-  margin-top: 8px;
-  margin-left: 4px;
-  color: #aaa;
-  font-size: 14px;
+    position: absolute;
+    margin-top: 8px;
+    margin-left: 4px;
+    color: #aaa;
+    font-size: 14px;
 }
 .systemAlert {
     background: #FFFFD6;
@@ -515,7 +515,7 @@ body#appcenter #footer {
 
 /*--- App Center ---*/
 body#appcenter .published-apps{
-   min-height: 340px;
+    min-height: 340px;
 }
 #main-content {
     display: inline-block;    
@@ -542,12 +542,12 @@ body#appcenter .published-apps{
 }
 #main-content ul {
     list-style: none;
-    
+
     clear: both;
 }
 #main-content ul li {
     clear: none;
-    
+
     display: block;
     float: left;
     height: 240px;
@@ -654,7 +654,7 @@ body#appcenter .published-apps{
 }
 #main-content #categories {
     float: right;
-    
+
     display: block;
     clear: both;
     position: relative;
@@ -663,7 +663,7 @@ body#appcenter .published-apps{
 }
 #main-content .category {
     padding: 4px;
-    
+
     margin-right: 4px;
     text-decoration: none;
     border: dotted 1px #666;
@@ -671,7 +671,7 @@ body#appcenter .published-apps{
 }
 #main-content .category-selected {
     background: #555;
-    
+
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -728,7 +728,7 @@ body#appcenter .published-apps{
 }
 #side-content .content-column {
     margin-bottom: 40px;
-    
+
 }
 #welcome-content {    
 }

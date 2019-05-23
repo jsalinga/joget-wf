@@ -75,26 +75,26 @@ public class DirectoryManagerProxyImpl implements ExtDirectoryManager {
     }
 
     private DirectoryManagerAuthenticator getDirectoryManagerAuthenticator() {
-        DirectoryManagerAuthenticator authenticator = (DirectoryManagerAuthenticator)pluginManager.getPlugin(DirectoryManagerAuthenticatorImpl.class.getName());
+        DirectoryManagerAuthenticator authenticator = (DirectoryManagerAuthenticator) pluginManager.getPlugin(DirectoryManagerAuthenticatorImpl.class.getName());
         return authenticator;
     }
 
     private DirectoryManager getCustomDirectoryManagerImpl() {
         try {
-            String propertiesName = DirectoryUtil.IMPL_PROPERTIES; 
+            String propertiesName = DirectoryUtil.IMPL_PROPERTIES;
             String className = "";
-            
+
             Setting setting = getSetupManager().getSettingByProperty("directoryManagerImpl");
             if (setting != null && setting.getValue() != null && !setting.getValue().isEmpty()) {
                 className = setting.getValue();
             } else {
                 className = getCustomDirectoryManagerClassName();
             }
-            
+
             if (className != null && className.equals(getCustomDirectoryManagerClassName())) {
                 propertiesName = DirectoryUtil.CUSTOM_IMPL_PROPERTIES;
             }
-            
+
             if (className != null && !className.isEmpty()) {
 
                 DirectoryManagerPlugin directoryManagerPlugin = (DirectoryManagerPlugin) getPluginManager().getPlugin(className);
@@ -104,22 +104,23 @@ public class DirectoryManagerProxyImpl implements ExtDirectoryManager {
                     //get plugin properties (if any)
                     Map propertyMap = new HashMap();
                     Setting propertySetting = getSetupManager().getSettingByProperty(propertiesName);
-                    
+
                     if (propertySetting == null && getCustomDirectoryManagerClassName() != null) {
                         String properties = "";
-                        
+
                         try {
                             properties = PropertyUtil.getDefaultPropertyValues(((PropertyEditable) directoryManagerPlugin).getPropertyOptions());
                             properties = properties.replaceAll("\\\\n", "\\n");
-                        } catch (Exception e){}
-                        
+                        } catch (Exception e) {
+                        }
+
                         propertySetting = new Setting();
                         propertySetting.setProperty(propertiesName);
                         propertySetting.setValue(properties);
-                        
+
                         getSetupManager().saveSetting(propertySetting);
                     }
-                    
+
                     if (propertySetting != null && propertySetting.getValue() != null && propertySetting.getValue().trim().length() > 0) {
                         String properties = propertySetting.getValue();
                         properties = StringUtil.decryptContent(properties);
@@ -194,14 +195,14 @@ public class DirectoryManagerProxyImpl implements ExtDirectoryManager {
     }
 
     public Collection<User> getUsersSubordinate(String username, String sort, Boolean desc, Integer start, Integer rows) {
-        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {        
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getExtDirectoryManagerImpl().getUsersSubordinate(username, sort, desc, start, rows);
         }
         return new ArrayList<User>();
     }
 
     public Long getTotalUsersSubordinate(String username) {
-        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) { 
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getExtDirectoryManagerImpl().getTotalUsersSubordinate(username);
         }
         return 0L;
@@ -400,7 +401,7 @@ public class DirectoryManagerProxyImpl implements ExtDirectoryManager {
     }
 
     public User getUserByUsername(String username) {
-        if (username != null && !username.isEmpty()  && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getDirectoryManagerImpl().getUserByUsername(username);
         }
         return null;
@@ -419,14 +420,14 @@ public class DirectoryManagerProxyImpl implements ExtDirectoryManager {
     }
 
     public boolean isUserInGroup(String username, String groupName) {
-        if (username != null && !username.isEmpty()  && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getDirectoryManagerImpl().isUserInGroup(username, groupName);
         }
         return false;
     }
 
     public Collection<Role> getUserRoles(String username) {
-        if (username != null && !username.isEmpty()  && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getDirectoryManagerImpl().getUserRoles(username);
         }
         return new ArrayList<Role>();
@@ -440,21 +441,21 @@ public class DirectoryManagerProxyImpl implements ExtDirectoryManager {
     }
 
     public Collection<User> getUserHod(String username) {
-        if (username != null && !username.isEmpty()  && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getDirectoryManagerImpl().getUserHod(username);
         }
         return new ArrayList<User>();
     }
 
     public Collection<User> getUserSubordinate(String username) {
-        if (username != null && !username.isEmpty()  && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getDirectoryManagerImpl().getUserSubordinate(username);
         }
         return new ArrayList<User>();
     }
 
     public Collection<User> getUserDepartmentUser(String username) {
-        if (username != null && !username.isEmpty()  && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
+        if (username != null && !username.isEmpty() && !DirectoryUtil.ROLE_ANONYMOUS.equals(username)) {
             return getDirectoryManagerImpl().getUserDepartmentUser(username);
         }
         return new ArrayList<User>();

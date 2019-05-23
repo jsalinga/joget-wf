@@ -49,9 +49,9 @@ import org.enhydra.shark.xpdl.elements.WorkflowProcess;
 import org.enhydra.shark.xpdl.elements.WorkflowProcesses;
 
 /**
- *  Used to display Package hierarchy tree.
+ * Used to display Package hierarchy tree.
  *
- *  @author Sasa Bojanic
+ * @author Sasa Bojanic
  */
 public class SimpleNavigatorPanel extends JPanel implements JaWEComponentView {
 
@@ -119,7 +119,9 @@ public class SimpleNavigatorPanel extends JPanel implements JaWEComponentView {
         tree.setCellRenderer(renderer);
         tree.addTreeSelectionListener(controller);
 
-        /** MouseListener for JTree */
+        /**
+         * MouseListener for JTree
+         */
         mouseListener = new MouseAdapter() {
 
             public void mouseClicked(MouseEvent me) {
@@ -160,7 +162,6 @@ public class SimpleNavigatorPanel extends JPanel implements JaWEComponentView {
         };
 
         tree.addMouseListener(mouseListener);
-
 
         // creates panel
         scrollPane = new JScrollPane();

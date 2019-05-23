@@ -64,11 +64,11 @@ public class ApplyChanges extends ActionBase {
         ipc.setModified(false);
 
         //CUSTOM
-        if(jawecomponent instanceof XPDLElementEditor) {
+        if (jawecomponent instanceof XPDLElementEditor) {
             XPDLElementEditor editor = ((XPDLElementEditor) jawecomponent);
             editor.close();
-        } else if(el instanceof XMLCollectionElement) {
-            ((NewStandardXPDLElementEditor)jawecomponent).editXPDLElement(((XMLCollectionElement)el).getParent().getParent());
+        } else if (el instanceof XMLCollectionElement) {
+            ((NewStandardXPDLElementEditor) jawecomponent).editXPDLElement(((XMLCollectionElement) el).getParent().getParent());
         }
         //END CUSTOM
     }

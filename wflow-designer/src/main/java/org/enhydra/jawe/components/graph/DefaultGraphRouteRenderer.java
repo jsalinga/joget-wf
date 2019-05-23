@@ -24,9 +24,10 @@ public class DefaultGraphRouteRenderer extends MultiLinedRenderer implements
     protected static int arc = 10; //5;
 
     /**
-     * Paints activity. Overrides super class paint to add specific painting. First it
-     * fills inner with color. Then it adds specific drawing for join type. Then it apply
-     * JPanel with name and icon. At the end it draws shadow and border
+     * Paints activity. Overrides super class paint to add specific painting.
+     * First it fills inner with color. Then it adds specific drawing for join
+     * type. Then it apply JPanel with name and icon. At the end it draws shadow
+     * and border
      */
     public void paint(Graphics g) {
         int actW = GraphUtilities.getGraphController().getGraphSettings().getRouteWidth();

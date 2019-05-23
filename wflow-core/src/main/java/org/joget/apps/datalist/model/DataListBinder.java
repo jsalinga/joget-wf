@@ -9,28 +9,31 @@ import org.joget.plugin.property.model.PropertyEditable;
 public interface DataListBinder extends PropertyEditable {
 
     /**
-     * Columns meta returned by the binder. 
-     * 
+     * Columns meta returned by the binder.
+     *
      * Field "name", "label" and "sortable" are needed by system
-     * 
+     *
      * @return
      */
     DataListColumn[] getColumns();
 
     /**
      * The primary key / identifier column for the data
+     *
      * @return The name of the column that represents the primary key
      */
     String getPrimaryKeyColumnName();
-    
+
     /**
      * To get the actual column name
-     * @return The name of the column 
+     *
+     * @return The name of the column
      */
     String getColumnName(String name);
 
     /**
      * The data rows returned by the binder based on the current filter.
+     *
      * @param dataList
      * @param properties
      * @param filter
@@ -44,6 +47,7 @@ public interface DataListBinder extends PropertyEditable {
 
     /**
      * Total number of rows returned based on the current filter.
+     *
      * @param dataList
      * @param properties
      * @param filterName

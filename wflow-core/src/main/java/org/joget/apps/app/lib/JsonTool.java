@@ -74,7 +74,7 @@ public class JsonTool extends DefaultApplicationPlugin {
         String jsonUrl = (String) properties.get("jsonUrl");
         CloseableHttpClient client = null;
         HttpRequestBase request = null;
-        
+
         try {
             client = HttpClients.createDefault();
 
@@ -83,18 +83,18 @@ public class JsonTool extends DefaultApplicationPlugin {
             jsonUrl = StringUtil.encodeUrlParam(jsonUrl);
 
             if ("true".equalsIgnoreCase(getPropertyString("debugMode"))) {
-                LogUtil.info(JsonTool.class.getName(), ("post".equalsIgnoreCase(getPropertyString("requestType"))?"POST":"GET") + " : " + jsonUrl);
+                LogUtil.info(JsonTool.class.getName(), ("post".equalsIgnoreCase(getPropertyString("requestType")) ? "POST" : "GET") + " : " + jsonUrl);
             }
-            
+
             if ("post".equalsIgnoreCase(getPropertyString("requestType"))) {
                 request = new HttpPost(jsonUrl);
-                
+
                 if ("jsonPayload".equals(getPropertyString("postMethod"))) {
                     JSONObject obj = new JSONObject();
                     Object[] paramsValues = (Object[]) properties.get("params");
                     for (Object o : paramsValues) {
                         Map mapping = (HashMap) o;
-                        String name  = mapping.get("name").toString();
+                        String name = mapping.get("name").toString();
                         String value = mapping.get("value").toString();
                         obj.accumulate(name, WorkflowUtil.processVariable(value, "", wfAssignment));
                     }
@@ -117,7 +117,7 @@ public class JsonTool extends DefaultApplicationPlugin {
                     Object[] paramsValues = (Object[]) properties.get("params");
                     for (Object o : paramsValues) {
                         Map mapping = (HashMap) o;
-                        String name  = mapping.get("name").toString();
+                        String name = mapping.get("name").toString();
                         String value = mapping.get("value").toString();
                         urlParameters.add(new BasicNameValuePair(name, WorkflowUtil.processVariable(value, "", wfAssignment)));
                         if ("true".equalsIgnoreCase(getPropertyString("debugMode"))) {
@@ -129,11 +129,11 @@ public class JsonTool extends DefaultApplicationPlugin {
             } else {
                 request = new HttpGet(jsonUrl);
             }
-            
+
             Object[] paramsValues = (Object[]) properties.get("headers");
             for (Object o : paramsValues) {
                 Map mapping = (HashMap) o;
-                String name  = mapping.get("name").toString();
+                String name = mapping.get("name").toString();
                 String value = mapping.get("value").toString();
                 if (name != null && !name.isEmpty() && value != null && !value.isEmpty()) {
                     request.setHeader(name, value);
@@ -142,12 +142,12 @@ public class JsonTool extends DefaultApplicationPlugin {
                     }
                 }
             }
-            
+
             HttpResponse response = client.execute(request);
             if ("true".equalsIgnoreCase(getPropertyString("debugMode"))) {
                 LogUtil.info(JsonTool.class.getName(), jsonUrl + " returned with status : " + response.getStatusLine().getStatusCode());
             }
-            
+
             if (!"true".equalsIgnoreCase(getPropertyString("noResponse"))) {
                 String jsonResponse = EntityUtils.toString(response.getEntity(), "UTF-8");
                 if (jsonResponse != null && !jsonResponse.isEmpty()) {

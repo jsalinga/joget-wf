@@ -25,11 +25,11 @@ public class UserviewDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Use
     public void setCache(Cache cache) {
         this.cache = cache;
     }
-    
-    private String getCacheKey(String id, String appId, Long version){
-        return DynamicDataSourceManager.getCurrentProfile()+"_"+appId+"_"+version+"_VIEW_"+id;
+
+    private String getCacheKey(String id, String appId, Long version) {
+        return DynamicDataSourceManager.getCurrentProfile() + "_" + appId + "_" + version + "_VIEW_" + id;
     }
-    
+
     @Override
     public String getEntityName() {
         return ENTITY_NAME;
@@ -72,13 +72,13 @@ public class UserviewDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Use
 
         if (element == null) {
             UserviewDefinition uvDef = super.loadById(id, appDefinition);
-            
+
             if (uvDef != null) {
                 element = new Element(cacheKey, (Serializable) uvDef);
                 cache.put(element);
             }
             return uvDef;
-        }else{
+        } else {
             return (UserviewDefinition) element.getValue();
         }
     }
@@ -93,7 +93,7 @@ public class UserviewDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Use
     @Override
     public boolean update(UserviewDefinition object) {
         cache.remove(getCacheKey(object.getId(), object.getAppId(), object.getAppVersion()));
-        
+
         object.setDateModified(new Date());
         return super.update(object);
     }
@@ -118,7 +118,7 @@ public class UserviewDefinitionDaoImpl extends AbstractAppVersionedObjectDao<Use
                 // delete obj
                 super.delete(getEntityName(), obj);
                 result = true;
-                
+
                 cache.remove(getCacheKey(id, appDef.getId(), appDef.getVersion()));
             }
         } catch (Exception e) {

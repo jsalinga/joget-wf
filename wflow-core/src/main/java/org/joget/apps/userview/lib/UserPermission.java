@@ -66,13 +66,13 @@ public class UserPermission extends UserviewPermission implements PluginWebSuppo
     }
 
     public void webService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         boolean isAdmin = WorkflowUtil.isCurrentUserInRole(WorkflowUserManager.ROLE_ADMIN);
         if (!isAdmin) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
 
         if ("getOrgs".equals(action)) {

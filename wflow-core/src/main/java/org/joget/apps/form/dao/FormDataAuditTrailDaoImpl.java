@@ -5,7 +5,7 @@ import org.joget.apps.form.model.FormDataAuditTrail;
 import org.joget.commons.spring.model.AbstractSpringDao;
 
 public class FormDataAuditTrailDaoImpl extends AbstractSpringDao implements FormDataAuditTrailDao {
-    
+
     public static final String ENTITY_NAME = "FormDataAuditTrail";
 
     public void addAuditTrail(FormDataAuditTrail auditTrail) {

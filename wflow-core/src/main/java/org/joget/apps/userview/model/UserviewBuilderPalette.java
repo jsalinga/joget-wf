@@ -28,6 +28,7 @@ public class UserviewBuilderPalette {
 
     /**
      * Retrieves the elements available for userview builder palette
+     *
      * @return
      */
     public Map<String, List<UserviewMenu>> getUserviewMenuCategoryMap(Map basicRequestParams) {
@@ -39,7 +40,7 @@ public class UserviewBuilderPalette {
         // add elements to palette
         for (Plugin element : elementList) {
             if (element instanceof UserviewMenu) {
-                UserviewMenu um = new CachedUserviewMenu((UserviewMenu)element);
+                UserviewMenu um = new CachedUserviewMenu((UserviewMenu) element);
                 um.setRequestParameters(basicRequestParams);
                 addElement(categoryMap, um);
             }

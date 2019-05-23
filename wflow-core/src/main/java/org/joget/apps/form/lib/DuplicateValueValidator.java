@@ -75,7 +75,7 @@ public class DuplicateValueValidator extends FormValidator {
         String mandatory = (String) getProperty("mandatory");
         String regex = (String) getProperty("regex");
         String errorMsg = (String) getProperty("errorMsg");
-        
+
         PluginManager pm = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
 
         //Check is empty or not
@@ -89,7 +89,7 @@ public class DuplicateValueValidator extends FormValidator {
             if (!isFormatCorrect(regex, values)) {
                 result = false;
                 if (errorMsg != null && errorMsg.trim().length() == 0) {
-                    errorMsg = pm.getMessage("form.duplicatevaluevalidator.e.formatInvalid", this.getClassName(), null); 
+                    errorMsg = pm.getMessage("form.duplicatevaluevalidator.e.formatInvalid", this.getClassName(), null);
                 }
                 data.addFormError(id, errorMsg);
             } else {

@@ -37,7 +37,7 @@ public class FormRowDataListBinder extends DataListBinderDefault {
     private Form cachedForm = null;
     private String cachedTableName = null;
     private String cachedFormDefId = null;
-    
+
     @Override
     public String getClassName() {
         return this.getClass().getName();
@@ -147,7 +147,7 @@ public class FormRowDataListBinder extends DataListBinderDefault {
     public int getDataTotalRowCount(DataList dataList, Map properties, DataListFilterQueryObject[] filterQueryObjects) {
         alterOracleSession();
         int count = 0;
-        
+
         String formDefId = getPropertyString("formDefId");
         String tableName = getTableName(formDefId);
         if (tableName != null) {
@@ -159,12 +159,12 @@ public class FormRowDataListBinder extends DataListBinderDefault {
         }
         return count;
     }
-    
+
     protected void alterOracleSession() {
         try {
             DataSource ds = (DataSource) AppUtil.getApplicationContext().getBean("setupDataSource");
             String driver = BeanUtils.getProperty(ds, "driverClassName");
-            
+
             if (driver.equals("oracle.jdbc.driver.OracleDriver")) {
                 Connection con = null;
                 PreparedStatement pstmt = null;
@@ -178,12 +178,14 @@ public class FormRowDataListBinder extends DataListBinderDefault {
                         if (pstmt != null) {
                             pstmt.close();
                         }
-                    } catch(Exception e){}
+                    } catch (Exception e) {
+                    }
                     try {
                         if (con != null) {
                             con.close();
                         }
-                    } catch(Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             }
         } catch (Exception e) {
@@ -202,7 +204,7 @@ public class FormRowDataListBinder extends DataListBinderDefault {
                 FormDefinition formDef = formDefinitionDao.loadById(formDefId, appDef);
                 if (formDef != null) {
                     String formJson = formDef.getJson();
-                    
+
                     if (formJson != null) {
                         form = (Form) formService.createElementFromJson(formJson, false);
                         cachedFormDefId = formDefId;

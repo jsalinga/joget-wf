@@ -13,7 +13,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * Utility methods to deal with Time Zone
- * 
+ *
  */
 public class TimeZoneUtil {
 
@@ -23,9 +23,10 @@ public class TimeZoneUtil {
 
     private TimeZoneUtil() {
     }
-    
+
     /**
      * Retrieve a list of Time Zone
+     *
      * @return a map of time zone id and its description
      */
     public static Map<String, String> getList() {
@@ -64,11 +65,11 @@ public class TimeZoneUtil {
             list.put("10", ResourceBundleUtil.getMessage("timezone.gmt.10"));
             list.put("11", ResourceBundleUtil.getMessage("timezone.gmt.11"));
             list.put("12", ResourceBundleUtil.getMessage("timezone.gmt.12"));
-            
+
             String[] timezones = TimeZone.getAvailableIDs();
-            List<String> sortedKeys=new ArrayList<String>(Arrays.asList(timezones));
+            List<String> sortedKeys = new ArrayList<String>(Arrays.asList(timezones));
             Collections.sort(sortedKeys);
-            
+
             ListOrderedMap otherList = new ListOrderedMap();
             for (String tzid : sortedKeys) {
                 TimeZone tz = TimeZone.getTimeZone(tzid);
@@ -80,7 +81,7 @@ public class TimeZoneUtil {
                     otherList.put(tzid, display);
                 }
             }
-            
+
             list.putAll(otherList);
         }
 
@@ -89,7 +90,8 @@ public class TimeZoneUtil {
 
     /**
      * Retrieve Server Time Zone in GMT format
-     * @return GMT Time Zone 
+     *
+     * @return GMT Time Zone
      */
     public static String getServerTimeZone() {
         if (serverTimeZone == null) {
@@ -98,10 +100,11 @@ public class TimeZoneUtil {
 
         return serverTimeZone;
     }
-    
+
     /**
-     * Retrieve Server Time Zone ID 
-     * @return 
+     * Retrieve Server Time Zone ID
+     *
+     * @return
      */
     public static String getServerTimeZoneID() {
         if (serverTimeZoneId == null) {
@@ -113,16 +116,18 @@ public class TimeZoneUtil {
 
     /**
      * Convert Date to String based on GMT/Timezone ID and Date Format
+     *
      * @param time Datetime to convert
-     * @param gmt GMT ("-12" to "12") or Timezone ID, NULL to use System/User selected timezone
+     * @param gmt GMT ("-12" to "12") or Timezone ID, NULL to use System/User
+     * selected timezone
      * @param format Date Format
-     * @return Date in converted String 
+     * @return Date in converted String
      */
     public static String convertToTimeZone(Date time, String gmt, String format) {
         if (time == null) {
             return "";
         }
-        
+
         if (format == null || format.trim().length() == 0) {
             format = ResourceBundleUtil.getMessage("console.setting.general.default.systemDateFormat");
         }
@@ -132,18 +137,19 @@ public class TimeZoneUtil {
         } catch (Exception e) {
             dateFormat = new SimpleDateFormat(ResourceBundleUtil.getMessage("console.setting.general.default.systemDateFormat"), LocaleContextHolder.getLocale());
         }
-        
+
         if (gmt != null && !gmt.isEmpty()) {
             dateFormat.setTimeZone(TimeZone.getTimeZone(getTimeZoneByGMT(gmt)));
         } else {
             dateFormat.setTimeZone(LocaleContextHolder.getTimeZone());
         }
-        
+
         return dateFormat.format(time);
     }
 
     /**
-     * Get Time Zone ID by GMT 
+     * Get Time Zone ID by GMT
+     *
      * @param gmt GMT ("-12" to "12")
      * @return Time Zone ID
      */

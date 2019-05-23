@@ -72,11 +72,11 @@ public class EnvironmentVariableDaoImpl extends AbstractAppVersionedObjectDao<En
         }
         return result;
     }
-    
+
     @Override
     public Integer getIncreasedCounter(final String id, final String remark, final AppDefinition appDef) {
         Integer count = 0;
-        
+
         try {
             EnvironmentVariable env = loadByIdForUpdate(id, appDef);
             if (env != null && env.getValue() != null && env.getValue().trim().length() > 0) {

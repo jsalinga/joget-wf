@@ -23,82 +23,82 @@
     <div id="main-body">
         <div id="main-body-content-filter">
             <form>
-            <fmt:message key="console.directory.group.filter.label.byOrganization"/>
-            <select id="JsonDataTable_filterbyOrg" onchange="filter(JsonDataTable, '&orgId=', this.options[this.selectedIndex].value)">
-                <option value=""><fmt:message key="console.directory.group.empty.option.label"/></option>
-            <c:forEach items="${organizations}" var="o">
-                <c:set var="selected"><c:if test="${o.id == param.orgId}"> selected</c:if></c:set>
-                <option value="<c:out value="${o.id}"/>" ${selected}><c:out value="${o.name}"/></option>
-            </c:forEach>
-            </select>
+                <fmt:message key="console.directory.group.filter.label.byOrganization"/>
+                <select id="JsonDataTable_filterbyOrg" onchange="filter(JsonDataTable, '&orgId=', this.options[this.selectedIndex].value)">
+                    <option value=""><fmt:message key="console.directory.group.empty.option.label"/></option>
+                    <c:forEach items="${organizations}" var="o">
+                        <c:set var="selected"><c:if test="${o.id == param.orgId}"> selected</c:if></c:set>
+                        <option value="<c:out value="${o.id}"/>" ${selected}><c:out value="${o.name}"/></option>
+                    </c:forEach>
+                </select>
             </form>
         </div>
         <ui:jsontable url="${pageContext.request.contextPath}/web/json/directory/admin/group/list?${pageContext.request.queryString}"
-                       var="JsonDataTable"
-                       divToUpdate="groupList"
-                       jsonData="data"
-                       rowsPerPage="15"
-                       width="100%"
-                       sort="name"
-                       desc="false"
-                       href="${pageContext.request.contextPath}/web/console/directory/group/view"
-                       hrefParam="id"
-                       hrefSuffix="."
-                       hrefQuery="false"
-                       hrefDialog="false"
-                       hrefDialogWidth="600px"
-                       hrefDialogHeight="400px"
-                       hrefDialogTitle="Process Dialog"
-                       checkbox="${!isCustomDirectoryManager}"
-                       checkboxButton2="general.method.label.delete"
-                       checkboxCallback2="deleteGroup"
-                       searchItems="name|Name"
-                       fields="['id','name','description','organization.name']"
-                       column1="{key: 'id', label: 'console.directory.group.common.label.id', sortable: true}"
-                       column2="{key: 'name', label: 'console.directory.group.common.label.name', sortable: true}"
-                       column3="{key: 'description', label: 'console.directory.group.common.label.description', sortable: false}"
-                       column4="{key: 'organization.name', label: 'console.directory.group.common.label.organization', sortable: false}"
-                       />
+                      var="JsonDataTable"
+                      divToUpdate="groupList"
+                      jsonData="data"
+                      rowsPerPage="15"
+                      width="100%"
+                      sort="name"
+                      desc="false"
+                      href="${pageContext.request.contextPath}/web/console/directory/group/view"
+                      hrefParam="id"
+                      hrefSuffix="."
+                      hrefQuery="false"
+                      hrefDialog="false"
+                      hrefDialogWidth="600px"
+                      hrefDialogHeight="400px"
+                      hrefDialogTitle="Process Dialog"
+                      checkbox="${!isCustomDirectoryManager}"
+                      checkboxButton2="general.method.label.delete"
+                      checkboxCallback2="deleteGroup"
+                      searchItems="name|Name"
+                      fields="['id','name','description','organization.name']"
+                      column1="{key: 'id', label: 'console.directory.group.common.label.id', sortable: true}"
+                      column2="{key: 'name', label: 'console.directory.group.common.label.name', sortable: true}"
+                      column3="{key: 'description', label: 'console.directory.group.common.label.description', sortable: false}"
+                      column4="{key: 'organization.name', label: 'console.directory.group.common.label.organization', sortable: false}"
+                      />
 
     </div>
 </div>
 
 <script>
     $(document).ready(function(){
-        $('#JsonDataTable_searchTerm').hide();
+    $('#JsonDataTable_searchTerm').hide();
 
-        <c:if test="${isCustomDirectoryManager}">
-            $('#main-action-buttons').remove();
-            $('#JsonDataTable_groupList-buttons').remove();
-        </c:if>
+    <c:if test="${isCustomDirectoryManager}">
+        $('#main-action-buttons').remove();
+        $('#JsonDataTable_groupList-buttons').remove();
+    </c:if>
     });
 
     <ui:popupdialog var="popupDialog" src="${pageContext.request.contextPath}/web/console/directory/group/create"/>
 
     function onCreate(){
-        popupDialog.init();
+    popupDialog.init();
     }
 
     function closeDialog() {
-        popupDialog.close();
+    popupDialog.close();
     }
 
     function deleteGroup(selectedList){
-         if (confirm('<fmt:message key="console.directory.group.delete.label.confirmation"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/directory/groups';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/group/delete', callback, 'ids='+selectedList);
-        }
+    if (confirm('<fmt:message key="console.directory.group.delete.label.confirmation"/>')) {
+    var callback = {
+    success : function() {
+    document.location = '${pageContext.request.contextPath}/web/console/directory/groups';
+    }
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/group/delete', callback, 'ids='+selectedList);
+    }
     }
 
     var org_filter = window.filter;
     var filter = function(jsonTable, url, value){       
-        url = "&orgId=" + encodeURI($('#JsonDataTable_filterbyOrg').val()); 
-        url += "&name=" + encodeURI($('#JsonDataTable_searchCondition').val());
-        org_filter(jsonTable, url, '');
+    url = "&orgId=" + encodeURI($('#JsonDataTable_filterbyOrg').val()); 
+    url += "&name=" + encodeURI($('#JsonDataTable_searchCondition').val());
+    org_filter(jsonTable, url, '');
     };
 </script>
 

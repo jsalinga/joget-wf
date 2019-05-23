@@ -60,22 +60,22 @@ public class GraphSettings extends JaWEComponentSettings {
 
         componentSettings.put("UseParticipantChoiceButton",
                 new Boolean(properties.getProperty("GraphPanel.UseParticipantChoiceButton",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("UseActivitySetChoiceButton",
                 new Boolean(properties.getProperty("GraphPanel.UseActivitySetChoiceButton",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("GraphOverview.Class",
                 properties.getProperty("GraphOverview.Class",
-                "org.enhydra.jawe.components.graph.overviewpanel.GraphOverviewPanel"));
+                        "org.enhydra.jawe.components.graph.overviewpanel.GraphOverviewPanel"));
         componentSettings.put("ShowGraphOverview",
                 new Boolean(properties.getProperty("GraphOverview.Show",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("NameWrapping",
                 new Boolean(properties.getProperty("Graph.NameWrapping",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("WordWrapping",
                 new Boolean(properties.getProperty("Graph.WrappingStyleWordStatus",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("ShowGrid",
                 new Boolean(properties.getProperty("Graph.ShowGrid", "false").equals("true")));
         componentSettings.put("ShowIcons",
@@ -84,40 +84,40 @@ public class GraphSettings extends JaWEComponentSettings {
                 new Boolean(properties.getProperty("Graph.ShowShadow", "true").equals("true")));
         componentSettings.put("ShowTransitionCondition",
                 new Boolean(properties.getProperty("Graph.ShowTransitionCondition",
-                "false").equals("true")));
+                        "false").equals("true")));
         componentSettings.put("ShowTransitionNameForCondition",
                 new Boolean(properties.getProperty("Graph.ShowTransitionNameForCondition",
-                "false").equals("true")));
+                        "false").equals("true")));
         componentSettings.put("UseBubbles",
                 new Boolean(properties.getProperty("Graph.UseBubbles", "true").equals("true")));
         componentSettings.put("DrawBlockLines",
                 new Boolean(properties.getProperty("Graph.DrawBlockLines",
-                "true").equals("true")));
+                        "true").equals("true")));
         componentSettings.put("DrawSubflowLines",
                 new Boolean(properties.getProperty("Graph.DrawSubflowLines",
-                "true").equals("true")));
+                        "true").equals("true")));
 
         componentSettings.put("GraphClass",
                 properties.getProperty("Graph.Class",
-                "org.enhydra.jawe.components.graph.Graph"));
+                        "org.enhydra.jawe.components.graph.Graph"));
         componentSettings.put("GraphManagerClass",
                 properties.getProperty("GraphManager.Class",
-                "org.enhydra.jawe.components.graph.GraphManager"));
+                        "org.enhydra.jawe.components.graph.GraphManager"));
         componentSettings.put("GraphMarqueeHandlerClass",
                 properties.getProperty("GraphMarqueeHandler.Class",
-                "org.enhydra.jawe.components.graph.GraphMarqueeHandler"));
+                        "org.enhydra.jawe.components.graph.GraphMarqueeHandler"));
         componentSettings.put("GraphModelClass",
                 properties.getProperty("GraphModel.Class",
-                "org.enhydra.jawe.components.graph.JaWEGraphModel"));
+                        "org.enhydra.jawe.components.graph.JaWEGraphModel"));
         componentSettings.put("GraphObjectFactoryClass",
                 properties.getProperty("GraphObjectFactory.Class",
-                "org.enhydra.jawe.components.graph.GraphObjectFactory"));
+                        "org.enhydra.jawe.components.graph.GraphObjectFactory"));
         componentSettings.put("GraphObjectRendererFactoryClass",
                 properties.getProperty("GraphObjectRendererFactoryClass",
-                "org.enhydra.jawe.components.graph.GraphObjectRendererFactory"));
+                        "org.enhydra.jawe.components.graph.GraphObjectRendererFactory"));
         componentSettings.put("DefaultTransitionStyle",
                 properties.getProperty("Graph.DefaultTransitionStyle",
-                "NO_ROUTING_SPLINE"));
+                        "NO_ROUTING_SPLINE"));
 
         componentSettings.put("GridSize",
                 new Integer(properties.getProperty("Graph.GridSize", "10")));
@@ -127,19 +127,19 @@ public class GraphSettings extends JaWEComponentSettings {
                 new Integer(properties.getProperty("Graph.FontSize", "12")));
         componentSettings.put("ActivityHeight",
                 new Integer(properties.getProperty("Graph.ActivityHeight",
-                "55")));
+                        "55")));
         componentSettings.put("ActivityWidth",
                 new Integer(properties.getProperty("Graph.ActivityWidth",
-                "85")));
+                        "85")));
         componentSettings.put("ParticipantNameWidth",
                 new Integer(properties.getProperty("Graph.ParticipantNameWidth",
-                "50")));
+                        "50")));
         componentSettings.put("MinParWidth",
                 new Integer(properties.getProperty("Graph.ParticipantMinWidth",
-                "800")));
+                        "800")));
         componentSettings.put("MinParHeight",
                 new Integer(properties.getProperty("Graph.ParticipantMinHeight",
-                "150")));
+                        "150")));
         String textPos = properties.getProperty("Graph.TextPosition", "right");
         int tpv = RIGHT;
         if ("left".equalsIgnoreCase(textPos)) {
@@ -153,12 +153,11 @@ public class GraphSettings extends JaWEComponentSettings {
 
         componentSettings.put("Graph.HistoryManager.Class",
                 properties.getProperty("Graph.HistoryManager.Class",
-                "org.enhydra.jawe.HistoryMgr"));
+                        "org.enhydra.jawe.HistoryMgr"));
         componentSettings.put("Graph.HistorySize",
                 new Integer(properties.getProperty("Graph.HistorySize", "15")));
 
         //CUSTOM
-
         Color color;
         try {
             color = Utils.getColor(ResourceManager.getResourceString(properties,
@@ -319,7 +318,6 @@ public class GraphSettings extends JaWEComponentSettings {
         componentSettings.put("BubbleToolBarEnd", cicon);
 
         //END CUSTOM
-
         iconURL = ResourceManager.getResource(properties,
                 "Graph.XPDLElement.Image.FreeTextParticipant");
         if (iconURL != null) {
@@ -404,10 +402,10 @@ public class GraphSettings extends JaWEComponentSettings {
             String clsName = "org.enhydra.jawe.components.graph.actions.SetPerformerExpression";
             try {
                 action = (ActionBase) Class.forName(clsName).getConstructor(new Class[]{
-                            JaWEComponent.class
-                        }).newInstance(new Object[]{
-                            comp
-                        });
+                    JaWEComponent.class
+                }).newInstance(new Object[]{
+                    comp
+                });
             } catch (Exception e) {
             }
             icon = new ImageIcon(ResourceManager.class.getClassLoader().getResource("org/enhydra/jawe/images/commonexpparticipantsetexp.png"));
@@ -435,10 +433,10 @@ public class GraphSettings extends JaWEComponentSettings {
             String clsName = "org.enhydra.jawe.components.graph.actions.SelectConnectingTransitionsForSelectedActivities";
             try {
                 action = (ActionBase) Class.forName(clsName).getConstructor(new Class[]{
-                            JaWEComponent.class
-                        }).newInstance(new Object[]{
-                            comp
-                        });
+                    JaWEComponent.class
+                }).newInstance(new Object[]{
+                    comp
+                });
             } catch (Exception e) {
                 action = null;
             }
@@ -537,10 +535,10 @@ public class GraphSettings extends JaWEComponentSettings {
             String clsName = "org.enhydra.jawe.components.graph.actions.RotateProcess";
             try {
                 action = (ActionBase) Class.forName(clsName).getConstructor(new Class[]{
-                            JaWEComponent.class
-                        }).newInstance(new Object[]{
-                            comp
-                        });
+                    JaWEComponent.class
+                }).newInstance(new Object[]{
+                    comp
+                });
             } catch (Exception e) {
                 action = null;
             }
@@ -619,10 +617,10 @@ public class GraphSettings extends JaWEComponentSettings {
             String clsName = "org.enhydra.jawe.components.graph.actions.SelectConnectingActivitiesForSelectedTransitions";
             try {
                 action = (ActionBase) Class.forName(clsName).getConstructor(new Class[]{
-                            JaWEComponent.class
-                        }).newInstance(new Object[]{
-                            comp
-                        });
+                    JaWEComponent.class
+                }).newInstance(new Object[]{
+                    comp
+                });
             } catch (Exception e) {
                 action = null;
             }
@@ -910,6 +908,7 @@ public class GraphSettings extends JaWEComponentSettings {
     }
 
     public boolean performAutomaticLayoutOnInsertion() {
-        return false; /*enable layout saving*/
+        return false;
+        /*enable layout saving*/
     }
 }

@@ -3,7 +3,7 @@ package org.joget.commons.spring.model;
 import java.io.Serializable;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
-public class ResourceBundleMessage implements Serializable{
+public class ResourceBundleMessage implements Serializable {
 
     private String id;
     @NotBlank

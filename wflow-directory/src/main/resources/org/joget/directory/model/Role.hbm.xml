@@ -7,7 +7,7 @@
         </id>
         <property column="name" name="name" type="string"/>
         <property column="description" name="description" type="string"/>
-    <!-- join tables -->
+        <!-- join tables -->
         <set name="users" table="dir_user_role">
             <key column="roleId"/>
             <many-to-many column="userId" entity-name="User"/>

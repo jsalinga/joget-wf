@@ -7,21 +7,22 @@ import org.joget.apps.userview.model.UserviewPermission;
 import org.joget.commons.util.LogUtil;
 
 public class BeanShellPermission extends UserviewPermission implements FormPermission {
+
     @Override
     public boolean isAuthorize() {
         return executeScript();
     }
-        
-    protected boolean executeScript() {    
+
+    protected boolean executeScript() {
         String script = getPropertyString("script");
-        
+
         Object result = null;
         try {
             Interpreter interpreter = new Interpreter();
             interpreter.setClassLoader(getClass().getClassLoader());
             interpreter.set("user", getCurrentUser());
             interpreter.set("requestParams", getRequestParameters());
-            
+
             result = interpreter.eval(script);
             return (Boolean) result;
         } catch (Exception e) {

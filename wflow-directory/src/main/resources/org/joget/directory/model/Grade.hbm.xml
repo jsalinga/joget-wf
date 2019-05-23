@@ -5,7 +5,7 @@
         <id column="id" name="id" type="string"/>
         <property column="name" name="name" type="string"/>
         <property column="description" name="description" type="string"/>
-    <!-- join tables -->
+        <!-- join tables -->
         <set name="employments">
             <key column="gradeId"/>
             <one-to-many entity-name="Employment"/>

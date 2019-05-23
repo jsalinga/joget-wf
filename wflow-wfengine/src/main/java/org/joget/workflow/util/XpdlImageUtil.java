@@ -40,10 +40,10 @@ import org.springframework.core.task.TaskExecutor;
 
 /**
  * Utility methods used to generate XPDl image
- * 
+ *
  */
 public class XpdlImageUtil {
-    
+
     public static final String IMAGE_FOLDER = "app_xpdlImages";
     public static final String IMAGE_EXTENSION = ".png";
     public static final String THUMBNAIL_PREFIX = "thumb-";
@@ -51,8 +51,9 @@ public class XpdlImageUtil {
 
     /**
      * Gets the XPDL image path in wflow/app_xpdlImages folder
+     *
      * @param processDefId
-     * @return 
+     * @return
      */
     public static String getXpdlImagePath(String processDefId) {
         ApplicationContext appContext = WorkflowUtil.getApplicationContext();
@@ -65,9 +66,10 @@ public class XpdlImageUtil {
 
     /**
      * Gets the XPDL image.
+     *
      * @param designerwebBaseUrl
      * @param processDefId
-     * @return 
+     * @return
      */
     public static File getXpdlImage(String designerwebBaseUrl, String processDefId) {
         File file = new File(getXpdlImagePath(processDefId), processDefId + IMAGE_EXTENSION);
@@ -79,10 +81,11 @@ public class XpdlImageUtil {
     }
 
     /**
-     * Gets the XPDL image thumbnail. 
+     * Gets the XPDL image thumbnail.
+     *
      * @param designerwebBaseUrl
      * @param processDefId
-     * @return 
+     * @return
      */
     public static File getXpdlThumbnail(String designerwebBaseUrl, String processDefId) {
         File file = new File(getXpdlImagePath(processDefId), THUMBNAIL_PREFIX + processDefId + IMAGE_EXTENSION);
@@ -95,12 +98,12 @@ public class XpdlImageUtil {
 
     /**
      * Queue a task for XPDL image generation
-     * 
-     * @deprecated this is not used in v5 since the Workflow Designer is replaced
-     * by a web-based Process Builder
-     * 
+     *
+     * @deprecated this is not used in v5 since the Workflow Designer is
+     * replaced by a web-based Process Builder
+     *
      * @param designerwebBaseUrl
-     * @param processDefId 
+     * @param processDefId
      */
     public static void generateXpdlImage(final String designerwebBaseUrl, final String processDefId) {
         generateXpdlImage(designerwebBaseUrl, processDefId, false);
@@ -108,29 +111,29 @@ public class XpdlImageUtil {
 
     /**
      * Queue a task for XPDL image generation
-     * 
-     * @deprecated this is not used in v5 since the Workflow Designer is replaced
-     * by a web-based Process Builder
-     * 
+     *
+     * @deprecated this is not used in v5 since the Workflow Designer is
+     * replaced by a web-based Process Builder
+     *
      * @param designerwebBaseUrl
      * @param processDefId
-     * @param asynchronous 
+     * @param asynchronous
      */
     public static void generateXpdlImage(final String designerwebBaseUrl, final String processDefId, boolean asynchronous) {
         String profile = DynamicDataSourceManager.getCurrentProfile();
-        
+
         TaskExecutor executor = (TaskExecutor) WorkflowUtil.getApplicationContext().getBean("xpdlImageExecutor");
         executor.execute(new XpdlImageTask(profile, designerwebBaseUrl, processDefId));
     }
 
     /**
      * Create the XDPL image
-     * 
-     * @deprecated this is not used in v5 since the Workflow Designer is replaced
-     * by a web-based Process Builder
-     * 
+     *
+     * @deprecated this is not used in v5 since the Workflow Designer is
+     * replaced by a web-based Process Builder
+     *
      * @param designerwebBaseUrl
-     * @param processDefId 
+     * @param processDefId
      */
     public static void createXpdlImage(String designerwebBaseUrl, String processDefId) {
         String baseDir = getXpdlImagePath(processDefId);
@@ -138,7 +141,7 @@ public class XpdlImageUtil {
         WorkflowManager workflowManager = (WorkflowManager) appContext.getBean("workflowManager");
         WorkflowProcess process = workflowManager.getProcess(processDefId);
         byte[] xpdlBytes = workflowManager.getPackageContent(process.getPackageId(), process.getVersion());
-            
+
         FileOutputStream fos = null;
         CloseableHttpClient httpClient = null;
         try {
@@ -166,7 +169,7 @@ public class XpdlImageUtil {
                 SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build(), NoopHostnameVerifier.INSTANCE);
                 httpClientBuilder.setSSLSocketFactory(sslsf);
             }
-            
+
             // execute request
             httpClient = httpClientBuilder.build();
             HttpResponse response = httpClient.execute(post);
@@ -219,15 +222,15 @@ public class XpdlImageUtil {
             }
         }
     }
-    
+
     /**
      * Create the XPDL image thumbnail
-     * 
-     * @deprecated this is not used in v5 since the Workflow Designer is replaced
-     * by a web-based Process Builder
-     * 
+     *
+     * @deprecated this is not used in v5 since the Workflow Designer is
+     * replaced by a web-based Process Builder
+     *
      * @param path
-     * @param processDefId 
+     * @param processDefId
      */
     public static void createThumbnail(String path, String processDefId) {
         int thumbWidth = THUMBNAIL_SIZE;
@@ -235,7 +238,7 @@ public class XpdlImageUtil {
 
         BufferedOutputStream out = null;
 
-        try{
+        try {
             Image image = Toolkit.getDefaultToolkit().getImage(new File(path, processDefId + IMAGE_EXTENSION).getAbsolutePath());
             MediaTracker mediaTracker = new MediaTracker(new Container());
             mediaTracker.addImage(image, 0);
@@ -272,5 +275,5 @@ public class XpdlImageUtil {
             }
         }
     }
-    
+
 }

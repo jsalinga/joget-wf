@@ -42,7 +42,7 @@ public class JsonResponseFilter implements Filter {
         public void sendError(int sc, String msg) throws IOException {
             buildJsonBody(sc, msg);
         }
-        
+
         @Override
         public void setStatus(int sc) {
             buildJsonBody(sc, "");
@@ -52,7 +52,7 @@ public class JsonResponseFilter implements Filter {
         public void setStatus(int sc, String msg) {
             buildJsonBody(sc, msg);
         }
-        
+
         private void buildJsonBody(int sc, String msg) {
             if (!super.isCommitted()) {
                 if (sc >= 400) {
@@ -83,7 +83,7 @@ public class JsonResponseFilter implements Filter {
             }
         }
     }
-    
+
     public void init(FilterConfig fc) throws ServletException {
         // nothing to init
     }
@@ -92,14 +92,14 @@ public class JsonResponseFilter implements Filter {
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            
+
             // reset profile and set hostname
             HostManager.initHost();
-            
+
             StatusCodeCaptureWrapper wrappedResponse = new StatusCodeCaptureWrapper(httpResponse);
-            
+
             String callback = httpRequest.getParameter("callback");
-            
+
             SetupManager setupManager = (SetupManager) AppUtil.getApplicationContext().getBean("setupManager");
             String jsonpWhitelist = setupManager.getSettingValue("jsonpWhitelist");
             String jsonpIPWhitelist = setupManager.getSettingValue("jsonpIPWhitelist");
@@ -116,17 +116,17 @@ public class JsonResponseFilter implements Filter {
                     ipWhitelist.addAll(Arrays.asList(jsonpIPWhitelist.split(";")));
                 }
                 if (!(SecurityUtil.isAllowedDomain(domain, whitelist) || SecurityUtil.isAllowedDomain(ip, ipWhitelist))) {
-                    LogUtil.info(JsonResponseFilter.class.getName(), "Possible CSRF attack from url("+httpRequest.getRequestURI()+") referer(" + httpRequest.getHeader("referer") + ") IP(" + ip + ")");
+                    LogUtil.info(JsonResponseFilter.class.getName(), "Possible CSRF attack from url(" + httpRequest.getRequestURI() + ") referer(" + httpRequest.getHeader("referer") + ") IP(" + ip + ")");
                     wrappedResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST, "");
                     return;
                 }
             }
-            
+
             if (callback != null && !callback.isEmpty()) {
                 wrappedResponse.setContentType("application/javascript; charset=utf-8");
             } else {
                 wrappedResponse.setContentType("application/json; charset=utf-8");
-                
+
                 if (httpRequest.getHeader("Origin") != null) {
                     String origin = httpRequest.getHeader("Origin");
                     if (origin != null) {
@@ -136,12 +136,12 @@ public class JsonResponseFilter implements Filter {
                     wrappedResponse.setHeader("Access-Control-Allow-Credentials", "true");
                 }
             }
-            
+
             Throwable throwable = null;
             Integer status = null;
-            
+
             try {
-		filterChain.doFilter(httpRequest, wrappedResponse);	
+                filterChain.doFilter(httpRequest, wrappedResponse);
             } catch (MissingServletRequestParameterException e) {
                 throwable = e;
                 status = HttpServletResponse.SC_BAD_REQUEST;
@@ -153,27 +153,27 @@ public class JsonResponseFilter implements Filter {
                 if (throwable instanceof TypeMismatchException) {
                     status = HttpServletResponse.SC_BAD_REQUEST;
                 }
-            } catch(IllegalStateException ise) {
+            } catch (IllegalStateException ise) {
                 //ignore
-	    } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 throwable = e;
                 status = HttpServletResponse.SC_BAD_REQUEST;
             } catch (Exception e) {
-		throwable = e;
-	    } 
-            
+                throwable = e;
+            }
+
             if (throwable != null) {
                 if (status == null) {
                     status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                     LogUtil.error(JsonResponseFilter.class.getName(), throwable, null);
                 }
-                
+
                 String message = throwable.getMessage();
-                
+
                 if (message == null) {
                     message = throwable.toString();
                 }
-	        wrappedResponse.setStatus(status, message);
+                wrappedResponse.setStatus(status, message);
             }
         }
     }

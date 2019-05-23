@@ -8,8 +8,8 @@ import org.joget.plugin.property.model.PropertyEditable;
 public interface DataListColumnFormat extends PropertyEditable {
 
     /**
-     * Format column value 
-     * 
+     * Format column value
+     *
      * @param dataList
      * @param column
      * @param row

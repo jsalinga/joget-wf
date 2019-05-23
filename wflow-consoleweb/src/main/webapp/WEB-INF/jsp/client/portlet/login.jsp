@@ -5,15 +5,15 @@
     autoDetectJSLibrary(typeof jQuery == 'undefined', '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/js/jquery/jquery-1.9.1.min.js');
     autoDetectJSLibrary(typeof jQuery == 'undefined', '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/js/jquery/jquery-migrate-1.2.1.min.js');
     function autoDetectJSLibrary(jsObjUndefined, src){
-        if (jsObjUndefined) {
-            var objHead = window.document.getElementsByTagName('head')[0];
-            var objScript = window.document.createElement('script');
-            objScript.src = src;
-            objScript.type = 'text/javascript';
-            objHead.appendChild(objScript);
-        }
+    if (jsObjUndefined) {
+    var objHead = window.document.getElementsByTagName('head')[0];
+    var objScript = window.document.createElement('script');
+    objScript.src = src;
+    objScript.type = 'text/javascript';
+    objHead.appendChild(objScript);
     }
-    
+    }
+
 </script>
 
 <c:set var="id" value="1"/>
@@ -48,38 +48,38 @@
 <div id="loading_${fn:escapeXml(id)}" style="display:none">
     <center><img src="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/images/v3/portlet_loading.gif"/></center>
 </div>
-    
+
 <script type="text/javascript" src="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/js/json/util.js"></script>
 <script>
 
     var loginUrlPath_${fn:escapeXml(id)} = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-   
+
     function doInboxLogin_${fn:escapeXml(id)}(){
-        
-        var loginCallback_${fn:escapeXml(id)} = {
-            success: function(){
-                $('#loading_${fn:escapeXml(id)}').show();
-                $('#${fn:escapeXml(divId)}').html( $('#loading_${fn:escapeXml(id)}').html());
-                var param = 'id='+${fn:escapeXml(id)}+'&rows='+${fn:escapeXml(rowsPerPage)}+'&divId=${fn:escapeXml(divId)}&packageId=${fn:escapeXml(packageId)}&loginCallback=${fn:escapeXml(loginCallback)}';
-                var url = '';
-                
-                if(${fn:escapeXml(login)} ==true){
-                    url = '/web/js/client/processList.js?';
-                }else{
-                    url = '/web/js/client/inbox.js?';
-                }
-               
-                url +=param;
-                
-                $.getScript(loginUrlPath_${fn:escapeXml(id)}+url,null);
 
-                if(typeof ${fn:escapeXml(loginCallback)} != "undefined" && ${fn:escapeXml(loginCallback)} !='loginCallback'){
-                     ${fn:escapeXml(loginCallback)}.success();
-                }
-            }
-        };
+    var loginCallback_${fn:escapeXml(id)} = {
+    success: function(){
+    $('#loading_${fn:escapeXml(id)}').show();
+    $('#${fn:escapeXml(divId)}').html( $('#loading_${fn:escapeXml(id)}').html());
+    var param = 'id='+${fn:escapeXml(id)}+'&rows='+${fn:escapeXml(rowsPerPage)}+'&divId=${fn:escapeXml(divId)}&packageId=${fn:escapeXml(packageId)}&loginCallback=${fn:escapeXml(loginCallback)}';
+    var url = '';
 
-        AssignmentManager.login(loginUrlPath_${fn:escapeXml(id)}, $('#j_username_${fn:escapeXml(id)}').val(), $('#j_password_${fn:escapeXml(id)}').val(),loginCallback_${fn:escapeXml(id)});
+    if(${fn:escapeXml(login)} ==true){
+    url = '/web/js/client/processList.js?';
+    }else{
+    url = '/web/js/client/inbox.js?';
+    }
+
+    url +=param;
+
+    $.getScript(loginUrlPath_${fn:escapeXml(id)}+url,null);
+
+    if(typeof ${fn:escapeXml(loginCallback)} != "undefined" && ${fn:escapeXml(loginCallback)} !='loginCallback'){
+    ${fn:escapeXml(loginCallback)}.success();
+    }
+    }
+    };
+
+    AssignmentManager.login(loginUrlPath_${fn:escapeXml(id)}, $('#j_username_${fn:escapeXml(id)}').val(), $('#j_password_${fn:escapeXml(id)}').val(),loginCallback_${fn:escapeXml(id)});
     }
 </script>
 

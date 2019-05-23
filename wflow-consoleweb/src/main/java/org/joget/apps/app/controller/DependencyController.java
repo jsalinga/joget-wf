@@ -33,13 +33,13 @@ import org.w3c.dom.NodeList;
 
 @Controller
 public class DependencyController {
-    
+
     @Autowired
     AppService appService;
-    
+
     @Autowired
     AppDefinitionDao appDefinitionDao;
-    
+
     @RequestMapping("/dependency/tree/image/(*:id)")
     public void getTreeImage(OutputStream out, @RequestParam("id") String id, @RequestParam("postfix") String postfix, @RequestParam("data") String data, HttpServletRequest request, HttpServletResponse response) throws IOException {
         byte[] img = null;
@@ -61,14 +61,14 @@ public class DependencyController {
                 LogUtil.error(DependencyController.class.getName(), e, "");
             }
         }
-        
+
         if (img == null) {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return;
         }
-        
+
         response.setHeader("Content-Type", "image/png");
-        response.setHeader("Content-Disposition", "attachment; filename="+id+postfix+".png");
+        response.setHeader("Content-Disposition", "attachment; filename=" + id + postfix + ".png");
 
         try {
             out.write(img);
@@ -76,29 +76,28 @@ public class DependencyController {
             out.close();
         }
     }
-    
+
     @RequestMapping("/json/dependency/app/(*:appId)/(~:version)/check")
     public void checkDependency(Writer writer, @RequestParam(value = "appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("keyword") String keyword, @RequestParam(value = "type", required = false) String type, @RequestParam(value = "callback", required = false) String callback, HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
-        
-        
+
         JSONObject result = new JSONObject();
         JSONArray usages = getDependencies(appId, version, type, keyword, request);
-        
+
         if (usages.length() > 0) {
             result.put("usages", usages);
         } else {
             result.put("usages", ResourceBundleUtil.getMessage("dependency.usage.noUsageFound"));
         }
         result.put("size", usages.length());
-        
+
         AppUtil.writeJson(writer, result, callback);
     }
-    
+
     @RequestMapping("/json/dependency/app/(*:appId)/(~:version)/checkOther")
     public void checkDependencyInOtherApp(Writer writer, @RequestParam(value = "appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("keyword") String keyword, @RequestParam(value = "type", required = false) String type, @RequestParam(value = "callback", required = false) String callback, HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
         JSONObject result = new JSONObject();
         JSONObject usages = new JSONObject();
-        
+
         Collection<AppDefinition> appDefinitionList = appDefinitionDao.findLatestVersions(null, null, null, "name", Boolean.FALSE, null, null);
         for (AppDefinition appDef : appDefinitionList) {
             if (!appId.equals(appDef.getAppId())) {
@@ -108,24 +107,24 @@ public class DependencyController {
                 }
             }
         }
-        
+
         if (usages.length() > 0) {
             result.put("usages", usages);
         } else {
             result.put("usages", ResourceBundleUtil.getMessage("dependency.usage.noUsageFound"));
         }
         result.put("size", usages.length());
-        
+
         AppUtil.writeJson(writer, result, callback);
     }
-    
+
     private void findKeywords(JSONArray keywords, String text, String keyword) {
         int found = text.indexOf(keyword);
-                        
+
         while (found > 0) {
             int start = (found - 40 < 0) ? 0 : found - 40;
-            int end = ((found + keyword.length() + 40) >= text.length())? text.length() : (found + keyword.length() + 40);
-            
+            int end = ((found + keyword.length() + 40) >= text.length()) ? text.length() : (found + keyword.length() + 40);
+
             String words = text.substring(start, end);
             if (start != 0) {
                 words = "..." + words;
@@ -139,7 +138,7 @@ public class DependencyController {
             found = text.indexOf(keyword);
         }
     }
-    
+
     private JSONArray getDependencies(String appId, String version, String type, String keyword, HttpServletRequest request) {
         Long appVersion;
         if (version == null || version.isEmpty()) {
@@ -149,43 +148,43 @@ public class DependencyController {
         }
         byte[] defXml = appService.getAppDefinitionXml(appId, appVersion);
         JSONArray usages = new JSONArray();
-        
+
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            ByteArrayInputStream input =  new ByteArrayInputStream(defXml);
+            ByteArrayInputStream input = new ByteArrayInputStream(defXml);
             Document xml = builder.parse(input);
-            XPath xPath =  XPathFactory.newInstance().newXPath();
-            
-            String expression = "//json[contains(text(),'\""+keyword+"\"')]";
-            expression += " | //pluginProperties[contains(text(),'\""+keyword+"\"')] ";
-            
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            String expression = "//json[contains(text(),'\"" + keyword + "\"')]";
+            expression += " | //pluginProperties[contains(text(),'\"" + keyword + "\"')] ";
+
             if ("form".equals(type)) {
                 //handle for beanshell
-                expression += " | //json[contains(text(),'\""+keyword+"\\\"')]";
-                expression += " | //pluginProperties[contains(text(),'\""+keyword+"\\\"')] ";
-                
-                expression += " | //packageActivityForm/formId[normalize-space(text())='"+keyword+"']";	       
+                expression += " | //json[contains(text(),'\"" + keyword + "\\\"')]";
+                expression += " | //pluginProperties[contains(text(),'\"" + keyword + "\\\"')] ";
+
+                expression += " | //packageActivityForm/formId[normalize-space(text())='" + keyword + "']";
             } else if ("table".equals(type)) {
                 //handle for beanshell
-                expression += " | //json[contains(text(),'\""+keyword+"\\\"')]";
-                expression += " | //pluginProperties[contains(text(),'\""+keyword+"\\\"')] ";
-                
+                expression += " | //json[contains(text(),'\"" + keyword + "\\\"')]";
+                expression += " | //pluginProperties[contains(text(),'\"" + keyword + "\\\"')] ";
+
                 //handle for jdbc query
-                expression += " | //json[contains(text(),'app_fd_"+keyword+"')]";
-                expression += " | //pluginProperties[contains(text(),'app_fd_"+keyword+"')] ";
-                
+                expression += " | //json[contains(text(),'app_fd_" + keyword + "')]";
+                expression += " | //pluginProperties[contains(text(),'app_fd_" + keyword + "')] ";
+
                 //handle for form hash variable
-                expression += " | //json[contains(text(),'form."+keyword+".')]";
-                expression += " | //pluginProperties[contains(text(),'form."+keyword+".')] ";
+                expression += " | //json[contains(text(),'form." + keyword + ".')]";
+                expression += " | //pluginProperties[contains(text(),'form." + keyword + ".')] ";
             }
             NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xml, XPathConstants.NODESET);
-            
+
             if (nodeList.getLength() > 0) {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     JSONObject obj = new JSONObject();
                     Node nNode = nodeList.item(i);
-                    
+
                     if ("formId".equals(nNode.getNodeName())) {
                         Element parent = (Element) nNode.getParentNode().getParentNode();
                         Node where = parent.getElementsByTagName("string").item(0);
@@ -194,7 +193,7 @@ public class DependencyController {
                         obj.put("label", where.getTextContent());
                         obj.put("type", "process_activity");
                         obj.put("category", ResourceBundleUtil.getMessage("dependency.usage.activities"));
-                        obj.put("link", request.getContextPath() + "/web/console/app/"+appId+"/"+version+"/processes/"+ids[0]+"?tab=activityList&activityDefId="+ids[1]);
+                        obj.put("link", request.getContextPath() + "/web/console/app/" + appId + "/" + version + "/processes/" + ids[0] + "?tab=activityList&activityDefId=" + ids[1]);
                     } else if ("pluginProperties".equals(nNode.getNodeName())) {
                         if ("pluginDefaultProperties".equals(nNode.getParentNode().getNodeName())) {
                             Element parent = (Element) nNode.getParentNode();
@@ -205,7 +204,7 @@ public class DependencyController {
                             obj.put("label", label.getTextContent());
                             obj.put("type", "plugin_default_properties");
                             obj.put("category", ResourceBundleUtil.getMessage("dependency.usage.pluginDefault"));
-                            obj.put("link", request.getContextPath() + "/web/console/app/"+appId+"/"+version+"/properties?tab=pluginDefault&plugin="+className);
+                            obj.put("link", request.getContextPath() + "/web/console/app/" + appId + "/" + version + "/properties?tab=pluginDefault&plugin=" + className);
                         } else {
                             Element parent = (Element) nNode.getParentNode().getParentNode();
                             Node where = parent.getElementsByTagName("string").item(0);
@@ -217,11 +216,11 @@ public class DependencyController {
                             if ("packageParticipant".equals(nNode.getParentNode().getNodeName())) {
                                 obj.put("type", "process_participant");
                                 obj.put("category", ResourceBundleUtil.getMessage("dependency.usage.participants"));
-                                obj.put("link", request.getContextPath() + "/web/console/app/"+appId+"/"+version+"/processes/"+ids[0]+"?tab=participantList&participantId="+ids[1]);
+                                obj.put("link", request.getContextPath() + "/web/console/app/" + appId + "/" + version + "/processes/" + ids[0] + "?tab=participantList&participantId=" + ids[1]);
                             } else {
                                 obj.put("type", "process_tool");
                                 obj.put("category", ResourceBundleUtil.getMessage("dependency.usage.tools"));
-                                obj.put("link", request.getContextPath() + "/web/console/app/"+appId+"/"+version+"/processes/"+ids[0]+"?tab=toolList&activityDefId="+ids[1]);
+                                obj.put("link", request.getContextPath() + "/web/console/app/" + appId + "/" + version + "/processes/" + ids[0] + "?tab=toolList&activityDefId=" + ids[1]);
                             }
                         }
                     } else if ("json".equals(nNode.getNodeName())) {
@@ -229,49 +228,49 @@ public class DependencyController {
                         Node where = parent.getElementsByTagName("id").item(0);
                         String id = where.getTextContent();
                         obj.put("where", id);
-                        
+
                         Node label = parent.getElementsByTagName("name").item(0);
                         obj.put("label", label.getTextContent());
-                            
+
                         String nodeType = "form";
                         if ("userviewDefinition".equals(nNode.getParentNode().getNodeName())) {
                             nodeType = "userview";
                         } else if ("datalistDefinition".equals(nNode.getParentNode().getNodeName())) {
                             nodeType = "datalist";
                         }
-                        
+
                         if (nodeType.equals(type) && keyword.equals(id)) {
                             continue;
                         }
-                        
+
                         obj.put("type", nodeType);
-                        obj.put("category", ResourceBundleUtil.getMessage("dependency.usage."+nodeType));
-                        obj.put("link", request.getContextPath() + "/web/console/app/"+appId+"/"+version+"/"+nodeType+"/builder/"+id);
+                        obj.put("category", ResourceBundleUtil.getMessage("dependency.usage." + nodeType));
+                        obj.put("link", request.getContextPath() + "/web/console/app/" + appId + "/" + version + "/" + nodeType + "/builder/" + id);
                     }
-                    
+
                     if ("pluginProperties".equals(nNode.getNodeName()) || "json".equals(nNode.getNodeName())) {
                         String text = nNode.getTextContent();
                         text = text.replaceAll("    ", "");
-                        
+
                         JSONArray foundArr = new JSONArray();
-                        findKeywords(foundArr, text, "\""+keyword+"\"");
-                        
+                        findKeywords(foundArr, text, "\"" + keyword + "\"");
+
                         if ("form".equals(type)) {
-                            findKeywords(foundArr, text, "\\\""+keyword+"\\\"");
+                            findKeywords(foundArr, text, "\\\"" + keyword + "\\\"");
                         }
-                        
+
                         if ("table".equals(type)) {
-                            findKeywords(foundArr, text, "\\\""+keyword+"\\\"");
-                            findKeywords(foundArr, text, "form."+keyword+".");
-                            findKeywords(foundArr, text, "app_fd_"+keyword+"");
+                            findKeywords(foundArr, text, "\\\"" + keyword + "\\\"");
+                            findKeywords(foundArr, text, "form." + keyword + ".");
+                            findKeywords(foundArr, text, "app_fd_" + keyword + "");
                         }
-                        
+
                         obj.put("found", foundArr);
                     }
                     usages.put(obj);
                 }
             }
-            
+
         } catch (Exception e) {
             LogUtil.error(DependencyController.class.getName(), e, "");
         }

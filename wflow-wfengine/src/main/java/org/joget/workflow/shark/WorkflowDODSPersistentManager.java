@@ -22,12 +22,12 @@ public class WorkflowDODSPersistentManager extends DODSPersistentManager {
             mockAss.setActivityDefId(act.getActivityDefinitionId());
             mockAss.setProcessId(act.getProcessId());
             mockAss.setProcessDefId(act.getProcessMgrName());
-            
+
             act.setName(WorkflowUtil.processVariable(act.getName(), null, mockAss));
         }
         super.persist(shandle, act, isInitialPersistence);
     }
-    
+
     @Override
     protected ProcessDO[] getPersistedProcesses(int type, String sqlWhere, int startAt, int limit) throws PersistenceException {
         ProcessDO[] DOs = null;
@@ -42,7 +42,7 @@ public class WorkflowDODSPersistentManager extends DODSPersistentManager {
                     query.setQueryState(ProcessStateDO.createExisting((BigDecimal) _prOpenStatesBigDecimals.get(i)), QueryBuilder.NOT_EQUAL);
                 }
             }
-            
+
             if (null != sqlWhere) {
                 query.getQueryBuilder().addWhere(sqlWhere);
                 if (startAt > 0) {
@@ -60,11 +60,10 @@ public class WorkflowDODSPersistentManager extends DODSPersistentManager {
             throw new PersistenceException(t);
         }
     }
-    
+
     @Override
     public void synchronizeProcess(WMSessionHandle shandle, String procId)
             throws PersistenceException {
         //ignore
     }
 }
-

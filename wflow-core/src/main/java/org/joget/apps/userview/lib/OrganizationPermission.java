@@ -74,7 +74,7 @@ public class OrganizationPermission extends UserviewPermission implements Plugin
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
 
         if ("getOptions".equals(action)) {

@@ -111,7 +111,7 @@ import io.proximax.model.BlockchainNetworkType;
 
 /**
  * Implementation of AppService interface
- * 
+ *
  */
 @Service("appService")
 public class AppServiceImpl implements AppService {
@@ -149,11 +149,12 @@ public class AppServiceImpl implements AppService {
     @Autowired
     WorkflowProcessLinkDao workflowProcessLinkDao;
     //----- Workflow use cases ------
-    
+
     final protected Map<String, String> processMigration = new HashMap<String, String>();
 
     /**
      * Retrieves the workflow process definition for a specific app version.
+     *
      * @param appId
      * @param version
      * @param processDefId
@@ -185,6 +186,7 @@ public class AppServiceImpl implements AppService {
 //
     /**
      * Retrieves the app definition for a specific workflow activity assignment.
+     *
      * @param activityId
      * @return
      */
@@ -209,9 +211,10 @@ public class AppServiceImpl implements AppService {
         AppUtil.setCurrentAppDefinition(appDef);
         return appDef;
     }
-    
+
     /**
      * Retrieves the app definition for a specific workflow process.
+     *
      * @param processId
      * @return
      */
@@ -232,9 +235,11 @@ public class AppServiceImpl implements AppService {
         AppUtil.setCurrentAppDefinition(appDef);
         return appDef;
     }
-    
+
     /**
-     * Retrieves the app definition for a specific workflow process definition id.
+     * Retrieves the app definition for a specific workflow process definition
+     * id.
+     *
      * @param processDefId
      * @return
      */
@@ -246,19 +251,20 @@ public class AppServiceImpl implements AppService {
         String[] params = processDefId.split("#");
         String packageId = params[0];
         Long packageVersion = Long.parseLong(params[1]);
-        
+
         PackageDefinition packageDef = packageDefinitionDao.loadPackageDefinition(packageId, packageVersion);
         if (packageDef != null) {
             appDef = packageDef.getAppDefinition();
         }
-        
+
         // set into thread
         AppUtil.setCurrentAppDefinition(appDef);
         return appDef;
     }
-    
+
     /**
      * Retrieve a form for a specific activity instance
+     *
      * @param appId
      * @param version
      * @param activityId
@@ -273,6 +279,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Retrieve a form for a specific activity instance
+     *
      * @param appId
      * @param version
      * @param activityId
@@ -287,9 +294,10 @@ public class AppServiceImpl implements AppService {
         WorkflowAssignment assignment = workflowManager.getAssignment(activityId);
         return viewAssignmentForm(appDef, assignment, formData, formUrl, cancelUrl);
     }
-    
+
     /**
      * Retrieve a form for a specific activity instance
+     *
      * @param appDef
      * @param assignment
      * @param formData
@@ -300,9 +308,10 @@ public class AppServiceImpl implements AppService {
     public PackageActivityForm viewAssignmentForm(AppDefinition appDef, WorkflowAssignment assignment, FormData formData, String formUrl) {
         return viewAssignmentForm(appDef, assignment, formData, formUrl, null);
     }
-    
+
     /**
      * Retrieve a form for a specific activity instance
+     *
      * @param appDef
      * @param assignment
      * @param formData
@@ -328,7 +337,7 @@ public class AppServiceImpl implements AppService {
         formData.setActivityId(activityId);
         formData.setProcessId(processId);
         formData.setPrimaryKeyValue(originProcessId);
-        
+
         Form form = retrieveForm(appDef, activityForm, formData, assignment);
         if (form == null) {
             form = createDefaultForm(processId, formData);
@@ -374,13 +383,14 @@ public class AppServiceImpl implements AppService {
                 externalUrl += "?";
             }
             activityForm.setFormUrl(externalUrl);
-        }        
-        
+        }
+
         return activityForm;
     }
-    
+
     /**
      * Process a submitted form to complete an assignment
+     *
      * @param form
      * @param assignment
      * @param formData
@@ -410,7 +420,7 @@ public class AppServiceImpl implements AppService {
             if (!assignment.isAccepted()) {
                 workflowManager.assignmentAccept(activityId);
             }
-            
+
             // complete assignment
             workflowManager.assignmentComplete(activityId, workflowVariableMap);
         }
@@ -419,6 +429,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Process a submitted form to complete an assignment
+     *
      * @param appId
      * @param version
      * @param activityId
@@ -446,7 +457,7 @@ public class AppServiceImpl implements AppService {
                 String originProcessId = getOriginProcessId(processId);
                 formData.setPrimaryKeyValue(originProcessId);
                 formData.setProcessId(processId);
-                
+
                 AppDefinition appDef = getAppDefinition(appId, version);
                 Form form = retrieveForm(appDef, paf, formData, assignment);
                 formData = submitForm(form, formData, false);
@@ -459,7 +470,7 @@ public class AppServiceImpl implements AppService {
             if (!assignment.isAccepted()) {
                 workflowManager.assignmentAccept(activityId);
             }
-        
+
             // complete assignment
             workflowManager.assignmentComplete(activityId, workflowVariableMap);
         }
@@ -468,6 +479,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Retrieve form mapped to start a process
+     *
      * @param appId
      * @param version
      * @param processDefId
@@ -490,7 +502,7 @@ public class AppServiceImpl implements AppService {
                     // decorate form with actions
                     Element submitButton = (Element) pluginManager.getPlugin(AssignmentCompleteButton.class.getName());
                     submitButton.setProperty(FormUtil.PROPERTY_ID, AssignmentCompleteButton.DEFAULT_ID);
-                    submitButton.setProperty("label",  ResourceBundleUtil.getMessage("form.button.submit"));
+                    submitButton.setProperty("label", ResourceBundleUtil.getMessage("form.button.submit"));
                     startForm.addAction((FormAction) submitButton);
                     startForm = decorateFormActions(startForm);
 
@@ -509,13 +521,14 @@ public class AppServiceImpl implements AppService {
                     externalUrl += "?";
                 }
                 startFormDef.setFormUrl(externalUrl);
-            }        
+            }
         }
         return startFormDef;
     }
-    
+
     /**
      * Start a process through a form submission
+     *
      * @param appId
      * @param version
      * @param processDefId
@@ -538,6 +551,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Start a process through a form submission
+     *
      * @param appId
      * @param version
      * @param startFormDef
@@ -596,7 +610,7 @@ public class AppServiceImpl implements AppService {
                         if (!originId.equals(startForm.getPrimaryKeyValue(formData))) {
                             workflowProcessLinkDao.addWorkflowProcessLink(startForm.getPrimaryKeyValue(formData), originId);
                         }
-                        
+
                         // set next activity if configured
                         boolean autoContinue = (startFormDef != null) && startFormDef.isAutoContinue();
                         if (!autoContinue) {
@@ -614,7 +628,9 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Retrieves ID of the form data row that is created or updated upon form submission.
+     * Retrieves ID of the form data row that is created or updated upon form
+     * submission.
+     *
      * @param formResult
      * @return
      */
@@ -635,7 +651,9 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Returns the form definition ID for the form mapped to the specified activity definition ID.
+     * Returns the form definition ID for the form mapped to the specified
+     * activity definition ID.
+     *
      * @param appId
      * @param version
      * @param activityDefId
@@ -649,7 +667,7 @@ public class AppServiceImpl implements AppService {
         PackageActivityForm paf = packageDef.getPackageActivityForm(processDefIdWithoutVersion, activityDefId);
         if (paf != null) {
             try {
-                paf = (PackageActivityForm)paf.clone();
+                paf = (PackageActivityForm) paf.clone();
             } catch (CloneNotSupportedException ex) {
                 LogUtil.error(AppServiceImpl.class.getName(), ex, "Error cloning PackageActivityForm for " + activityDefId);
             }
@@ -681,8 +699,10 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Create a default empty form containing buttons for submission and fields for workflow variables
-     * @return 
+     * Create a default empty form containing buttons for submission and fields
+     * for workflow variables
+     *
+     * @return
      */
     protected Form createDefaultForm(String processId, FormData formData) {
         // create default empty form
@@ -721,10 +741,11 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Returns the origin process ID or recordId for a process instance.
-     * The return value can be the process ID of the top-most process 
-     * which is started that possibly triggers other sub-processes, or it is a record id
+     * Returns the origin process ID or recordId for a process instance. The
+     * return value can be the process ID of the top-most process which is
+     * started that possibly triggers other sub-processes, or it is a record id
      * used to start the top-most process.
+     *
      * @param processId
      * @return
      */
@@ -736,7 +757,9 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Check to see whether an activity is configured to automatically continue on to the next activity.
+     * Check to see whether an activity is configured to automatically continue
+     * on to the next activity.
+     *
      * @param packageId
      * @param packageVersion
      * @param processDefId
@@ -767,6 +790,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Retrieve a data form
+     *
      * @param appId
      * @param version
      * @param formDefId
@@ -782,9 +806,10 @@ public class AppServiceImpl implements AppService {
     public Form viewDataForm(String appId, String version, String formDefId, String saveButtonLabel, String submitButtonLabel, String cancelButtonLabel, FormData formData, String formUrl, String cancelUrl) {
         return viewDataForm(appId, version, formDefId, saveButtonLabel, submitButtonLabel, cancelButtonLabel, null, formData, formUrl, cancelUrl);
     }
-    
+
     /**
      * Retrieve a data form
+     *
      * @param appId
      * @param version
      * @param formDefId
@@ -795,7 +820,7 @@ public class AppServiceImpl implements AppService {
      * @param formData
      * @param formUrl
      * @param cancelUrl
-     * @return 
+     * @return
      */
     @Override
     public Form viewDataForm(String appId, String version, String formDefId, String saveButtonLabel, String submitButtonLabel, String cancelButtonLabel, String cancelButtonTarget, FormData formData, String formUrl, String cancelUrl) {
@@ -809,9 +834,10 @@ public class AppServiceImpl implements AppService {
         Form form = loadFormByFormDefId(appDef.getId(), appDef.getVersion().toString(), formDefId, formData, null);
         return viewDataForm(form, saveButtonLabel, submitButtonLabel, cancelButtonLabel, cancelButtonTarget, formData, formUrl, cancelUrl);
     }
-    
+
     /**
      * Retrieve a data form
+     *
      * @param form
      * @param saveButtonLabel
      * @param submitButtonLabel
@@ -820,7 +846,7 @@ public class AppServiceImpl implements AppService {
      * @param formData
      * @param formUrl
      * @param cancelUrl
-     * @return 
+     * @return
      */
     @Override
     public Form viewDataForm(Form form, String saveButtonLabel, String submitButtonLabel, String cancelButtonLabel, String cancelButtonTarget, FormData formData, String formUrl, String cancelUrl) {
@@ -870,9 +896,9 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Returns a Collection of form data for a process based on criteria
-     * 
+     *
      * @Deprecated API used in v2. Not implemented since v3.
-     * 
+     *
      * @param formDefId
      * @param processId
      * @param query
@@ -888,10 +914,11 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Returns the total number of form data rows for a process based on criteria
-     * 
+     * Returns the total number of form data rows for a process based on
+     * criteria
+     *
      * @Deprecated API used in v2. Not implemented since v3.
-     * 
+     *
      * @param formDefId
      * @param query
      * @return
@@ -903,9 +930,12 @@ public class AppServiceImpl implements AppService {
 
     //----- Console app management use cases ------
     /**
-     * Finds the app definition based on the appId and version, cached where possible
+     * Finds the app definition based on the appId and version, cached where
+     * possible
+     *
      * @param appId
-     * @param version If null, empty or equals to AppDefinition.VERSION_LATEST, the latest version is returned.
+     * @param version If null, empty or equals to AppDefinition.VERSION_LATEST,
+     * the latest version is returned.
      * @return null if the specific app definition is not found
      */
     @Override
@@ -923,8 +953,10 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Loads the app definition based on the appId and version
+     *
      * @param appId
-     * @param version If null, empty or equals to AppDefinition.VERSION_LATEST, the latest version is returned.
+     * @param version If null, empty or equals to AppDefinition.VERSION_LATEST,
+     * the latest version is returned.
      * @return null if the specific app definition is not found
      */
     @Override
@@ -950,9 +982,10 @@ public class AppServiceImpl implements AppService {
         AppUtil.setCurrentAppDefinition(appDef);
         return appDef;
     }
-    
+
     /**
      * Create a new app definition
+     *
      * @param appDefinition
      * @return A Collection of errors (if any).
      */
@@ -961,9 +994,10 @@ public class AppServiceImpl implements AppService {
     public Collection<String> createAppDefinition(AppDefinition appDefinition) {
         return createAppDefinition(appDefinition, null);
     }
-    
+
     /**
      * Create a new app definition and duplicate the other app
+     *
      * @param appDefinition
      * @param copyAppDefinition
      * @return A Collection of errors (if any).
@@ -979,7 +1013,7 @@ public class AppServiceImpl implements AppService {
         if (appDef != null) {
             errors.add("console.app.error.label.idExists");
         } else {
-            if (copy != null) { 
+            if (copy != null) {
                 byte[] appDefinitionXml = null;
                 byte[] xpdl = null;
                 ByteArrayOutputStream baos = null;
@@ -997,14 +1031,14 @@ public class AppServiceImpl implements AppService {
                     baos.close();
 
                     String value = new String(appDefinitionXml, "UTF-8");
-                    
+
                     //replace id and name
-                    value = value.replaceAll("<id>"+copy.getAppId()+"</id>", "<id>"+appId+"</id>");
-                    value = value.replaceAll("<name>"+copy.getName()+"</name>", "<name>"+appDefinition.getName()+"</name>");
-                    value = value.replaceAll("<appId>"+copy.getAppId()+"</appId>", "<appId>"+appId+"</appId>");
-                    
-                    appDefinitionXml =  value.getBytes("UTF-8");
-                    
+                    value = value.replaceAll("<id>" + copy.getAppId() + "</id>", "<id>" + appId + "</id>");
+                    value = value.replaceAll("<name>" + copy.getName() + "</name>", "<name>" + appDefinition.getName() + "</name>");
+                    value = value.replaceAll("<appId>" + copy.getAppId() + "</appId>", "<appId>" + appId + "</appId>");
+
+                    appDefinitionXml = value.getBytes("UTF-8");
+
                     PackageDefinition packageDef = copy.getPackageDefinition();
                     if (packageDef != null) {
                         xpdl = workflowManager.getPackageContent(packageDef.getId(), packageDef.getVersion().toString());
@@ -1013,11 +1047,11 @@ public class AppServiceImpl implements AppService {
                         replace.put(copy.getName(), appDefinition.getName());
                         xpdl = StringUtil.searchAndReplaceByteContent(xpdl, replace);
                     }
-                    
+
                     //import
                     appDef = serializer.read(AppDefinition.class, new ByteArrayInputStream(appDefinitionXml), false);
                     AppDefinition newAppDef = importAppDefinition(appDef, 1L, xpdl);
-                    
+
                     AppResourceUtil.copyAppResources(copy.getAppId(), copy.getVersion().toString(), newAppDef.getAppId(), newAppDef.getVersion().toString());
                 } catch (Exception ex) {
                     LogUtil.error(getClass().getName(), ex, "");
@@ -1033,7 +1067,7 @@ public class AppServiceImpl implements AppService {
 
                     TimeZone.setDefault(current);
                 }
-                
+
             } else {
                 // create app
                 appDefinitionDao.saveOrUpdate(appDefinition);
@@ -1042,9 +1076,10 @@ public class AppServiceImpl implements AppService {
 
         return errors;
     }
-    
+
     /**
      * Create a new version of an app from an existing latest version
+     *
      * @param appId
      * @return
      */
@@ -1056,6 +1091,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Create a new version of an app from an existing version
+     *
      * @param appId
      * @param version
      * @return
@@ -1065,7 +1101,7 @@ public class AppServiceImpl implements AppService {
     public AppDefinition createNewAppDefinitionVersion(String appId, Long version) {
         TimeZone current = TimeZone.getDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT 0"));
-        
+
         if (version == null) {
             version = appDefinitionDao.getLatestVersion(appId);
         }
@@ -1076,7 +1112,7 @@ public class AppServiceImpl implements AppService {
 
         try {
             byte[] appData = getAppDefinitionXml(appId, version);
-            
+
             //for backward compatible
             Map<String, String> replacement = new HashMap<String, String>();
             replacement.put("<!--disableSaveAsDraft>", "<disableSaveAsDraft>");
@@ -1089,7 +1125,7 @@ public class AppServiceImpl implements AppService {
             replacement.put("</resourceList-->", "</resourceList>");
             replacement.put("<!--resourceList/-->", "<resourceList/>");
             appData = StringUtil.searchAndReplaceByteContent(appData, replacement);
-            
+
             newAppDef = serializer.read(AppDefinition.class, new ByteArrayInputStream(appData));
 
             PackageDefinition packageDef = appDef.getPackageDefinition();
@@ -1101,9 +1137,9 @@ public class AppServiceImpl implements AppService {
 
             Long newAppVersion = appDefinitionDao.getLatestVersion(appId) + 1;
             newAppDef = importAppDefinition(newAppDef, newAppVersion, xpdl);
-            
+
             AppResourceUtil.copyAppResources(appId, version.toString(), appId, newAppDef.getVersion().toString());
-            
+
             return newAppDef;
         } catch (Exception e) {
             LogUtil.error(AppServiceImpl.class.getName(), e, appId);
@@ -1115,6 +1151,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Delete a specific app version
+     *
      * @param appId
      * @param version
      */
@@ -1124,12 +1161,13 @@ public class AppServiceImpl implements AppService {
         AppDefinition appDef = appDefinitionDao.loadVersion(appId, version);
 
         appDefinitionDao.delete(appDef);
-        
+
         AppResourceUtil.deleteAppResources(appDef.getAppId(), appDef.getVersion().toString());
     }
 
     /**
      * Delete all versions of an app
+     *
      * @param appId
      */
     @Override
@@ -1139,13 +1177,13 @@ public class AppServiceImpl implements AppService {
         appDefinitionDao.deleteAllVersions(appId);
 
         // TODO: delete processes
-
         AppResourceUtil.deleteAppResourcesForAllVersion(appId);
     }
 
     //----- Console workflow management use cases ------
     /**
      * Deploy an XPDL package for an app.
+     *
      * @param appId
      * @param version
      * @param packageXpdl
@@ -1160,7 +1198,7 @@ public class AppServiceImpl implements AppService {
         PackageDefinition packageDef = null;
         AppDefinition appDef = null;
         String packageId = workflowManager.getPackageIdFromDefinition(packageXpdl);
-        
+
         // get app version
         if (appId != null && !appId.isEmpty()) {
             appDef = loadAppDefinition(appId, version);
@@ -1175,7 +1213,7 @@ public class AppServiceImpl implements AppService {
 
         if (appDef != null || createNewApp) {
             Long originalVersion = null;
-            
+
             //to fix package id letter case issue
             if (appDef != null && !packageId.equals(appDef.getAppId())) {
                 packageXpdl = StringUtil.searchAndReplaceByteContent(packageXpdl, packageId, appDef.getAppId());
@@ -1205,7 +1243,7 @@ public class AppServiceImpl implements AppService {
             Long packageVersion = Long.parseLong(versionStr);
             if (packageDef == null) {
                 packageDef = packageDefinitionDao.createPackageDefinition(appDef, packageVersion);
-                
+
                 //if app version is the only version for the app and no package is found, set process start white list to admin user
                 if (appDefinitionDao.countVersions(appId) == 1) {
                     Collection<WorkflowProcess> processList = workflowManager.getProcessList(appDef.getAppId(), packageVersion.toString());
@@ -1236,6 +1274,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Create a new form definition
+     *
      * @param appDefinition
      * @param formDefinition
      * @return A Collection of errors (if any).
@@ -1264,6 +1303,7 @@ public class AppServiceImpl implements AppService {
     //---- form data use cases
     /**
      * Loads a Form based on a specific form definition ID
+     *
      * @param appId
      * @param version
      * @param formDefId
@@ -1275,7 +1315,7 @@ public class AppServiceImpl implements AppService {
         try {
             AppDefinition appDef = getAppDefinition(appId, version);
             FormDefinition formDef = formDefinitionDao.loadById(formDefId, appDef);
-            
+
             if (formDef != null && formDef.getJson() != null) {
                 String formJson = formDef.getJson();
                 formJson = AppUtil.processHashVariable(formJson, wfAssignment, StringUtil.TYPE_JSON, null);
@@ -1288,7 +1328,9 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Decorates a Form by adding a horizontal row of FormAction buttons in a "section-actions" section.
+     * Decorates a Form by adding a horizontal row of FormAction buttons in a
+     * "section-actions" section.
+     *
      * @param form
      * @return
      */
@@ -1304,14 +1346,14 @@ public class AppServiceImpl implements AppService {
                 formChildren = new ArrayList<Element>();
             }
             formChildren.add(section);
-        
+
             // add new horizontal column to section
             Column column = new Column();
             column.setProperty("horizontal", "true");
             Collection<Element> columnChildren = new ArrayList<Element>();
             column.setChildren(columnChildren);
             sectionChildren.add(column);
-        
+
             // add actions to column
             for (FormAction formAction : form.getActions()) {
                 if (formAction != null && formAction instanceof Element) {
@@ -1324,6 +1366,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Use case for form submission by ID
+     *
      * @param appId
      * @param version
      * @param formDefId
@@ -1340,9 +1383,10 @@ public class AppServiceImpl implements AppService {
             return formData;
         }
     }
-    
+
     /**
      * Use case for form submission by Form object
+     *
      * @param form
      * @param formData
      * @param ignoreValidation
@@ -1367,11 +1411,13 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Load specific data row (record) by primary key value for a specific form
+     *
      * @param appId
      * @param version
      * @param formDefId
      * @param primaryKeyValue
-     * @return null if the form is not available, empty FormRowSet if the form is available but record is not found.
+     * @return null if the form is not available, empty FormRowSet if the form
+     * is available but record is not found.
      */
     @Override
     public FormRowSet loadFormData(String appId, String version, String formDefId, String primaryKeyValue) {
@@ -1385,9 +1431,11 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Load specific data row (record) by primary key value for a specific form
+     *
      * @param form
      * @param primaryKeyValue
-     * @return null if the form is not available, empty FormRowSet if the form is available but record is not found.
+     * @return null if the form is not available, empty FormRowSet if the form
+     * is available but record is not found.
      */
     @Override
     public FormRowSet loadFormData(Form form, String primaryKeyValue) {
@@ -1400,11 +1448,14 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Method to load specific data row (record) by primary key value for a specific form.
-     * This method is transactional (since v5), but retains the method name for backward compatibility reasons.
+     * Method to load specific data row (record) by primary key value for a
+     * specific form. This method is transactional (since v5), but retains the
+     * method name for backward compatibility reasons.
+     *
      * @param form
      * @param primaryKeyValue
-     * @return null if the form is not available, empty FormRowSet if the form is available but record is not found.
+     * @return null if the form is not available, empty FormRowSet if the form
+     * is available but record is not found.
      */
     @Override
     public FormRowSet loadFormDataWithoutTransaction(Form form, String primaryKeyValue) {
@@ -1417,12 +1468,15 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Method to load specific data row (record) by primary key value for a specific form.
-     * This method is transactional (since v5), but retains the method name for backward compatibility reasons.
+     * Method to load specific data row (record) by primary key value for a
+     * specific form. This method is transactional (since v5), but retains the
+     * method name for backward compatibility reasons.
+     *
      * @param formDefid
      * @param tableName
      * @param primaryKeyValue
-     * @return null if the form is not available, empty FormRowSet if the form is available but record is not found.
+     * @return null if the form is not available, empty FormRowSet if the form
+     * is available but record is not found.
      */
     @Override
     public FormRowSet loadFormDataWithoutTransaction(String formDefid, String tableName, String primaryKeyValue) {
@@ -1431,11 +1485,14 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Load specific data row (record) by primary key value for a specific form
+     *
      * @param formDefId
      * @param tableName
      * @param primaryKeyValue
-     * @param transactional Determines whether the DAO method to call i.e. transactional or non-transactional. No longer used in v5.
-     * @return null if the form is not available, empty FormRowSet if the form is available but record is not found.
+     * @param transactional Determines whether the DAO method to call i.e.
+     * transactional or non-transactional. No longer used in v5.
+     * @return null if the form is not available, empty FormRowSet if the form
+     * is available but record is not found.
      */
     protected FormRowSet internalLoadFormData(String formDefId, String tableName, String primaryKeyValue, boolean transactional) {
         FormRowSet results = null;
@@ -1444,34 +1501,34 @@ public class AppServiceImpl implements AppService {
             results.setMultiRow(false);
             if (primaryKeyValue != null && primaryKeyValue.trim().length() > 0) {
                 FormRow row = (transactional) ? formDataDao.load(formDefId, tableName, primaryKeyValue) : formDataDao.loadWithoutTransaction(formDefId, tableName, primaryKeyValue);
-               
-                if(null != row && !StringUtils.isBlank(row.getProperty("resultValue"))) {
-                	 BlockchainNetworkConnection blockChain = new BlockchainNetworkConnection(
-                             BlockchainNetworkType.TEST_NET, "bctestnet1.xpxsirius.io", 3000, HttpProtocol.HTTP);
-                     IpfsConnection connection = new IpfsConnection("127.0.0.1", 5001);
-                     ConnectionConfig config = ConnectionConfig.createWithLocalIpfsConnection(blockChain, connection);
-                     
-             		String transactionHash = row.getProperty("resultValue");
-             		DownloadParameter param = DownloadParameter.create(transactionHash).build();
-             		Downloader downloader = new Downloader(config);
-             		DownloadResult result = downloader.download(param);
-             		String data = result.getData().getContentAsString("UTF-8");
-             		try {
-						JSONObject object = new JSONObject(data);
-						Iterator<String> iterate = object.keys();
-						while(iterate.hasNext()) {
-							String key = iterate.next();
-							if(!StringUtils.isBlank(object.getString(key))) {
-								row.put(key, object.getString(key));
-							}
-							
-						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
+                if (null != row && !StringUtils.isBlank(row.getProperty("resultValue"))) {
+                    BlockchainNetworkConnection blockChain = new BlockchainNetworkConnection(
+                            BlockchainNetworkType.TEST_NET, "bctestnet1.xpxsirius.io", 3000, HttpProtocol.HTTP);
+                    IpfsConnection connection = new IpfsConnection("127.0.0.1", 5001);
+                    ConnectionConfig config = ConnectionConfig.createWithLocalIpfsConnection(blockChain, connection);
+
+                    String transactionHash = row.getProperty("resultValue");
+                    DownloadParameter param = DownloadParameter.create(transactionHash).build();
+                    Downloader downloader = new Downloader(config);
+                    DownloadResult result = downloader.download(param);
+                    String data = result.getData().getContentAsString("UTF-8");
+                    try {
+                        JSONObject object = new JSONObject(data);
+                        Iterator<String> iterate = object.keys();
+                        while (iterate.hasNext()) {
+                            String key = iterate.next();
+                            if (!StringUtils.isBlank(object.getString(key))) {
+                                row.put(key, object.getString(key));
+                            }
+
+                        }
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
-                if (row != null) {	
+                if (row != null) {
                     results.add(row);
                 }
                 LogUtil.debug(getClass().getName(), "  -- Loaded form data row [" + primaryKeyValue + "] for form [" + formDefId + "] from table [" + tableName + "]");
@@ -1481,13 +1538,14 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Store specific data row (record). 
+     * Store specific data row (record).
+     *
      * @param appId
      * @param version
      * @param formDefId
      * @param rows
      * @param primaryKeyValue
-     * @return 
+     * @return
      */
     @Override
     public FormRowSet storeFormData(String appId, String version, String formDefId, FormRowSet rows, String primaryKeyValue) {
@@ -1500,10 +1558,12 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Store specific data row (record) for a form. 
+     * Store specific data row (record) for a form.
+     *
      * @param form
      * @param rows
-     * @param primaryKeyValue For single-row data. If null, a UUID will be generated. For multi-row data, this value is not used.
+     * @param primaryKeyValue For single-row data. If null, a UUID will be
+     * generated. For multi-row data, this value is not used.
      * @return
      */
     @Override
@@ -1517,11 +1577,13 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Store specific data row (record) for a form. 
+     * Store specific data row (record) for a form.
+     *
      * @param formDefId
      * @param tableName
      * @param rows
-     * @param primaryKeyValue For single-row data. If null, a UUID will be generated. For multi-row data, this value is not used.
+     * @param primaryKeyValue For single-row data. If null, a UUID will be
+     * generated. For multi-row data, this value is not used.
      * @return
      */
     @Override
@@ -1563,7 +1625,7 @@ public class AppServiceImpl implements AppService {
                 User user = workflowUserManager.getCurrentUser();
                 String name = null;
                 if (user != null) {
-                    name = user.getFirstName() + ((user.getLastName() != null)?(" "+ user.getLastName()):"");
+                    name = user.getFirstName() + ((user.getLastName() != null) ? (" " + user.getLastName()) : "");
                 }
                 row.setModifiedByName(name);
                 Date dateCreated = null;
@@ -1583,7 +1645,7 @@ public class AppServiceImpl implements AppService {
                 }
                 row.setBlockchainDataHash(rows.getBlockchainDataHash());
                 row.setBlockchainTransactionHash(rows.getBlockchainTransactionHash());
-                
+
                 row.setDateCreated(dateCreated);
                 row.setCreatedBy(createdBy);
                 row.setCreatedByName(createdByName);
@@ -1591,13 +1653,13 @@ public class AppServiceImpl implements AppService {
 
             // update DB schema
             formDataDao.updateSchema(formDefId, tableName, rows);
-            
+
             FileUtil.checkAndUpdateFileName(results, tableName, primaryKeyValue);
-            
+
             // save data
             formDataDao.saveOrUpdate(formDefId, tableName, results);
             LogUtil.debug(getClass().getName(), "  -- Saved form data row [" + primaryKeyValue + "] for form [" + formDefId + "] from table [" + tableName + "]");
-            
+
             FileUtil.storeFileFromFormRowSet(results, tableName, primaryKeyValue);
         }
         return results;
@@ -1605,6 +1667,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Get version of published app
+     *
      * @param appId
      * @return
      */
@@ -1616,9 +1679,10 @@ public class AppServiceImpl implements AppService {
         }
         return null;
     }
-    
+
     /**
      * Get published app
+     *
      * @param appId
      * @return
      */
@@ -1631,9 +1695,10 @@ public class AppServiceImpl implements AppService {
         }
         return null;
     }
-    
+
     /**
      * Publish a specific app version
+     *
      * @param appId
      * @param version set null to publish the latest version
      * @return the published AppDefinition, null if not found
@@ -1663,9 +1728,10 @@ public class AppServiceImpl implements AppService {
         }
         return appDef;
     }
-    
+
     /**
      * Publish an app
+     *
      * @param appId
      * @return the unpublished AppDefinition, null if not found
      */
@@ -1682,6 +1748,7 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Get App definition XML
+     *
      * @param appId
      * @param version
      * @return
@@ -1690,10 +1757,10 @@ public class AppServiceImpl implements AppService {
         byte[] appDefinitionXml = null;
 
         ByteArrayOutputStream baos = null;
-        
+
         TimeZone current = TimeZone.getDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT 0"));
-        
+
         try {
             baos = new ByteArrayOutputStream();
 
@@ -1704,31 +1771,31 @@ public class AppServiceImpl implements AppService {
 
             appDefinitionXml = baos.toByteArray();
             baos.close();
-            
+
             String value = new String(appDefinitionXml, "UTF-8");
             value = value.replaceAll("org\\.hibernate\\.collection\\.PersistentBag", "java.util.ArrayList");
             value = value.replaceAll("org\\.hibernate\\.collection\\.PersistentMap", "java.util.HashMap");
-            
+
             //for backward compatible
             value = commentTag(value, "disableSaveAsDraft");
             value = commentTag(value, "meta");
             if (value.indexOf("<formDefinitionList>") > 0) {
                 int start = value.indexOf("<formDefinitionList>");
                 int end = value.indexOf("</formDefinitionList>");
-                value = value.substring(0, start - 1) + commentTag(value.substring(start, end-1), "description") + value.substring(end);
+                value = value.substring(0, start - 1) + commentTag(value.substring(start, end - 1), "description") + value.substring(end);
             }
             int afterMessagePos = 14;
             if (value.indexOf("<messageList/>") > 0) {
                 afterMessagePos += value.indexOf("<messageList/>");
-            }else{
+            } else {
                 afterMessagePos += value.indexOf("</messageList>");
             }
-            value = value.substring(0, afterMessagePos) + commentTag(value.substring(afterMessagePos+1), "description");
-            
+            value = value.substring(0, afterMessagePos) + commentTag(value.substring(afterMessagePos + 1), "description");
+
             value = value.replace("<resourceList>", "<!--resourceList>");
             value = value.replace("</resourceList>", "</resourceList-->");
             value = value.replace("<resourceList/>", "<!--resourceList/-->");
-            
+
             return value.getBytes("UTF-8");
         } catch (Exception ex) {
             LogUtil.error(getClass().getName(), ex, "");
@@ -1740,39 +1807,41 @@ public class AppServiceImpl implements AppService {
                     LogUtil.error(getClass().getName(), e, "");
                 }
             }
-            
+
             TimeZone.setDefault(current);
         }
         return null;
     }
-    
+
     private String commentTag(String content, String tag) {
-        Pattern pattern = Pattern.compile("<"+tag+">([^<])*</"+tag+">");
+        Pattern pattern = Pattern.compile("<" + tag + ">([^<])*</" + tag + ">");
         Matcher matcher = pattern.matcher(content);
         Set<String> foundList = new HashSet<String>();
         while (matcher.find()) {
             foundList.add(matcher.group());
         }
-        
+
         for (String f : foundList) {
             String newf = f;
             newf = newf.replaceAll("-", "&#45;");
-            newf = newf.replaceAll("<"+tag+">", "<!--"+tag+">");
-            newf = newf.replaceAll("</"+tag+">", "</"+tag+"-->");
-            
+            newf = newf.replaceAll("<" + tag + ">", "<!--" + tag + ">");
+            newf = newf.replaceAll("</" + tag + ">", "</" + tag + "-->");
+
             content = content.replaceAll(StringUtil.escapeRegex(f), StringUtil.escapeRegex(newf));
         }
-        
+
         return content;
     }
 
     /**
      * Export an app version in ZIP format into an OutputStream
+     *
      * @param appId
      * @param version If null, the latest app version will be used.
      * @param output The OutputStream the ZIP content will be streamed into
-     * @return Returns the OutputStream object parameter passed in. If null, a ByteArrayOutputStream will be created and returned. 
-     * @throws IOException 
+     * @return Returns the OutputStream object parameter passed in. If null, a
+     * ByteArrayOutputStream will be created and returned.
+     * @throws IOException
      */
     @Override
     public OutputStream exportApp(String appId, String version, OutputStream output) throws IOException {
@@ -1799,9 +1868,9 @@ public class AppServiceImpl implements AppService {
                     zip.write(xpdl);
                     zip.closeEntry();
                 }
-                
+
                 AppResourceUtil.addResourcesToZip(appId, version, zip);
-                
+
                 // finish the zip
                 zip.finish();
             }
@@ -1814,9 +1883,10 @@ public class AppServiceImpl implements AppService {
         }
         return output;
     }
-    
+
     /**
      * Import app from zip file
+     *
      * @param zip
      * @return
      */
@@ -1825,11 +1895,11 @@ public class AppServiceImpl implements AppService {
     public AppDefinition importApp(byte[] zip) throws ImportAppException {
         TimeZone current = TimeZone.getDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT 0"));
-        
+
         try {
             byte[] appData = getAppDataXmlFromZip(zip);
             byte[] xpdl = getXpdlFromZip(zip);
-            
+
             //for backward compatible
             Map<String, String> replacement = new HashMap<String, String>();
             replacement.put("<!--disableSaveAsDraft>", "<disableSaveAsDraft>");
@@ -1850,7 +1920,7 @@ public class AppServiceImpl implements AppService {
             //Store appDef
             long newAppVersion = appVersion + 1;
             AppDefinition newAppDef = importAppDefinition(appDef, newAppVersion, xpdl);
-            
+
             AppResourceUtil.importFromZip(newAppDef.getAppId(), newAppDef.getVersion().toString(), zip);
 
             importPlugins(zip);
@@ -1868,12 +1938,13 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Find a form data record id based a field name and value
+     *
      * @param appId
      * @param appVersion
      * @param formDefId
      * @param foreignKeyName
      * @param foreignKeyValue
-     * @return 
+     * @return
      */
     @Override
     public String getPrimaryKeyWithForeignKey(String appId, String appVersion, String formDefId, String foreignKeyName, String foreignKeyValue) {
@@ -1883,31 +1954,32 @@ public class AppServiceImpl implements AppService {
     }
 
     /**
-     * Update running processes for a package from a version to another.
-     * The update is run in a background thread.
+     * Update running processes for a package from a version to another. The
+     * update is run in a background thread.
+     *
      * @param packageId
      * @param fromVersion
-     * @param toVersion 
+     * @param toVersion
      */
     protected void updateRunningProcesses(final String packageId, final Long fromVersion, final Long toVersion) {
         final String profile = DynamicDataSourceManager.getCurrentProfile();
         final AppDefinition appDef = AppUtil.getCurrentAppDefinition();
         final User currentUser = workflowUserManager.getCurrentUser();
-        
+
         Thread backgroundThread = new Thread(new Runnable() {
 
             public void run() {
                 HostManager.setCurrentProfile(profile);
                 AppUtil.setCurrentAppDefinition(appDef);
                 workflowUserManager.setCurrentThreadUser(currentUser);
-                
+
                 processMigration.put(profile + "::" + packageId + "::" + fromVersion, toVersion.toString());
-                
+
                 LogUtil.info(getClass().getName(), "Updating running processes for " + packageId + " from " + fromVersion + " to " + toVersion.toString());
                 Collection<WorkflowProcess> runningProcessList = workflowManager.getRunningProcessList(packageId, null, null, fromVersion.toString(), null, null, 0, null);
 
                 migrateProcessInstance(runningProcessList, profile, packageId, fromVersion.toString(), toVersion.toString());
-                
+
                 processMigration.remove(profile + "::" + packageId + "::" + fromVersion);
                 LogUtil.info(getClass().getName(), "Completed updating running processes for " + packageId + " from " + fromVersion + " to " + toVersion.toString());
                 removeUnusedXpdl(profile, packageId);
@@ -1916,18 +1988,18 @@ public class AppServiceImpl implements AppService {
         backgroundThread.setDaemon(false);
         backgroundThread.start();
     }
-    
+
     protected void migrateProcessInstance(Collection<WorkflowProcess> runningProcesses, String profile, String packageId, String fromVersion, String toVersion) {
         if (runningProcesses.isEmpty() || toVersion == null) {
             return;
         }
-        
+
         String newVersion = toVersion;
-        
+
         Collection<String> newProcessDefIds = null;
         Collection<WorkflowProcess> processInstanceNeedReview = new ArrayList<WorkflowProcess>();
         WorkflowProcess lastMigratedProcessInstance = null;
-        
+
         for (WorkflowProcess process : runningProcesses) {
             if (newProcessDefIds == null) {
                 newProcessDefIds = new ArrayList<String>();
@@ -1966,30 +2038,30 @@ public class AppServiceImpl implements AppService {
                 processInstanceNeedReview.add(lastMigratedProcessInstance);
             }
         }
-        
+
         migrateProcessInstance(processInstanceNeedReview, profile, packageId, null, newVersion);
     }
-    
+
     protected void removeUnusedXpdl(String profile, String packageId) {
         Collection<WorkflowProcess> existingProcesses = workflowManager.getProcessList(packageId);
         Set<String> versions = new HashSet<String>();
         for (WorkflowProcess p : existingProcesses) {
             versions.add(p.getVersion());
         }
-        
+
         //removed version of latest package used by each app version
         Collection<Long> allPackageVersion = packageDefinitionDao.getPackageVersions(packageId);
         for (Long l : allPackageVersion) {
             versions.remove(l.toString());
         }
-        
+
         //removed version of package used by all existing assignment
         Collection<String> allAssignmentPackageDefIds = workflowAssignmentDao.getPackageDefIds(packageId);
         for (String id : allAssignmentPackageDefIds) {
             String[] part = id.split("#");
             versions.remove(part[1]);
         }
-        
+
         for (String v : versions) {
             if (!processMigration.containsKey(profile + "::" + packageId + "::" + v)) {
                 try {
@@ -2000,14 +2072,15 @@ public class AppServiceImpl implements AppService {
                 }
             }
         }
-    } 
+    }
 
     /**
      * Import an app definition object and XPDL content into the system.
+     *
      * @param appDef
      * @param appVersion
      * @param xpdl
-     * @return 
+     * @return
      */
     @Override
     @Transactional
@@ -2016,7 +2089,7 @@ public class AppServiceImpl implements AppService {
         Boolean overridePluginDefault = false;
         Boolean doNotImportParticipant = false;
         Boolean doNotImportTool = false;
-        
+
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (request != null && request.getParameterValues("overrideEnvVariable") != null) {
             overrideEnvVariable = true;
@@ -2030,7 +2103,7 @@ public class AppServiceImpl implements AppService {
         if (request != null && request.getParameterValues("doNotImportTool") != null) {
             doNotImportTool = true;
         }
-        
+
         //fix app id letter case issue during import
         AppDefinition orgAppDef = loadAppDefinition(appDef.getAppId(), null);
         String appId = appDef.getAppId();
@@ -2038,7 +2111,7 @@ public class AppServiceImpl implements AppService {
             appId = orgAppDef.getAppId();
         }
 
-        LogUtil.debug(getClass().getName(), "Importing app " + appDef.getId());        
+        LogUtil.debug(getClass().getName(), "Importing app " + appDef.getId());
         AppDefinition newAppDef = new AppDefinition();
         newAppDef.setAppId(appId);
         newAppDef.setVersion(appVersion);
@@ -2057,7 +2130,7 @@ public class AppServiceImpl implements AppService {
                 o.setAppDefinition(newAppDef);
                 formDefinitionDao.add(o);
             }
-            
+
             String currentTable = "";
             Collection<String> importedForms = new ArrayList<String>();
             try {
@@ -2082,7 +2155,7 @@ public class AppServiceImpl implements AppService {
                 throw new ImportAppException(ResourceBundleUtil.getMessage("console.app.import.error.createTable", new Object[]{currentTable, errorMessage}), e);
             }
         }
-        
+
         if (appDef.getDatalistDefinitionList() != null) {
             for (DatalistDefinition o : appDef.getDatalistDefinitionList()) {
                 o.setAppDefinition(newAppDef);
@@ -2094,12 +2167,12 @@ public class AppServiceImpl implements AppService {
         if (appDef.getUserviewDefinitionList() != null) {
             for (UserviewDefinition o : appDef.getUserviewDefinitionList()) {
                 o.setAppDefinition(newAppDef);
-                
+
                 //remove tempDisablePermissionChecking setting
                 if (o.getJson().contains("\"tempDisablePermissionChecking\"")) {
                     o.setJson(o.getJson().replace("\"tempDisablePermissionChecking\"", "\"__\""));
                 }
-                
+
                 userviewDefinitionDao.add(o);
                 LogUtil.debug(getClass().getName(), "Added userview " + o.getId());
             }
@@ -2113,16 +2186,16 @@ public class AppServiceImpl implements AppService {
                         o.setValue(temp.getValue());
                     }
                 }
-                
+
                 if (o.getValue() == null) {
                     o.setValue("");
                 }
                 o.setAppDefinition(newAppDef);
-                
+
                 environmentVariableDao.add(o);
             }
         }
-        
+
         if (appDef.getMessageList() != null) {
             for (Message o : appDef.getMessageList()) {
                 o.setAppDefinition(newAppDef);
@@ -2138,12 +2211,12 @@ public class AppServiceImpl implements AppService {
                         o.setPluginProperties(temp.getPluginProperties());
                     }
                 }
-                
+
                 o.setAppDefinition(newAppDef);
                 pluginDefaultPropertiesDao.add(o);
             }
         }
-        
+
         if (appDef.getResourceList() != null) {
             for (AppResource o : appDef.getResourceList()) {
                 o.setAppDefinition(newAppDef);
@@ -2212,14 +2285,15 @@ public class AppServiceImpl implements AppService {
         // reload app from DB
         newAppDef = loadAppDefinition(newAppDef.getAppId(), newAppDef.getVersion().toString());
         LogUtil.debug(getClass().getName(), "Finished importing app " + newAppDef.getId() + " version " + newAppDef.getVersion());
-        
+
         return newAppDef;
     }
 
     /**
      * Import plugins (JAR) from within a zip content.
+     *
      * @param zip
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void importPlugins(byte[] zip) throws Exception {
@@ -2246,9 +2320,10 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Reads app XML from zip content.
+     *
      * @param zip
-     * @return 
-     * @throws java.lang.Exception 
+     * @return
+     * @throws java.lang.Exception
      */
     @Override
     public byte[] getAppDataXmlFromZip(byte[] zip) throws Exception {
@@ -2277,9 +2352,10 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Reads XPDL from zip content.
+     *
      * @param zip
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public byte[] getXpdlFromZip(byte[] zip) throws Exception {
@@ -2305,24 +2381,26 @@ public class AppServiceImpl implements AppService {
 
         return null;
     }
-    
+
     /**
      * Get table name of a form
+     *
      * @param appId
      * @param appVersion
      * @param formDefId
-     * @return 
+     * @return
      */
     public String getFormTableName(String appId, String appVersion, String formDefId) {
         AppDefinition appDef = getAppDefinition(appId, appVersion);
         return getFormTableName(appDef, formDefId);
     }
-    
+
     /**
      * Get table name of a form
+     *
      * @param appDef
      * @param formDefId
-     * @return 
+     * @return
      */
     public String getFormTableName(AppDefinition appDef, String formDefId) {
         FormDefinition formDef = formDefinitionDao.loadById(formDefId, appDef);
@@ -2334,8 +2412,9 @@ public class AppServiceImpl implements AppService {
 
     /**
      * Retrieve list of published apps available to the current user
+     *
      * @param appId Optional filter by appId
-     * @return 
+     * @return
      */
     public Collection<AppDefinition> getPublishedApps(String appId) {
         Collection<AppDefinition> resultAppDefinitionList = getPublishedApps(appId, false, false);
@@ -2345,6 +2424,7 @@ public class AppServiceImpl implements AppService {
     /**
      * Retrieve list of published apps available to the current user. Overloaded
      * to additionally filter by mobile view support.
+     *
      * @param appId Optional filter by appId
      * @param mobileView
      * @param mobileCache
@@ -2395,17 +2475,18 @@ public class AppServiceImpl implements AppService {
                     tempAppDef.setUserviewDefinitionList(newUvDefList);
                     resultAppDefinitionList.add(tempAppDef);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 LogUtil.error(AppServiceImpl.class.getName(), e, "Error generating userviews for  " + appDef.getId());
             }
         }
         return resultAppDefinitionList;
-    }    
-    
+    }
+
     /**
      * Retrieve list of published processes available to the current user
+     *
      * @param appId Optional filter by appId
-     * @return 
+     * @return
      */
     public Map<AppDefinition, Collection<WorkflowProcess>> getPublishedProcesses(String appId) {
         Map<AppDefinition, Collection<WorkflowProcess>> appProcessMap = new ListOrderedMap();
@@ -2431,15 +2512,15 @@ public class AppServiceImpl implements AppService {
             if (packageDefList != null && !packageDefList.isEmpty()) {
                 PackageDefinition packageDef = packageDefList.iterator().next();
                 Collection<WorkflowProcess> processList = workflowManager.getProcessList(packageDef.getId(), packageDef.getVersion().toString());
-                
+
                 Collection<WorkflowProcess> processListWithPermission = new ArrayList<WorkflowProcess>();
-                
+
                 for (WorkflowProcess process : processList) {
                     if (workflowManager.isUserInWhiteList(process.getId())) {
                         processListWithPermission.add(process);
                     }
                 }
-                
+
                 if (!processListWithPermission.isEmpty()) {
                     appProcessMap.put(appDef, processListWithPermission);
                 }
@@ -2447,21 +2528,22 @@ public class AppServiceImpl implements AppService {
                 i.remove();
             }
         }
-        
+
         return appProcessMap;
     }
-    
+
     /**
      * Generate Message Bundle PO file to OutputStream
+     *
      * @param appId
      * @param version
      * @param locale
      * @param output
-     * @throws IOException 
+     * @throws IOException
      */
     public void generatePO(String appId, String version, String locale, OutputStream output) throws IOException {
         Writer writer = new OutputStreamWriter(output, "UTF-8");
-        
+
         try {
             writer.append("# This file was generated by Joget Workflow\r\n");
             writer.append("# http://www.joget.org\r\n");
@@ -2476,33 +2558,34 @@ public class AppServiceImpl implements AppService {
             writer.append("\"Language-Team: \\n\"\r\n");
             writer.append("\"Language: " + locale + "\\n\"\r\n");
             writer.append("\"MIME-Version: 1.0\\n\"\r\n\r\n");
-            
+
             Map<String, String> messages = getMessages(appId, version, locale);
             for (String key : messages.keySet()) {
                 String value = messages.get(key);
                 writer.append("msgid \"" + key + "\"\r\n");
                 writer.append("msgstr \"" + value + "\"\r\n");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             LogUtil.error(AppServiceImpl.class.getName(), e, "Error generating PO file for " + appId);
         } finally {
             writer.flush();
             writer.close();
         }
     }
-    
+
     /**
      * Import Messages from a PO file
+     *
      * @param appId
      * @param version
      * @param locale
      * @param multipartFile
-     * @throws IOException 
+     * @throws IOException
      */
     @Transactional
     public void importPO(String appId, String version, String locale, MultipartFile multipartFile) throws IOException {
         InputStream inputStream = null;
-        
+
         String line = null, key = null, translated = null;
         try {
             inputStream = multipartFile.getInputStream();
@@ -2527,7 +2610,7 @@ public class AppServiceImpl implements AppService {
                         }
                     }
                 }
-                
+
                 if (key != null && translated != null) {
                     Message message = messageDao.loadByMessageKey(key, locale, appDef);
                     if (message == null) {
@@ -2545,25 +2628,26 @@ public class AppServiceImpl implements AppService {
                     translated = null;
                 }
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             LogUtil.error(AppServiceImpl.class.getName(), e, "Error importing PO file " + e.getMessage());
         } finally {
             inputStream.close();
         }
     }
-    
+
     /**
      * Retrieve all apps without check for permission
-     * @return 
+     *
+     * @return
      */
-    public Collection<AppDefinition> getUnprotectedAppList(){
+    public Collection<AppDefinition> getUnprotectedAppList() {
         Collection<AppDefinition> appDefinitionList = appDefinitionDao.findLatestVersions(null, null, null, "name", false, null, null);
         return appDefinitionList;
     }
-    
+
     protected Map<String, String> getMessages(String appId, String version, String locale) {
         Map<String, String> messages = new HashMap<String, String>();
-        
+
         AppDefinition appDef = getAppDefinition(appId, version);
         if (appDef != null) {
             Collection<DatalistDefinition> dList = appDef.getDatalistDefinitionList();
@@ -2572,21 +2656,21 @@ public class AppServiceImpl implements AppService {
                     messages.putAll(getMessages(def.getJson()));
                 }
             }
-            
+
             Collection<FormDefinition> fList = appDef.getFormDefinitionList();
             if (fList != null && !fList.isEmpty()) {
                 for (FormDefinition def : fList) {
                     messages.putAll(getMessages(def.getJson()));
                 }
             }
-            
+
             Collection<UserviewDefinition> uList = appDef.getUserviewDefinitionList();
             if (uList != null && !uList.isEmpty()) {
                 for (UserviewDefinition def : uList) {
                     messages.putAll(getMessages(def.getJson()));
                 }
             }
-            
+
             PackageDefinition packageDefinition = appDef.getPackageDefinition();
             if (packageDefinition != null) {
                 Collection<WorkflowProcess> processList = workflowManager.getProcessList(appId, packageDefinition.getVersion().toString());
@@ -2602,7 +2686,7 @@ public class AppServiceImpl implements AppService {
                     }
                 }
             }
-            
+
             Collection<Message> mList = messageDao.getMessageList(null, locale, appDef, null, null, null, null);
             if (mList != null && !mList.isEmpty()) {
                 for (Message m : mList) {
@@ -2610,18 +2694,18 @@ public class AppServiceImpl implements AppService {
                 }
             }
         }
-        
+
         return messages;
     }
-    
+
     protected Map<String, String> getMessages(String content) {
         Map<String, String> messages = new HashMap<String, String>();
-        
+
         // check for hash # to avoid unnecessary processing
         if (!AppUtil.containsHashVariable(content)) {
             return messages;
         }
-        
+
         //parse content
         if (content != null) {
             Pattern pattern = Pattern.compile("#i18n\\.([^#^\"]*)#");
@@ -2630,7 +2714,7 @@ public class AppServiceImpl implements AppService {
                 messages.put(matcher.group(1), "");
             }
         }
-        
+
         return messages;
     }
 }

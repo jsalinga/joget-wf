@@ -7,87 +7,88 @@ import org.joget.commons.util.LogUtil;
 import org.joget.commons.util.StringUtil;
 
 /**
- * A base abstract class to develop a Userview Theme plugin for version v5.0 onward.
- * 
+ * A base abstract class to develop a Userview Theme plugin for version v5.0
+ * onward.
+ *
  */
 public abstract class UserviewV5Theme extends UserviewTheme {
-    
+
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getCss() {
         //is not using anymore
         return null;
-    } 
-    
+    }
+
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getJavascript() {
         //is not using anymore
         return null;
-    } 
+    }
 
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getHeader() {
         //is not using anymore
         return null;
-    } 
+    }
 
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getFooter() {
         //is not using anymore
         return null;
-    } 
-    
+    }
+
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getPageTop() {
         //is not using anymore
         return null;
-    } 
+    }
 
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getPageBottom() {
         //is not using anymore
         return null;
-    } 
+    }
 
     /**
      * @Deprecated not use for UserviewV5Theme
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getBeforeContent() {
         //is not using anymore
         return null;
-    } 
+    }
 
     /**
      * HTML template to handle error when retrieving userview content
-     * 
+     *
      * @param e
      * @param data
-     * @return 
+     * @return
      */
     public String handleContentError(Exception e, Map<String, Object> data) {
         LogUtil.error(getClassName(), e, "Error rendering content.");
@@ -98,9 +99,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle page not found.
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String handlePageNotFound(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/pageNotFound.ftl");
@@ -108,9 +109,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle theme layout
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getLayout(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/layout.ftl");
@@ -118,9 +119,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle page header
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getHeader(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/header.ftl");
@@ -128,9 +129,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle page footer
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getFooter(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/footer.ftl");
@@ -138,9 +139,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle userview menu content
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getContentContainer(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/contentContainer.ftl");
@@ -148,9 +149,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle menus
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getMenus(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/menus.ftl");
@@ -158,9 +159,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template for putting javascript and css link for getHead() template
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getJsCssLib(Map<String, Object> data) {
         return "<link href=\"" + data.get("context_path") + "/css/empty_userview.css?build=" + data.get("build_number") + "\" rel=\"stylesheet\" type=\"text/css\" />";
@@ -168,29 +169,29 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * Gets dynamic generated CSS for getHead() template
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getCss(Map<String, Object> data) {
         return "";
     }
 
     /**
-     * Gets dynamic generated javascript for getHead() template 
-     * 
+     * Gets dynamic generated javascript for getHead() template
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getJs(Map<String, Object> data) {
         return "";
     }
 
     /**
-     * Gets dynamic generated meta data for getHead() template 
-     * 
+     * Gets dynamic generated meta data for getHead() template
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getMetas(Map<String, Object> data) {
         return "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n"
@@ -199,19 +200,19 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template to handle for &lt;head&gt; tag
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getHead(Map<String, Object> data) {
         return UserviewUtil.getTemplate(this, data, "/templates/userview/head.ftl");
     }
 
     /**
-     * Gets the fav icon relative path for getHead() template 
-     * 
+     * Gets the fav icon relative path for getHead() template
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getFavIconLink(Map<String, Object> data) {
         return data.get("context_path") + "/images/favicon_uv.ico";
@@ -219,9 +220,9 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template for login form
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String getLoginForm(Map<String, Object> data) {
         if (!data.containsKey("login_form_before")) {
@@ -243,18 +244,18 @@ public abstract class UserviewV5Theme extends UserviewTheme {
 
     /**
      * HTML template for menu category label
-     * 
+     *
      * @param data
-     * @return 
+     * @return
      */
     public String decorateCategoryLabel(UserviewCategory category) {
         return StringUtil.stripHtmlRelaxed(category.getPropertyString("label"));
     }
-    
+
     /**
      * Return theme defined menus id
-     * 
-     * @return 
+     *
+     * @return
      */
     public String[] themeDefinedMenusId() {
         return null;

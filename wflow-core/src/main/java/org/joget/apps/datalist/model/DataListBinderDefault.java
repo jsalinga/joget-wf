@@ -20,22 +20,23 @@ public abstract class DataListBinderDefault extends ExtDefaultPlugin implements 
     public void setDatalist(DataList datalist) {
         this.datalist = datalist;
     }
-    
+
     /**
      * To get the actual column name
+     *
      * @param name
-     * @return 
+     * @return
      */
     @Override
     public String getColumnName(String name) {
         return name;
     }
-    
+
     /**
      * Construct filter conditions
-     * 
+     *
      * @param filterQueryObjects
-     * @return 
+     * @return
      */
     public DataListFilterQueryObject processFilterQueryObjects(DataListFilterQueryObject[] filterQueryObjects) {
         DataListFilterQueryObject obj = new DataListFilterQueryObject();
@@ -53,7 +54,7 @@ public abstract class DataListBinderDefault extends ExtDefaultPlugin implements 
             }
         }
         obj.setQuery(condition);
-        if (values.size() > 0){
+        if (values.size() > 0) {
             obj.setValues((String[]) values.toArray(new String[0]));
         }
         return obj;

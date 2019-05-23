@@ -35,25 +35,25 @@
 <jsp2:include page="/WEB-INF/jsp/includes/scripts.jsp" />
 
 <c:if test="${showRefresh}">
-<a href="#" onclick="${var}.refresh()">refresh</a>
+    <a href="#" onclick="${var}.refresh()">refresh</a>
 </c:if>
 <div id="${divToUpdate}"></div>
 
 <script>
-UI.base = "${pageContext.request.contextPath}";
+    UI.base = "${pageContext.request.contextPath}";
 
-var ${var} = new JsonTree("${divToUpdate}", "${url}");
-${var}.baseUrl = "${baseUrl}";
-${var}.title = "${title}";
-${var}.jsonData = "${jsonData}";
-${var}.nodeKey = "${nodeKey}";
-${var}.nodeLabel = "${nodeLabel}";
-${var}.nodeDescription = "${nodeDescription}";
-${var}.nodeCount = "${nodeCount}";
-${var}.xss = ${xss};
+    var ${var} = new JsonTree("${divToUpdate}", "${url}");
+    ${var}.baseUrl = "${baseUrl}";
+    ${var}.title = "${title}";
+    ${var}.jsonData = "${jsonData}";
+    ${var}.nodeKey = "${nodeKey}";
+    ${var}.nodeLabel = "${nodeLabel}";
+    ${var}.nodeDescription = "${nodeDescription}";
+    ${var}.nodeCount = "${nodeCount}";
+    ${var}.xss = ${xss};
 
-${var}.link = new Link("${href}", "${hrefParam}", ${hrefQuery}, new PopupDialog("${href}"<c:if test="${xss}">, '<fmt:message key="wflowClient.assignment.view.label.title"/>', '_blank'</c:if>));
-${var}.init();
+    ${var}.link = new Link("${href}", "${hrefParam}", ${hrefQuery}, new PopupDialog("${href}"<c:if test="${xss}">, '<fmt:message key="wflowClient.assignment.view.label.title"/>', '_blank'</c:if>));
+    ${var}.init();
 </script>
 
 

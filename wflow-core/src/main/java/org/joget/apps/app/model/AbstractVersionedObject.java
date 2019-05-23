@@ -30,7 +30,9 @@ public class AbstractVersionedObject implements Serializable {
     private Date dateModified;
 
     /**
-     * Unique ID (primary key) for the object, which consists of the ID and version separated by underscore.
+     * Unique ID (primary key) for the object, which consists of the ID and
+     * version separated by underscore.
+     *
      * @return
      */
     public String getUid() {
@@ -63,6 +65,7 @@ public class AbstractVersionedObject implements Serializable {
 
     /**
      * ID for the overall package (app) this object belongs to.
+     *
      * @return
      */
     public String getAppId() {
@@ -75,6 +78,7 @@ public class AbstractVersionedObject implements Serializable {
 
     /**
      * Identifier for the object. Each ID may have multiple versions.
+     *
      * @return
      */
     public String getId() {

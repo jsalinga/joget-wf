@@ -14,9 +14,9 @@
 </c:if>
 
 <html>
-<head>
-<title></title>
-<meta http-equiv="REFRESH" content="0;url=${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${homeUrl}"></HEAD>
-<body>
-</body>
+    <head>
+        <title></title>
+        <meta http-equiv="REFRESH" content="0;url=${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${homeUrl}"></HEAD>
+    <body>
+    </body>
 </html>

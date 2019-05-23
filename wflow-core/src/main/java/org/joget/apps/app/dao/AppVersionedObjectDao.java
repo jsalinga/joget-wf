@@ -23,5 +23,5 @@ public interface AppVersionedObjectDao<T extends AbstractAppVersionedObject> {
     Collection<T> find(String condition, Object[] params, AppDefinition appDefinition, String sort, Boolean desc, Integer start, Integer rows);
 
     Long count(String condition, Object[] params, AppDefinition appDefinition);
-    
+
 }

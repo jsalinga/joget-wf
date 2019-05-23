@@ -23,7 +23,7 @@
 
         <script>
             function closeDialog() {
-                assignmentInbox.refresh();
+            assignmentInbox.refresh();
             }
         </script>
 
@@ -52,25 +52,25 @@
                           column6="{key: 'serviceLevelMonitor', label: 'console.app.assignment.common.label.serviceLevelMonitor', sortable: true, relaxed: true, width: '100'}"
                           column7="{key: 'due', label: 'console.app.assignment.common.label.dueDate', sortable: true, width: '128'}"
                           />
-            
+
             <script type="text/javascript">
                 function toggleEmbedCode(){
-                    var embedToggleCallback = function() {
-                        $('#embed-code textarea').focus().select();
-                    };
-                    $("#embed-code").toggle("slow", embedToggleCallback );
+                var embedToggleCallback = function() {
+                $('#embed-code textarea').focus().select();
+                };
+                $("#embed-code").toggle("slow", embedToggleCallback );
                 }
             </script>
-                
+
             <div style="position:relative;margin-bottom:5px;">
                 <span id="embed-icon"><a onclick="toggleEmbedCode()"><fmt:message key="general.method.label.embedCode"/></a></span>
-                <c:if test="${!userSecurity.disableHashLogin}">
-                <span id="rss-icon"><a target="_blank" href="${pageContext.request.contextPath}${rssLink}"><span><fmt:message key="general.method.label.rss"/></span></a></span>
-                </c:if>
+                    <c:if test="${!userSecurity.disableHashLogin}">
+                    <span id="rss-icon"><a target="_blank" href="${pageContext.request.contextPath}${rssLink}"><span><fmt:message key="general.method.label.rss"/></span></a></span>
+                            </c:if>
             </div>
-                
+
             <div style="clear:both;"></div>
-                
+
             <div id="embed-code" name="embed-code">
                 <textarea>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/css/portlet.css">

@@ -22,7 +22,7 @@
     <div id="main-body">
 
         <h3><fmt:message key="general.header.unauthorized"/></h3>
-        
+
         <fmt:message key="general.content.unauthorized" />
 
     </div>

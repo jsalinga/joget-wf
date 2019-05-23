@@ -5,7 +5,9 @@ import org.joget.plugin.base.ExtDefaultPlugin;
 import org.joget.plugin.property.model.PropertyEditable;
 
 /**
- * A base abstract class to develop a Form Load Binder, Form Options Binder or Form Store Binder plugin. 
+ * A base abstract class to develop a Form Load Binder, Form Options Binder or
+ * Form Store Binder plugin.
+ *
  * @author julian
  */
 public abstract class FormBinder extends ExtDefaultPlugin implements PropertyEditable {
@@ -18,8 +20,8 @@ public abstract class FormBinder extends ExtDefaultPlugin implements PropertyEdi
 
     /**
      * Gets the form field element which own this binder
-     * 
-     * @return 
+     *
+     * @return
      */
     public Element getElement() {
         return element;
@@ -27,8 +29,8 @@ public abstract class FormBinder extends ExtDefaultPlugin implements PropertyEdi
 
     /**
      * Sets the form field element which own this binder
-     * 
-     * @param element 
+     *
+     * @param element
      */
     public void setElement(Element element) {
         this.element = element;

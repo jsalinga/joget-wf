@@ -59,9 +59,9 @@ public class Radio extends SelectBox implements FormBuilderPaletteElement {
     @Override
     public String renderTemplate(FormData formData, Map dataModel) {
         String template = "radio.ftl";
-        
+
         dynamicOptions(formData);
-        
+
         // set value
         String value = FormUtil.getElementPropertyValue(this, formData);
         dataModel.put("value", value);
@@ -109,4 +109,3 @@ public class Radio extends SelectBox implements FormBuilderPaletteElement {
         return null;
     }
 }
-

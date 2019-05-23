@@ -11,29 +11,32 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Utility methods used by the system to manager temporary files
- * 
+ *
  */
 public class FileManager {
-    public final static Integer THUMBNAIL_SIZE = 60; 
-    public final static String THUMBNAIL_EXT = ".thumb.jpg"; 
-    
+
+    public final static Integer THUMBNAIL_SIZE = 60;
+    public final static String THUMBNAIL_EXT = ".thumb.jpg";
+
     /**
      * Gets directory path to temporary files folder
-     * @return 
+     *
+     * @return
      */
     public static String getBaseDirectory() {
         return SetupManager.getBaseDirectory() + File.separator + "app_tempfile" + File.separator;
     }
-    
+
     /**
      * Stores files post to the HTTP request to temporary files folder
+     *
      * @param file
      * @return the relative path of the stored temporary file, NULL if failure.
      */
     public static String storeFile(MultipartFile file) {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             String id = UuidGenerator.getInstance().getUuid();
-            String path =  id + File.separator;
+            String path = id + File.separator;
             String filename = path;
             try {
                 try {
@@ -56,11 +59,12 @@ public class FileManager {
         }
         return null;
     }
-    
+
     /**
      * Gets the temporary file from temporary files folder by relative path
+     *
      * @param path
-     * @return 
+     * @return
      */
     public static File getFileByPath(String path) {
         if (path != null) {
@@ -74,19 +78,21 @@ public class FileManager {
                 if (file.exists() && !file.isDirectory()) {
                     return file;
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return null;
     }
-    
+
     /**
      * Deletes the temporary file from temporary files folder by relative path
-     * @param path 
+     *
+     * @param path
      */
     public static void deleteFileByPath(String path) {
         File file = getFileByPath(path);
         File directory = file.getParentFile();
-        
+
         if (file != null && file.exists()) {
             file.delete();
         }
@@ -95,29 +101,32 @@ public class FileManager {
             directory.delete();
         }
     }
-    
+
     /**
      * Deletes a file
-     * @param file 
+     *
+     * @param file
      */
     public static void deleteFile(File file) {
         if (!file.exists()) {
             return;
         }
-        
-        if (file.isDirectory()){
-            for (File f : file.listFiles()){
+
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
                 deleteFile(f);
             }
         }
         file.delete();
     }
-    
+
     /**
-     * Generates a thumbnail of a image file in temporary files folder by relative path
+     * Generates a thumbnail of a image file in temporary files folder by
+     * relative path
+     *
      * @param path
      * @param thumbWidth
-     * @param thumbHeight 
+     * @param thumbHeight
      */
     public static void createThumbnail(String path, Integer thumbWidth, Integer thumbHeight) {
         if (thumbWidth == null) {
@@ -126,10 +135,10 @@ public class FileManager {
         if (thumbHeight == null) {
             thumbHeight = THUMBNAIL_SIZE;
         }
-        
+
         BufferedOutputStream out = null;
 
-        try{
+        try {
             try {
                 path = URLDecoder.decode(path, "UTF-8");
             } catch (Exception e) {
@@ -155,7 +164,7 @@ public class FileManager {
             Graphics2D graphics2D = thumbImage.createGraphics();
             graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             graphics2D.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
-            
+
             out = new BufferedOutputStream(new FileOutputStream(imageFile.getAbsolutePath() + THUMBNAIL_EXT));
             ImageIO.write(thumbImage, "jpeg", out);
 

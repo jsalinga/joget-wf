@@ -24,9 +24,9 @@ public class HtmlPage extends UserviewMenu {
     @Override
     public String getRenderPage() {
         String html = "<div class=\"ui-html\">\n"
-            + getPropertyString("content")
-            + "\n<div class=\"ui-html-footer\"></div>"
-            + "\n</div>";
+                + getPropertyString("content")
+                + "\n<div class=\"ui-html-footer\"></div>"
+                + "\n</div>";
         return html;
     }
 

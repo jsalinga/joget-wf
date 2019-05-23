@@ -29,7 +29,7 @@ public class HyperlinkDataListAction extends DataListActionDefault {
     public String getDescription() {
         return "Data List Hyperlink Action";
     }
-    
+
     public String getLabel() {
         return "Hyperlink";
     }
@@ -71,11 +71,11 @@ public class HyperlinkDataListAction extends DataListActionDefault {
         String url = getHref();
         String hrefParam = getHrefParam();
         String hrefColumn = getHrefColumn();
-        
+
         if (hrefParam != null && hrefColumn != null && !hrefColumn.isEmpty() && rowKeys != null && rowKeys.length > 0) {
             DataListCollection rows = dataList.getRows();
             String primaryKeyColumnName = dataList.getBinder().getPrimaryKeyColumnName();
-        
+
             String[] params = hrefParam.split(";");
             String[] columns = hrefColumn.split(";");
 
@@ -107,7 +107,7 @@ public class HyperlinkDataListAction extends DataListActionDefault {
                 }
             }
         }
-        
+
         result.setUrl(url);
 
         return result;
@@ -120,7 +120,7 @@ public class HyperlinkDataListAction extends DataListActionDefault {
 
     protected String getValue(DataListCollection rows, String primaryKeyColumnName, String key, String columnName) {
         String paramValue = "";
-        
+
         try {
             if (primaryKeyColumnName != null && primaryKeyColumnName.equals(columnName)) {
                 paramValue = key;
@@ -133,7 +133,7 @@ public class HyperlinkDataListAction extends DataListActionDefault {
                     }
                 }
             }
-        
+
             return (paramValue != null) ? URLEncoder.encode(paramValue, "UTF-8") : null;
         } catch (Exception ex) {
             return paramValue;

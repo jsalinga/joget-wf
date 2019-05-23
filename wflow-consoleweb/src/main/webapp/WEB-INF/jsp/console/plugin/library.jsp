@@ -25,13 +25,13 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/chosen/chosen.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/dropzone/dropzone.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery.propertyeditor.css?build=<fmt:message key="build.number"/>" />
-        
+
 <c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery.propertyeditor_rtl.css?build=<fmt:message key="build.number"/>">
     <script type="text/javascript">
         UI.rtl = true;
         $(document).ready(function(){
-            $("body").addClass("rtl");
+        $("body").addClass("rtl");
         });
     </script>    
 </c:if>

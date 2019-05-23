@@ -33,7 +33,7 @@ public class LinkButton extends FormButton {
         if (getPropertyString("target") == null || getPropertyString("target").isEmpty()) {
             setProperty("target", "top");
         }
-        
+
         String template = "linkButton.ftl";
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
         return html;
@@ -75,7 +75,6 @@ public class LinkButton extends FormButton {
     return null;
     }
      */
-
     public String getLabel() {
         return "Link Button";
     }

@@ -22,7 +22,7 @@ public abstract class AbstractSpringDao extends HibernateDaoSupport {
         session = sf.getCurrentSession();
         return session;
     }
-    
+
     protected Serializable save(String entityName, Object obj) {
         Session session = findSession();
         Serializable save = session.save(entityName, obj);
@@ -58,7 +58,7 @@ public abstract class AbstractSpringDao extends HibernateDaoSupport {
         Criteria crit = session.createCriteria(object.getClass());
         Example example = Example.create(object);
         crit.add(example);
-        return crit.list();        
+        return crit.list();
     }
 
     protected Collection find(final String entityName, final String condition, final Object[] params, final String sort, final Boolean desc, final Integer start, final Integer rows) {
@@ -107,11 +107,12 @@ public abstract class AbstractSpringDao extends HibernateDaoSupport {
 
         return ((Long) q.iterate().next());
     }
-    
+
     /**
      * Normalizes and truncates a String if there is a space.
+     *
      * @param str
-     * @return 
+     * @return
      */
     protected String filterSpace(String str) {
         if (str != null) {
@@ -121,6 +122,5 @@ public abstract class AbstractSpringDao extends HibernateDaoSupport {
             }
         }
         return str;
-    }    
+    }
 }
-

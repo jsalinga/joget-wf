@@ -8,12 +8,14 @@ import org.joget.directory.model.service.DirectoryManager;
 public interface DirectoryManagerAuthenticator {
 
     /**
-     * Authenticate a user based on the username and password using the specified DirectoryManager.
+     * Authenticate a user based on the username and password using the
+     * specified DirectoryManager.
+     *
      * @param directoryManager
      * @param username
      * @param password
      * @return
      */
     boolean authenticate(DirectoryManager directoryManager, String username, String password);
-    
+
 }

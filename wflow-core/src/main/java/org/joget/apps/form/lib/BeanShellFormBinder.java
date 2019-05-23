@@ -66,12 +66,12 @@ public class BeanShellFormBinder extends FormBinder implements FormLoadBinder, F
         if (SecurityUtil.getDataEncryption() != null && SecurityUtil.getNonceGenerator() != null) {
             useAjax = ",{name:'useAjax',label:'@@form.beanshellformbinder.useAjax@@',description:'@@form.beanshellformbinder.useAjax.desc@@',type:'checkbox',value :'false',options :[{value :'true',label :''}]}";
         }
-        
+
         Object[] arguments = new Object[]{useAjax};
-        
+
         return AppUtil.readPluginResource(getClass().getName(), "/properties/form/beanShellFormBinder.json", arguments, true, "message/form/beanShellFormBinder");
     }
-    
+
     protected FormRowSet executeScript(String script, Map properties, boolean throwException) throws RuntimeException {
         Object result = null;
         try {
@@ -99,7 +99,7 @@ public class BeanShellFormBinder extends FormBinder implements FormLoadBinder, F
     public FormRowSet loadAjaxOptions(String[] dependencyValues) {
         Map properties = new HashMap();
         properties.putAll(getProperties());
-        properties.put("values", (dependencyValues == null)? new String[]{}: dependencyValues);
+        properties.put("values", (dependencyValues == null) ? new String[]{} : dependencyValues);
         return executeScript(getPropertyString("script"), properties, false);
     }
 }

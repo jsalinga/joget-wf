@@ -27,7 +27,7 @@ import org.springframework.web.context.ServletContextAware;
 
 /**
  * Utility methods used by userview for rendering
- * 
+ *
  */
 @Service("userviewUtil")
 public class UserviewUtil implements ApplicationContextAware, ServletContextAware {
@@ -53,21 +53,24 @@ public class UserviewUtil implements ApplicationContextAware, ServletContextAwar
 
     /**
      * Method used to retrieve HTML template of an userview theme
+     *
      * @param theme
      * @param data
      * @param templatePath
-     * @return 
+     * @return
      */
     public static String getTemplate(UserviewTheme theme, Map data, String templatePath) {
         return getTemplate(theme, data, templatePath, null);
     }
 
     /**
-     * Method used to retrieve HTML template of an userview theme with i18n supported
+     * Method used to retrieve HTML template of an userview theme with i18n
+     * supported
+     *
      * @param theme
      * @param data
      * @param templatePath
-     * @return 
+     * @return
      */
     public static String getTemplate(UserviewTheme theme, Map data, String templatePath, String translationPath) {
         PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
@@ -81,12 +84,13 @@ public class UserviewUtil implements ApplicationContextAware, ServletContextAwar
         String content = pluginManager.getPluginFreeMarkerTemplate(data, theme.getClassName(), templatePath, translationPath);
         return content;
     }
-    
+
     /**
      * Method used to retrieve HTML template of an userview menu
+     *
      * @param menu
      * @return
-     * @throws RuntimeException 
+     * @throws RuntimeException
      */
     public static String getUserviewMenuHtml(UserviewMenu menu) throws RuntimeException {
         String content = UserviewCache.getCachedContent(menu, UserviewCache.CACHE_TYPE_PAGE);
@@ -107,9 +111,10 @@ public class UserviewUtil implements ApplicationContextAware, ServletContextAwar
 
     /**
      * Method used to convert a jsp page as HTML template
+     *
      * @param viewName
      * @param modelMap
-     * @return 
+     * @return
      */
     public static String renderJspAsString(String viewName, Map<String, Object> modelMap) {
         if (viewName == null) {
@@ -158,14 +163,14 @@ public class UserviewUtil implements ApplicationContextAware, ServletContextAwar
             }
         }
     }
-    
+
     public static String appendPropertyOptions(String propertyOptions, String additionalProperties) {
-        if (propertyOptions != null && !propertyOptions.isEmpty() && additionalProperties != null && !additionalProperties.isEmpty() ) {
-            propertyOptions = propertyOptions.substring(0, propertyOptions.lastIndexOf("]")) + "," + additionalProperties + "]"; 
+        if (propertyOptions != null && !propertyOptions.isEmpty() && additionalProperties != null && !additionalProperties.isEmpty()) {
+            propertyOptions = propertyOptions.substring(0, propertyOptions.lastIndexOf("]")) + "," + additionalProperties + "]";
         }
         return propertyOptions;
     }
-    
+
     public static boolean checkUserviewInboxEnabled(UserviewDefinition userviewDef) {
         boolean inboxEnabled = false;
         if (userviewDef != null) {

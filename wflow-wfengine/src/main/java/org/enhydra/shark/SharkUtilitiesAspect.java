@@ -21,7 +21,6 @@ import org.joget.workflow.model.dao.WorkflowHelper;
 import org.joget.workflow.model.service.WorkflowUserManager;
 import org.joget.workflow.util.WorkflowUtil;
 
-
 /**
  * AOP aspect to intercept calls to SharkUtilities.synchronizeXPDLCache() to
  * customize cache implementation.
@@ -66,7 +65,7 @@ public class SharkUtilitiesAspect {
 
         if (pkg == null) {
             SharkEngineManager.getInstance().getCallbackUtilities().info(shandle, "Package [" + pkgId + "," + pkgVer + "] is not found - synchronizing XPDL caches ...");
-            
+
             SharkUtilities.restorePackage(shandle, xmlInterface, pkgId, pkgVer);
             if (pkgVer != null) {
                 pkg = xmlInterface.getPackageByIdAndVersion(pkgId, pkgVer);
@@ -80,7 +79,7 @@ public class SharkUtilitiesAspect {
 
         return pkg;
     }
-    
+
     @Pointcut("execution(* org.enhydra.shark.xpdl.XMLInterface.getPackageByIdAndVersion(..))")
     private void getPackageByIdAndVersionMethod() {
     }
@@ -126,7 +125,7 @@ public class SharkUtilitiesAspect {
         xpdlHandler.setValidation(false);
 
         xpdlHandler.synchronizePackages(xmlInterface);
-        
+
         Set<String> enginePkgIds = new HashSet<String>(xpdlHandler.getAllPackageIds());
         Set<String> enginePkgIdsWithVersion = new HashSet<String>();
         Iterator prep = enginePkgIds.iterator();
@@ -139,7 +138,7 @@ public class SharkUtilitiesAspect {
                 enginePkgIdsWithVersion.add(epidWithVersion);
             }
         }
-        
+
         Set<String> reposPkgIdsWithVersion = new HashSet<String>(); // latest version of each app version
         WorkflowHelper workflowMapper = (WorkflowHelper) WorkflowUtil.getApplicationContext().getBean("workflowHelper");
         Map<String, String> allPublishedPackageVersions = workflowMapper.getPublishedPackageVersions();
@@ -229,7 +228,7 @@ public class SharkUtilitiesAspect {
         String profile = DynamicDataSourceManager.getCurrentProfile();
         currentPkgVersions.put(profile, profileCurrentPkgVersions);
     }
-    
+
     @Pointcut("execution(* org.enhydra.shark.api.client.wfservice.PackageAdministration.closeAllPackagesForId(..))")
     private void closeAllPackagesForIdMethod() {
     }
@@ -239,15 +238,15 @@ public class SharkUtilitiesAspect {
         Object[] args = pjp.getArgs();
         WMSessionHandle shandle = (WMSessionHandle) args[0];
         String pkgId = (String) args[1];
-        
+
         Object object = pjp.proceed();
-        
+
         XMLInterface xmlInterface = SharkEngineManager.getInstance().getXMLInterface();
         xmlInterface.closePackages(pkgId);
 
         return object;
     }
-    
+
     @Pointcut("execution(* org.enhydra.shark.api.client.wfservice.PackageAdministration.closePackage(..))")
     private void closePackageMethod() {
     }
@@ -258,9 +257,9 @@ public class SharkUtilitiesAspect {
         WMSessionHandle shandle = (WMSessionHandle) args[0];
         String pkgId = (String) args[1];
         String pkgVer = (String) args[2];
-        
+
         Object object = pjp.proceed();
-        
+
         XMLInterface xmlInterface = SharkEngineManager.getInstance().getXMLInterface();
         xmlInterface.closePackageVersion(pkgId, pkgVer);
 

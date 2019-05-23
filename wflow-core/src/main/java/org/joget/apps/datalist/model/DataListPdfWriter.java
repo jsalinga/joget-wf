@@ -22,36 +22,38 @@ import org.joget.commons.util.SetupManager;
 
 /**
  * A utility class used to create table in PDF for datalist pdf export
- * 
+ *
  */
 public class DataListPdfWriter {
+
     /**
-     * This is the table, added as an Element to the PDF document. It contains all the data, needed to represent the
-     * visible table into the PDF
+     * This is the table, added as an Element to the PDF document. It contains
+     * all the data, needed to represent the visible table into the PDF
      */
     private PdfPTable mainTable;
     /**
-     * This is the current editing table, it is null unless a inner table is created. 
+     * This is the current editing table, it is null unless a inner table is
+     * created.
      */
     private PdfPTable innerTable;
-    
+
     /**
      * The default font used in the document.
      */
     private FontSelector selector;
-    
+
     public DataListPdfWriter(int numOfCols) throws BadElementException, DocumentException, IOException {
         mainTable = new PdfPTable(numOfCols);
         mainTable.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
         mainTable.setWidthPercentage(100);
-        
+
         selector = new FontSelector();
         selector.addFont(FontFactory.getFont(FontFactory.HELVETICA, 7, Font.NORMAL, new Color(0, 0, 0)));
         selector.addFont(new Font(BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 7, Font.NORMAL, new Color(0, 0, 0)));
         selector.addFont(new Font(BaseFont.createFont("MSung-Light", "UniCNS-UCS2-H", BaseFont.NOT_EMBEDDED), 7, Font.NORMAL, new Color(0, 0, 0)));
         selector.addFont(new Font(BaseFont.createFont("HeiseiMin-W3", "UniJIS-UCS2-H", BaseFont.NOT_EMBEDDED), 7, Font.NORMAL, new Color(0, 0, 0)));
         selector.addFont(new Font(BaseFont.createFont("HYGoThic-Medium", "UniKS-UCS2-H", BaseFont.NOT_EMBEDDED), 7, Font.NORMAL, new Color(0, 0, 0)));
-        
+
         String path = SetupManager.getBaseDirectory() + File.separator + "fonts" + File.separator;
         File fontsFile = new File(path + "fonts.csv");
         if (fontsFile.exists()) {
@@ -65,12 +67,12 @@ public class DataListPdfWriter {
                     parts = line.split(",");
                     name = parts[0].trim();
                     fontPath = parts[1].trim();
-                    
+
                     String normalizedFileName = Normalizer.normalize(fontPath, Normalizer.Form.NFKC);
                     if (normalizedFileName.contains("../") || normalizedFileName.contains("..\\")) {
                         continue;
                     }
-                    
+
                     encoding = parts[2].trim();
                     fontFile = new File(path + fontPath);
                     if (fontFile.exists()) {
@@ -83,7 +85,8 @@ public class DataListPdfWriter {
                 if (br != null) {
                     try {
                         br.close();
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                    }
                 }
             }
         }
@@ -91,12 +94,13 @@ public class DataListPdfWriter {
         selector.addFont(new Font(BaseFont.createFont("fonts/Droid-Sans/DroidSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED), 7, Font.NORMAL, new Color(0, 0, 0)));
         selector.addFont(new Font(BaseFont.createFont("fonts/THSarabun/THSarabun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED), 10, Font.NORMAL, new Color(0, 0, 0)));
     }
-    
+
     /**
      * Add header cell to the main table or current working inner table
+     *
      * @param text
      * @param color
-     * @throws BadElementException 
+     * @throws BadElementException
      */
     public void addHeaderCell(String text, Color color) throws BadElementException {
         PdfPCell hdrCell = getCell(text);
@@ -105,19 +109,21 @@ public class DataListPdfWriter {
         }
         getCurrentTable().addCell(hdrCell);
     }
-    
+
     /**
-     * Complete the process of adding header cell to the main table or current working inner table
+     * Complete the process of adding header cell to the main table or current
+     * working inner table
      */
     public void endHeaders() {
         getCurrentTable().setHeaderRows(0);
     }
-    
+
     /**
      * Add cell to the main table or current working inner table
+     *
      * @param text
      * @param color
-     * @throws BadElementException 
+     * @throws BadElementException
      */
     public void addCell(String text, Color color) throws BadElementException {
         PdfPCell cell = getCell(text);
@@ -126,11 +132,12 @@ public class DataListPdfWriter {
         }
         getCurrentTable().addCell(cell);
     }
-    
+
     /**
      * Create a inner table
+     *
      * @param numOfCols
-     * @throws BadElementException 
+     * @throws BadElementException
      */
     public void createInnerTable(int numOfCols) throws BadElementException {
         if (innerTable == null) {
@@ -139,7 +146,7 @@ public class DataListPdfWriter {
             innerTable.setWidthPercentage(100);
         }
     }
-    
+
     /**
      * Complete the inner table creation and add it to main table
      */
@@ -151,29 +158,32 @@ public class DataListPdfWriter {
             innerTable = null;
         }
     }
-    
+
     /**
      * Get the cell object with configuration
+     *
      * @param value
      * @return
-     * @throws BadElementException 
+     * @throws BadElementException
      */
     protected PdfPCell getCell(String value) throws BadElementException {
         value = StringUtils.trimToEmpty(value);
         if (ITextCustomOutputDevice.textIsRTL(value)) {
             value = ITextCustomOutputDevice.transformRTL(value);
         }
-        
+
         PdfPCell cell = new PdfPCell(this.selector.process(value));
         cell.setVerticalAlignment(Element.ALIGN_TOP);
         cell.setLeading(8, 0);
         return cell;
     }
-    
+
     /**
-     * Get the current working table, it inner table is created and not yet added to main table,
-     * inner table will be return, else main table will return
-     * @return 
+     * Get the current working table, it inner table is created and not yet
+     * added to main table, inner table will be return, else main table will
+     * return
+     *
+     * @return
      */
     protected PdfPTable getCurrentTable() {
         if (innerTable != null) {
@@ -185,7 +195,8 @@ public class DataListPdfWriter {
 
     /**
      * Retrieve the resulted table
-     * @return 
+     *
+     * @return
      */
     public PdfPTable getTable() {
         return mainTable;
@@ -193,7 +204,8 @@ public class DataListPdfWriter {
 
     /**
      * Retrieve the font selector of the PDF
-     * @return 
+     *
+     * @return
      */
     public FontSelector getSelector() {
         return selector;

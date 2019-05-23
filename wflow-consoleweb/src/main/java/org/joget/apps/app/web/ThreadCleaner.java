@@ -27,17 +27,17 @@ public class ThreadCleaner {
             final Field inheritableThreadLocalsField = Thread.class.getDeclaredField("inheritableThreadLocals");
             inheritableThreadLocalsField.setAccessible(true);
             for (final Thread thread : Thread.getAllStackTraces().keySet()) {
-                    count += clear(threadLocalsField.get(thread));
-                    count += clear(inheritableThreadLocalsField.get(thread));
+                count += clear(threadLocalsField.get(thread));
+                count += clear(inheritableThreadLocalsField.get(thread));
             }
-            
+
             LogUtil.info(getClass().getName(), "cleaned " + count + " values in ThreadLocals");
         } catch (Exception e) {
             throw new Error("ThreadLocalCleaner.cleanThreadLocals()", e);
         }
         return count;
     }
-    
+
     public Integer cleanThreads() {
         int count = 0;
         try {
@@ -57,15 +57,16 @@ public class ThreadCleaner {
                     }
                 }
             }
-        } catch (Exception e) {        
-            throw new Error("ThreadLocalCleaner.cleanThreads()", e);        
+        } catch (Exception e) {
+            throw new Error("ThreadLocalCleaner.cleanThreads()", e);
         }
         return count;
     }
 
     private int clear(final Object threadLocalMap) throws Exception {
-        if (threadLocalMap == null)
-                return 0;
+        if (threadLocalMap == null) {
+            return 0;
+        }
         int count = 0;
         final Field tableField = threadLocalMap.getClass().getDeclaredField("table");
         tableField.setAccessible(true);
@@ -73,7 +74,7 @@ public class ThreadCleaner {
         for (int i = 0, length = Array.getLength(table); i < length; ++i) {
             final Object entry = Array.get(table, i);
             if (entry != null) {
-                final Object threadLocal = ((WeakReference)entry).get();
+                final Object threadLocal = ((WeakReference) entry).get();
                 if (threadLocal != null) {
                     log(i, threadLocal);
                     Array.set(table, i, null);
@@ -88,16 +89,14 @@ public class ThreadCleaner {
         if (!debug) {
             return;
         }
-        if (threadLocal.getClass() != null &&
-            threadLocal.getClass().getEnclosingClass() != null &&
-            threadLocal.getClass().getEnclosingClass().getName() != null) {
+        if (threadLocal.getClass() != null
+                && threadLocal.getClass().getEnclosingClass() != null
+                && threadLocal.getClass().getEnclosingClass().getName() != null) {
             LogUtil.info(getClass().getName(), "threadLocalMap(" + i + "): " + threadLocal.getClass().getEnclosingClass().getName());
-        }
-        else if (threadLocal.getClass() != null &&
-                 threadLocal.getClass().getName() != null) {
+        } else if (threadLocal.getClass() != null
+                && threadLocal.getClass().getName() != null) {
             LogUtil.info(getClass().getName(), "threadLocalMap(" + i + "): " + threadLocal.getClass().getName());
-        }
-        else {
+        } else {
             LogUtil.info(getClass().getName(), "threadLocalMap(" + i + "): cannot identify threadlocal class name");
         }
     }

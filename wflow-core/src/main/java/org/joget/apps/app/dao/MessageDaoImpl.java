@@ -21,7 +21,7 @@ public class MessageDaoImpl extends AbstractAppVersionedObjectDao<Message> imple
     public String getEntityName() {
         return ENTITY_NAME;
     }
-    
+
     public Cache getCache() {
         return cache;
     }
@@ -29,9 +29,9 @@ public class MessageDaoImpl extends AbstractAppVersionedObjectDao<Message> imple
     public void setCache(Cache cache) {
         this.cache = cache;
     }
-    
-    private String getCacheKey(String messageKey, String locale, String appId, String version){
-        return DynamicDataSourceManager.getCurrentProfile()+"_"+appId+"_"+version+"_MSG_"+messageKey+":"+locale;
+
+    private String getCacheKey(String messageKey, String locale, String appId, String version) {
+        return DynamicDataSourceManager.getCurrentProfile() + "_" + appId + "_" + version + "_MSG_" + messageKey + ":" + locale;
     }
 
     public Message loadByMessageKey(String messageKey, String locale, AppDefinition appDefinition) {
@@ -123,7 +123,7 @@ public class MessageDaoImpl extends AbstractAppVersionedObjectDao<Message> imple
                     if (obj.getId().equals(object.getId())) {
                         String key = getCacheKey(object.getMessageKey(), object.getLocale(), object.getAppId(), object.getAppVersion().toString());
                         cache.remove(key);
-        
+
                         list.remove(obj);
                         break;
                     }
@@ -139,7 +139,7 @@ public class MessageDaoImpl extends AbstractAppVersionedObjectDao<Message> imple
         }
         return result;
     }
-    
+
     @Override
     public boolean update(Message object) {
         String key = getCacheKey(object.getMessageKey(), object.getLocale(), object.getAppId(), object.getAppVersion().toString());

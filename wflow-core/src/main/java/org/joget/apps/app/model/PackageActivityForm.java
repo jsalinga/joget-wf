@@ -34,7 +34,9 @@ public class PackageActivityForm implements Serializable, Cloneable {
     private Form form;
 
     /**
-     * Unique ID (primary key) for the object, which consists of the process def ID and activity def ID separated by ::.
+     * Unique ID (primary key) for the object, which consists of the process def
+     * ID and activity def ID separated by ::.
+     *
      * @return
      */
     public String getUid() {
@@ -127,9 +129,9 @@ public class PackageActivityForm implements Serializable, Cloneable {
     public void setForm(Form form) {
         this.form = form;
     }
-    
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }    
+    }
 }

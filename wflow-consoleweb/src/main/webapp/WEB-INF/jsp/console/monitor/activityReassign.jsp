@@ -18,14 +18,14 @@
     <div id="user">
         <div class="main-body-content-filter">
             <form>
-            <fmt:message key="console.directory.user.filter.label.byOrganization"/>
-            <select id="userDataTable_filterbyOrg" onchange="filter(userDataTable, '&orgId=', this.options[this.selectedIndex].value)">
-                <option value=""><fmt:message key="console.directory.user.empty.option.label"/></option>
-                <c:forEach items="${organizations}" var="o">
-                    <c:set var="selected"><c:if test="${o.id == param.orgId}"> selected</c:if></c:set>
-                    <option value="${o.id}" ${selected}><c:out value="${o.name}"/></option>
-                </c:forEach>
-            </select>
+                <fmt:message key="console.directory.user.filter.label.byOrganization"/>
+                <select id="userDataTable_filterbyOrg" onchange="filter(userDataTable, '&orgId=', this.options[this.selectedIndex].value)">
+                    <option value=""><fmt:message key="console.directory.user.empty.option.label"/></option>
+                    <c:forEach items="${organizations}" var="o">
+                        <c:set var="selected"><c:if test="${o.id == param.orgId}"> selected</c:if></c:set>
+                        <option value="${o.id}" ${selected}><c:out value="${o.name}"/></option>
+                    </c:forEach>
+                </select>
             </form>
         </div>
         <ui:jsontable url="${pageContext.request.contextPath}/web/json/directory/admin/user/list?${pageContext.request.queryString}"
@@ -62,32 +62,32 @@
 </div>
 <script>
     $(document).ready(function(){
-        $('#userDataTable_searchTerm').hide();
+    $('#userDataTable_searchTerm').hide();
     });
     function submitUser(username){
-        if(username.length > 0){
-            if (confirm("<fmt:message key="console.monitoring.running.label.reassign.confirm"/>")) {
-                var callback = {
-                    success : function() {
-                       parent.location.reload(true);
-                    }
-                }
-                var replaceUser = $('#replaceUser').val();
-                if($('#replaceUser option[value="'+username+'"]').length > 0){
-                    alert('<fmt:message key="console.monitoring.running.label.reassign.error"/>');
-                }else{
-                    var params = "username=" + encodeURIComponent(username) + "&state=<c:out value="${state}"/>&processDefId=<c:out value="${processDefId}"/>&activityId=<c:out value="${activityId}"/>&processId=<c:out value="${processId}"/>&replaceUser=" + encodeURIComponent(replaceUser);
-                    ConnectionManager.post('${pageContext.request.contextPath}/web/json/monitoring/running/activity/reassign', callback, params);
-                }
-            }
-        }
+    if(username.length > 0){
+    if (confirm("<fmt:message key="console.monitoring.running.label.reassign.confirm"/>")) {
+    var callback = {
+    success : function() {
+    parent.location.reload(true);
     }
-    
+    }
+    var replaceUser = $('#replaceUser').val();
+    if($('#replaceUser option[value="'+username+'"]').length > 0){
+    alert('<fmt:message key="console.monitoring.running.label.reassign.error"/>');
+    }else{
+    var params = "username=" + encodeURIComponent(username) + "&state=<c:out value="${state}"/>&processDefId=<c:out value="${processDefId}"/>&activityId=<c:out value="${activityId}"/>&processId=<c:out value="${processId}"/>&replaceUser=" + encodeURIComponent(replaceUser);
+    ConnectionManager.post('${pageContext.request.contextPath}/web/json/monitoring/running/activity/reassign', callback, params);
+    }
+    }
+    }
+    }
+
     var org_filter = window.filter;
     var filter = function(jsonTable, url, value){
-        url = "&orgId=" + encodeURI($('#userDataTable_filterbyOrg').val());
-        url += "&name=" + encodeURI($('#userDataTable_searchCondition').val());
-        org_filter(jsonTable, url, '');
+    url = "&orgId=" + encodeURI($('#userDataTable_filterbyOrg').val());
+    url += "&name=" + encodeURI($('#userDataTable_searchCondition').val());
+    org_filter(jsonTable, url, '');
     };
 </script>
 

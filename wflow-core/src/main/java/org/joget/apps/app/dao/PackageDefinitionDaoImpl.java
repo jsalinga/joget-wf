@@ -58,16 +58,17 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
         }
         String packageId = obj.getId();
         String packageVersion = obj.getVersion().toString();
-        
+
         // delete package definition
         super.delete(getEntityName(), obj);
-        
+
         WorkflowHelper appWorkflowHelper = (WorkflowHelper) WorkflowUtil.getApplicationContext().getBean("workflowHelper");
         appWorkflowHelper.cleanDeadlineAppDefinitionCache(packageId, packageVersion);
     }
 
     /**
      * Loads the package definition for a specific app version
+     *
      * @param appId
      * @param appVersion
      * @return
@@ -89,6 +90,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
 
     /**
      * Loads the package definition
+     *
      * @param packageId
      * @param packageVersion
      * @return
@@ -110,6 +112,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
 
     /**
      * Loads the package definition based on a process definition ID
+     *
      * @param packageVersion
      * @param processDefId
      * @return
@@ -130,11 +133,11 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
         }
         return packageDef;
     }
-    
+
     @Override
     public void saveOrUpdate(PackageDefinition packageDef) {
         super.saveOrUpdate(packageDef);
-        
+
         WorkflowHelper appWorkflowHelper = (WorkflowHelper) WorkflowUtil.getApplicationContext().getBean("workflowHelper");
         appWorkflowHelper.cleanDeadlineAppDefinitionCache(packageDef.getId(), packageDef.getVersion().toString());
     }
@@ -160,7 +163,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
         // update package definition
         packageDef.setId(packageId);
         packageDef.setVersion(packageVersion);
-        
+
         //remove not exist participants, activities and tools in mapping
         Collection<String> activityIds = new ArrayList<String>();
         Collection<String> toolIds = new ArrayList<String>();
@@ -174,19 +177,19 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
             for (WorkflowProcess wp : processList) {
                 String processDefId = WorkflowUtil.getProcessDefIdWithoutVersion(wp.getId());
                 Collection<WorkflowActivity> activityList = workflowManager.getProcessActivityDefinitionList(wp.getId());
-                activityIds.add(processDefId+"::"+WorkflowUtil.ACTIVITY_DEF_ID_RUN_PROCESS);
-                participantIds.add(processDefId+"::"+"processStartWhiteList");
+                activityIds.add(processDefId + "::" + WorkflowUtil.ACTIVITY_DEF_ID_RUN_PROCESS);
+                participantIds.add(processDefId + "::" + "processStartWhiteList");
                 for (WorkflowActivity a : activityList) {
                     if (a.getType().equalsIgnoreCase("normal")) {
-                        activityIds.add(processDefId+"::"+a.getId());
+                        activityIds.add(processDefId + "::" + a.getId());
                     } else if (a.getType().equalsIgnoreCase("tool")) {
-                        toolIds.add(processDefId+"::"+a.getId());
+                        toolIds.add(processDefId + "::" + a.getId());
                     }
                 }
 
                 Collection<WorkflowParticipant> participantList = workflowManager.getProcessParticipantDefinitionList(wp.getId());
                 for (WorkflowParticipant p : participantList) {
-                    participantIds.add(processDefId+"::"+p.getId());
+                    participantIds.add(processDefId + "::" + p.getId());
                 }
             }
 
@@ -211,7 +214,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
         } catch (Exception e) {
             LogUtil.error(PackageDefinitionDaoImpl.class.getName(), e, "");
         }
-                
+
         packageDef.setPackageActivityFormMap(packageActivityFormMap);
         packageDef.setPackageActivityPluginMap(packageActivityPluginMap);
         packageDef.setPackageParticipantMap(packageParticipantMap);
@@ -223,7 +226,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
 
     @Override
     public void addAppActivityForm(String appId, Long appVersion, PackageActivityForm activityForm) {
-    	
+
         PackageDefinition packageDef = loadAppPackageDefinition(appId, appVersion);
         if (packageDef == null) {
             AppDefinition appDef = getAppDefinitionDao().loadVersion(appId, appVersion);
@@ -302,7 +305,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
         packageDef.removePackageParticipant(processDefId, participantId);
         saveOrUpdate(packageDef);
     }
-    
+
     public Collection<Long> getPackageVersions(String packageId) {
         Session session = findSession();
         String query = "SELECT e.version FROM " + ENTITY_NAME + " e WHERE e.id = ?";
@@ -312,7 +315,7 @@ public class PackageDefinitionDaoImpl extends AbstractVersionedObjectDao<Package
 
         return (Collection<Long>) q.list();
     }
-    
+
     public AppDefinition getAppDefinitionByPackage(String packageId, Long packageVersion) {
         Session session = findSession();
         String query = "SELECT e.appDefinition FROM " + getEntityName() + " e  WHERE e.id=? AND e.version=?";

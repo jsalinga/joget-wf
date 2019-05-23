@@ -48,7 +48,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
     private SetupManager setupManager;
     private LocalLocaleResolver localeResolver;
     private AuditTrailManager auditTrailManager;
-    
+
     public WorkflowHttpAuthProcessingFilter() {
         super.setUsernameParameter("j_username");
         super.setPasswordParameter("j_password");
@@ -61,8 +61,8 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
-        HttpServletResponse response = (HttpServletResponse)servletResponse;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         Boolean requiresAuthentication;
         try {
             if (request != null) {
@@ -73,17 +73,17 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                 LocaleContext localeContext = localeResolver.resolveLocaleContext(request);
                 LocaleContextHolder.setLocaleContext(localeContext, true);
             }
-            
+
             // clear current user
             workflowUserManager.clearCurrentThreadUser();
-            
+
             // init request
             AppUtil.initRequest();
-            
+
             requiresAuthentication = requiresAuthentication(request, response);
 
             super.doFilter(request, response, chain);
-            
+
             String uri = request.getRequestURI();
             if (requiresAuthentication && !uri.startsWith(request.getContextPath() + "/j_spring_security_check") && !response.isCommitted()) {
                 chain.doFilter(request, response);
@@ -96,23 +96,23 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                 // don't store authentication in session for json calls
                 SecurityContextHolder.getContext().setAuthentication(null);
             }            
-            */
+             */
 
             UserSecurity us = DirectoryUtil.getUserSecurity();
             if (us != null) {
                 us.requestPostProcessing();
             }
-            
+
             // clear request
             AppUtil.clearRequest();
-            
+
             // clear current user
             workflowUserManager.clearCurrentThreadUser();
             LocaleContextHolder.resetLocaleContext();
             auditTrailManager.clean();
         }
     }
-    
+
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
         boolean isAnonymous = workflowUserManager.isCurrentUserAnonymous();
@@ -123,7 +123,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
         if (pathParamIndex > 0) {
             // strip everything after the first semi-colon
             uri = uri.substring(0, pathParamIndex);
-        } 
+        }
 
         UserSecurity us = DirectoryUtil.getUserSecurity();
         if ((super.obtainUsername(request) != null)) {
@@ -138,8 +138,8 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                 // logged in, but timed out
                 requiresAuth = true;
             }
-        } 
-        
+        }
+
         if (requiresAuth) {
             // generate new session to avoid session fixation vulnerability
             HttpSession session = request.getSession(false);
@@ -147,7 +147,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                 SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
                 session.invalidate();
                 session = request.getSession(true);
-                if (savedRequest != null) { 
+                if (savedRequest != null) {
                     new HttpSessionRequestCache().saveRequest(request, response);
                 }
                 workflowUserManager.setCurrentThreadUser(WorkflowUserManager.ROLE_ANONYMOUS);
@@ -159,13 +159,13 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
 
     protected Authentication authenticate(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request, response));
-        
+
         boolean isAnonymous = workflowUserManager.isCurrentUserAnonymous();
         UserSecurity us = DirectoryUtil.getUserSecurity();
         if (us != null && us.getForceSessionTimeout() && !isAnonymous) {
             throw new BadCredentialsException(ResourceBundleUtil.getMessage("authentication.failed.sessionTimeOut"));
         }
-        
+
         Authentication auth = null;
 
         // check for username/password in request
@@ -174,9 +174,9 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
 
         String loginAs = request.getParameter("loginAs");
         String loginHash = request.getParameter("hash");
-        
+
         String ip = request.getRemoteAddr();
-        
+
         // Place the last username attempted into HttpSession for views
         HttpSession session = request.getSession(false);
 
@@ -191,17 +191,17 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
             if (us != null && us.getDisableHashLogin()) {
                 loginAs = null;
             }
-            
+
             if (loginAs != null) {
                 String masterLoginUsername = getSetupManager().getSettingValue("masterLoginUsername");
                 String masterLoginPassword = getSetupManager().getSettingValue("masterLoginPassword");
-                
+
                 //decryt masterLoginPassword
                 masterLoginPassword = SecurityUtil.decrypt(masterLoginPassword);
 
-                if ((masterLoginUsername != null && masterLoginUsername.trim().length() > 0) &&
-                        (masterLoginPassword != null && masterLoginPassword.length() > 0)) {
-                    
+                if ((masterLoginUsername != null && masterLoginUsername.trim().length() > 0)
+                        && (masterLoginPassword != null && masterLoginPassword.length() > 0)) {
+
                     // Prevent DoS attacks by refusing to hash large passwords
                     if (password != null && password.length() > WorkflowAuthenticationProvider.PASSWORD_MAX_LENGTH) {
                         throw new BadCredentialsException("");
@@ -211,21 +211,21 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                     master.setUsername(masterLoginUsername.trim());
                     master.setPassword(StringUtil.md5Base16(masterLoginPassword));
 
-                    if (username.trim().equals(master.getUsername()) &&
-                            ((password != null && StringUtil.md5Base16(password).equalsIgnoreCase(master.getPassword())) ||
-                            (loginHash != null && loginHash.trim().equalsIgnoreCase(master.getLoginHash())))) {
+                    if (username.trim().equals(master.getUsername())
+                            && ((password != null && StringUtil.md5Base16(password).equalsIgnoreCase(master.getPassword()))
+                            || (loginHash != null && loginHash.trim().equalsIgnoreCase(master.getLoginHash())))) {
                         currentUser = directoryManager.getUserByUsername(loginAs);
                         if (currentUser != null) {
                             WorkflowUserDetails user = new WorkflowUserDetails(currentUser);
-                            
+
                             auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
                             super.setDetails(request, (UsernamePasswordAuthenticationToken) auth);
                         } else {
-                            LogUtil.info(getClass().getName(), "Authentication for user " + loginAs + " ("+ip+") : " + false);
-            
+                            LogUtil.info(getClass().getName(), "Authentication for user " + loginAs + " (" + ip + ") : " + false);
+
                             WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-                            workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + loginAs + " ("+ip+") : " + false, new Class[]{String.class}, new Object[]{loginAs}, false);
-                        
+                            workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + loginAs + " (" + ip + ") : " + false, new Class[]{String.class}, new Object[]{loginAs}, false);
+
                             throw new BadCredentialsException("");
                         }
                     }
@@ -239,7 +239,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                     if (password.length() > WorkflowAuthenticationProvider.PASSWORD_MAX_LENGTH) {
                         throw new BadCredentialsException("");
                     }
-                    
+
                     // use existing authentication manager
                     try {
                         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username.trim(), password);
@@ -260,16 +260,16 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
                                 field.setAccessible(false);
                             }
                         }
-                        
+
                         if (auth.isAuthenticated()) {
                             currentUser = directoryManager.getUserByUsername(username);
                         }
                     } catch (BadCredentialsException be) {
-                        LogUtil.info(getClass().getName(), "Authentication for user " + ((loginAs == null) ? username : loginAs) + " ("+ip+") : " + false);
-            
+                        LogUtil.info(getClass().getName(), "Authentication for user " + ((loginAs == null) ? username : loginAs) + " (" + ip + ") : " + false);
+
                         WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-                        workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + ((loginAs == null) ? username : loginAs) + " ("+ip+") : " + false, new Class[]{String.class}, new Object[]{((loginAs == null) ? username : loginAs)}, false);
-            
+                        workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + ((loginAs == null) ? username : loginAs) + " (" + ip + ") : " + false, new Class[]{String.class}, new Object[]{((loginAs == null) ? username : loginAs)}, false);
+
                         throw be;
                     }
                 }
@@ -280,9 +280,9 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
             }
 
             if (!"/WEB-INF/jsp/unauthorized.jsp".equals(request.getServletPath())) {
-                LogUtil.info(getClass().getName(), "Authentication for user " + ((loginAs == null) ? username : loginAs) + " ("+ip+") : " + true);
+                LogUtil.info(getClass().getName(), "Authentication for user " + ((loginAs == null) ? username : loginAs) + " (" + ip + ") : " + true);
                 WorkflowHelper workflowHelper = (WorkflowHelper) AppUtil.getApplicationContext().getBean("workflowHelper");
-                workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + ((loginAs == null) ? username : loginAs) + " ("+ip+") : " + true, new Class[]{String.class}, new Object[]{((loginAs == null) ? username : loginAs)}, true);
+                workflowHelper.addAuditTrail(this.getClass().getName(), "authenticate", "Authentication for user " + ((loginAs == null) ? username : loginAs) + " (" + ip + ") : " + true, new Class[]{String.class}, new Object[]{((loginAs == null) ? username : loginAs)}, true);
             }
         } else {
             if (us != null && us.getAuthenticateAllApi()) {
@@ -292,7 +292,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
 
         return auth;
     }
-    
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         String uri = request.getRequestURI();
@@ -316,7 +316,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
             super.successfulAuthentication(request, response, chain, authResult);
         }
     }
-    
+
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException ae) throws IOException, ServletException {
         String uri = request.getRequestURI();
@@ -326,11 +326,11 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
         } else {
             SimpleUrlAuthenticationFailureHandler failureHandler = (SimpleUrlAuthenticationFailureHandler) getFailureHandler();
             failureHandler.setDefaultFailureUrl("/web/login?login_error=1");
-            
+
             super.unsuccessfulAuthentication(request, response, ae);
         }
-    }    
-    
+    }
+
     public WorkflowUserManager getWorkflowUserManager() {
         return workflowUserManager;
     }
@@ -354,7 +354,7 @@ public class WorkflowHttpAuthProcessingFilter extends UsernamePasswordAuthentica
     public void setSetupManager(SetupManager setupManager) {
         this.setupManager = setupManager;
     }
-    
+
     public LocaleResolver getLocaleResolver() {
         return localeResolver;
     }

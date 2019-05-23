@@ -11,7 +11,7 @@ public class ContextListener implements ServletContextListener {
         myThread.setContextClassLoader(ClassLoader.getSystemClassLoader());
 
         java.awt.Toolkit.getDefaultToolkit();
-        
+
         myThread.setContextClassLoader(ccl); // POP 
     }
 

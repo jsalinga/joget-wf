@@ -23,18 +23,20 @@ public class DirectoryManagerAuthenticatorImpl extends ExtDefaultPlugin implemen
     public String getDescription() {
         return "DirectoryManager Authenticator";
     }
-    
+
     /**
-     * Authenticate a user based on the username and password using the specified DirectoryManager.
+     * Authenticate a user based on the username and password using the
+     * specified DirectoryManager.
+     *
      * @param directoryManager
      * @param username
      * @param password
-     * @return 
+     * @return
      */
     @Override
     public boolean authenticate(DirectoryManager directoryManager, String username, String password) {
         boolean authenticated = directoryManager.authenticate(username, password);
         return authenticated;
     }
-    
+
 }

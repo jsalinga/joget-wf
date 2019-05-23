@@ -79,7 +79,7 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
 
     public Object execute(Map properties) {
         PluginManager pluginManager = (PluginManager) properties.get("pluginManager");
-        
+
         String formDataTable = (String) properties.get("formDataTable");
         String smtpHost = (String) properties.get("host");
         String smtpPort = (String) properties.get("port");
@@ -95,7 +95,7 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
 
         String emailSubject = (String) properties.get("subject");
         String emailMessage = (String) properties.get("message");
-        
+
         String isHtml = (String) properties.get("isHtml");
 
         WorkflowAssignment wfAssignment = (WorkflowAssignment) properties.get("workflowAssignment");
@@ -107,23 +107,23 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                 replaceMap = new HashMap<String, String>();
                 replaceMap.put("\\n", "<br/>");
             }
-            
+
             emailSubject = WorkflowUtil.processVariable(emailSubject, formDataTable, wfAssignment);
             emailMessage = AppUtil.processHashVariable(emailMessage, wfAssignment, null, replaceMap);
-            
+
             smtpHost = AppUtil.processHashVariable(smtpHost, wfAssignment, null, null);
             smtpPort = AppUtil.processHashVariable(smtpPort, wfAssignment, null, null);
             smtpUsername = AppUtil.processHashVariable(smtpUsername, wfAssignment, null, null);
             smtpPassword = AppUtil.processHashVariable(smtpPassword, wfAssignment, null, null);
             security = AppUtil.processHashVariable(security, wfAssignment, null, null);
             final String fromStr = WorkflowUtil.processVariable(from, formDataTable, wfAssignment);
-            
+
             // create the email message
             final HtmlEmail email = AppUtil.createEmail(smtpHost, smtpPort, security, smtpUsername, smtpPassword, fromStr);
             if (email == null) {
                 return null;
             }
-            
+
             if (cc != null && cc.length() != 0) {
                 Collection<String> ccs = AppUtil.getEmailList(null, cc, wfAssignment, appDef);
                 for (String address : ccs) {
@@ -139,7 +139,7 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
 
             email.setSubject(emailSubject);
             email.setCharset("UTF-8");
-            
+
             if ("true".equalsIgnoreCase(isHtml)) {
                 email.setHtmlMsg(emailMessage);
             } else {
@@ -159,28 +159,28 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
 
             final String to = emailToOutput;
             final String profile = DynamicDataSourceManager.getCurrentProfile();
-            
+
             //handle file attachment
             String formDefId = (String) properties.get("formDefId");
             Object[] fields = null;
-            if (properties.get("fields") instanceof Object[]){
+            if (properties.get("fields") instanceof Object[]) {
                 fields = (Object[]) properties.get("fields");
             }
             if (formDefId != null && !formDefId.isEmpty() && fields != null && fields.length > 0) {
                 AppService appService = (AppService) AppUtil.getApplicationContext().getBean("appService");
-                
+
                 FormData formData = new FormData();
                 String primaryKey = appService.getOriginProcessId(wfAssignment.getProcessId());
                 formData.setPrimaryKeyValue(primaryKey);
                 Form loadForm = appService.viewDataForm(appDef.getId(), appDef.getVersion().toString(), formDefId, null, null, null, formData, null, null);
-                
+
                 for (Object o : fields) {
                     Map mapping = (HashMap) o;
                     String fieldId = mapping.get("field").toString();
-                        
+
                     try {
                         Element el = FormUtil.findElement(fieldId, loadForm, formData);
-                        
+
                         String value = FormUtil.getElementPropertyValue(el, formData);
                         if (value != null && !value.isEmpty()) {
                             String values[] = value.split(";");
@@ -194,14 +194,14 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                                 }
                             }
                         }
-                    } catch(Exception e){
+                    } catch (Exception e) {
                         LogUtil.info(EmailTool.class.getName(), "Attached file fail from field \"" + fieldId + "\" in form \"" + formDefId + "\"");
                     }
                 }
             }
-            
+
             Object[] files = null;
-            if (properties.get("files") instanceof Object[]){
+            if (properties.get("files") instanceof Object[]) {
                 files = (Object[]) properties.get("files");
             }
             if (files != null && files.length > 0) {
@@ -210,9 +210,9 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                     String path = mapping.get("path").toString();
                     String fileName = mapping.get("fileName").toString();
                     String type = mapping.get("type").toString();
-                        
+
                     try {
-                        
+
                         if ("system".equals(type)) {
                             EmailAttachment attachment = new EmailAttachment();
                             attachment.setPath(path);
@@ -222,8 +222,8 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                             URL u = new URL(path);
                             email.attach(u, MimeUtility.encodeText(fileName), "");
                         }
-                        
-                    } catch(Exception e){
+
+                    } catch (Exception e) {
                         LogUtil.info(EmailTool.class.getName(), "Attached file fail from path \"" + path + "\"");
                         e.printStackTrace();
                     }
@@ -252,7 +252,7 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
 
         return null;
     }
-    
+
     protected void attachIcal(final HtmlEmail email) {
         try {
             if ("true".equalsIgnoreCase(getPropertyString("icsAttachement"))) {
@@ -260,18 +260,18 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                 calendar.getProperties().add(Version.VERSION_2_0);
                 calendar.getProperties().add(new ProdId("-//Joget Workflow//iCal4j 1.0//EN"));
                 calendar.getProperties().add(CalScale.GREGORIAN);
-                
+
                 String eventName = getPropertyString("icsEventName");
                 if (eventName.isEmpty()) {
                     eventName = email.getSubject();
                 }
-                
+
                 String startDateTime = getPropertyString("icsDateStart");
                 String endDateTime = getPropertyString("icsDateEnd");
                 String dateFormat = getPropertyString("icsDateFormat");
                 String timezoneString = getPropertyString("icsTimezone");
-                SimpleDateFormat sdFormat =  new SimpleDateFormat(dateFormat);
-                
+                SimpleDateFormat sdFormat = new SimpleDateFormat(dateFormat);
+
                 TimeZone timezone = null;
                 TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
                 try {
@@ -280,15 +280,16 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                     } else {
                         timezone = registry.getTimeZone(TimeZoneUtil.getServerTimeZoneID());
                     }
-                } catch (Exception et) {}
-                
+                } catch (Exception et) {
+                }
+
                 java.util.Calendar startDate = new GregorianCalendar();
                 if (timezone != null) {
                     startDate.setTimeZone(timezone);
                 }
                 startDate.setTime(sdFormat.parse(startDateTime));
                 DateTime start = new DateTime(startDate.getTime());
-                
+
                 VEvent event;
                 if (endDateTime.isEmpty()) {
                     event = new VEvent(start, eventName);
@@ -299,36 +300,36 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                     }
                     endDate.setTime(sdFormat.parse(endDateTime));
                     DateTime end = new DateTime(endDate.getTime());
-                    
+
                     event = new VEvent(start, end, eventName);
                 }
-                
+
                 String eventDesc = getPropertyString("icsEventDesc");
                 if (!eventDesc.isEmpty()) {
                     event.getProperties().add(new Description(getPropertyString("icsEventDesc")));
                 }
-                
+
                 if (timezone != null) {
                     VTimeZone tz = timezone.getVTimeZone();
                     event.getProperties().add(tz.getTimeZoneId());
                 }
-                
+
                 if ("true".equalsIgnoreCase(getPropertyString("icsAllDay"))) {
                     event.getProperties().getProperty(Property.DTSTART).getParameters().add(Value.DATE);
                 }
-                
+
                 if (!getPropertyString("icsLocation").isEmpty()) {
                     event.getProperties().add(new Location(getPropertyString("icsLocation")));
                 }
-                
+
                 if (!getPropertyString("icsOrganizerEmail").isEmpty()) {
-                    event.getProperties().add(new Organizer("MAILTO:"+getPropertyString("icsOrganizerEmail")));
+                    event.getProperties().add(new Organizer("MAILTO:" + getPropertyString("icsOrganizerEmail")));
                 } else {
-                    event.getProperties().add(new Organizer("MAILTO:"+email.getFromAddress().getAddress()));
+                    event.getProperties().add(new Organizer("MAILTO:" + email.getFromAddress().getAddress()));
                 }
-                
+
                 Object[] attendees = null;
-                if (getProperty("icsAttendees") instanceof Object[]){
+                if (getProperty("icsAttendees") instanceof Object[]) {
                     attendees = (Object[]) getProperty("icsAttendees");
                 }
                 if (attendees != null && attendees.length > 0) {
@@ -339,7 +340,7 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                         String required = mapping.get("required").toString();
 
                         try {
-                            Attendee att = new Attendee(URI.create("mailto:"+mailto));
+                            Attendee att = new Attendee(URI.create("mailto:" + mailto));
                             if ("true".equals(required)) {
                                 att.getParameters().add(Role.REQ_PARTICIPANT);
                             } else {
@@ -347,12 +348,12 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                             }
                             att.getParameters().add(new Cn(name));
                             event.getProperties().add(att);
-                        } catch(Exception ex){
+                        } catch (Exception ex) {
                             LogUtil.error(getClassName(), ex, "");
                         }
                     }
                 }
-                
+
                 calendar.getComponents().add(event);
                 email.attach(new ByteArrayDataSource(calendar.toString(), "text/calendar;charset=UTF-8;ENCODING=8BIT;method=REQUEST"), MimeUtility.encodeText("invite.ics"), "");
             }
@@ -379,13 +380,13 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
         if ("testmail".equals(action)) {
             String message = "";
             try {
                 AppDefinition appDef = AppUtil.getCurrentAppDefinition();
-                
+
                 String smtpHost = AppUtil.processHashVariable(request.getParameter("host"), null, null, null, appDef);
                 String smtpPort = AppUtil.processHashVariable(request.getParameter("port"), null, null, null, appDef);
                 String smtpUsername = AppUtil.processHashVariable(request.getParameter("username"), null, null, null, appDef);
@@ -398,14 +399,14 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
                 email.setSubject(ResourceBundleUtil.getMessage("app.emailtool.testSubject"));
                 email.setCharset("UTF-8");
                 email.setHtmlMsg(ResourceBundleUtil.getMessage("app.emailtool.testMessage"));
-                
+
                 if (to != null && to.length() != 0) {
                     Collection<String> tos = AppUtil.getEmailList(null, to, null, null);
                     for (String address : tos) {
                         email.addTo(address);
                     }
                 }
-                
+
                 email.send();
                 message = ResourceBundleUtil.getMessage("app.emailtool.testEmailSent");
             } catch (Exception e) {
@@ -421,32 +422,32 @@ public class EmailTool extends DefaultApplicationPlugin implements PluginWebSupp
             }
         } else if ("validate".equals(action)) {
             boolean error = false;
-            
+
             String smtpHost = request.getParameter("host");
             String smtpPort = request.getParameter("port");
             String smtpFrom = request.getParameter("from");
-            
+
             if (smtpHost == null || smtpHost.isEmpty() || smtpPort == null || smtpPort.isEmpty() || smtpFrom == null || smtpFrom.isEmpty()) {
-                SetupManager setupManager = (SetupManager)AppUtil.getApplicationContext().getBean("setupManager");
+                SetupManager setupManager = (SetupManager) AppUtil.getApplicationContext().getBean("setupManager");
                 String host = setupManager.getSettingValue("smtpHost");
                 String port = setupManager.getSettingValue("smtpPort");
                 String from = setupManager.getSettingValue("smtpEmail");
-                
+
                 if (host == null || host.isEmpty() || port == null || port.isEmpty() || from == null || from.isEmpty()) {
                     error = true;
                 }
             }
-            
+
             try {
                 JSONObject jsonObject = new JSONObject();
-                
+
                 if (!error) {
                     jsonObject.put("status", "success");
                 } else {
                     jsonObject.put("status", "fail");
                     jsonObject.put("message", new JSONArray());
                 }
-                
+
                 jsonObject.write(response.getWriter());
             } catch (Exception e) {
                 //ignore

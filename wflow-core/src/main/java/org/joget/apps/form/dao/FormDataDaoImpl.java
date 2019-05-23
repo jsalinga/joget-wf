@@ -75,7 +75,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
     public static final String FORM_PREFIX_COLUMN = "c_";
     public static final int ACTION_TYPE_LOAD = 0;
     public static final int ACTION_TYPE_STORE = 1;
-    
+
     private FormDefinitionDao formDefinitionDao;
     private FormService formService;
     private FormColumnCache formColumnCache;
@@ -83,7 +83,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
     private Cache joinFormSessionFactoryCache;
     private Cache formPersistentClassCache;
     private Document formRowDocument;
-    
+
     public FormDefinitionDao getFormDefinitionDao() {
         return formDefinitionDao;
     }
@@ -134,6 +134,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Loads a data row for a form based on the primary key
+     *
      * @param form
      * @param primaryKey
      * @return null if the row does not exist
@@ -144,9 +145,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String tableName = getFormTableName(form);
         return internalLoad(entityName, tableName, primaryKey);
     }
-    
+
     /**
      * Loads a data row for a form based on the primary key
+     *
      * @param formDefId
      * @param tableName
      * @param primaryKey
@@ -160,11 +162,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
     }
 
     /**
-     * Loads a data row for a form based on the primary key. 
-     * This method is transactional (since v5), but retains the method name for backward compatibility reasons.
+     * Loads a data row for a form based on the primary key. This method is
+     * transactional (since v5), but retains the method name for backward
+     * compatibility reasons.
+     *
      * @param form
      * @param primaryKey
-     * @return 
+     * @return
      */
     @Override
     public FormRow loadWithoutTransaction(Form form, String primaryKey) {
@@ -172,14 +176,16 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String tableName = getFormTableName(form);
         return internalLoad(entityName, tableName, primaryKey);
     }
-    
+
     /**
-     * Loads a data row for a form based on the primary key. 
-     * This method is transactional (since v5), but retains the method name for backward compatibility reasons.
+     * Loads a data row for a form based on the primary key. This method is
+     * transactional (since v5), but retains the method name for backward
+     * compatibility reasons.
+     *
      * @param formDefId
      * @param tableName
      * @param primaryKey
-     * @return 
+     * @return
      */
     @Override
     public FormRow loadWithoutTransaction(String formDefId, String tableName, String primaryKey) {
@@ -190,6 +196,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Loads a data row for an entity and table based on the primary key
+     *
      * @param entityName
      * @param tableName
      * @param primaryKey
@@ -198,7 +205,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
     protected FormRow internalLoad(String entityName, String tableName, String primaryKey) {
         // get hibernate session
         Session session = getHibernateSession(entityName, tableName, null, ACTION_TYPE_LOAD);
-        
+
         // load by primary key
         FormRow row = null;
         try {
@@ -215,6 +222,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Loads a data row for a table based on the primary key
+     *
      * @param tableName
      * @param columnName is not used
      * @param primaryKey
@@ -225,12 +233,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         if (!tableName.startsWith(FORM_PREFIX_TABLE_NAME)) {
             tableName = FormDataDaoImpl.FORM_PREFIX_TABLE_NAME + tableName;
         }
-        
+
         return internalLoad(tableName, tableName, primaryKey);
     }
 
     /**
      * Query to find a list of matching form rows.
+     *
      * @param formDefId
      * @param tableName
      * @param condition
@@ -239,7 +248,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
      * @param desc
      * @param start
      * @param rows
-     * @return 
+     * @return
      */
     @Override
     public FormRowSet find(String formDefId, String tableName, final String condition, final Object[] params, final String sort, final Boolean desc, final Integer start, final Integer rows) {
@@ -248,9 +257,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalFind(entityName, newTableName, condition, params, sort, desc, start, rows);
     }
-    
+
     /**
      * Query to find a list of matching form rows.
+     *
      * @param form
      * @param condition
      * @param params
@@ -267,9 +277,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalFind(entityName, tableName, condition, params, sort, desc, start, rows);
     }
-    
+
     /**
      * Query to find a list of matching form rows.
+     *
      * @param entityName
      * @param tableName
      * @param condition
@@ -293,8 +304,8 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             if ((sort != null && !sort.trim().isEmpty()) && !query.toLowerCase().contains("order by")) {
                 String sortProperty = sort;
                 if (!FormUtil.PROPERTY_ID.equals(sortProperty) && !FormUtil.PROPERTY_DATE_CREATED.equals(sortProperty) && !FormUtil.PROPERTY_DATE_MODIFIED.equals(sortProperty)
-                         && !FormUtil.PROPERTY_CREATED_BY.equals(sortProperty)  && !FormUtil.PROPERTY_CREATED_BY_NAME.equals(sortProperty)
-                         && !FormUtil.PROPERTY_MODIFIED_BY.equals(sortProperty)  && !FormUtil.PROPERTY_MODIFIED_BY_NAME.equals(sortProperty)) {
+                        && !FormUtil.PROPERTY_CREATED_BY.equals(sortProperty) && !FormUtil.PROPERTY_CREATED_BY_NAME.equals(sortProperty)
+                        && !FormUtil.PROPERTY_MODIFIED_BY.equals(sortProperty) && !FormUtil.PROPERTY_MODIFIED_BY_NAME.equals(sortProperty)) {
                     Collection<String> columnNames = getFormDefinitionColumnNames(tableName);
                     if (columnNames.contains(sort)) {
                         sortProperty = FormUtil.PROPERTY_CUSTOM_PROPERTIES + "." + sort;
@@ -335,11 +346,12 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Query total row count for a form.
+     *
      * @param formDefId
      * @param tableName
      * @param condition
      * @param params
-     * @return 
+     * @return
      */
     @Override
     public Long count(String formDefId, String tableName, final String condition, final Object[] params) {
@@ -349,9 +361,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalCount(entityName, newTableName, condition, params);
     }
-    
+
     /**
      * Query total row count for a form.
+     *
      * @param form
      * @param condition
      * @param params
@@ -365,9 +378,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalCount(entityName, tableName, condition, params);
     }
-    
+
     /**
      * Query total row count for a form.
+     *
      * @param entityName
      * @param tableName
      * @param condition
@@ -396,6 +410,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Query to find find primary key based on a field name and it's value.
+     *
      * @param form
      * @param fieldName
      * @param value
@@ -408,9 +423,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalFindPrimaryKey(entityName, tableName, fieldName, value);
     }
-    
+
     /**
      * Query to find find primary key based on a field name and it's value.
+     *
      * @param formDefId
      * @param tableName
      * @param fieldName
@@ -424,9 +440,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalFindPrimaryKey(entityName, newTableName, fieldName, value);
     }
-    
+
     /**
      * Query to find find primary key based on a field name and it's value.
+     *
      * @param entityName
      * @param tableName
      * @param fieldName
@@ -456,6 +473,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Saves (creates or updates) form data
+     *
      * @param form
      * @param rowSet
      */
@@ -465,9 +483,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String tableName = getFormTableName(form);
         internalSaveOrUpdate(entityName, tableName, rowSet);
     }
-    
+
     /**
      * Saves (creates or updates) form data
+     *
      * @param formDefId
      * @param tableName
      * @param rowSet
@@ -481,9 +500,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Saves (creates or updates) form data
+     *
      * @param entityName
      * @param tableName
-     * @param rowSet 
+     * @param rowSet
      */
     protected void internalSaveOrUpdate(String entityName, String tableName, FormRowSet rowSet) {
         // get hibernate template
@@ -502,6 +522,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Call Hibernate to update DB schema
+     *
      * @param form
      * @param rowSet
      */
@@ -510,12 +531,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String entityName = getFormEntityName(form);
         String tableName = getFormTableName(form);
         Session session = getHibernateSession(entityName, tableName, rowSet, ACTION_TYPE_STORE);
-        
+
         closeSession(session);
     }
 
     /**
      * Call Hibernate to update DB schema
+     *
      * @param formDefId
      * @param tableName
      * @param rowSet
@@ -525,14 +547,15 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String entityName = getFormEntityName(formDefId);
         String newTableName = getFormTableName(formDefId, tableName);
         Session session = getHibernateSession(entityName, newTableName, rowSet, ACTION_TYPE_STORE);
-        
+
         closeSession(session);
     }
 
     /**
      * Delete form data by primary keys
+     *
      * @param form
-     * @param primaryKeyValues 
+     * @param primaryKeyValues
      */
     @Override
     public void delete(Form form, String[] primaryKeyValues) {
@@ -541,12 +564,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         internalDelete(entityName, tableName, primaryKeyValues);
     }
-    
+
     /**
      * Delete form data by primary keys
+     *
      * @param formDefId
      * @param tableName
-     * @param primaryKeyValues 
+     * @param primaryKeyValues
      */
     @Override
     public void delete(String formDefId, String tableName, String[] primaryKeyValues) {
@@ -555,9 +579,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         internalDelete(entityName, newTableName, primaryKeyValues);
     }
-    
+
     /**
      * Delete form data by primary keys
+     *
      * @param formDefId
      * @param tableName
      * @param rows
@@ -579,12 +604,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             closeSession(session);
         }
     }
-    
+
     /**
      * Delete form data by primary keys
+     *
      * @param entityName
      * @param tableName
-     * @param primaryKeyValues 
+     * @param primaryKeyValues
      */
     protected void internalDelete(String entityName, String tableName, String[] primaryKeyValues) {
         // get hibernate template
@@ -604,6 +630,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Gets the generated hibernate entity name for the form
+     *
      * @param form
      * @return
      */
@@ -613,11 +640,12 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String entityName = FormDataDaoImpl.FORM_PREFIX_ENTITY + formDefId;
         return entityName;
     }
-    
+
     /**
      * Gets the generated hibernate entity name for the form
+     *
      * @param formDefId
-     * @return 
+     * @return
      */
     @Override
     public String getFormEntityName(String formDefId) {
@@ -627,8 +655,9 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Gets the defined table name for the form
+     *
      * @param form
-     * @return 
+     * @return
      */
     @Override
     public String getFormTableName(Form form) {
@@ -642,12 +671,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         tableName = FormDataDaoImpl.FORM_PREFIX_TABLE_NAME + tableName;
         return tableName;
     }
-    
+
     /**
      * Gets the defined table name for the form
+     *
      * @param formDefId
      * @param tableName
-     * @return 
+     * @return
      */
     @Override
     public String getFormTableName(String formDefId, String tableName) {
@@ -669,22 +699,22 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         formPersistentClassCache.removeAll();
         formColumnCache.clear();
     }
-    
+
     public void clearFormCache(Form form) {
         String entityName = getFormEntityName(form);
         String tableName = getFormTableName(form);
         formSessionFactoryCache.remove(getSessionFactoryCacheKey(entityName, tableName, null));
         formPersistentClassCache.remove(getPersistentClassCacheKey(entityName));
         clearJoinCache(tableName);
-        
+
         // strip table prefix for form column cache
         if (tableName.startsWith(FORM_PREFIX_TABLE_NAME)) {
             tableName = tableName.substring(FORM_PREFIX_TABLE_NAME.length());
         }
-        
+
         formColumnCache.remove(tableName);
     }
-    
+
     protected void clearJoinCache(String entity) {
         if (!entity.startsWith(FORM_PREFIX_TABLE_NAME)) {
             entity = FORM_PREFIX_TABLE_NAME + entity;
@@ -695,7 +725,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             }
         }
     }
-    
+
     protected String getSessionFactoryCacheKey(String entityName, String tableName, FormRowSet rowSet) {
         String profile = DynamicDataSourceManager.getCurrentProfile();
         String cacheKey = profile + ";" + entityName + ";" + tableName + ";";
@@ -707,7 +737,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         }
         return cacheKey;
     }
-    
+
     protected String getJoinSessionFactoryCacheKey(String[] entities) {
         String profile = DynamicDataSourceManager.getCurrentProfile();
         String cacheKey = profile;
@@ -724,21 +754,22 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         String cacheKey = profile + ";PC:" + entityName + ";";
         return cacheKey;
     }
-    
+
     /**
      * Gets the hibernate session for the entity
+     *
      * @param entityName
      * @param tableName
      * @param rowSet
      * @param actionType
      * @return
      */
-    protected Session getHibernateSession(String entityName, String tableName, FormRowSet rowSet,  int actionType) throws HibernateException {
+    protected Session getHibernateSession(String entityName, String tableName, FormRowSet rowSet, int actionType) throws HibernateException {
         Session session;
         if (actionType == ACTION_TYPE_LOAD) {
             // for load, use the db table as entity name
             entityName = tableName;
-            
+
             // find session factory and open session
             SessionFactory sf = findSessionFactory(entityName, tableName, null, actionType);
             session = sf.withOptions().autoJoinTransactions(true).openSession();
@@ -748,23 +779,23 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             session = sf.withOptions().autoJoinTransactions(true).openSession();
         }
         return session;
-    }  
-    
+    }
+
     protected Session getJoinHibernateSession(String entityName, String[] joinsTables) {
         Session session;
-        
+
         int size = 1;
-        
+
         if (joinsTables != null) {
             size += joinsTables.length;
         }
-        
+
         String[] entities = new String[size];
         if (!entityName.startsWith(FORM_PREFIX_TABLE_NAME)) {
             entityName = FORM_PREFIX_TABLE_NAME + entityName;
         }
         entities[0] = entityName;
-        
+
         if (joinsTables != null) {
             int i = 1;
             for (String e : joinsTables) {
@@ -775,34 +806,34 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 i++;
             }
         }
-        
+
         // find session factory and open session
         SessionFactory sf = findJoinSessionFactory(entities);
         session = sf.withOptions().autoJoinTransactions(true).openSession();
-        
+
         return session;
     }
 
     protected SessionFactory findSessionFactory(String entityName, String tableName, FormRowSet rowSet, int actionType) throws HibernateException {
-        SessionFactory sf = null;        
+        SessionFactory sf = null;
         PersistentClass pc = null;
-        
+
         // lookup cache
         String cacheKey = getSessionFactoryCacheKey(entityName, tableName, rowSet);
         net.sf.ehcache.Element cacheElement = formSessionFactoryCache.get(cacheKey);
         if (cacheElement != null) {
-            sf = (SessionFactory)cacheElement.getObjectValue();
+            sf = (SessionFactory) cacheElement.getObjectValue();
             if (LogUtil.isDebugEnabled(FormDataDaoImpl.class.getName())) {
                 LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form " + entityName + " session factory found in cache");
             }
         }
-            
+
         if (actionType == ACTION_TYPE_LOAD) {
             // find existing persistent class for comparison
             if (sf != null) {
                 net.sf.ehcache.Element pcElement = formPersistentClassCache.get(getPersistentClassCacheKey(entityName));
                 if (pcElement != null) {
-                    pc = (PersistentClass)pcElement.getObjectValue();
+                    pc = (PersistentClass) pcElement.getObjectValue();
                     if (LogUtil.isDebugEnabled(FormDataDaoImpl.class.getName())) {
                         LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form " + entityName + " PersistentClass found in cache");
                     }
@@ -861,7 +892,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                                     break;
                                 }
                             }
-                            
+
                             try {
                                 Property createdBy = pc.getProperty(FormUtil.PROPERTY_CREATED_BY);
                                 if (createdBy == null) {
@@ -892,7 +923,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
                     // clear session factory to be recreated
                     sf = null;
-                    
+
                     //remove persistentClassCache
                     formPersistentClassCache.remove(getPersistentClassCacheKey(entityName));
                     clearJoinCache(entityName);
@@ -903,7 +934,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 }
             }
         }
-        
+
         if (sf == null) {
             if (LogUtil.isDebugEnabled(FormDataDaoImpl.class.getName())) {
                 LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form " + entityName + " create session factory");
@@ -912,10 +943,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         }
         return sf;
     }
-    
+
     protected SessionFactory findJoinSessionFactory(String[] entities) throws HibernateException {
-        SessionFactory sf = null;        
-        
+        SessionFactory sf = null;
+
         if (entities.length == 1) {
             sf = findSessionFactory(entities[0], entities[0], null, ACTION_TYPE_LOAD);
         } else {
@@ -928,7 +959,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             String cacheKey = getJoinSessionFactoryCacheKey(entities);
             net.sf.ehcache.Element cacheElement = joinFormSessionFactoryCache.get(cacheKey);
             if (cacheElement != null) {
-                sf = (SessionFactory)cacheElement.getObjectValue();
+                sf = (SessionFactory) cacheElement.getObjectValue();
                 LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form [" + entities + "] join session factory found in cache");
             }
 
@@ -939,13 +970,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         }
         return sf;
     }
-    
+
     protected SessionFactory createSessionFactory(String entityName, String tableName, FormRowSet rowSet, int actionType) throws HibernateException {
         // create configuration
         Configuration configuration = new Configuration();
         configuration.setProperty("show_sql", "false");
         configuration.setProperty("cglib.use_reflection_optimizer", "true");
-        
+
         // get columns
         Collection<String> formFields;
         if (rowSet != null) {
@@ -957,7 +988,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         }
 
         // load default FormRow hbm xml
-        synchronized(this) {
+        synchronized (this) {
             if (formRowDocument == null) {
                 InputStream is = null;
                 try {
@@ -979,7 +1010,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 }
             }
         }
-        Document document = (Document)formRowDocument.cloneNode(true);
+        Document document = (Document) formRowDocument.cloneNode(true);
 
         // update entity-name
         NodeList classTags = document.getElementsByTagName("class");
@@ -1014,13 +1045,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 element.setAttribute("type", propType);
                 element.setAttribute("not-null", String.valueOf(false));
                 node.appendChild(element);
-            }            
+            }
         }
 
         if (actionType == ACTION_TYPE_LOAD) {
             // locate entity hbm mapping file
             String path = getFormMappingPath();
-            String filename = entityName + ".hbm.xml";        
+            String filename = entityName + ".hbm.xml";
             File mappingFile = new File(path, filename);
             try {
                 // delete existing mapping file
@@ -1041,38 +1072,38 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         } else {
             configuration.addDocument(document);
         }
-        
+
         String cacheKey = getSessionFactoryCacheKey(entityName, tableName, rowSet);
         SessionFactory sf = getSessionFactory(entityName, cacheKey, actionType, configuration);
-        
+
         return sf;
     }
-    
+
     protected SessionFactory createJoinSessionFactory(String[] entities) throws HibernateException {
         // create configuration
         Configuration configuration = new Configuration();
         configuration.setProperty("show_sql", "false");
         configuration.setProperty("cglib.use_reflection_optimizer", "true");
-        
+
         String path = getFormMappingPath();
         for (String e : entities) {
             String filename = e + ".hbm.xml";
             File mappingFile = new File(path, filename);
-            
+
             configuration.addFile(mappingFile);
         }
-        
+
         String cacheKey = getJoinSessionFactoryCacheKey(entities);
         SessionFactory sf = getJoinSessionFactory(entities, cacheKey, configuration);
-        
+
         return sf;
     }
-    
+
     protected SessionFactory getSessionFactory(final String entityName, String cacheKey, int actionType, final Configuration configuration) {
         // set datasource
-        DataSource dataSource = (DataSource)AppUtil.getApplicationContext().getBean("setupDataSource");
+        DataSource dataSource = (DataSource) AppUtil.getApplicationContext().getBean("setupDataSource");
         configuration.getProperties().put(Environment.DATASOURCE, dataSource);
-        
+
         // build session factory
         final ServiceRegistry sr = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         SessionFactory sf = configuration.buildSessionFactory(sr);
@@ -1080,26 +1111,26 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         // update schema
         internalUpdateSchema(sf, sr, configuration, entityName);
-        
+
         if (actionType == ACTION_TYPE_LOAD) {
             PersistentClass pc = configuration.getClassMapping(entityName);
             // save into cache
             formPersistentClassCache.put(new net.sf.ehcache.Element(getPersistentClassCacheKey(entityName), pc));
         }
-        
+
         // save into cache
         formSessionFactoryCache.remove(cacheKey);
         formSessionFactoryCache.put(new net.sf.ehcache.Element(cacheKey, sf));
         LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form " + entityName + " saved in cache");
-        
+
         return sf;
     }
-    
+
     protected SessionFactory getJoinSessionFactory(final String[] entities, String cacheKey, final Configuration configuration) {
         // set datasource
-        DataSource dataSource = (DataSource)AppUtil.getApplicationContext().getBean("setupDataSource");
+        DataSource dataSource = (DataSource) AppUtil.getApplicationContext().getBean("setupDataSource");
         configuration.getProperties().put(Environment.DATASOURCE, dataSource);
-        
+
         // build session factory
         final ServiceRegistry sr = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         SessionFactory sf = configuration.buildSessionFactory(sr);
@@ -1107,22 +1138,23 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         // update schema
         internalUpdateSchema(sf, sr, configuration, entities.toString());
-        
+
         // save into cache
         joinFormSessionFactoryCache.remove(cacheKey);
         joinFormSessionFactoryCache.put(new net.sf.ehcache.Element(cacheKey, sf));
         LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form [" + entities + "] saved in cache");
-        
+
         return sf;
     }
-    
+
     /**
      * Trigger actual Hibernate schema update
+     *
      * @param sf
      * @param sr
      * @param configuration
      * @param entityName
-     * @throws HibernateException 
+     * @throws HibernateException
      */
     protected void internalUpdateSchema(final SessionFactory sf, final ServiceRegistry sr, final Configuration configuration, final String entityName) throws HibernateException {
         // check table exists
@@ -1148,7 +1180,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                         tableSet.add(entityName);
                     }
                 }
-            });            
+            });
         } finally {
             if (session != null) {
                 session.close();
@@ -1169,12 +1201,13 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             } catch (Exception e) {
                 LogUtil.error(getClass().getName(), e, "Error updating schema");
             }
-            LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form [" + entityName + "] schema updated");                
-        }        
+            LogUtil.debug(FormDataDaoImpl.class.getName(), "  --- Form [" + entityName + "] schema updated");
+        }
     }
-    
+
     /**
      * Returns the base directory used to store hibernate mapping files
+     *
      * @return
      */
     protected String getFormMappingPath() {
@@ -1190,6 +1223,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Returns collection of all column names to be saved
+     *
      * @param rowSet
      * @return
      */
@@ -1199,18 +1233,18 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         Collection<String> lowerCaseColumnSet = new HashSet<String>();
         if (rowSet != null && !rowSet.isEmpty()) {
             Set columnsName = new HashSet();
-            
+
             for (FormRow row : rowSet) {
                 if (row != null && !row.isEmpty()) {
                     columnsName.addAll(row.keySet());
                 }
             }
-            
+
             for (Object column : columnsName) {
                 String columnName = (String) column;
                 if (columnName != null && !columnName.isEmpty() && !FormUtil.PROPERTY_ID.equals(columnName) && !FormUtil.PROPERTY_DATE_CREATED.equals(columnName) && !FormUtil.PROPERTY_DATE_MODIFIED.equals(columnName)
-                         && !FormUtil.PROPERTY_CREATED_BY.equals(columnName) && !FormUtil.PROPERTY_CREATED_BY_NAME.equals(columnName)
-                         && !FormUtil.PROPERTY_MODIFIED_BY.equals(columnName) && !FormUtil.PROPERTY_MODIFIED_BY_NAME.equals(columnName)) {
+                        && !FormUtil.PROPERTY_CREATED_BY.equals(columnName) && !FormUtil.PROPERTY_CREATED_BY_NAME.equals(columnName)
+                        && !FormUtil.PROPERTY_MODIFIED_BY.equals(columnName) && !FormUtil.PROPERTY_MODIFIED_BY_NAME.equals(columnName)) {
                     String lowerCasePropName = columnName.toLowerCase();
                     if (!lowerCaseColumnSet.contains(lowerCasePropName) && !(columnName.startsWith(FORM_PREFIX_COLUMN) && columnsName.contains(columnName.substring(2)))) {
                         columnList.add(columnName);
@@ -1218,7 +1252,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                     }
                 }
             }
-            
+
             //remove predefined column
             columnList.remove(FormUtil.PROPERTY_ID);
             columnList.remove(FormUtil.PROPERTY_DATE_CREATED);
@@ -1233,6 +1267,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Returns collection of all columns from forms mapped to a table
+     *
      * @param tableName
      * @return
      */
@@ -1249,7 +1284,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         // get forms mapped to the table name
         columnList = formColumnCache.get(tableName);
         if (columnList == null) {
-            LogUtil.debug("", "======== Build Form Column Cache for table \""+ tableName +"\" START ========");
+            LogUtil.debug("", "======== Build Form Column Cache for table \"" + tableName + "\" START ========");
             columnList = new HashSet<String>();
             Collection<FormDefinition> formList = getFormDefinitionDao().loadFormDefinitionByTableName(tableName);
             if (formList != null && !formList.isEmpty()) {
@@ -1260,7 +1295,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                         Form form = (Form) getFormService().createElementFromJson(json, false);
                         Collection<String> tempColumnList = new HashSet<String>();
                         findAllElementIds(form, tempColumnList);
-                        
+
                         LogUtil.debug("", "Columns of Form \"" + formDef.getId() + "\" [" + formDef.getAppId() + " v" + formDef.getAppVersion() + "] - " + tempColumnList.toString());
                         for (String c : tempColumnList) {
                             if (!c.isEmpty()) {
@@ -1275,7 +1310,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                         }
                     }
                 }
-                
+
                 //remove predefined column
                 columnList.remove(FormUtil.PROPERTY_ID);
                 columnList.remove(FormUtil.PROPERTY_DATE_CREATED);
@@ -1284,17 +1319,18 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 columnList.remove(FormUtil.PROPERTY_CREATED_BY_NAME);
                 columnList.remove(FormUtil.PROPERTY_MODIFIED_BY);
                 columnList.remove(FormUtil.PROPERTY_MODIFIED_BY_NAME);
-                
+
                 LogUtil.debug("", "All Columns - " + columnList.toString());
                 formColumnCache.put(tableName, columnList);
             }
-            LogUtil.debug("", "======== Build Form Column Cache for table \""+ tableName +"\" END   ========");
+            LogUtil.debug("", "======== Build Form Column Cache for table \"" + tableName + "\" END   ========");
         }
         return columnList;
     }
 
     /**
      * Returns EntityName of form mapped to a table & column
+     *
      * @param tableName
      * @param columnName
      * @return
@@ -1323,7 +1359,9 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
     }
 
     /**
-     * Recurse into child elements to find add all element property ID to columnList.
+     * Recurse into child elements to find add all element property ID to
+     * columnList.
+     *
      * @param element
      * @param columnList
      */
@@ -1352,7 +1390,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         if (session != null && session.isOpen()) {
             session.close();
         }
-    }    
+    }
 
     public List<Map<String, Object>> findCustomQuery(Form form, final String[] fields, final String[] alias, final String[] joins, final String condition, final Object[] params, final String[] groupBys, final String havingCondition, final BigDecimal[] havingParams, final String sort, final Boolean desc, final Integer start, final Integer rows) {
         final String entityName = getFormEntityName(form);
@@ -1381,9 +1419,10 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
         return internalCountCustom(entityName, newTableName, joins, condition, params, groupBys, havingCondition, havingParams);
     }
-    
+
     /**
      * Query to find a list of matching form rows.
+     *
      * @param entityName
      * @param tableName
      * @param fields
@@ -1405,7 +1444,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         Session session = getJoinHibernateSession(tableName, joinTableNames);
 
         try {
-            
+
             String fieldsQuery = "e";
             if (fields != null && fields.length > 0) {
                 fieldsQuery = "";
@@ -1416,7 +1455,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                     fieldsQuery += f;
                 }
             }
-            
+
             String conditionQuery = "";
             if (condition != null && !condition.isEmpty()) {
                 conditionQuery = " " + condition;
@@ -1425,7 +1464,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             if (havingCondition != null && !havingCondition.isEmpty()) {
                 havingConditionQuery = " HAVING " + havingCondition;
             }
-            
+
             String joinQuery = "";
             if (joinTableNames != null && joinTableNames.length > 0) {
                 for (String t : joinTableNames) {
@@ -1437,9 +1476,9 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 }
                 joinQuery += " ";
             }
-            
+
             String query = "SELECT " + fieldsQuery + " FROM " + tableName + " e " + joinQuery + conditionQuery;
-            
+
             if (groupBys != null && groupBys.length > 0) {
                 String groupByQuery = "";
                 for (String f : groupBys) {
@@ -1486,7 +1525,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
             List<Map<String, Object>> rowSet = new ArrayList<Map<String, Object>>();
             for (Object o : result) {
-                Object[] arr = (o instanceof String) ? new Object[] { o } : (Object[]) o;
+                Object[] arr = (o instanceof String) ? new Object[]{o} : (Object[]) o;
                 Map<String, Object> r = new HashMap<String, Object>();
                 for (int j = 0; j < alias.length; j++) {
                     Object tempValue = arr[j];
@@ -1495,11 +1534,11 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                     } else if (!(tempValue instanceof Date)) {
                         tempValue = tempValue.toString();
                     }
-                    
+
                     if (alias[j].contains(".")) {
                         String prefix = alias[j].substring(0, alias[j].indexOf("."));
                         String name = alias[j].substring(alias[j].indexOf(".") + 1);
-                        
+
                         Map<String, Object> sub = (Map<String, Object>) r.get(prefix);
                         if (sub == null) {
                             sub = new HashMap<String, Object>();
@@ -1519,6 +1558,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
 
     /**
      * Query total row count for a form.
+     *
      * @param entityName
      * @param tableName
      * @param joinTableNames
@@ -1533,9 +1573,9 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
         // get hibernate template
         Session session = getJoinHibernateSession(tableName, joinTableNames);
         try {
-            String selectField = "*"; 
+            String selectField = "*";
             String groupByQuery = "";
-            
+
             String conditionQuery = "";
             if (condition != null && !condition.isEmpty()) {
                 conditionQuery = " " + condition;
@@ -1544,7 +1584,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             if (havingCondition != null && !havingCondition.isEmpty()) {
                 havingConditionQuery = " HAVING " + havingCondition;
             }
-            
+
             if (groupBys != null && groupBys.length > 0) {
                 selectField = groupBys[0];
                 for (String f : groupBys) {
@@ -1555,7 +1595,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 }
                 groupByQuery = " GROUP BY " + groupByQuery + havingConditionQuery;
             }
-            
+
             String joinQuery = "";
             if (joinTableNames != null && joinTableNames.length > 0) {
                 for (String t : joinTableNames) {
@@ -1567,9 +1607,9 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
                 }
                 joinQuery += " ";
             }
-            
-            String query = "SELECT COUNT("+selectField+") FROM " + tableName + " e " + joinQuery + conditionQuery + groupByQuery;
-            
+
+            String query = "SELECT COUNT(" + selectField + ") FROM " + tableName + " e " + joinQuery + conditionQuery + groupByQuery;
+
             Query q = session.createQuery(processQuery(query));
 
             int i = 0;
@@ -1595,7 +1635,7 @@ public class FormDataDaoImpl extends HibernateDaoSupport implements FormDataDao 
             closeSession(session);
         }
     }
-    
+
     protected String processQuery(String query) {
         try {
             Pattern pattern = Pattern.compile("(\\w+\\.customProperties\\.)([0-9]\\w+)");

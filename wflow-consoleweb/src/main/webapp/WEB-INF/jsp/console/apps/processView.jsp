@@ -130,14 +130,14 @@
                                                                                 <c:if test="${empty participantDisplayName}">
                                                                                     <c:set var="participantDisplayName">
                                                                                     <span style="color:gray;">${participantValue} <fmt:message key="console.process.config.label.mapParticipants.unavailable"/></span>
-                                                                                    </c:set>
-                                                                                    <c:set var="escapeXml" value="${false}"/>
-                                                                                </c:if>  
-                                                                                <c:out value="${participantDisplayName}" escapeXml="${escapeXml}"/>
-                                                                            </c:when>
-                                                                            <c:otherwise>
-                                                                                <a href="${pageContext.request.contextPath}/web/console/directory/${participantMap[participantUid].type}/view/${participantValue}."><c:out value="${participantDisplayName}"/></a>
-                                                                            </c:otherwise>
+                                                                                </c:set>
+                                                                                <c:set var="escapeXml" value="${false}"/>
+                                                                            </c:if>  
+                                                                            <c:out value="${participantDisplayName}" escapeXml="${escapeXml}"/>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a href="${pageContext.request.contextPath}/web/console/directory/${participantMap[participantUid].type}/view/${participantValue}."><c:out value="${participantDisplayName}"/></a>
+                                                                        </c:otherwise>
                                                                     </c:choose>
                                                                 </span>
                                                             </c:forEach>
@@ -162,7 +162,7 @@
                                                                         </c:set>
                                                                         <c:set var="escapeXml" value="${false}"/>
                                                                     </c:if>  
-                                                                        <c:out value="${participantDisplayName}" escapeXml="${escapeXml}"/>
+                                                                    <c:out value="${participantDisplayName}" escapeXml="${escapeXml}"/>
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <a href="${pageContext.request.contextPath}/web/console/directory/dept/view/${participantMap[participantUid].value}."><c:out value="${participantDisplayName}"/></a>
@@ -390,264 +390,264 @@
 
         <script>
             var retry = 0;
-            
+
             function remove_generator() {
-                $("#xpdl_images_generator").remove();
+            $("#xpdl_images_generator").remove();
             }
-            
+
             function renderProcess() {
-                if ($("#xpdl_images_generator").length === 0) {
-                    retry++;
-                    // create invisible iframe for canvas
-                    var iframe = document.createElement('iframe');
-                    var iwidth = 1024;
-                    var iheight = 0;
-                    $(iframe).attr("id", "xpdl_images_generator");
-                    $(iframe).attr("src", "${pageContext.request.contextPath}/web/console/app/${appDefinition.id}/process/screenshot/${process.encodedId}?callback=remove_generator");
-                    $(iframe).css({
-                        'visibility':'hidden'
-                    }).width(iwidth).height(iheight);
-                    $(document.body).append(iframe);
-                }
+            if ($("#xpdl_images_generator").length === 0) {
+            retry++;
+            // create invisible iframe for canvas
+            var iframe = document.createElement('iframe');
+            var iwidth = 1024;
+            var iheight = 0;
+            $(iframe).attr("id", "xpdl_images_generator");
+            $(iframe).attr("src", "${pageContext.request.contextPath}/web/console/app/${appDefinition.id}/process/screenshot/${process.encodedId}?callback=remove_generator");
+            $(iframe).css({
+            'visibility':'hidden'
+            }).width(iwidth).height(iheight);
+            $(document.body).append(iframe);
             }
-            
+            }
+
             function loadImage() {
-                var image = new Image();
-                image.src = "${pageContext.request.contextPath}/web/console/images/xpdl/${process.encodedId}?rnd=" + new Date().valueOf().toString();
-                $(image).load(function(){
-                    $('#xpdlThumbnail').append(image);
-                    $(image).each(function() {
-                        var maxWidth = 600; // Max width for the image
-                        var maxHeight = 250;    // Max height for the image
-                        var ratio = 0;  // Used for aspect ratio
-                        var width = $(this).width();    // Current image width
-                        var height = $(this).height();  // Current image height
+            var image = new Image();
+            image.src = "${pageContext.request.contextPath}/web/console/images/xpdl/${process.encodedId}?rnd=" + new Date().valueOf().toString();
+            $(image).load(function(){
+            $('#xpdlThumbnail').append(image);
+            $(image).each(function() {
+            var maxWidth = 600; // Max width for the image
+            var maxHeight = 250;    // Max height for the image
+            var ratio = 0;  // Used for aspect ratio
+            var width = $(this).width();    // Current image width
+            var height = $(this).height();  // Current image height
 
-                        // Check if the current width is larger than the max
-                        if(width > maxWidth){
-                            ratio = maxWidth / width;   // get ratio for scaling image
-                            $(this).css("width", maxWidth); // Set new width
-                            $(this).css("height", height * ratio);  // Scale height based on ratio
-                            height = height * ratio;    // Reset height to match scaled image
-                            width = width * ratio;    // Reset width to match scaled image
-                        }
+            // Check if the current width is larger than the max
+            if(width > maxWidth){
+            ratio = maxWidth / width;   // get ratio for scaling image
+            $(this).css("width", maxWidth); // Set new width
+            $(this).css("height", height * ratio);  // Scale height based on ratio
+            height = height * ratio;    // Reset height to match scaled image
+            width = width * ratio;    // Reset width to match scaled image
+            }
 
-                        // Check if current height is larger than max
-                        if(height > maxHeight){
-                            ratio = maxHeight / height; // get ratio for scaling image
-                            $(this).css("height", maxHeight);   // Set new height
-                            $(this).css("width", width * ratio);    // Scale width based on ratio
-                            width = width * ratio;    // Reset width to match scaled image
-                        }
-                    });
-                    $('#xpdlThumbnailLoading').hide();
-                });
-            
-                $(image).error(function(){
-                    renderProcess();
-                    if (retry <= 3) {
-                        setTimeout(function() { loadImage(); }, 5000);
-                    }
-                });
+            // Check if current height is larger than max
+            if(height > maxHeight){
+            ratio = maxHeight / height; // get ratio for scaling image
+            $(this).css("height", maxHeight);   // Set new height
+            $(this).css("width", width * ratio);    // Scale width based on ratio
+            width = width * ratio;    // Reset width to match scaled image
+            }
+            });
+            $('#xpdlThumbnailLoading').hide();
+            });
+
+            $(image).error(function(){
+            renderProcess();
+            if (retry <= 3) {
+            setTimeout(function() { loadImage(); }, 5000);
+            }
+            });
             }
 
             $(document).ready(function() {
-                loadImage();
-                /*$('span.row-content[@helpTitle]').cluetip({
-                    splitTitle: '|||',
-                    showTitle: false,
-                    arrows: true,
-                    positionBy: 'mouse',
-                    dropShadow: false,
-                    hoverIntent: false,
-                    sticky: true,
-                    mouseOutClose: true,
-                    closePosition: 'title'}
+            loadImage();
+            /*$('span.row-content[@helpTitle]').cluetip({
+            splitTitle: '|||',
+            showTitle: false,
+            arrows: true,
+            positionBy: 'mouse',
+            dropShadow: false,
+            hoverIntent: false,
+            sticky: true,
+            mouseOutClose: true,
+            closePosition: 'title'}
             );*/
             <c:if test="${!empty param.activityDefId}">
-                    setTimeout(function() {
-                        var topy = $("#activityForm_<ui:escape value="${param.activityDefId}" format="html;javascript"/>").offset().top - 100;
-                        topy = parseInt(topy);
-                        window.scrollTo(0, topy);
-                    }, 100);
+                setTimeout(function() {
+                var topy = $("#activityForm_<ui:escape value="${param.activityDefId}" format="html;javascript"/>").offset().top - 100;
+                topy = parseInt(topy);
+                window.scrollTo(0, topy);
+                }, 100);
             </c:if>
             <c:if test="${!empty param.participantId}">
-                    setTimeout(function() {
-                        var topy = $("#participant_<ui:escape value="${param.participantId}" format="html;javascript"/>").offset().top - 100;
-                        topy = parseInt(topy);
-                        window.scrollTo(0, topy);
-                    }, 100);
+                setTimeout(function() {
+                var topy = $("#participant_<ui:escape value="${param.participantId}" format="html;javascript"/>").offset().top - 100;
+                topy = parseInt(topy);
+                window.scrollTo(0, topy);
+                }, 100);
             </c:if>
-                });
+            });
 
-                var tabView = new TabView('processTabView', 'top');
-                tabView.init();
+            var tabView = new TabView('processTabView', 'top');
+            tabView.init();
             <c:if test="${!empty param.tab}">
                 tabView.select('#<ui:escape value="${param.tab}" format="html;javascript"/>');
             </c:if>
             <ui:popupdialog var="popupDialog" src="${pageContext.request.contextPath}/web/form/edit/${form.id}"/>
 
-                var reloadCallback = {
-                    success: function(data){
-                        if (data && data.length > 0) {
-                            data = data.trim();
-                            $("#" + data).css("display", "none");
-                            return;
-                        }
+            var reloadCallback = {
+            success: function(data){
+            if (data && data.length > 0) {
+            data = data.trim();
+            $("#" + data).css("display", "none");
+            return;
+            }
 
-                        //get current selected tab
-                        var selectedTabId = $('#processTabView .ui-tabs-selected a').attr('href');
-                        selectedTabId = selectedTabId.replace('#', '');
+            //get current selected tab
+            var selectedTabId = $('#processTabView .ui-tabs-selected a').attr('href');
+            selectedTabId = selectedTabId.replace('#', '');
 
-                        var urlQueryString = document.location.search;
-                        if(urlQueryString == ''){
-                            document.location.href = document.location.href + "?tab=" + selectedTabId;
-                        }else{
-                            if(urlQueryString.indexOf('tab') == -1){
-                                document.location.href = document.location.href + "&tab=" + selectedTabId;
-                            }else{
-                                document.location.href = document.location.href.replace(urlQueryString, '') + "?tab=" + selectedTabId;
-                            }
-                        }
-                    }
-                }
+            var urlQueryString = document.location.search;
+            if(urlQueryString == ''){
+            document.location.href = document.location.href + "?tab=" + selectedTabId;
+            }else{
+            if(urlQueryString.indexOf('tab') == -1){
+            document.location.href = document.location.href + "&tab=" + selectedTabId;
+            }else{
+            document.location.href = document.location.href.replace(urlQueryString, '') + "?tab=" + selectedTabId;
+            }
+            }
+            }
+            }
 
-                function closeDialog() {
-                    popupDialog.close();
-                }
+            function closeDialog() {
+            popupDialog.close();
+            }
 
-                function uploadPackage(){
-                    popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/package/upload";
-                    popupDialog.init();
-                }
+            function uploadPackage(){
+            popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/package/upload";
+            popupDialog.init();
+            }
 
-                function launchDesigner(){
-                    $("#updateInformation").dialog({modal:true, height:150, width:550, resizable:false, show: 'slide',overlay: {opacity: 0.5, background: "black"},zIndex: 15001});
-                    $("#closeInfo").click(function(){$("#updateInformation").dialog("close")});
-                    window.open("${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/process/builder?processId=<ui:escape value="${process.idWithoutVersion}" format="u"/>");
-                }
+            function launchDesigner(){
+            $("#updateInformation").dialog({modal:true, height:150, width:550, resizable:false, show: 'slide',overlay: {opacity: 0.5, background: "black"},zIndex: 15001});
+            $("#closeInfo").click(function(){$("#updateInformation").dialog("close")});
+            window.open("${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/process/builder?processId=<ui:escape value="${process.idWithoutVersion}" format="u"/>");
+            }
 
-                function launchFormBuilder(formId) {
-                    window.open("${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/form/builder/" + formId);
-                }
+            function launchFormBuilder(formId) {
+            window.open("${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/form/builder/" + formId);
+            }
 
-                function runProcess() {
-                    var url = "${pageContext.request.contextPath}/web/client/app/${appId}/${appVersion}/process/<c:out value="${processIdWithoutVersion}"/>";
-                    popupDialog.src = url;
-                    popupDialog.init();
-                    //                window.open(url, "_blank", "");
-                }
+            function runProcess() {
+            var url = "${pageContext.request.contextPath}/web/client/app/${appId}/${appVersion}/process/<c:out value="${processIdWithoutVersion}"/>";
+            popupDialog.src = url;
+            popupDialog.init();
+            //                window.open(url, "_blank", "");
+            }
 
-                function addEditForm(activityId, activityName){
-                    popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/form?activityName=" + encodeURIComponent(activityName) ;
-                    popupDialog.init();
-                }
+            function addEditForm(activityId, activityName){
+            popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/form?activityName=" + encodeURIComponent(activityName) ;
+            popupDialog.init();
+            }
 
-                function addEditPlugin(activityId, activityName){
-                    popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/plugin?activityName=" + encodeURIComponent(activityName);
-                    popupDialog.init();
-                }
+            function addEditPlugin(activityId, activityName){
+            popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/plugin?activityName=" + encodeURIComponent(activityName);
+            popupDialog.init();
+            }
 
-                function addEditParticipant(participantId, participantName){
-                    popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/" + participantId + "?participantName=" + encodeURIComponent(participantName);
-                    popupDialog.init();
-                }
+            function addEditParticipant(participantId, participantName){
+            popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/" + participantId + "?participantName=" + encodeURIComponent(participantName);
+            popupDialog.init();
+            }
 
-                function activityRemoveForm(activityId){
-                    if (confirm("<fmt:message key="console.process.config.label.mapActivities.removeMapping.confirm"/>")) {
-                        var url = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/form/remove";
-                        ConnectionManager.post(url, reloadCallback);
-                    }
-                }
+            function activityRemoveForm(activityId){
+            if (confirm("<fmt:message key="console.process.config.label.mapActivities.removeMapping.confirm"/>")) {
+            var url = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/form/remove";
+            ConnectionManager.post(url, reloadCallback);
+            }
+            }
 
-                function activityRemovePlugin(activityId){
-                    if (confirm("<fmt:message key="console.process.config.label.mapTools.removePlugin.confirm"/>")) {
-                        var url = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/plugin/remove";
-                        ConnectionManager.post(url, reloadCallback);
-                    }
-                }
+            function activityRemovePlugin(activityId){
+            if (confirm("<fmt:message key="console.process.config.label.mapTools.removePlugin.confirm"/>")) {
+            var url = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/plugin/remove";
+            ConnectionManager.post(url, reloadCallback);
+            }
+            }
 
-                function activityConfigurePlugin(activityId, activityName){
-                    var title = " - " + activityName + " (" + activityId + ")";
-                    popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/plugin/configure?title=" + encodeURIComponent(title);
-                    popupDialog.init();
-                }
+            function activityConfigurePlugin(activityId, activityName){
+            var title = " - " + activityName + " (" + activityId + ")";
+            popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/activity/" + escape(activityId) + "/plugin/configure?title=" + encodeURIComponent(title);
+            popupDialog.init();
+            }
 
-                function participantRemoveMapping(participantId){
-                    var removeItem = {
-                        success : function(response) {
-                            if (participantId === 'processStartWhiteList') {
-                                document.location.href = '${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/<c:out value="${processIdWithoutVersion}"/>?tab=participantList&participantId=processStartWhiteList';
-                            } else {
-                                $('#participant_'+participantId).html('');
-                            }
-                        }
-                    }
-                    
-                    if (confirm("<fmt:message key="console.process.config.label.mapParticipants.removeMapping.confirm"/>")) {
-                        ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/' + participantId + '/remove', removeItem, '');
-                    }
-                }
+            function participantRemoveMapping(participantId){
+            var removeItem = {
+            success : function(response) {
+            if (participantId === 'processStartWhiteList') {
+            document.location.href = '${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/<c:out value="${processIdWithoutVersion}"/>?tab=participantList&participantId=processStartWhiteList';
+            } else {
+            $('#participant_'+participantId).html('');
+            }
+            }
+            }
 
-                function participantRemoveMappingSingle(obj, type, participantId, value){
-                    var removeItem = {
-                        success : function(response) {
-                            $(obj).parent().hide('slow');
-                            if($(obj).parent().parent().find('.participant-remove:visible').length == 2){
-                                $(obj).parent().parent().find('.participant-remove:visible').find('img').remove();
-                            }
-                        }
-                    }
-                    
-                    if (confirm("<fmt:message key="console.process.config.label.mapParticipants.removeMapping.confirm"/>")) {
-                        ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/' + participantId + '/remove', removeItem, 'type='+encodeURIComponent(type)+'&value='+encodeURIComponent(value));
-                    }
-                }
+            if (confirm("<fmt:message key="console.process.config.label.mapParticipants.removeMapping.confirm"/>")) {
+            ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/' + participantId + '/remove', removeItem, '');
+            }
+            }
 
-                function participantConfigurePlugin(participantId, participantName){
-                    var title = " - " + participantName + " (" + participantId + ")";
-                    popupDialog.src = '${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/'+participantId+'/plugin/configure?title=' + encodeURIComponent(title);
-                    popupDialog.init();
-                }
+            function participantRemoveMappingSingle(obj, type, participantId, value){
+            var removeItem = {
+            success : function(response) {
+            $(obj).parent().hide('slow');
+            if($(obj).parent().parent().find('.participant-remove:visible').length == 2){
+            $(obj).parent().parent().find('.participant-remove:visible').find('img').remove();
+            }
+            }
+            }
 
-                function showAdvancedInfo(){
-                    $('#advancedView').slideToggle('slow');
-                    $('#showAdvancedInfo').hide();
-                    $('#hideAdvancedInfo').show();
-                }
+            if (confirm("<fmt:message key="console.process.config.label.mapParticipants.removeMapping.confirm"/>")) {
+            ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/' + participantId + '/remove', removeItem, 'type='+encodeURIComponent(type)+'&value='+encodeURIComponent(value));
+            }
+            }
 
-                function hideAdvancedInfo(){
-                    $('#advancedView').slideToggle('slow');
-                    $('#showAdvancedInfo').show();
-                    $('#hideAdvancedInfo').hide();
-                }
+            function participantConfigurePlugin(participantId, participantName){
+            var title = " - " + participantName + " (" + participantId + ")";
+            popupDialog.src = '${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.encodedId}/participant/'+participantId+'/plugin/configure?title=' + encodeURIComponent(title);
+            popupDialog.init();
+            }
 
-                function showXpdlImage(){
-                    popupDialog.src = "${pageContext.request.contextPath}/web/console/images/xpdl/${process.encodedId}";
-                    popupDialog.init();
+            function showAdvancedInfo(){
+            $('#advancedView').slideToggle('slow');
+            $('#showAdvancedInfo').hide();
+            $('#hideAdvancedInfo').show();
+            }
 
-                }
+            function hideAdvancedInfo(){
+            $('#advancedView').slideToggle('slow');
+            $('#showAdvancedInfo').show();
+            $('#hideAdvancedInfo').hide();
+            }
 
-                var autoCallback = {
-                    success: function() {
-                        // do nothing
-                    }
-                }
+            function showXpdlImage(){
+            popupDialog.src = "${pageContext.request.contextPath}/web/console/images/xpdl/${process.encodedId}";
+            popupDialog.init();
 
-                function toggleContinueNextAssignment(processDefId, activityDefId, checkbox){
-                    var params = "auto="+$(checkbox).is(':checked');
-                    ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/' + processDefId + '/activity/' + activityDefId + '/continue', autoCallback, params);
-                }
-                
-                function toggleDisableSaveAsDraft(processDefId, activityDefId, checkbox){
-                    var params = "disable="+$(checkbox).is(':checked');
-                    ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/' + processDefId + '/activity/' + activityDefId + '/draft', autoCallback, params);
-                }
+            }
+
+            var autoCallback = {
+            success: function() {
+            // do nothing
+            }
+            }
+
+            function toggleContinueNextAssignment(processDefId, activityDefId, checkbox){
+            var params = "auto="+$(checkbox).is(':checked');
+            ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/' + processDefId + '/activity/' + activityDefId + '/continue', autoCallback, params);
+            }
+
+            function toggleDisableSaveAsDraft(processDefId, activityDefId, checkbox){
+            var params = "disable="+$(checkbox).is(':checked');
+            ConnectionManager.post('${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/' + processDefId + '/activity/' + activityDefId + '/draft', autoCallback, params);
+            }
         </script>
 
     </div>
 </div>
-    
+
 <script>
     Template.init("#menu-apps", "#nav-app-processes");
     <c:choose>
@@ -665,5 +665,5 @@
         </c:otherwise>
     </c:choose>
 </script>
-    
+
 <commons:footer />

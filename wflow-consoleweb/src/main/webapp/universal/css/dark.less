@@ -221,9 +221,9 @@ main input[type=number],
 main input[type=search],
 main textarea,
 main select:not([class^=ui]){
-  background-color: transparent;
-  border-bottom: 1px solid fade(@defaultFontColor, 70%);
-  color: fade(@defaultFontColor, 70%);
+    background-color: transparent;
+    border-bottom: 1px solid fade(@defaultFontColor, 70%);
+    color: fade(@defaultFontColor, 70%);
 }
 main input:not([type]):focus:not([readonly]),
 main input[type=text]:focus:not([readonly]),
@@ -240,14 +240,14 @@ main input[type=search]:focus:not([readonly]),
 main textarea:focus:not([readonly]),
 main select:focus:not([readonly]):not([class^=ui]),
 main input.focus {
-  border-bottom: 1px solid @defaultFontColor;
-  box-shadow: 0 1px 0 0 @defaultFontColor;
+    border-bottom: 1px solid @defaultFontColor;
+    box-shadow: 0 1px 0 0 @defaultFontColor;
 }
 main textarea {
-  background-color: transparent;
+    background-color: transparent;
 }
 main select:not([class^="ui-"]) {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='@{escapedColor}' d='M7.406 7.828l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='@{escapedColor}' d='M7.406 7.828l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z'/%3E%3C/svg%3E");
 }
 main input:-webkit-autofill, main textarea:-webkit-autofill, main select:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px @primary inset;

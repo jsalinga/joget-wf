@@ -17,7 +17,7 @@ import org.joget.workflow.util.WorkflowUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 public class FormRowDeleteDataListAction extends DataListActionDefault {
-    
+
     public String getName() {
         return "Form Row Delete Action";
     }
@@ -29,7 +29,7 @@ public class FormRowDeleteDataListAction extends DataListActionDefault {
     public String getDescription() {
         return "Form Row Delete Action";
     }
-    
+
     public String getLabel() {
         return "Form Row Delete Action";
     }
@@ -71,25 +71,25 @@ public class FormRowDeleteDataListAction extends DataListActionDefault {
         DataListActionResult result = new DataListActionResult();
         result.setType(DataListActionResult.TYPE_REDIRECT);
         result.setUrl("REFERER");
-        
+
         // only allow POST
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
             return null;
         }
-            
+
         if (rowKeys != null && rowKeys.length > 0) {
             String formDefId = getPropertyString("formDefId");
             AppDefinition appDef = AppUtil.getCurrentAppDefinition();
             Form form = getForm(appDef, formDefId);
-            
+
             for (String id : rowKeys) {
                 FormData formData = new FormData();
                 formData.setPrimaryKeyValue(id);
                 formData.addFormResult(FormUtil.FORM_RESULT_LOAD_ALL_DATA, FormUtil.FORM_RESULT_LOAD_ALL_DATA); //for Multipage form
-                
+
                 formData = FormUtil.executeLoadBinders(form, formData);
-                FormUtil.recursiveExecuteFormDeleteBinders(form, formData, 
+                FormUtil.recursiveExecuteFormDeleteBinders(form, formData,
                         "true".equalsIgnoreCase(getPropertyString("deleteGridData")),
                         "true".equalsIgnoreCase(getPropertyString("deleteSubformData")),
                         "true".equalsIgnoreCase(getPropertyString("abortRelatedRunningProcesses")),
@@ -113,22 +113,22 @@ public class FormRowDeleteDataListAction extends DataListActionDefault {
         String json = AppUtil.readPluginResource(getClass().getName(), "/properties/datalist/formRowDeleteDataListAction.json", arguments, true, "message/datalist/formRowDeleteDataListAction");
         return json;
     }
-    
+
     protected Form getForm(AppDefinition appDef, String formDefId) {
         FormService formService = (FormService) AppUtil.getApplicationContext().getBean("formService");
         FormDefinitionDao formDefinitionDao = (FormDefinitionDao) AppUtil.getApplicationContext().getBean("formDefinitionDao");
-        
+
         Form form = null;
         FormDefinition formDef = formDefinitionDao.loadById(formDefId, appDef);
-        
+
         if (formDef != null && formDef.getJson() != null) {
             String formJson = formDef.getJson();
             formJson = AppUtil.processHashVariable(formJson, null, StringUtil.TYPE_JSON, null);
             form = (Form) formService.createElementFromJson(formJson);
         }
-        
+
         return form;
-    } 
+    }
 
     public String getClassName() {
         return this.getClass().getName();

@@ -31,16 +31,17 @@ public class DefaultGraphActivityRenderer extends MultiLinedRenderer implements
             if (defaultWidth > maxWidth) {
                 defaultWidth = maxWidth;
             }
-            defaultHeight = (int)(defaultWidth * 0.6);
+            defaultHeight = (int) (defaultWidth * 0.6);
         }
         Dimension dim = new Dimension(defaultWidth, defaultHeight);
         return dim;
     }
 
     /**
-     * Paints activity. Overrides super class paint to add specific painting. First it
-     * fills inner with color. Then it adds specific drawing for join type. Then it apply
-     * JPanel with name and icon. At the end it draws shadow and border
+     * Paints activity. Overrides super class paint to add specific painting.
+     * First it fills inner with color. Then it adds specific drawing for join
+     * type. Then it apply JPanel with name and icon. At the end it draws shadow
+     * and border
      */
     public void paint(Graphics g) {
         int actW = GraphUtilities.getGraphController().getGraphSettings().getActivityWidth();
@@ -67,8 +68,8 @@ public class DefaultGraphActivityRenderer extends MultiLinedRenderer implements
         // CUSTOM
         String displayName = getDisplayName();
         Dimension dim = DefaultGraphActivityRenderer.calculateWidthAndHeight(displayName, actW, actH);
-        actW = (int)dim.getWidth();
-        actH = (int)dim.getHeight();
+        actW = (int) dim.getWidth();
+        actH = (int) dim.getHeight();
         int actType = act.getActivityType();
         if (actType == XPDLConstants.ACTIVITY_TYPE_ROUTE) {
             g.setColor(bordercolor);
@@ -106,7 +107,7 @@ public class DefaultGraphActivityRenderer extends MultiLinedRenderer implements
         // display limit
         String limit = act.getLimit();
         if (limit != null && limit.trim().length() > 0) {
-            WorkflowProcess process = (WorkflowProcess)act.getParent().getParent();
+            WorkflowProcess process = (WorkflowProcess) act.getParent().getParent();
             String durationUnit = process.getProcessHeader().getDurationUnit();
             if (durationUnit == null) {
                 durationUnit = "";

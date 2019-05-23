@@ -39,23 +39,24 @@ import org.xml.sax.InputSource;
 
 /**
  * Utility methods can be used by Generator Plugin
- * 
+ *
  */
 public class GeneratorUtil {
-    
+
     /**
-     * Method used to replaces syntax below to form meta value.
-     * [formId], [formName], [formTableName], [appId], [appName] & [appVersion] 
+     * Method used to replaces syntax below to form meta value. [formId],
+     * [formName], [formTableName], [appId], [appName] & [appVersion]
+     *
      * @param content
      * @param formId
      * @param appDef
-     * @return 
+     * @return
      */
     public static String populateFormMeta(String content, String formId, AppDefinition appDef) {
         if (content != null && !content.isEmpty() && formId != null && !formId.isEmpty() && appDef != null) {
             FormDefinitionDao formDao = (FormDefinitionDao) AppUtil.getApplicationContext().getBean("formDefinitionDao");
             FormDefinition formDef = formDao.loadById(formId, appDef);
-            
+
             if (formDef != null) {
                 content = content.replaceAll("\\[formId\\]", formDef.getId());
                 content = content.replaceAll("\\[formName\\]", formDef.getName());
@@ -66,14 +67,15 @@ public class GeneratorUtil {
             }
         }
         return content;
-    } 
-    
+    }
+
     /**
      * Gets the Form object by Id
+     *
      * @param formId
      * @param appDef
      * @return
-     * @throws RuntimeException 
+     * @throws RuntimeException
      */
     public static Form getFormObject(String formId, AppDefinition appDef) throws RuntimeException {
         FormDefinitionDao formDefinitionDao = (FormDefinitionDao) AppUtil.getApplicationContext().getBean("formDefinitionDao");
@@ -82,34 +84,35 @@ public class GeneratorUtil {
         FormDefinition formDef = formDefinitionDao.loadById(formId, appDef);
         if (formDef != null) {
             String formJson = formDef.getJson();
-                    
+
             if (formJson != null) {
                 form = (Form) formService.createElementFromJson(formJson, false);
                 return form;
             }
-        } 
+        }
         throw new RuntimeException(ResourceBundleUtil.getMessage("generator.form.notExist"));
     }
-    
-    
+
     /**
      * Creates a new userview definition json
+     *
      * @param userviewId
      * @param userviewName
      * @param userviewDescription
-     * @return 
+     * @return
      */
     public static String createNewUserviewJson(String userviewId, String userviewName, String userviewDescription) {
         return createNewUserviewJson(userviewId, userviewName, userviewDescription, null);
     }
-    
+
     /**
      * Creates a new userview definition json based another userview definition
+     *
      * @param userviewId
      * @param userviewName
      * @param userviewDescription
      * @param copy
-     * @return 
+     * @return
      */
     public static String createNewUserviewJson(String userviewId, String userviewName, String userviewDescription, UserviewDefinition copy) {
         if (copy != null) {
@@ -138,7 +141,7 @@ public class GeneratorUtil {
             if (theme == null || theme.isEmpty()) {
                 theme = ResourceBundleUtil.getMessage("generator.userview.theme");
             }
-            String themeProperties = ResourceBundleUtil.getMessage("generator.userview.theme."+theme+".properties");
+            String themeProperties = ResourceBundleUtil.getMessage("generator.userview.theme." + theme + ".properties");
             if (themeProperties == null || themeProperties.isEmpty()) {
                 themeProperties = ResourceBundleUtil.getMessage("generator.userview.theme.default.properties");
             }
@@ -155,55 +158,58 @@ public class GeneratorUtil {
         }
         return null;
     }
-    
+
     /**
      * Adds an userview category json to an existing userview json
+     *
      * @param categoryJson
      * @param userviewJson
-     * @return 
+     * @return
      */
     public static String addCategoryJsonToUserviewJson(String categoryJson, String userviewJson) {
         try {
             JSONObject userviewObject = new JSONObject(userviewJson);
             JSONObject categoryObject = new JSONObject(categoryJson);
-            
+
             JSONArray categories = userviewObject.getJSONArray("categories");
             categories.put(categoryObject);
-            
+
             return userviewObject.toString();
         } catch (Exception e) {
             LogUtil.error(GeneratorUtil.class.getName(), e, "addCategoryJsonToUserviewJson error");
         }
-        
+
         return userviewJson;
     }
-    
+
     /**
      * Create a XPDL with empty process package
+     *
      * @param appDef
-     * @return 
+     * @return
      */
     public static String createProcessPackageXpdl(AppDefinition appDef) {
         String appId = StringEscapeUtils.escapeXml(appDef.getAppId());
         String appName = StringEscapeUtils.escapeXml(appDef.getName());
         String date = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
         String version = StringEscapeUtils.escapeXml(ResourceBundleUtil.getMessage("console.footer.label.revision"));
-        
+
         String xpdl = AppUtil.readPluginResource(RunProcess.class.getName(), "/resources/generator/process/package.xpdl", new String[]{appId, appName, date, version}, true, null);
-                    
+
         if (xpdl != null && !xpdl.isEmpty()) {
             return xpdl;
         }
         return null;
     }
-    
+
     /**
      * Add participants xml and process xml to an existing xpdl
+     *
      * @param participantsXml
      * @param processXml
      * @param xpdl
      * @return
-     * @throws RuntimeException 
+     * @throws RuntimeException
      */
     public static String addParticipantsAndProcessXmlToXpdl(String participantsXml, String processXml, String xpdl) throws RuntimeException {
         try {
@@ -212,25 +218,25 @@ public class GeneratorUtil {
             domFactory.setExpandEntityReferences(false);
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document xpdlDoc = builder.parse(new InputSource(new ByteArrayInputStream(xpdl.getBytes("UTF-8"))));
-            
+
             DocumentBuilderFactory domFactory2 = DocumentBuilderFactory.newInstance();
             domFactory2.setExpandEntityReferences(false);
             DocumentBuilder builder2 = domFactory2.newDocumentBuilder();
             Document processDoc = builder2.parse(new InputSource(new ByteArrayInputStream(processXml.getBytes("UTF-8"))));
-        
+
             NodeList xpdlNodeList = xpdlDoc.getChildNodes();
             NodeList processNodeList = processDoc.getChildNodes();
-            
+
             Node xpdlPackageNode = getNode("Package", xpdlNodeList);
             Node participatsNode = getNode("Participants", xpdlPackageNode.getChildNodes());
             Node processesNode = getNode("WorkflowProcesses", xpdlPackageNode.getChildNodes());
-            
+
             if (participantsXml != null && !participantsXml.isEmpty()) {
                 DocumentBuilderFactory domFactory3 = DocumentBuilderFactory.newInstance();
                 domFactory3.setExpandEntityReferences(false);
                 DocumentBuilder builder3 = domFactory3.newDocumentBuilder();
                 Document participantsDoc = builder3.parse(new InputSource(new ByteArrayInputStream(participantsXml.getBytes("UTF-8"))));
-            
+
                 NodeList participantsList = participantsDoc.getChildNodes();
                 Node tempParticipatsNode = getNode("Participants", participantsList);
                 if (tempParticipatsNode != null && tempParticipatsNode.hasChildNodes()) {
@@ -242,7 +248,7 @@ public class GeneratorUtil {
                     }
                 }
             }
-            
+
             Node processNode = getNode("WorkflowProcess", processNodeList);
             Node importedNode = xpdlDoc.importNode(processNode, true);
             processesNode.appendChild(importedNode);
@@ -256,22 +262,23 @@ public class GeneratorUtil {
             xpdl = output.toString("UTF-8");
         } catch (Exception e) {
             LogUtil.error(GeneratorUtil.class.getName(), e, "Generate XPDL error");
-            throw new RuntimeException (ResourceBundleUtil.getMessage("generator.process.invalidXpdl"));
+            throw new RuntimeException(ResourceBundleUtil.getMessage("generator.process.invalidXpdl"));
         }
         return xpdl;
     }
-    
+
     /**
      * Retrieves a List id which using the form id in binder
+     *
      * @param appDef
      * @param formId
-     * @return 
+     * @return
      */
     public static String getFirstAvailableListIdByFormId(AppDefinition appDef, String formId) {
         DatalistDefinitionDao datalistDefinitionDao = (DatalistDefinitionDao) AppUtil.getApplicationContext().getBean("datalistDefinitionDao");
         String listId = "";
         Collection<DatalistDefinition> list = datalistDefinitionDao.getList(appDef, null, null, null, null);
-        
+
         if (list != null && !list.isEmpty()) {
             for (DatalistDefinition d : list) {
                 String json = d.getJson();
@@ -285,31 +292,33 @@ public class GeneratorUtil {
                             if (binder != null && formId.equals(binder.getPropertyString("formDefId"))) {
                                 return d.getId();
                             }
-                        } catch (Exception ex) {}
+                        } catch (Exception ex) {
+                        }
                     }
                 }
             }
         }
         return listId;
     }
-    
+
     /**
      * Retrieves the first userview id in the app
+     *
      * @param appDef
-     * @return 
+     * @return
      */
     public static String getFirstAvailableUserviewId(AppDefinition appDef) {
         UserviewDefinitionDao userviewDefinitionDao = (UserviewDefinitionDao) AppUtil.getApplicationContext().getBean("userviewDefinitionDao");
         String userviewId = "";
-        
+
         Collection<UserviewDefinition> list = userviewDefinitionDao.getList(appDef, null, null, 0, 1);
         if (list != null && !list.isEmpty()) {
             userviewId = list.iterator().next().getId();
         }
-        
+
         return userviewId;
     }
-    
+
     protected static Node getNode(String tagName, NodeList nodes) {
         for (int x = 0; x < nodes.getLength(); x++) {
             Node node = nodes.item(x);

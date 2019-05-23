@@ -20,9 +20,9 @@ public class AuditTrailInterceptor implements MethodInterceptor {
             String methodName = methodInvocation.getMethod().getName();
             Object[] args = methodInvocation.getArguments();
             Class[] param = methodInvocation.getMethod().getParameterTypes();
-            
-            LogUtil.debug(getClass().getName(), "INTERCEPTED: " + className + "." +methodName);
-            
+
+            LogUtil.debug(getClass().getName(), "INTERCEPTED: " + className + "." + methodName);
+
             // add audit trail record
             WorkflowUtil.addAuditTrail(className, methodName, null, param, args, returnObject);
         }

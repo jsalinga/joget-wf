@@ -39,18 +39,18 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProcessBuilderWebController {
 
     @Autowired
-    AppService appService;    
-    
+    AppService appService;
+
     @Autowired
-    WorkflowManager workflowManager;    
-    
+    WorkflowManager workflowManager;
+
     @Autowired
     PluginManager pluginManager;
-    
+
     @RequestMapping("/console/app/(*:appId)/(~:version)/process/builder")
     public String processBuilder(ModelMap model, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "version", required = false) String version) throws IOException {
         // verify app version
-        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin)pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
+        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin) pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
         String page = consoleWebPlugin.verifyAppVersion(appId, version);
         if (page != null) {
             return page;
@@ -67,7 +67,7 @@ public class ProcessBuilderWebController {
         return "pbuilder/pbuilder";
     }
 
-    @RequestMapping(value="/console/app/(*:appId)/(~:version)/process/screenshot/(*:processDefId)")
+    @RequestMapping(value = "/console/app/(*:appId)/(~:version)/process/screenshot/(*:processDefId)")
     public String processBuilderScreenshot(ModelMap map, @RequestParam(value = "appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam(value = "processDefId") String processDefId, @RequestParam(value = "callback", required = false) String callback) throws IOException {
         // get process info
         WorkflowProcess wfProcess = workflowManager.getProcess(processDefId);
@@ -90,16 +90,16 @@ public class ProcessBuilderWebController {
         }
 
         String viewer = "pbuilder/pscreenshot";
-        return viewer;    
+        return viewer;
     }
-    
-    @RequestMapping(value="/console/app/(*:appId)/(~:version)/process/builder/screenshot/submit", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/console/app/(*:appId)/(~:version)/process/builder/screenshot/submit", method = RequestMethod.POST)
     public void processBuilderScreenshotSubmit(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam(value = "processDefId") String processDefId) throws IOException {
 
         // validate input
-        appId = SecurityUtil.validateStringInput(appId);        
-        processDefId = SecurityUtil.validateStringInput(processDefId);        
-        
+        appId = SecurityUtil.validateStringInput(appId);
+        processDefId = SecurityUtil.validateStringInput(processDefId);
+
         // get base64 encoded image in POST body
         MultipartFile xpdlimage = null;
         try {
@@ -111,12 +111,12 @@ public class ProcessBuilderWebController {
         if (xpdlimage != null) {
             ByteArrayInputStream stream = null;
             try {
-                stream =new ByteArrayInputStream(xpdlimage.getBytes());
+                stream = new ByteArrayInputStream(xpdlimage.getBytes());
                 String imageBase64 = IOUtils.toString(stream, "UTF-8");
                 imageBase64 = imageBase64.substring("data:image/png;base64,".length());
 
                 // convert into bytes
-                byte[] decodedBytes = Base64.decodeBase64(imageBase64.getBytes());        
+                byte[] decodedBytes = Base64.decodeBase64(imageBase64.getBytes());
 
                 // save into image file
                 String filename = processDefId + XpdlImageUtil.IMAGE_EXTENSION;
@@ -137,14 +137,14 @@ public class ProcessBuilderWebController {
             }
         }
     }
-    
+
     protected void createThumbnail(Image image, String path, String processDefId) {
         int thumbWidth = 400;
         int thumbHeight = 400;
 
         BufferedOutputStream out = null;
 
-        try{
+        try {
             double thumbRatio = (double) thumbWidth / (double) thumbHeight;
             int imageWidth = image.getWidth(null);
             int imageHeight = image.getHeight(null);
@@ -175,5 +175,5 @@ public class ProcessBuilderWebController {
                 LogUtil.error(getClass().getName(), ex, "");
             }
         }
-    }    
+    }
 }

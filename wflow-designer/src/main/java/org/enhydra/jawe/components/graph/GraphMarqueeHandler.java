@@ -45,10 +45,10 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * Implementation of a marquee handler for Process Editor. This is also a place
- * where (after mouse click or release) participants, activities (normal, subflows,
- * block activities) and transitions are inserted, where persistent mode is achived and
- * where mouse cursors are changing, and where popup menu is implemented. When
- * inserting cells it calls WorkflowManager.
+ * where (after mouse click or release) participants, activities (normal,
+ * subflows, block activities) and transitions are inserted, where persistent
+ * mode is achived and where mouse cursors are changing, and where popup menu is
+ * implemented. When inserting cells it calls WorkflowManager.
  */
 public class GraphMarqueeHandler extends BasicMarqueeHandler {
 
@@ -70,15 +70,17 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
         this.graphController = graphController;
     }
 
-    /** Return true if this handler should be preferred over other handlers. */
+    /**
+     * Return true if this handler should be preferred over other handlers.
+     */
     public boolean isForceMarqueeEvent(MouseEvent e) {
         boolean isSelectButtonSelected = isSelectButtonSelected();
-        return ((isSelectButtonSelected && SwingUtilities.isRightMouseButton(e)) ||
-                !isSelectButtonSelected || super.isForceMarqueeEvent(e));
+        return ((isSelectButtonSelected && SwingUtilities.isRightMouseButton(e))
+                || !isSelectButtonSelected || super.isForceMarqueeEvent(e));
     }
 
     /**
-     *  We don't want special cursor
+     * We don't want special cursor
      */
     public void mousePressed(MouseEvent e) {
         startPoint = e.getPoint();
@@ -129,8 +131,8 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
     }
 
     /**
-     * Creates popup menu and adds a various actions (depending of where
-     * mouse was pressed - which cell(s) is/are selected).
+     * Creates popup menu and adds a various actions (depending of where mouse
+     * was pressed - which cell(s) is/are selected).
      */
     protected JPopupMenu createPopupMenu(final Object cell) {
 
@@ -203,7 +205,6 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
             retMenu.add(se);
         }
 
-
         return retMenu;
     }
 
@@ -225,8 +226,8 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
             }
 
             boolean isExceptionalTrans = getSubType().equals(JaWEConstants.TRANSITION_TYPE_EXCEPTION);
-            if (!(sourceActivity instanceof GraphBubbleActivityInterface) &&
-                    !JaWEManager.getInstance().getTransitionHandler().acceptsSource((Activity) sourceActivity.getUserObject(), isExceptionalTrans)) {
+            if (!(sourceActivity instanceof GraphBubbleActivityInterface)
+                    && !JaWEManager.getInstance().getTransitionHandler().acceptsSource((Activity) sourceActivity.getUserObject(), isExceptionalTrans)) {
                 JOptionPane.showMessageDialog(getJaWEFrame(), getGraphController().getSettings().getLanguageDependentString(
                         "WarningCannotAcceptMoreOutgoingTransitions"), getJaWEFrame().getAppTitle(),
                         JOptionPane.INFORMATION_MESSAGE);
@@ -241,13 +242,13 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
     }
 
     /**
-     * Returns <code>true</code> if parent cell of given port accepts source or target, depending
-     * on <code>source</code> parameter.
+     * Returns <code>true</code> if parent cell of given port accepts source or
+     * target, depending on <code>source</code> parameter.
      */
     public boolean validateConnection(GraphPortViewInterface pFirstPort, GraphPortViewInterface pSecondPort, Transition t) {
         // if ports are valid
-        if (pFirstPort != null && pFirstPort.getCell() != null && (pFirstPort.getCell() instanceof GraphPortInterface) &&
-                pSecondPort != null && pSecondPort.getCell() != null && (pSecondPort.getCell() instanceof GraphPortInterface)) {
+        if (pFirstPort != null && pFirstPort.getCell() != null && (pFirstPort.getCell() instanceof GraphPortInterface)
+                && pSecondPort != null && pSecondPort.getCell() != null && (pSecondPort.getCell() instanceof GraphPortInterface)) {
             // return if it accepts to be a source or a target
             GraphActivityInterface sourceActivity = pFirstPort.getGraphActivity();
             GraphActivityInterface targetActivity = pSecondPort.getGraphActivity();
@@ -279,11 +280,11 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
             // if target is end bubble, do not allow connection if source is already connected
             // to another end bubble, or to some other activity except itself or if transition is exceptional one
             if (targetActivity instanceof GraphBubbleActivityInterface) { // must be end bubble in that case
-                if (GraphManager.hasConnectedEndBubble(sourceActivity) ||
-                        !(sourceActNonExcTrans.size() == 0 || (sourceActNonExcTrans.size() == 1 && JaWEManager.getInstance().getXPDLUtils().hasCircularTransitions(sourceActNonExcTrans)))) {
+                if (GraphManager.hasConnectedEndBubble(sourceActivity)
+                        || !(sourceActNonExcTrans.size() == 0 || (sourceActNonExcTrans.size() == 1 && JaWEManager.getInstance().getXPDLUtils().hasCircularTransitions(sourceActNonExcTrans)))) {
                     JOptionPane.showMessageDialog(getJaWEFrame(),
                             getGraphController().getSettings().getLanguageDependentString(
-                            "ErrorEndingActivityCannotHaveOutgoingTransitions"),
+                                    "ErrorEndingActivityCannotHaveOutgoingTransitions"),
                             getJaWEFrame().getAppTitle(), JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
@@ -294,11 +295,11 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
             // if source is start bubble, do not allow connection if target is already connected
             // to another start bubble, or some other activity except itself
             if (sourceActivity instanceof GraphBubbleActivityInterface) { // must be start bubble in that case
-                if (GraphManager.hasConnectedStartBubble(targetActivity) ||
-                        !(targetActIncomingTrans.size() == 0 || (targetActIncomingTrans.size() == 1 && JaWEManager.getInstance().getXPDLUtils().hasCircularTransitions(targetActIncomingTrans)))) {
+                if (GraphManager.hasConnectedStartBubble(targetActivity)
+                        || !(targetActIncomingTrans.size() == 0 || (targetActIncomingTrans.size() == 1 && JaWEManager.getInstance().getXPDLUtils().hasCircularTransitions(targetActIncomingTrans)))) {
                     JOptionPane.showMessageDialog(getJaWEFrame(),
                             getGraphController().getSettings().getLanguageDependentString(
-                            "ErrorStartingActivityCannotHaveIncomingTransitions"),
+                                    "ErrorStartingActivityCannotHaveIncomingTransitions"),
                             getJaWEFrame().getAppTitle(), JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
@@ -318,12 +319,10 @@ public class GraphMarqueeHandler extends BasicMarqueeHandler {
             if (GraphManager.hasConnectedStartBubble(targetActivity) && !circularTransition) {
                 JOptionPane.showMessageDialog(getJaWEFrame(),
                         getGraphController().getSettings().getLanguageDependentString(
-                        "ErrorStartingActivityCannotHaveIncomingTransitions"),
+                                "ErrorStartingActivityCannotHaveIncomingTransitions"),
                         getJaWEFrame().getAppTitle(), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-
-
 
             if (!(sourceActivity instanceof GraphBubbleActivityInterface)) {
                 if (GraphManager.hasConnectedEndBubble(sourceActivity) && !(isExceptionalTrans || circularTransition)) {

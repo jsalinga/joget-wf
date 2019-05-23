@@ -27,7 +27,7 @@ import org.jsoup.nodes.Document.OutputSettings;
 
 /**
  * Utility methods for String processing
- * 
+ *
  */
 public class StringUtil {
 
@@ -43,9 +43,10 @@ public class StringUtil {
     public static final String TYPE_SEPARATOR = "separator";
 
     static final Whitelist whitelistRelaxed;
+
     static {
         // configure jsoup whitelist
-        whitelistRelaxed = Whitelist.relaxed().addTags("span", "div").addAttributes(":all","id","style","class","title","target", "name");
+        whitelistRelaxed = Whitelist.relaxed().addTags("span", "div").addAttributes(":all", "id", "style", "class", "title", "target", "name");
         java.lang.reflect.Field field = ReflectionUtils.findField(whitelistRelaxed.getClass(), "protocols");
         ReflectionUtils.makeAccessible(field);
         ReflectionUtils.setField(field, whitelistRelaxed, new HashMap());
@@ -53,8 +54,9 @@ public class StringUtil {
 
     /**
      * Method used to properly encode the parameters in a URL string
+     *
      * @param url
-     * @return 
+     * @return
      */
     public static String encodeUrlParam(String url) {
         String urlResult = url;
@@ -74,11 +76,12 @@ public class StringUtil {
     }
 
     /**
-     * Method used to merge 2 query string. If same parameter found, the one from 
-     * second query string will override the first query string.
+     * Method used to merge 2 query string. If same parameter found, the one
+     * from second query string will override the first query string.
+     *
      * @param queryString1
      * @param queryString2
-     * @return 
+     * @return
      */
     public static String mergeRequestQueryString(String queryString1, String queryString2) {
         if (queryString1 == null || queryString2 == null) {
@@ -92,12 +95,13 @@ public class StringUtil {
     }
 
     /**
-     * Add parameter and its value to url. Override the value if the parameter 
+     * Add parameter and its value to url. Override the value if the parameter
      * is exist in the url
+     *
      * @param url
      * @param paramKey
      * @param paramValue
-     * @return 
+     * @return
      */
     public static String addParamsToUrl(String url, String paramKey, String paramValue) {
         return addParamsToUrl(url, paramKey, new String[]{paramValue});
@@ -106,10 +110,11 @@ public class StringUtil {
     /**
      * Add parameter and its values to url. Override the value if the parameter
      * is exist in the url
+     *
      * @param url
      * @param paramKey
      * @param paramValues
-     * @return 
+     * @return
      */
     public static String addParamsToUrl(String url, String paramKey, String[] paramValues) {
         Map<String, String[]> params = new HashMap<String, String[]>();
@@ -120,9 +125,10 @@ public class StringUtil {
     /**
      * Add parameters and its values to url. Override the value if the parameter
      * is exist in the url
+     *
      * @param url
      * @param params
-     * @return 
+     * @return
      */
     public static String addParamsToUrl(String url, Map<String, String[]> params) {
         String urlResult = url;
@@ -149,6 +155,7 @@ public class StringUtil {
 
     /**
      * Converts all request parameters in url to a map
+     *
      * @param url
      * @return
      */
@@ -170,7 +177,7 @@ public class StringUtil {
                         if (param.length > 1 && !param[1].isEmpty()) {
                             value = URLDecoder.decode(param[1], "UTF-8");
                         }
-                        
+
                         String[] values = (String[]) result.get(key);
                         if (values != null) {
                             List temp = Arrays.asList(values);
@@ -179,7 +186,7 @@ public class StringUtil {
                         } else {
                             values = new String[]{value};
                         }
-                        
+
                         result.put(key, values);
                     }
                 }
@@ -191,8 +198,9 @@ public class StringUtil {
 
     /**
      * Builds a query string based on parameters and its values
+     *
      * @param params
-     * @return 
+     * @return
      */
     public static String constructUrlQueryString(Map<String, String[]> params) {
         String queryString = "";
@@ -204,17 +212,18 @@ public class StringUtil {
                 }
             }
             if (queryString.endsWith("&")) {
-                queryString = queryString.substring(0, queryString.length()-1);
+                queryString = queryString.substring(0, queryString.length() - 1);
             }
         } catch (Exception e) {
         }
         return queryString;
     }
-    
+
     /**
      * Decodes provided url
+     *
      * @param url
-     * @return 
+     * @return
      */
     public static String decodeURL(String url) {
         try {
@@ -226,19 +235,25 @@ public class StringUtil {
 
     /**
      * Escape regex syntax in a string
+     *
      * @param inStr
-     * @return 
+     * @return
      */
     public static String escapeRegex(String inStr) {
-        return (inStr != null) ?  inStr.replaceAll("([\\\\*+\\[\\](){}\\$.?\\^|])", "\\\\$1") : null;
+        return (inStr != null) ? inStr.replaceAll("([\\\\*+\\[\\](){}\\$.?\\^|])", "\\\\$1") : null;
     }
 
     /**
-     * Escape a string based on format and replaced string based on the replace keyword map
+     * Escape a string based on format and replaced string based on the replace
+     * keyword map
+     *
      * @param inStr input String
-     * @param format TYPE_HTML, TYPE_JAVA, TYPE_JAVASCIPT, TYPE_JSON, TYPE_SQL, TYPE_XML, TYPE_URL or TYPE_REGEX. Support chain escaping by separate the format in semicolon (;)
-     * @param replaceMap A map of keyword and new keyword pair to be replaced before escaping
-     * @return 
+     * @param format TYPE_HTML, TYPE_JAVA, TYPE_JAVASCIPT, TYPE_JSON, TYPE_SQL,
+     * TYPE_XML, TYPE_URL or TYPE_REGEX. Support chain escaping by separate the
+     * format in semicolon (;)
+     * @param replaceMap A map of keyword and new keyword pair to be replaced
+     * before escaping
+     * @return
      */
     public static String escapeString(String inStr, String format, Map<String, String> replaceMap) {
         if (replaceMap != null) {
@@ -248,11 +263,11 @@ public class StringUtil {
                 inStr = inStr.replaceAll(escapeRegex(pairs.getKey()), escapeRegex(pairs.getValue()));
             }
         }
-        
+
         if (format == null || inStr == null) {
             return inStr;
         }
-        
+
         String[] formats = format.split(";");
         for (String f : formats) {
             if (TYPE_REGEX.equals(f)) {
@@ -272,16 +287,17 @@ public class StringUtil {
             } else if (TYPE_URL.equals(f)) {
                 try {
                     inStr = URLEncoder.encode(inStr, "UTF-8");
-                } catch (Exception e) {/* ignored */}
+                } catch (Exception e) {/* ignored */
+                }
             } else if (TYPE_NL2BR.equals(f)) {
                 inStr = inStr.replaceAll("(\r\n|\n)", "<br />");
             } else if (f != null && f.startsWith(TYPE_SEPARATOR) && inStr.contains(";")) {
-                String newSeparator = f.substring(TYPE_SEPARATOR.length() + 1, f.length() -1);
-                String [] temps = inStr.split(";");
+                String newSeparator = f.substring(TYPE_SEPARATOR.length() + 1, f.length() - 1);
+                String[] temps = inStr.split(";");
                 inStr = StringUtils.join(temps, newSeparator);
             }
         }
-        
+
         return inStr;
     }
 
@@ -292,9 +308,10 @@ public class StringUtil {
 
         /**
          * Compare 2 strings with letter case ignored
+         *
          * @param strA
          * @param strB
-         * @return 
+         * @return
          */
         public int compare(String strA, String strB) {
             return strA.compareToIgnoreCase(strB);
@@ -303,8 +320,9 @@ public class StringUtil {
 
     /**
      * Encrypt the content with MD5
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String md5(String content) {
         try {
@@ -321,8 +339,9 @@ public class StringUtil {
 
     /**
      * Encrypt the content with MD5 base16
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String md5Base16(String content) {
         try {
@@ -343,11 +362,12 @@ public class StringUtil {
             return null;
         }
     }
-    
+
     /**
      * Encrypt the UTF-8 content with MD5 base16
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String md5Base16Utf8(String content) {
         try {
@@ -368,21 +388,23 @@ public class StringUtil {
             return null;
         }
     }
-    
+
     /**
      * Remove all HTML tags from the content
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String stripAllHtmlTag(String content) {
         return stripAllHtmlTag(content, true);
     }
-    
+
     /**
      * Remove all HTML tags from the content
+     *
      * @param content
      * @param prettyPrint
-     * @return 
+     * @return
      */
     public static String stripAllHtmlTag(String content, boolean prettyPrint) {
         if (content != null && !content.isEmpty()) {
@@ -394,16 +416,17 @@ public class StringUtil {
         }
         return content;
     }
-    
+
     /**
      * Removed all HTML tags not in the allowed map from the content
+     *
      * @param content
      * @param allowedTag
-     * @return 
+     * @return
      */
     public static String stripHtmlTag(String content, String[] allowedTag) {
         if (content != null && !content.isEmpty()) {
-            Whitelist whitelist = Whitelist.none().addAttributes(":all","style","class","title","id","src","href","target");
+            Whitelist whitelist = Whitelist.none().addAttributes(":all", "style", "class", "title", "id", "src", "href", "target");
             for (String tag : allowedTag) {
                 whitelist.addTags(tag);
             }
@@ -414,11 +437,12 @@ public class StringUtil {
         }
         return content;
     }
-    
+
     /**
      * Remove script and unknown tag from the content
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String stripHtmlRelaxed(String content) {
         if (content != null && content.indexOf("<") >= 0) {
@@ -426,12 +450,13 @@ public class StringUtil {
         }
         return content;
     }
-    
+
     /**
-     * Encrypt all keywords in the content which wrapped in SecurityUtil.ENVELOPE
-     * with SecurityUtil.encrypt method
+     * Encrypt all keywords in the content which wrapped in
+     * SecurityUtil.ENVELOPE with SecurityUtil.encrypt method
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String encryptContent(String content) {
         //parse content
@@ -461,10 +486,11 @@ public class StringUtil {
     }
 
     /**
-     * Decrypt all keywords in the content which wrapped in SecurityUtil.ENVELOPE
-     * with SecurityUtil.decrypt method
+     * Decrypt all keywords in the content which wrapped in
+     * SecurityUtil.ENVELOPE with SecurityUtil.decrypt method
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static String decryptContent(String content) {
         //parse content
@@ -490,13 +516,14 @@ public class StringUtil {
 
         return content;
     }
-    
+
     /**
      * Search a keyword and replace it with a new keyword in byte content
+     *
      * @param bytes
      * @param search
      * @param replacement
-     * @return 
+     * @return
      */
     public static byte[] searchAndReplaceByteContent(byte[] bytes, String search, String replacement) {
         if (search != null && replacement != null) {
@@ -511,18 +538,20 @@ public class StringUtil {
         }
         return bytes;
     }
-    
+
     /**
-     * Search keywords and replace it with corresponding new keyword in byte content
+     * Search keywords and replace it with corresponding new keyword in byte
+     * content
+     *
      * @param bytes
      * @param replacements
-     * @return 
+     * @return
      */
     public static byte[] searchAndReplaceByteContent(byte[] bytes, Map<String, String> replacements) {
         if (replacements != null && !replacements.isEmpty()) {
             try {
                 String content = new String(bytes, "UTF-8");
-                
+
                 for (String search : replacements.keySet()) {
                     content = content.replaceAll(StringUtil.escapeRegex(search), StringUtil.escapeRegex(replacements.get(search)));
                 }
@@ -533,13 +562,14 @@ public class StringUtil {
         }
         return bytes;
     }
-    
+
     /**
-     * Method used for validate an email. Options to validate multiple email separated
-     * by semicolon (;)
+     * Method used for validate an email. Options to validate multiple email
+     * separated by semicolon (;)
+     *
      * @param email
      * @param multiple
-     * @return 
+     * @return
      */
     public static boolean validateEmail(String email, boolean multiple) {
         String[] emails;
@@ -548,9 +578,9 @@ public class StringUtil {
         } else {
             emails = new String[]{email};
         }
-        
+
         EmailValidator validator = EmailValidator.getInstance();
-        
+
         boolean valid = true;
         for (String e : emails) {
             if (!validator.isValid(e.trim())) {
@@ -558,16 +588,16 @@ public class StringUtil {
                 break;
             }
         }
-                
-        return valid;        
+
+        return valid;
     }
-    
+
     /**
-     * Method used for encode personal name in an email. 
-     * by semicolon (;)
+     * Method used for encode personal name in an email. by semicolon (;)
+     *
      * @param email
      * @param multiple
-     * @return 
+     * @return
      */
     public static String encodeEmail(String email) {
         if (email.contains("<") && email.contains(">")) {
@@ -579,118 +609,122 @@ public class StringUtil {
         }
         return email;
     }
-    
+
     /**
      * Method used to format number value
+     *
      * @param value
      * @param format
      * @param prefix
      * @param postfix
      * @param useThousandSeparator
      * @param numOfDecimal
-     * @return 
+     * @return
      */
     public static String numberFormat(String value, String format, String prefix, String postfix, boolean useThousandSeparator, String numOfDecimal) {
         int decimal = 0;
         if (numOfDecimal != null && !numOfDecimal.isEmpty()) {
             try {
                 decimal = Integer.parseInt(numOfDecimal);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-        
+
         String decimalSeperator = ".";
         String thousandSeparator = ",";
-        if("EURO".equalsIgnoreCase(format)){
+        if ("EURO".equalsIgnoreCase(format)) {
             decimalSeperator = ",";
             thousandSeparator = ".";
         }
-        
+
         String numberStr = removeNumberFormat(value, format, prefix, postfix);
-                
+
         String exponent = "";
         boolean isNumber = false;
         double number = 0;
         try {
             number = Double.parseDouble(numberStr);
             isNumber = true;
-        } catch (Exception e) {}
-        
+        } catch (Exception e) {
+        }
+
         if (!isNumber) {
             number = 0;
         } else {
             int eindex = numberStr.indexOf("e");
-            if (eindex > -1){
+            if (eindex > -1) {
                 exponent = numberStr.substring(eindex);
                 number = Double.parseDouble(numberStr.substring(0, eindex));
             }
         }
-        
+
         String sign = number < 0 ? "-" : "";
         String decimalFormat = "0";
         if (decimal > 0) {
             decimalFormat += ".";
-            for (int i = 0; i < decimal; i++){
+            for (int i = 0; i < decimal; i++) {
                 decimalFormat += "0";
             }
         }
         DecimalFormat df = new DecimalFormat(decimalFormat);
         String integerStr = df.format(Math.abs(number));
-        
+
         int start = integerStr.length();
         if (integerStr.contains(".")) {
             start = integerStr.indexOf(".");
-            if("EURO".equalsIgnoreCase(format)){
+            if ("EURO".equalsIgnoreCase(format)) {
                 integerStr = integerStr.replace(".", decimalSeperator);
             }
         }
-        
-        if(useThousandSeparator){
-            for (int i = start - 3; i > 0; i -= 3){
-                integerStr = integerStr.substring(0 , i) + thousandSeparator + integerStr.substring(i);
+
+        if (useThousandSeparator) {
+            for (int i = start - 3; i > 0; i -= 3) {
+                integerStr = integerStr.substring(0, i) + thousandSeparator + integerStr.substring(i);
             }
         }
-        
+
         String resultString = "";
-        if(!sign.isEmpty()){
+        if (!sign.isEmpty()) {
             resultString += sign;
         }
-        if(prefix != null && !prefix.isEmpty()){
+        if (prefix != null && !prefix.isEmpty()) {
             resultString += prefix + ' ';
         }
         resultString += integerStr;
-        if(!exponent.isEmpty()){
+        if (!exponent.isEmpty()) {
             resultString += ' ' + exponent;
         }
-        if(postfix != null && !postfix.isEmpty()){
+        if (postfix != null && !postfix.isEmpty()) {
             resultString += ' ' + postfix;
         }
-        
+
         return resultString;
     }
-    
+
     /**
      * Method to remove number format
+     *
      * @param value
      * @param format
      * @param prefix
      * @param postfix
-     * @return 
+     * @return
      */
     public static String removeNumberFormat(String value, String format, String prefix, String postfix) {
         String decimalSeperator = ".";
         String thousandSeparator = ",";
-        if("EURO".equalsIgnoreCase(format)){
+        if ("EURO".equalsIgnoreCase(format)) {
             decimalSeperator = ",";
             thousandSeparator = ".";
         }
-        
+
         String numberStr = value.replaceAll("\\s", "");
         numberStr = numberStr.replaceAll(StringUtil.escapeRegex(thousandSeparator), "");
         numberStr = numberStr.replaceAll(StringUtil.escapeRegex(decimalSeperator), ".");
-        if(prefix != null && !prefix.isEmpty()){
+        if (prefix != null && !prefix.isEmpty()) {
             numberStr = numberStr.replaceAll(StringUtil.escapeRegex(prefix), "");
         }
-        if(postfix != null && !postfix.isEmpty()){
+        if (postfix != null && !postfix.isEmpty()) {
             numberStr = numberStr.replaceAll(StringUtil.escapeRegex(postfix), "");
         }
         return numberStr;

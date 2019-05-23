@@ -10,5 +10,5 @@ public class SessionFactoryCacheListenerFactory extends CacheEventListenerFactor
     public CacheEventListener createCacheEventListener(Properties properties) {
         return new SessionFactoryCacheListener();
     }
-    
+
 }

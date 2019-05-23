@@ -229,7 +229,7 @@ public class Package extends XMLComplexElement {
     public int hashCode() {
         return super.hashCode();
     }
-    
+
     protected boolean isMainElement() {
         return true;
     }
@@ -245,4 +245,3 @@ public class Package extends XMLComplexElement {
         System.gc();
     }
 }
-

@@ -35,20 +35,20 @@ public class DatabaseUpdateTool extends DefaultApplicationPlugin {
             String query = (String) properties.get("query");
             String driver = "";
             DataSource ds = null;
-            String datasource = (String)properties.get("jdbcDatasource");
+            String datasource = (String) properties.get("jdbcDatasource");
             if (datasource != null && "default".equals(datasource)) {
                 // use current datasource
-                 ds = (DataSource)AppUtil.getApplicationContext().getBean("setupDataSource");
-                 driver = DynamicDataSourceManager.getProperty("workflowDriver");
+                ds = (DataSource) AppUtil.getApplicationContext().getBean("setupDataSource");
+                driver = DynamicDataSourceManager.getProperty("workflowDriver");
             } else {
                 Properties props = new Properties();
                 String driverClassName = (String) properties.get("driverClassName");
                 String url = (String) properties.get("url");
                 String username = (String) properties.get("username");
                 String password = (String) properties.get("password");
-            
+
                 driver = driverClassName;
-                
+
                 // use custom datasource
                 props.put("driverClassName", driverClassName);
                 props.put("url", url);
@@ -56,7 +56,7 @@ public class DatabaseUpdateTool extends DefaultApplicationPlugin {
                 props.put("password", password);
                 ds = createDataSource(props);
             }
-            
+
             WorkflowAssignment wfAssignment = (WorkflowAssignment) properties.get("workflowAssignment");
 
             Map<String, String> replace = new HashMap<String, String>();
@@ -96,13 +96,13 @@ public class DatabaseUpdateTool extends DefaultApplicationPlugin {
                 if (stmt != null) {
                     stmt.close();
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
             }
             try {
                 if (con != null) {
                     con.close();
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
             }
         }
     }

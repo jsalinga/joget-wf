@@ -5,7 +5,7 @@
 <html>
     <body>
         <p>
-        <img src="${pageContext.request.contextPath}/images/v3/loading.gif" />
+            <img src="${pageContext.request.contextPath}/images/v3/loading.gif" />
         </p>
 
         <%
@@ -18,9 +18,9 @@
                 <dd><textarea style="visibility:hidden" name="xpdl" rows="20" cols="80"><c:out value="${xpdl}" escapeXml="true"/></textarea></dd>
                 <dd><input type="hidden" name="packageId" value="${wfProcess.packageId}" /></dd>
                 <dd><input type="hidden" name="processId" value="${wfProcess.id}" /></dd>
-                <c:forEach items="${runningActivityIds}" var="activityId">
+                    <c:forEach items="${runningActivityIds}" var="activityId">
                     <dd><input type="hidden" name="activityId" value="${activityId}" /></dd>
-                </c:forEach>
+                    </c:forEach>
             </dl>
         </form>
 

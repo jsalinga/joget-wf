@@ -26,7 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Utility methods used by workflow engine
- * 
+ *
  */
 @Service
 public class WorkflowUtil implements ApplicationContextAware {
@@ -46,7 +46,8 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return appContext;
@@ -54,6 +55,7 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Retrieve users for assignment based on participant mapping
+     *
      * @param packageId
      * @param procDefId
      * @param procId
@@ -61,7 +63,7 @@ public class WorkflowUtil implements ApplicationContextAware {
      * @param actId
      * @param requesterUsername
      * @param participantId
-     * @return 
+     * @return
      */
     public static List<String> getAssignmentUsers(String packageId, String procDefId, String procId, String version, String actId, String requesterUsername, String participantId) {
         List<String> resultList = null;
@@ -83,8 +85,9 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Check if the content contains hash (#) character
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static boolean containsHashVariable(String content) {
         boolean result = (content != null && content.indexOf("#") >= 0);
@@ -93,36 +96,40 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Parse and replace the Hash Variable in content
+     *
      * @param content
      * @param formDataTable
      * @param wfAssignment
-     * @return 
+     * @return
      */
     public static String processVariable(String content, String formDataTable, WorkflowAssignment wfAssignment) {
         return processVariable(content, formDataTable, wfAssignment, null, null);
     }
 
     /**
-     * Parse and replace the Hash Variable in content. Option to escape with a format
+     * Parse and replace the Hash Variable in content. Option to escape with a
+     * format
+     *
      * @param content
      * @param formDataTable
      * @param wfAssignment
      * @param escapeFormat StringUtil.TYPE_REGEX or StringUtil.TYPE_JSON
-     * @return 
+     * @return
      */
     public static String processVariable(String content, String formDataTable, WorkflowAssignment wfAssignment, String escapeFormat) {
         return processVariable(content, formDataTable, wfAssignment, escapeFormat, null);
     }
 
     /**
-     * Parse and replace the Hash Variable in content. 
-     * Option to escape with a format and replace keywords.
+     * Parse and replace the Hash Variable in content. Option to escape with a
+     * format and replace keywords.
+     *
      * @param content
      * @param formDataTable
      * @param wfAssignment
      * @param escapeFormat
      * @param replaceMap
-     * @return 
+     * @return
      */
     public static String processVariable(String content, String formDataTable, WorkflowAssignment wfAssignment, String escapeFormat, Map<String, String> replaceMap) {
 
@@ -138,9 +145,10 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Convenient method used to get an attribute value from user
+     *
      * @param username
      * @param attribute
-     * @return 
+     * @return
      */
     public static String getUserAttribute(String username, String attribute) {
         String attributeValue = null;
@@ -171,8 +179,9 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Convenient method used to get a value of system setting
+     *
      * @param propertyName
-     * @return 
+     * @return
      */
     public static String getSystemSetupValue(String propertyName) {
         SetupManager setupManager = (SetupManager) appContext.getBean("setupManager");
@@ -181,7 +190,8 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Convenient method used to get current logged in user
-     * @return 
+     *
+     * @return
      */
     public static String getCurrentUsername() {
         WorkflowUserManager workflowUserManager = (WorkflowUserManager) appContext.getBean("workflowUserManager");
@@ -191,7 +201,8 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Convenient method used to get the full name of current logged in user
-     * @return 
+     *
+     * @return
      */
     public static String getCurrentUserFullName() {
         WorkflowUserManager workflowUserManager = (WorkflowUserManager) appContext.getBean("workflowUserManager");
@@ -205,8 +216,9 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Convenient method used to check the current logged in user has a role
+     *
      * @param role
-     * @return 
+     * @return
      */
     public static boolean isCurrentUserInRole(String role) {
         WorkflowUserManager workflowUserManager = (WorkflowUserManager) appContext.getBean("workflowUserManager");
@@ -215,8 +227,10 @@ public class WorkflowUtil implements ApplicationContextAware {
     }
 
     /**
-     * Convenient method used to check the current logged in user is an anonymous user
-     * @return 
+     * Convenient method used to check the current logged in user is an
+     * anonymous user
+     *
+     * @return
      */
     public static boolean isCurrentUserAnonymous() {
         WorkflowUserManager workflowUserManager = (WorkflowUserManager) appContext.getBean("workflowUserManager");
@@ -226,8 +240,9 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Method used for system to set ApplicationContext
+     *
      * @param context
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         appContext = context;
@@ -235,7 +250,9 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Returns the HTTP Servlet Request associated with the current thread.
-     * @return The HTTP request if it is available. If the request is not available, e.g. when triggered from a deadline, null is returned.
+     *
+     * @return The HTTP request if it is available. If the request is not
+     * available, e.g. when triggered from a deadline, null is returned.
      */
     public static HttpServletRequest getHttpServletRequest() {
         try {
@@ -249,7 +266,9 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Returns the HTTP Servlet Response associated with the current thread.
-     * @return The HTTP Response if it is available. If the response is not available, e.g. when triggered from a deadline, null is returned.
+     *
+     * @return The HTTP Response if it is available. If the response is not
+     * available, e.g. when triggered from a deadline, null is returned.
      */
     public static HttpServletResponse getHttpServletResponse() {
         try {
@@ -263,9 +282,10 @@ public class WorkflowUtil implements ApplicationContextAware {
             return null;
         }
     }
-    
+
     /**
      * Retrieves the process definition ID without the version and package.
+     *
      * @param processDefId
      * @return
      */
@@ -285,6 +305,7 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Retrieves the package ID from the process definition ID.
+     *
      * @param processDefId
      * @return
      */
@@ -301,6 +322,7 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Retrieves the version from the process definition.
+     *
      * @param processDefId
      * @return
      */
@@ -318,20 +340,22 @@ public class WorkflowUtil implements ApplicationContextAware {
 
     /**
      * Convenient method used to add a simple audit trail
-     * @return 
+     *
+     * @return
      */
     public static void addAuditTrail(String clazz, String method, String message) {
         addAuditTrail(clazz, method, message, null, null, null);
     }
-    
+
     /**
      * Convenient method used to add an audit trail
+     *
      * @param clazz
      * @param method
      * @param message
      * @param paramTypes
      * @param args
-     * @param returnObject 
+     * @param returnObject
      */
     public static void addAuditTrail(String clazz, String method, String message, Class[] paramTypes, Object[] args, Object returnObject) {
         try {
@@ -341,14 +365,15 @@ public class WorkflowUtil implements ApplicationContextAware {
             LogUtil.error(WorkflowUtil.class.getName(), e, "Error add audit trail");
         }
     }
-    
+
     /**
-     * Method used to get the HTML indicator of service level based on value and 
+     * Method used to get the HTML indicator of service level based on value and
      * system setting
+     *
      * @param value
-     * @return 
+     * @return
      */
-    public static String getServiceLevelIndicator(double value){
+    public static String getServiceLevelIndicator(double value) {
         if (value >= 0) {
             String warningLevel = getSystemSetupValue("mediumWarningLevel");
             int mediumWarningLevel = (warningLevel != null && warningLevel.trim().length() > 0 ? 100 - Integer.parseInt(warningLevel) : 80);
@@ -363,15 +388,16 @@ public class WorkflowUtil implements ApplicationContextAware {
             } else {
                 return "<span class=\"dot_green\">&nbsp;</span>";
             }
-        }else{
+        } else {
             return "-";
         }
     }
-    
+
     /**
      * Method used to get replacement users replaced by an user
+     *
      * @param username
-     * @return 
+     * @return
      */
     public static Map<String, Collection<String>> getReplacementUsers(String username) {
         try {

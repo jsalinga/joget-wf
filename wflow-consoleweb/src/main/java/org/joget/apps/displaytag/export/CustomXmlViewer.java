@@ -25,6 +25,7 @@ import org.joget.apps.datalist.model.DataListXmlExportFormatter;
 import org.joget.apps.datalist.model.DataListXmlWriter;
 
 public class CustomXmlViewer implements TextExportView {
+
     /**
      * TableModel to render.
      */
@@ -64,20 +65,19 @@ public class CustomXmlViewer implements TextExportView {
      * A map hold the column number and its formatter
      */
     private Map<Integer, DataListXmlExportFormatter> formatter = new HashMap<Integer, DataListXmlExportFormatter>();
-    
+
     @Override
     public void setParameters(TableModel tableModel, boolean exportFullList, boolean includeHeader,
-        boolean decorateValues)
-    {
+            boolean decorateValues) {
         this.model = tableModel;
         this.exportFull = exportFullList;
         this.header = includeHeader;
         this.decorated = decorateValues;
-        
+
         PageContext pageContext = (new TableModelWrapper(tableModel)).getPageContext();
         if (pageContext != null) {
             datalist = (DataList) pageContext.findAttribute("dataList");
-            
+
             if (datalist != null) {
                 DataListColumn[] columns = datalist.getColumns();
                 Collection<DataListColumnFormat> formats;
@@ -102,20 +102,17 @@ public class CustomXmlViewer implements TextExportView {
             }
         }
     }
-    
+
     @Override
-    public String getMimeType()
-    {
-        return "text/xml"; 
+    public String getMimeType() {
+        return "text/xml";
     }
-    
-    public void doExport(Writer out) throws IOException, JspException
-    {
+
+    public void doExport(Writer out) throws IOException, JspException {
         writer = new DataListXmlWriter(out);
         writer.createXmlDocument();
-        
-        if (this.header)
-        {
+
+        if (this.header) {
             Iterator iterator = this.model.getHeaderCellList().iterator();
             HeaderCell headerCell;
             String columnHeader;
@@ -141,11 +138,10 @@ public class CustomXmlViewer implements TextExportView {
         int col = 0;
         ColumnIterator columnIterator;
         // iterator on rows
-        while (rowIterator.hasNext())
-        {
+        while (rowIterator.hasNext()) {
             row = rowIterator.next();
             writer.createNewRow();
-            
+
             if (isBeforeRow) {
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -166,10 +162,10 @@ public class CustomXmlViewer implements TextExportView {
                 column = columnIterator.nextColumn();
 
                 // Get the value to be displayed for the column
-                value =  column.getValue(this.decorated);
+                value = column.getValue(this.decorated);
                 writer.addColumn(value);
             }
-            
+
             if (isAfterRow) {
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());

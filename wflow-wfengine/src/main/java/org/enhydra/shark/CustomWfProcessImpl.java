@@ -53,7 +53,7 @@ public class CustomWfProcessImpl extends WfProcessImpl {
             persistActivityToFollowedTransitions(shandle);
 
             startActivity(shandle, toActivityDef, getActiveActivity(shandle, fromActivity.block_activity_id(shandle)));
-            
+
             this.activityCache.clear(); //Customise: clear cache so that the remaining open activities is update
         } else {
             this.activityToFollowedTransitions.put(ajhs, new Integer(followed + 1));
@@ -67,7 +67,7 @@ public class CustomWfProcessImpl extends WfProcessImpl {
             persistActivityToFollowedTransitions(shandle);
         }
     }
-    
+
     @Override
     public WfActivityInternal[] checkDeadlines(WMSessionHandle shandle) throws Exception {
         WorkflowHelper workflowMapper = (WorkflowHelper) WorkflowUtil.getApplicationContext().getBean("workflowHelper");

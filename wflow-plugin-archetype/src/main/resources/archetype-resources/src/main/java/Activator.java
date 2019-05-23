@@ -1,10 +1,14 @@
-package ${groupId};
+package $
+
+{groupId};
 
 import java.util.ArrayList;
 import java.util.Collection;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+
+
 
 public class Activator implements BundleActivator {
 

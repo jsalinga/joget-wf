@@ -70,7 +70,7 @@ public class AuditTrail {
         if (message == null && paramTypes != null && args != null) {
             message = "";
             boolean auditableObjExists = false;
-            
+
             int i = 0;
             for (Class c : paramTypes) {
                 if (args[i] instanceof Auditable) {
@@ -87,15 +87,15 @@ public class AuditTrail {
                 if ("delete".equals(getMethod()) && args.length > 1 && args[1] instanceof AppDefinition) {
                     AppDefinition appDef = (AppDefinition) args[1];
                     message = "{" + "id=" + args[0].toString() + ", appId=" + appDef.getAppId() + ", appVersion=" + appDef.getVersion() + '}';
-                }else if (args[0] != null) {
+                } else if (args[0] != null) {
                     message = args[0].toString();
                 }
-                
+
             } else if (message.endsWith(";")) {
                 message = message.substring(0, message.length() - 1);
             }
         }
-        
+
         return message;
     }
 

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class Driver implements java.sql.Driver {
 
     static java.sql.Driver driver;
-    
+
     static {
         try {
             driver = new org.mariadb.jdbc.Driver();

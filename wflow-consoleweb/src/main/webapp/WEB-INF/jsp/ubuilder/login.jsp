@@ -58,7 +58,7 @@
         </title>
 
         <jsp:include page="/WEB-INF/jsp/includes/scripts.jsp" />
-        
+
         <script type="text/javascript">
             ${userview.setting.theme.javascript}
             UI.base = "${pageContext.request.contextPath}";    
@@ -78,8 +78,8 @@
     </head>
 
     <body id="login" class="<c:if test="${embed}">embeded</c:if><c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}"> rtl</c:if>">
-        <div id="page">
-            <div id="header">
+            <div id="page">
+                <div id="header">
 
                 <c:choose>
                     <c:when test="${!empty userview.setting.theme.header}">
@@ -103,7 +103,7 @@
                         <span id="welcomeMessage">${userview.properties.welcomeMessage}</span>
                     </div>
                     <div id="header-logout-text">
-                        
+
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -132,8 +132,8 @@
                             <tr><td><fmt:message key="ubuilder.login.password" />:</td><td><input type='password' id='j_password' name='j_password'></td></tr>
                             <tr><td>&nbsp;</td><td><input name="submit" class="form-button" type="submit" value="<fmt:message key="ubuilder.login" />" /></td></tr>
                             <tr><td colspan="2">
-                                <%= DirectoryUtil.getLoginFormFooter() %>
-                            </td></tr>
+                                    <%= DirectoryUtil.getLoginFormFooter() %>
+                                </td></tr>
                         </table>
                     </form>
                     <c:choose>
@@ -146,9 +146,9 @@
                     </c:choose>         
                     <script type="text/javascript">
                         $(document).ready(
-                            function() {
-                                $("#j_username").focus();
-                            }
+                        function() {
+                        $("#j_username").focus();
+                        }
                         );
                     </script>
                 </div>

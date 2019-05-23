@@ -56,9 +56,9 @@ public class UserDaoImpl extends AbstractSpringDao implements UserDao {
 
     public Boolean addUser(User user) {
         try {
-            
+
             adminRoleFilter(user);
-            
+
             save("User", user);
             return true;
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class UserDaoImpl extends AbstractSpringDao implements UserDao {
     public Boolean updateUser(User user) {
         try {
             adminRoleFilter(user);
-            
+
             merge("User", user);
             return true;
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class UserDaoImpl extends AbstractSpringDao implements UserDao {
                     employments.clear();
                 }
                 delete("User", user);
-                
+
                 UserMetaDataDao umdDao = (UserMetaDataDao) DirectoryUtil.getApplicationContext().getBean("userMetaDataDao");
                 umdDao.deleteUserMetaDatas(username);
             }
@@ -400,13 +400,13 @@ public class UserDaoImpl extends AbstractSpringDao implements UserDao {
 
         return 0L;
     }
-    
+
     protected void adminRoleFilter(User user) {
         ApplicationContext ac = DirectoryUtil.getApplicationContext();
-        
+
         if (ac != null) {
             WorkflowUserManager workflowUserManager = (WorkflowUserManager) DirectoryUtil.getApplicationContext().getBean("workflowUserManager");
-            if (workflowUserManager != null && !(workflowUserManager.isCurrentUserInRole(WorkflowUserManager.ROLE_ADMIN) || workflowUserManager.isSystemUser())){
+            if (workflowUserManager != null && !(workflowUserManager.isCurrentUserInRole(WorkflowUserManager.ROLE_ADMIN) || workflowUserManager.isSystemUser())) {
                 Role adminRole = roleDao.getRole(WorkflowUserManager.ROLE_ADMIN);
                 if (user.getRoles() != null && user.getRoles().contains(adminRole)) {
                     user.getRoles().remove(adminRole);

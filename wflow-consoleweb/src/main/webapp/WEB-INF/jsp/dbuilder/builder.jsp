@@ -26,7 +26,7 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/boxy/stylesheets/boxy.css" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/dbuilder.css?build=<fmt:message key="build.number"/>"  />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/jsondiffpatch/jsondiffpatchhtml.css" />
-        
+
         <c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}">
             <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_rtl.css?build=<fmt:message key="build.number"/>">
         </c:if>
@@ -35,40 +35,40 @@
         <jsp:include page="/WEB-INF/jsp/includes/css.jsp" />
         <script type="text/javascript">
             window.onbeforeunload = function() {
-                if(!DatalistBuilder.isSaved()){
-                    return "<fmt:message key="dbuilder.saveBeforeClose"/>";
-                }
+            if(!DatalistBuilder.isSaved()){
+            return "<fmt:message key="dbuilder.saveBeforeClose"/>";
+            }
             };
 
             $(document).ready(function() {
-                DatalistBuilder.appId = '<c:out value="${appId}"/>';
-                DatalistBuilder.appVersion = '<c:out value="${appVersion}"/>';
-                DatalistBuilder.saveUrl = '<c:out value="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/datalist/builderSave/"/>';
-                DatalistBuilder.previewUrl = '<c:out value="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/datalist/builderPreview/"/>';
-                DatalistBuilder.contextPath = '${pageContext.request.contextPath}';
-                DatalistBuilder.appPath = '<c:out value="/${appId}/${appVersion}"/>';
-                DatalistBuilder.filterParam = '<c:out value="${filterParam}"/>';
+            DatalistBuilder.appId = '<c:out value="${appId}"/>';
+            DatalistBuilder.appVersion = '<c:out value="${appVersion}"/>';
+            DatalistBuilder.saveUrl = '<c:out value="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/datalist/builderSave/"/>';
+            DatalistBuilder.previewUrl = '<c:out value="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/datalist/builderPreview/"/>';
+            DatalistBuilder.contextPath = '${pageContext.request.contextPath}';
+            DatalistBuilder.appPath = '<c:out value="/${appId}/${appVersion}"/>';
+            DatalistBuilder.filterParam = '<c:out value="${filterParam}"/>';
 
-                //tabbed
-                $('#builder-steps li').click( function(){
-                    var div = $(this).find('a').attr('href');
-                    if($(div).size() > 0){
-                        $('#builder-steps li').removeClass("active");
-                        $('#builder-steps li').removeClass("next");
-                        $(this).addClass("active");
-                        $(this).prev().addClass("next");
-                        $('#tabpanels').children().hide();
-                        $(div).show();
-                    }
-                    return false;
-                });
+            //tabbed
+            $('#builder-steps li').click( function(){
+            var div = $(this).find('a').attr('href');
+            if($(div).size() > 0){
+            $('#builder-steps li').removeClass("active");
+            $('#builder-steps li').removeClass("next");
+            $(this).addClass("active");
+            $(this).prev().addClass("next");
+            $('#tabpanels').children().hide();
+            $(div).show();
+            }
+            return false;
+            });
 
-                DatalistBuilder.init();
-                DatalistBuilder.setJson(${json}, "<c:out value="${id}"/>");
-                
-                $('#builder-steps-properties').click( function(){
-                    DatalistBuilder.showDatalistProperties();
-                })
+            DatalistBuilder.init();
+            DatalistBuilder.setJson(${json}, "<c:out value="${id}"/>");
+
+            $('#builder-steps-properties').click( function(){
+            DatalistBuilder.showDatalistProperties();
+            })
             });
         </script>
     </head>
@@ -154,7 +154,7 @@
                             </tr>
                         </table>
                         <div class="form-clear"></div>
-                        
+
                         <div id="list-advanced">
                             <div id="list-info" style="display: none">
                                 <form id="list-preview" action="?" method="post">
@@ -165,7 +165,7 @@
                                 <button onclick="DatalistBuilder.updateList()"><fmt:message key="console.builder.update"/></button>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div id="properties" style="display:none">
@@ -177,7 +177,7 @@
                 <fmt:message key="console.builder.footer"/>
             </div>
         </div>
-            
+
         <div id="builder-message"></div> 
 
         <script type="text/javascript">
@@ -186,7 +186,7 @@
             HelpGuide.key = "help.web.console.app.datalist.builder";
             setTimeout(function() { HelpGuide.show(); }, 2000);
         </script>
-            
+
         <jsp:include page="/WEB-INF/jsp/console/apps/builder.jsp" flush="true">
             <jsp:param name="appId" value="${appId}"/>
             <jsp:param name="appVersion" value="${appDefinition.version}"/>
@@ -200,6 +200,6 @@
             <jsp:param name="webConsole" value="true"/>
             <jsp:param name="builderMode" value="true"/>
         </jsp:include>
-            
+
     </body>
 </html>

@@ -22,16 +22,16 @@
     <script>
         loadCSS("${pageContext.request.contextPath}/js/footable/footable.core.min.css?build=<fmt:message key="build.number"/>");
     </script>
-    
+
     <c:set var="isQuickEditEnabled" value="<%= AppUtil.isQuickEditEnabled() %>"/>
     <c:if test="${isQuickEditEnabled && !dataList.disableQuickEdit}">
-    <div class="quickEdit" style="display: none">
-        <a href="<c:out value="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/datalist/builder/${dataList.id}"/>" target="_blank"><i class="fa fa-pencil"></i>  <fmt:message key="adminBar.label.list"/>: <c:out value="${dataList.name}"/></a>
-    </div>
+        <div class="quickEdit" style="display: none">
+            <a href="<c:out value="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/datalist/builder/${dataList.id}"/>" target="_blank"><i class="fa fa-pencil"></i>  <fmt:message key="adminBar.label.list"/>: <c:out value="${dataList.name}"/></a>
+        </div>
     </c:if>
-    
+
     <c:catch var="dataListException">
-        
+
         <c:set var="actionResult" value="${dataList.actionResult}" />
         <c:set var="redirected" value="false" />
         <c:if test="${!empty actionResult}">
@@ -54,7 +54,7 @@
                     </script>
                 </c:when>
                 <c:otherwise>   
-                        
+
                 </c:otherwise>
             </c:choose>
         </c:if>
@@ -109,9 +109,9 @@
                         <c:forEach items="${dataList.filterTemplates}" var="template">
                             ${template}
                         </c:forEach>
-                         <span class="filter-cell">
-                             <input type="submit" class="form-button btn button" value="<fmt:message key="general.method.label.show"/>"/>
-                         </span>
+                        <span class="filter-cell">
+                            <input type="submit" class="form-button btn button" value="<fmt:message key="general.method.label.show"/>"/>
+                        </span>
                     </div>
                 </form>
             </c:if>
@@ -224,123 +224,123 @@
             <ul style="text-align:left; display:inline-block">
                 <li><fmt:message key="console.footer.label.revision"/></li>
                 <li><fmt:message key="general.error.date"/>: <fmt:formatDate pattern="d MMM yyyy HH:mm:ss" value="<%= new java.util.Date() %>"/></li>
-                <fmt:message key="general.error.errorDetails"/>
+                    <fmt:message key="general.error.errorDetails"/>
             </ul>
             <p>&nbsp;</p>
         </div>
-<%
-Throwable t =(Throwable)pageContext.findAttribute("dataListException");  
-LogUtil.error("/jsp/dbuilder/dataListView.jsp", t, "Error rendering datalist");
-%>
+        <%
+        Throwable t =(Throwable)pageContext.findAttribute("dataListException");  
+        LogUtil.error("/jsp/dbuilder/dataListView.jsp", t, "Error rendering datalist");
+        %>
     </c:if>
-    
+
 </div>
 
 <script>
     var popupActionDialog = null;
-    
+
     DataListUtil = {
-        submitForm: function(form) {
-            var params = $(form).serialize();
-            var queryStr = window.location.search;
-            params = params.replace(/\+/g, " ");
-            var newUrl = UrlUtil.mergeRequestQueryString(queryStr, params);
-            window.location.href = "?" + newUrl;
-            return false;
-        }
+    submitForm: function(form) {
+    var params = $(form).serialize();
+    var queryStr = window.location.search;
+    params = params.replace(/\+/g, " ");
+    var newUrl = UrlUtil.mergeRequestQueryString(queryStr, params);
+    window.location.href = "?" + newUrl;
+    return false;
+    }
     }
     $(document).ready(function() {
-        $("#filters_${dataListId}").submit(function(e) {
-            e.preventDefault();
-            DataListUtil.submitForm(this);
-        });
-        $("form[name='form_${dataListId}'] button").on("click", function(){
-            var target = $(this).data("target");
-            var confirmation = $(this).data("confirmation");
-            if (target === undefined || target === null || target === "" || target.toLowerCase() === "post") {
-                $("form[name='form_${dataListId}']").removeAttr("target");
-            } else if (target.toLowerCase() === "popup") {
-                var url = "${pageContext.request.contextPath}/images/v3/clear.gif";
-                if (popupActionDialog == null) {
-                    popupActionDialog = new PopupDialog(url);
-                } else {
-                    popupActionDialog.src = url;
-                }
-                $("form[name='form_${dataListId}']").attr("target", "jqueryDialogFrame");
-                var submitForm = true;
-                if (confirmation !== undefined && confirmation !== null && confirmation !== "") {
-                    submitForm = showConfirm(this, confirmation);
-                }
-                if (submitForm) {
-                    popupActionDialog.init();
-                    var name = $(this).attr("name");
-                    var value = $(this).attr("value");
-                    setTimeout(function(){
-                        $("form[name='form_${dataListId}']").append('<input name="'+name+'" value="'+value+'" class="temp_button_input"/>');
-                        $("form[name='form_${dataListId}']").submit();
-                        $("form[name='form_${dataListId}'] .temp_button_input").remove();
-                    }, 200);
-                }
-                return false;
-            } else {
-                $("form[name='form_${dataListId}']").attr("target", target);
-            }
-            if (confirmation !== undefined && confirmation !== null && confirmation !== "") {
-                return showConfirm(this, confirmation);
-            } else {
-                return true;
-            }
-        });
+    $("#filters_${dataListId}").submit(function(e) {
+    e.preventDefault();
+    DataListUtil.submitForm(this);
+    });
+    $("form[name='form_${dataListId}'] button").on("click", function(){
+    var target = $(this).data("target");
+    var confirmation = $(this).data("confirmation");
+    if (target === undefined || target === null || target === "" || target.toLowerCase() === "post") {
+    $("form[name='form_${dataListId}']").removeAttr("target");
+    } else if (target.toLowerCase() === "popup") {
+    var url = "${pageContext.request.contextPath}/images/v3/clear.gif";
+    if (popupActionDialog == null) {
+    popupActionDialog = new PopupDialog(url);
+    } else {
+    popupActionDialog.src = url;
+    }
+    $("form[name='form_${dataListId}']").attr("target", "jqueryDialogFrame");
+    var submitForm = true;
+    if (confirmation !== undefined && confirmation !== null && confirmation !== "") {
+    submitForm = showConfirm(this, confirmation);
+    }
+    if (submitForm) {
+    popupActionDialog.init();
+    var name = $(this).attr("name");
+    var value = $(this).attr("value");
+    setTimeout(function(){
+    $("form[name='form_${dataListId}']").append('<input name="'+name+'" value="'+value+'" class="temp_button_input"/>');
+    $("form[name='form_${dataListId}']").submit();
+    $("form[name='form_${dataListId}'] .temp_button_input").remove();
+    }, 200);
+    }
+    return false;
+    } else {
+    $("form[name='form_${dataListId}']").attr("target", target);
+    }
+    if (confirmation !== undefined && confirmation !== null && confirmation !== "") {
+    return showConfirm(this, confirmation);
+    } else {
+    return true;
+    }
+    });
     });
     function toggleAll(element) {
-        var table = $(element).closest("table");
-        if ($(element).is(":checked")) {
-            $(table).find("input[type=checkbox]").attr("checked", "checked");
-        } else {
-            $(table).find("input[type=checkbox]").removeAttr("checked");
-        }
+    var table = $(element).closest("table");
+    if ($(element).is(":checked")) {
+    $(table).find("input[type=checkbox]").attr("checked", "checked");
+    } else {
+    $(table).find("input[type=checkbox]").removeAttr("checked");
+    }
     }
     function dlPopupAction(element, message) {
-        var url = $(element).attr("href");
-        var showPopup = true;
-        if (message != "") {
-            showPopup = confirm(message);
-        }
-        if (showPopup) {
-            if (popupActionDialog == null) {
-                popupActionDialog = new PopupDialog(url);
-            } else {
-                popupActionDialog.src = url;
-            }
-            popupActionDialog.init();
-        }
-        return false;
+    var url = $(element).attr("href");
+    var showPopup = true;
+    if (message != "") {
+    showPopup = confirm(message);
+    }
+    if (showPopup) {
+    if (popupActionDialog == null) {
+    popupActionDialog = new PopupDialog(url);
+    } else {
+    popupActionDialog.src = url;
+    }
+    popupActionDialog.init();
+    }
+    return false;
     }
     function dlPostAction(element, message) {
-        var url = $(element).attr("href");
-        var showPopup = true;
-        if (message != "") {
-            showPopup = confirm(message);
-        }
-        if (showPopup) {
-            var  orgAction = $(element).closest("form").attr("action");
-            $(element).closest("form").removeAttr("target");
-            $(element).closest("form").find("input[type=checkbox]").removeAttr("checked");
-            $(element).closest("form").attr("action", $(element).attr("href"));
-            $(element).closest("form").submit();
-            
-            //reset the action
-            $(element).closest("form").attr("action", orgAction);
-        }
-        return false;
+    var url = $(element).attr("href");
+    var showPopup = true;
+    if (message != "") {
+    showPopup = confirm(message);
+    }
+    if (showPopup) {
+    var  orgAction = $(element).closest("form").attr("action");
+    $(element).closest("form").removeAttr("target");
+    $(element).closest("form").find("input[type=checkbox]").removeAttr("checked");
+    $(element).closest("form").attr("action", $(element).attr("href"));
+    $(element).closest("form").submit();
+
+    //reset the action
+    $(element).closest("form").attr("action", orgAction);
+    }
+    return false;
     }
     function showConfirm(element, message) {
-        var table = $(element).parent().parent().find('table');
-        if ($(table).find("input[type=checkbox][name|=d]:checked, input[type=radio][name|=d]:checked").length > 0) {
-            return confirm(message);
-        } else {
-            alert("<fmt:message key="dbuilder.alert.noRecordSelected"/>");
-            return false;
-        }
+    var table = $(element).parent().parent().find('table');
+    if ($(table).find("input[type=checkbox][name|=d]:checked, input[type=radio][name|=d]:checked").length > 0) {
+    return confirm(message);
+    } else {
+    alert("<fmt:message key="dbuilder.alert.noRecordSelected"/>");
+    return false;
+    }
     }
 </script>

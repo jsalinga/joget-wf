@@ -12,11 +12,10 @@ public class FormRowSet extends ArrayList<FormRow> {
     private String referenceKey;
     private String blockchainTransactionHash;
     private String blockchainDataHash;
-    
 
     /**
-     * @return true indicates that multiple row results are to be expected,
-     * even if the actual result is empty or just a single row.
+     * @return true indicates that multiple row results are to be expected, even
+     * if the actual result is empty or just a single row.
      */
     public boolean isMultiRow() {
         return multiRow;
@@ -42,19 +41,19 @@ public class FormRowSet extends ArrayList<FormRow> {
         this.referenceKey = referenceKey;
     }
 
-	public String getBlockchainTransactionHash() {
-		return blockchainTransactionHash;
-	}
+    public String getBlockchainTransactionHash() {
+        return blockchainTransactionHash;
+    }
 
-	public void setBlockchainTransactionHash(String blockchainTransactionHash) {
-		this.blockchainTransactionHash = blockchainTransactionHash;
-	}
+    public void setBlockchainTransactionHash(String blockchainTransactionHash) {
+        this.blockchainTransactionHash = blockchainTransactionHash;
+    }
 
-	public String getBlockchainDataHash() {
-		return blockchainDataHash;
-	}
+    public String getBlockchainDataHash() {
+        return blockchainDataHash;
+    }
 
-	public void setBlockchainDataHash(String blockchainDataHash) {
-		this.blockchainDataHash = blockchainDataHash;
-	}
+    public void setBlockchainDataHash(String blockchainDataHash) {
+        this.blockchainDataHash = blockchainDataHash;
+    }
 }

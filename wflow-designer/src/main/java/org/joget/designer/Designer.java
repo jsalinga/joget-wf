@@ -23,6 +23,7 @@ public class Designer {
 
     /**
      * Checks to see if a package is defined and fixed (non-changeable)
+     *
      * @return
      */
     public static boolean isPackageFixed() {

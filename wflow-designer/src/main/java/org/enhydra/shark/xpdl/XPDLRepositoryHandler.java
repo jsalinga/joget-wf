@@ -89,7 +89,7 @@ public class XPDLRepositoryHandler {
                 // CUSTOM
                 // remove additional columns for Deadlines
                 if (newOne instanceof Deadline) {
-                    ((Deadline)newOne).hideCustomElements();
+                    ((Deadline) newOne).hideCustomElements();
                 }
                 // END CUSTOM
             }
@@ -225,8 +225,7 @@ public class XPDLRepositoryHandler {
             if (el != null && newVal != null) {
                 try {
                     el.setValue(newVal);
-                }
-                catch(RuntimeException re) {
+                } catch (RuntimeException re) {
                     // ignore
                     System.out.println("Error setting value for el: " + newVal + "; " + re.toString());
                     re.printStackTrace();

@@ -3,6 +3,7 @@ package org.joget.apps.form.model;
 import java.util.Date;
 
 public class FormDataAuditTrail {
+
     private String id;
     private String appId;
     private String appVersion;

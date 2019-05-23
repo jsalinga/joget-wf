@@ -143,23 +143,23 @@ public class DeadlineChecker extends Thread {
 
             HostManager.setCurrentProfile(profile);
             WorkflowManager workflowManager = (WorkflowManager) WorkflowUtil.getApplicationContext().getBean("workflowManager");
-            
+
             LocaleContextResolver localeResolver = (LocaleContextResolver) WorkflowUtil.getApplicationContext().getBean("localeResolver");
             if (localeResolver != null) {
                 LocaleContext localeContext = localeResolver.resolveLocaleContext(null);
                 LocaleContextHolder.setLocaleContext(localeContext, true);
             }
-            
+
             int sizeToCheck = 0;
             List<String> instancesFailed2check = new ArrayList<String>();
             Collection<String> instancesToCheck = workflowManager.getRunningProcessIds();
-            
+
             if (instancesToCheck != null && !instancesToCheck.isEmpty()) {
                 sizeToCheck = instancesToCheck.size();
                 Iterator iterProcesses = instancesToCheck.iterator();
                 List<String> currentBatch = null;
                 do {
-                    currentBatch = new ArrayList<String>(); 
+                    currentBatch = new ArrayList<String>();
                     try {
                         for (int n = 0; n < this.instancesPerTransaction; ++n) {
                             if (!iterProcesses.hasNext()) {
@@ -171,7 +171,7 @@ public class DeadlineChecker extends Thread {
                         }
                         String[] pids = new String[currentBatch.size()];
                         currentBatch.toArray(pids);
-                        
+
                         workflowManager.internalCheckDeadlines(pids);
                     } catch (Exception ex) {
                         LogUtil.error(getClass().getName(), ex, "Profile : " + profile);
@@ -188,7 +188,7 @@ public class DeadlineChecker extends Thread {
         }
     }
 
-    public boolean isStopped(){
+    public boolean isStopped() {
         return stopped;
     }
 }

@@ -13,16 +13,16 @@
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
  
     <bean id="profilePropertyManager" class="org.joget.commons.util.DatasourceProfilePropertyManager">
-    	<property name="propertyClass" value="java.util.Properties"/>
+        <property name="propertyClass" value="java.util.Properties"/>
     </bean>
 
     <bean id="staticInitOfDynamicDataSourceManager" class="org.joget.commons.util.DynamicDataSourceManager" >
-    	<constructor-arg ref="profilePropertyManager"/>
+        <constructor-arg ref="profilePropertyManager"/>
     </bean>
     
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basenames">
-             <list>
+            <list>
                 <value>custom</value>
                 <value>console</value>
                 <value>peditor</value>
@@ -34,7 +34,7 @@
                 <value>plugin</value>
                 <value>helpdef</value>
                 <value>help</value>
-             </list>
+            </list>
         </property>
     </bean>
 </beans>

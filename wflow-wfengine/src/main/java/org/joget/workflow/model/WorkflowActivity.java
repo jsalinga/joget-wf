@@ -284,5 +284,5 @@ public class WorkflowActivity implements Serializable {
     public void setLatestActivityCount(long latestActivityCount) {
         this.latestActivityCount = latestActivityCount;
     }
-    
+
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import org.joget.commons.spring.model.Auditable;
 
 public class UserMetaData implements Serializable, Auditable {
+
     private String username;
     private String key;
     private String value;

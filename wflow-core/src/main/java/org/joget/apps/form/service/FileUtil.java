@@ -33,36 +33,41 @@ public class FileUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return appContext;
     }
-    
+
     /**
-     * Method used to check for the duplicate file name of files in the 
-     * FormRowSet object against the existing files in the target upload directory.
-     * It will update the file name by appending with number if found duplicated.
+     * Method used to check for the duplicate file name of files in the
+     * FormRowSet object against the existing files in the target upload
+     * directory. It will update the file name by appending with number if found
+     * duplicated.
+     *
      * @param results
      * @param element a Form object
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void checkAndUpdateFileName(FormRowSet results, Element element, String primaryKeyValue) {
         String tableName = getTableName(element);
         checkAndUpdateFileName(results, tableName, primaryKeyValue);
     }
-    
+
     /**
-     * Method used to check for the duplicate file name of files in the 
-     * FormRowSet object against the existing files in the target upload directory.
-     * It will update the file name by appending with number if found duplicated.
+     * Method used to check for the duplicate file name of files in the
+     * FormRowSet object against the existing files in the target upload
+     * directory. It will update the file name by appending with number if found
+     * duplicated.
+     *
      * @param results
      * @param tableName
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void checkAndUpdateFileName(FormRowSet results, String tableName, String primaryKeyValue) {
         Set<String> existedFileName = new HashSet<String>();
-        
+
         for (int i = 0; i < results.size(); i++) {
             FormRow row = results.get(i);
             String id = row.getId();
@@ -72,14 +77,14 @@ public class FileUtil implements ApplicationContextAware {
                     for (Iterator<String> j = tempFilePathMap.keySet().iterator(); j.hasNext();) {
                         String fieldId = j.next();
                         String[] paths = tempFilePathMap.get(fieldId);
-                        
+
                         //if field id exist in deleteFilePath, do not need to update file name
                         if (row.getDeleteFilePaths(fieldId) != null) {
                             continue;
                         }
-                        
+
                         List<String> newPaths = new ArrayList<String>();
-                        
+
                         for (String path : paths) {
                             if (!path.endsWith(FileManager.THUMBNAIL_EXT)) {
                                 File file = FileManager.getFileByPath(path);
@@ -112,7 +117,7 @@ public class FileUtil implements ApplicationContextAware {
                                             thumbFile.renameTo(new File(thumbFile.getParentFile(), newThumbFilename));
 
                                             for (String key : tempFilePathMap.keySet()) {
-                                                List<String> thumbs = new ArrayList<String> (Arrays.asList(tempFilePathMap.get(key)));
+                                                List<String> thumbs = new ArrayList<String>(Arrays.asList(tempFilePathMap.get(key)));
                                                 if (thumbs.contains(thumbPath)) {
                                                     int index = thumbs.indexOf(thumbPath);
                                                     thumbs.set(index, newThumbPath);
@@ -135,19 +140,24 @@ public class FileUtil implements ApplicationContextAware {
             }
         }
     }
-    
+
     /**
-     * Validate the file name against the existing files in the target upload directory.
+     * Validate the file name against the existing files in the target upload
+     * directory.
+     *
      * @param fileName
      * @param path
-     * @param existedFileName a set of file names which not yet exist in the target upload directory but the current checking file should not has the same file name in it.  
-     * @return the new file name with number appended when duplicate file is found.
+     * @param existedFileName a set of file names which not yet exist in the
+     * target upload directory but the current checking file should not has the
+     * same file name in it.
+     * @return the new file name with number appended when duplicate file is
+     * found.
      */
     public static String validateFileName(String fileName, String path, Set<String> existedFileName) {
         String tempPath = path + fileName;
         boolean fileExist = true;
         int count = 1;
-        
+
         String name = fileName;
         String ext = "";
         if (fileName.contains(".")) {
@@ -155,27 +165,29 @@ public class FileUtil implements ApplicationContextAware {
             ext = fileName.substring(fileName.lastIndexOf("."));
         }
         fileName = name + ext;
-        
+
         do {
             File file = new File(tempPath);
-            
+
             if (file.exists() || existedFileName.contains(fileName)) {
-                fileName = name + "("+count+")" + ext;
+                fileName = name + "(" + count + ")" + ext;
                 tempPath = path + fileName;
             } else {
                 fileExist = false;
             }
-            count ++;
+            count++;
         } while (fileExist);
-        
+
         return fileName;
     }
 
     /**
-     * Store files in the FormRowSet to target upload directory of a form data record
+     * Store files in the FormRowSet to target upload directory of a form data
+     * record
+     *
      * @param results
      * @param element a Form object
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void storeFileFromFormRowSet(FormRowSet results, Element element, String primaryKeyValue) {
         String tableName = getTableName(element);
@@ -183,15 +195,17 @@ public class FileUtil implements ApplicationContextAware {
     }
 
     /**
-     * Store files in the FormRowSet to target upload directory of a form data record
+     * Store files in the FormRowSet to target upload directory of a form data
+     * record
+     *
      * @param results
      * @param tableName
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void storeFileFromFormRowSet(FormRowSet results, String tableName, String primaryKeyValue) {
         for (FormRow row : results) {
             String id = row.getId();
-            
+
             //delete files
             Map<String, String[]> deleteFilePathMap = row.getDeleteFilePathMap();
             if (deleteFilePathMap != null && !deleteFilePathMap.isEmpty()) {
@@ -206,7 +220,7 @@ public class FileUtil implements ApplicationContextAware {
                                     if (thumb != null) {
                                         thumb.delete();
                                     }
-                                    
+
                                     file.delete();
                                 }
                             } catch (Exception e) {
@@ -216,7 +230,7 @@ public class FileUtil implements ApplicationContextAware {
                     }
                 }
             }
-            
+
             Map<String, String[]> tempFilePathMap = row.getTempFilePathMap();
             if (tempFilePathMap != null && !tempFilePathMap.isEmpty()) {
                 for (String fieldId : tempFilePathMap.keySet()) {
@@ -237,12 +251,13 @@ public class FileUtil implements ApplicationContextAware {
             }
         }
     }
-    
+
     /**
      * Store file to target upload directory of a form data record
+     *
      * @param file
      * @param element A Form object
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void storeFile(MultipartFile file, Element element, String primaryKeyValue) {
         FileOutputStream out = null;
@@ -269,23 +284,25 @@ public class FileUtil implements ApplicationContextAware {
             }
         }
     }
-    
+
     /**
      * Store file to target upload directory of a form data record
+     *
      * @param file
      * @param element A Form object
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void storeFile(File file, Element element, String primaryKeyValue) {
         String tableName = getTableName(element);
         storeFile(file, tableName, primaryKeyValue);
     }
-    
+
     /**
      * Store file to target upload directory of a form data record
+     *
      * @param file
      * @param tableName
-     * @param primaryKeyValue 
+     * @param primaryKeyValue
      */
     public static void storeFile(File file, String tableName, String primaryKeyValue) {
         if (file != null && file.exists()) {
@@ -294,7 +311,7 @@ public class FileUtil implements ApplicationContextAware {
             if (!newDirectory.exists()) {
                 newDirectory.mkdirs();
             }
-                
+
             boolean result = file.renameTo(new File(newDirectory, file.getName()));
             if (!result) {
                 try {
@@ -308,11 +325,12 @@ public class FileUtil implements ApplicationContextAware {
 
     /**
      * Gets the file from target upload directory of a form data record
+     *
      * @param fileName
      * @param element A Form object
      * @param primaryKeyValue
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static File getFile(String fileName, Element element, String primaryKeyValue) throws IOException {
         // validate input
@@ -320,19 +338,20 @@ public class FileUtil implements ApplicationContextAware {
         if (normalizedFileName.contains("../") || normalizedFileName.contains("..\\")) {
             throw new SecurityException("Invalid filename " + normalizedFileName);
         }
-        
+
         // get file
         String path = getUploadPath(element, primaryKeyValue);
         return new File(path + fileName);
     }
-    
+
     /**
      * Gets the file from target upload directory of a form data record
+     *
      * @param fileName
      * @param tableName
      * @param primaryKeyValue
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static File getFile(String fileName, String tableName, String primaryKeyValue) throws IOException {
         // validate input
@@ -340,13 +359,14 @@ public class FileUtil implements ApplicationContextAware {
         if (normalizedFileName.contains("../") || normalizedFileName.contains("..\\")) {
             throw new SecurityException("Invalid filename " + normalizedFileName);
         }
-                
+
         String path = getUploadPath(tableName, primaryKeyValue);
         return new File(path + fileName);
     }
-    
+
     /**
      * Delete the file from target upload directory of a form data record
+     *
      * @param fileName
      * @param element A Form object
      * @param primaryKeyValue
@@ -357,7 +377,7 @@ public class FileUtil implements ApplicationContextAware {
 
             if (file != null && file.exists()) {
                 file.delete();
-                
+
                 //delete thumbnail 
                 FileUtil.deleteFile(fileName + FileManager.THUMBNAIL_EXT, element, primaryKeyValue);
             }
@@ -365,9 +385,10 @@ public class FileUtil implements ApplicationContextAware {
             LogUtil.error(FileUtil.class.getName(), e, fileName);
         }
     }
-    
+
     /**
      * Gets the file from target upload directory of a form data record
+     *
      * @param fileName
      * @param tableName
      * @param primaryKeyValue
@@ -378,7 +399,7 @@ public class FileUtil implements ApplicationContextAware {
 
             if (file != null && file.exists()) {
                 file.delete();
-                
+
                 //delete thumbnail
                 FileUtil.deleteFile(fileName + FileManager.THUMBNAIL_EXT, tableName, primaryKeyValue);
             }
@@ -386,9 +407,10 @@ public class FileUtil implements ApplicationContextAware {
             LogUtil.error(FileUtil.class.getName(), e, fileName);
         }
     }
-    
+
     /**
      * Delete the files from target upload directory of a form data record
+     *
      * @param element A Form object
      * @param primaryKeyValue
      */
@@ -404,9 +426,10 @@ public class FileUtil implements ApplicationContextAware {
             LogUtil.error(FileUtil.class.getName(), e, primaryKeyValue);
         }
     }
-    
+
     /**
      * Delete the files from target upload directory of a form data record
+     *
      * @param tableName
      * @param primaryKeyValue
      */
@@ -425,9 +448,10 @@ public class FileUtil implements ApplicationContextAware {
 
     /**
      * Gets the target upload directory of a form data record
+     *
      * @param element A Form object
      * @param primaryKeyValue
-     * @return 
+     * @return
      */
     public static String getUploadPath(Element element, String primaryKeyValue) {
         String tableName = getTableName(element);
@@ -436,9 +460,10 @@ public class FileUtil implements ApplicationContextAware {
 
     /**
      * Gets the target upload directory of a form data record
+     *
      * @param tableName
      * @param primaryKeyValue
-     * @return 
+     * @return
      */
     public static String getUploadPath(String tableName, String primaryKeyValue) {
         // validate input
@@ -462,13 +487,14 @@ public class FileUtil implements ApplicationContextAware {
 
         return formUploadPath + File.separator + "app_formuploads" + File.separator + tableName + File.separator + primaryKeyValue + File.separator;
     }
-    
+
     /**
      * Method used to gets the table name from the properties of a Form object
+     *
      * @param element A Form object
-     * @return 
+     * @return
      */
-    public static String getTableName (Element element) {
+    public static String getTableName(Element element) {
         // determine table name
         String tableName = "";
         if (element != null) {
@@ -480,11 +506,12 @@ public class FileUtil implements ApplicationContextAware {
         }
         return tableName;
     }
-    
+
     /**
      * Method used by the system to set an ApplicationContext object
+     *
      * @param appContext
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext appContext) throws BeansException {
         FileUtil.appContext = appContext;

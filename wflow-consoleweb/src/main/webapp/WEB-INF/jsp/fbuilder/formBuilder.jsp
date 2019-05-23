@@ -30,94 +30,94 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/boxy/stylesheets/boxy.css" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/fbuilder.css?build=<fmt:message key="build.number"/>" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/jsondiffpatch/jsondiffpatchhtml.css" />
-        
+
         <c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}">
             <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_rtl.css?build=<fmt:message key="build.number"/>">
         </c:if>
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_custom.css?build=<fmt:message key="build.number"/>">
         <jsp:include page="/WEB-INF/jsp/includes/css.jsp" />
-            
+
         <script type="text/javascript">
             var viewForm = function() {
-                // get form row id
-                var primaryKey = $("#form-row-id").attr("value");
-                if (!primaryKey || primaryKey.length == 0) {
-                    primaryKey = "<c:out value="${primaryKey}"/>";
-                }
+            // get form row id
+            var primaryKey = $("#form-row-id").attr("value");
+            if (!primaryKey || primaryKey.length == 0) {
+            primaryKey = "<c:out value="${primaryKey}"/>";
+            }
 
-                var form = $('#form-preview');
-                form.attr("action", "${pageContext.request.contextPath}/web/fbuilder/form/view/<c:out value="${formId}"/>/" + primaryKey);
-                $('#form-preview').submit();
-                return false;
+            var form = $('#form-preview');
+            form.attr("action", "${pageContext.request.contextPath}/web/fbuilder/form/view/<c:out value="${formId}"/>/" + primaryKey);
+            $('#form-preview').submit();
+            return false;
             };
 
             var updateForm = function() {
-                var securityToken = ConnectionManager.tokenName + "=" + ConnectionManager.tokenValue;
-                var form = $('#form-preview');
-                form.attr("action", "?" + securityToken);
-                form.attr("target", "");
-                $('#form-preview').submit();
-                return false;
+            var securityToken = ConnectionManager.tokenName + "=" + ConnectionManager.tokenValue;
+            var form = $('#form-preview');
+            form.attr("action", "?" + securityToken);
+            form.attr("target", "");
+            $('#form-preview').submit();
+            return false;
             };
 
             var saveForm = function() {
-                var json = FormBuilder.generateJSON();
-                var saveUrl = "${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/${appDefinition.version}/form/<c:out value="${formId}"/>/update";
-                $.ajax({
-                    type: "POST",
-                    data: {"json": json },
-                    url: saveUrl,
-                    dataType : "text",
-                    beforeSend: function (request) {
-                       request.setRequestHeader(ConnectionManager.tokenName, ConnectionManager.tokenValue);
-                    },
-                    success: function(response) {
-                        FormBuilder.originalJson = FormBuilder.generateJSON();
-                        FormBuilder.showMessage("<fmt:message key="fbuilder.saved"/>");
-                        setTimeout(function(){ FormBuilder.showMessage(""); }, 2000);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert("<fmt:message key="fbuilder.errorSaving"/> (" + textStatus + "): " + errorThrown);
-                    }
-                });
+            var json = FormBuilder.generateJSON();
+            var saveUrl = "${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/${appDefinition.version}/form/<c:out value="${formId}"/>/update";
+            $.ajax({
+            type: "POST",
+            data: {"json": json },
+            url: saveUrl,
+            dataType : "text",
+            beforeSend: function (request) {
+            request.setRequestHeader(ConnectionManager.tokenName, ConnectionManager.tokenValue);
+            },
+            success: function(response) {
+            FormBuilder.originalJson = FormBuilder.generateJSON();
+            FormBuilder.showMessage("<fmt:message key="fbuilder.saved"/>");
+            setTimeout(function(){ FormBuilder.showMessage(""); }, 2000);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+            alert("<fmt:message key="fbuilder.errorSaving"/> (" + textStatus + "): " + errorThrown);
+            }
+            });
             }
 
             window.onbeforeunload = function() {
-                if(!FormBuilder.isSaved()){
-                    return "<fmt:message key="fbuilder.saveBeforeClose"/>";
-                }
+            if(!FormBuilder.isSaved()){
+            return "<fmt:message key="fbuilder.saveBeforeClose"/>";
+            }
             };
 
             $(document).ready(function() {
-                // initialize the form
-                FormBuilder.appId = '<c:out value="${appId}"/>';
-                FormBuilder.appVersion = '<c:out value="${appDefinition.version}"/>';
-                FormBuilder.contextPath = '${pageContext.request.contextPath}';
-                FormBuilder.formPreviewUrl = '/web/fbuilder/app/<c:out value="${appId}"/>/${appDefinition.version}/form/<c:out value="${formId}"/>/preview/';
-                FormBuilder.elementPreviewUrl = '/web/fbuilder/app/<c:out value="${appId}"/>/${appDefinition.version}/form/<c:out value="${formId}"/>/element/preview';
-                FormBuilder.init("<c:out value="${formId}"/>");
+            // initialize the form
+            FormBuilder.appId = '<c:out value="${appId}"/>';
+            FormBuilder.appVersion = '<c:out value="${appDefinition.version}"/>';
+            FormBuilder.contextPath = '${pageContext.request.contextPath}';
+            FormBuilder.formPreviewUrl = '/web/fbuilder/app/<c:out value="${appId}"/>/${appDefinition.version}/form/<c:out value="${formId}"/>/preview/';
+            FormBuilder.elementPreviewUrl = '/web/fbuilder/app/<c:out value="${appId}"/>/${appDefinition.version}/form/<c:out value="${formId}"/>/element/preview';
+            FormBuilder.init("<c:out value="${formId}"/>");
 
-                <c:if test="${empty elementHtml}">
+            <c:if test="${empty elementHtml}">
                 // clear the form
                 FormBuilder.clear();
 
                 setTimeout(function() {
-                    // test to programatically add a new section and column
-                    var section = FormBuilder.addSection();
+                // test to programatically add a new section and column
+                var section = FormBuilder.addSection();
                 }, 0);
-                </c:if>
+            </c:if>
             });
 
             <c:forEach items="${palette.editableElementList}" var="element">
                 <c:if test="${!empty element.propertyOptions}">
-                try {
+                    try {
                     var elementProps = ${PropertyUtil.injectHelpLink(element.helpLink, element.propertyOptions)};
                     var elementTemplate = "${element.formBuilderTemplate}";
                     FormBuilder.initElementDefinition("${element.className}", elementProps, elementTemplate);
-                } catch (e) {
+                    } catch (e) {
                     alert("Error initializing ${element.name}:" + e);
-                }
+                    }
                 </c:if>
             </c:forEach>
         </script>
@@ -139,7 +139,7 @@
                         <li id="builder-step-properties"><a href="#" onclick="FormBuilder.showFormProperties()"><span class="steps-bg"><span class="title"><fmt:message key="fbuilder.properties"/> </span><span class="subtitle"><fmt:message key="fbuilder.properties.description"/></span></span></a></li>
                         <li id="builder-step-properties"><a href="#" onclick="FormBuilder.previewForm()"><span class="steps-bg"><span class="title"><fmt:message key="fbuilder.preview"/> </span><span class="subtitle"><fmt:message key="fbuilder.preview.description"/></span></span></a></li>
                         <li class="last-inactive"><a href="#" onclick="FormBuilder.mergeAndSave()"><span class="steps-bg"><span class="title"><fmt:message key="fbuilder.save"/> </span><span class="subtitle"><fmt:message key="fbuilder.save.description"/></span></span></a></li>
-                        <jsp:include page="extend.jsp" flush="true" />
+                                    <jsp:include page="extend.jsp" flush="true" />
                     </ul>
                     <div id="builder-bg"></div>
                 </div>
@@ -151,25 +151,25 @@
                                 <fieldset id="builder-palette">
                                     <div id="builder-palette-top"></div>
                                     <div id="builder-palette-body">
-                                    <c:forEach items="${palette.elementCategoryMap}" var="categoryRow">
-                                        <c:set var="category" value="${categoryRow.key}"/>
-                                        <c:set var="elementList" value="${categoryRow.value}"/>
-                                        <h3>${category}</h3>
-                                        <ul>
-                                        <c:forEach items="${elementList}" var="element">
-                                            <li>
-                                                <div class="form-palette-element" element-class="${element.className}" element-property='${element.defaultPropertyValues}'>
-                                                    <c:set var="elementIconPath" value="${element.formBuilderIcon}"/>
-                                                    <c:if test="${empty elementIconPath}">
-                                                        <c:set var="elementIconPath" value="/images/v3/builder/sidebar_element.gif"/>
-                                                    </c:if>
-                                                    <img src="${pageContext.request.contextPath}${elementIconPath}" border="0" align="left" />
-                                                    <label>${element.i18nLabel}</label>
-                                                </div>
-                                            </li>
+                                        <c:forEach items="${palette.elementCategoryMap}" var="categoryRow">
+                                            <c:set var="category" value="${categoryRow.key}"/>
+                                            <c:set var="elementList" value="${categoryRow.value}"/>
+                                            <h3>${category}</h3>
+                                            <ul>
+                                                <c:forEach items="${elementList}" var="element">
+                                                    <li>
+                                                        <div class="form-palette-element" element-class="${element.className}" element-property='${element.defaultPropertyValues}'>
+                                                            <c:set var="elementIconPath" value="${element.formBuilderIcon}"/>
+                                                            <c:if test="${empty elementIconPath}">
+                                                                <c:set var="elementIconPath" value="/images/v3/builder/sidebar_element.gif"/>
+                                                            </c:if>
+                                                            <img src="${pageContext.request.contextPath}${elementIconPath}" border="0" align="left" />
+                                                            <label>${element.i18nLabel}</label>
+                                                        </div>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
                                         </c:forEach>
-                                        </ul>
-                                    </c:forEach>
                                     </div>
                                 </fieldset>
                             </td>
@@ -203,26 +203,26 @@
                 <fmt:message key="console.builder.footer"/>
             </div>
         </div>
-        
+
         <div id="builder-message"></div>
-            
+
         <script type="text/javascript">
             HelpGuide.base = "${pageContext.request.contextPath}"
             HelpGuide.attachTo = "#builder-bar";
             HelpGuide.key = "help.web.console.app.form.builder";
-//            HelpGuide.definition = [{
-//                    id: "start",
-//                    title: "Form Builder",
-//                    description: "Drag elements from here to the canvas on the right.",
-//                    buttons: [{name: "Done", onclick: HelpGuide.hide},{name: "Hide Hints", onclick: HelpGuide.disable}],
-//                    attachTo: "#builder-palette",
-//                    position: 3,
-//                    show: true
-//                }
-//            ]
+            //            HelpGuide.definition = [{
+            //                    id: "start",
+            //                    title: "Form Builder",
+            //                    description: "Drag elements from here to the canvas on the right.",
+            //                    buttons: [{name: "Done", onclick: HelpGuide.hide},{name: "Hide Hints", onclick: HelpGuide.disable}],
+            //                    attachTo: "#builder-palette",
+            //                    position: 3,
+            //                    show: true
+            //                }
+            //            ]
             HelpGuide.show();
         </script>
-            
+
         <jsp:include page="/WEB-INF/jsp/console/apps/builder.jsp" flush="true">
             <jsp:param name="appId" value="${appId}"/>
             <jsp:param name="appVersion" value="${appDefinition.version}"/>
@@ -236,6 +236,6 @@
             <jsp:param name="webConsole" value="true"/>
             <jsp:param name="builderMode" value="true"/>
         </jsp:include>
-                        
+
     </body>
 </html>

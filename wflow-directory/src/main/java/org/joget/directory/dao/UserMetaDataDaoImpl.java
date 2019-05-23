@@ -34,7 +34,7 @@ public class UserMetaDataDaoImpl extends AbstractSpringDao implements UserMetaDa
 
         return null;
     }
-    
+
     public Boolean addUserMetaData(UserMetaData data) {
         try {
             save("UserMetaData", data);
@@ -82,5 +82,5 @@ public class UserMetaDataDaoImpl extends AbstractSpringDao implements UserMetaDa
             return false;
         }
     }
-    
+
 }

@@ -21,10 +21,10 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 /**
  * A utility class used to create table in Excel for datalist excel export
- * 
+ *
  */
 public class DataListExcelWriter {
-    
+
     SXSSFWorkbook wb;
     SXSSFSheet sheet;
     SXSSFRow currentRow;
@@ -35,13 +35,13 @@ public class DataListExcelWriter {
     Integer rowNo = null;
     Integer colNo = null;
     Integer totalColumnNumber = 0;
-    
+
     public DataListExcelWriter(SXSSFWorkbook wb, SXSSFSheet sheet) {
         this.wb = wb;
         this.sheet = sheet;
         this.sheet.setRandomAccessWindowSize(100);
         this.sheet.trackAllColumnsForAutoSizing();
-        
+
         headerStyle = (XSSFCellStyle) wb.createCellStyle();
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         headerStyle.setFillForegroundColor(HSSFColor.DARK_BLUE.index);
@@ -50,7 +50,7 @@ public class DataListExcelWriter {
         headerFont.setColor(HSSFColor.WHITE.index);
         headerStyle.setFont(headerFont);
     }
-    
+
     /**
      * Create new row in excel sheet
      */
@@ -63,10 +63,11 @@ public class DataListExcelWriter {
         colNo = null;
         currentRow = (SXSSFRow) sheet.createRow(rowNo);
     }
-    
+
     /**
      * Add header cell in current row
-     * @param text 
+     *
+     * @param text
      * @param backgroundColor Color name in HSSFColor
      */
     public void addHeaderCell(String text, Color backgroundColor) {
@@ -90,9 +91,10 @@ public class DataListExcelWriter {
             currentCell.setCellStyle(headerStyle);
         }
     }
-    
+
     /**
-     * Add cell in current row 
+     * Add cell in current row
+     *
      * @param value
      */
     public void addCell(Object value) {
@@ -107,7 +109,7 @@ public class DataListExcelWriter {
         currentCell = getCurrentRow().createCell(colNo);
         writeCell(value, currentCell);
     }
-    
+
     /**
      * Set all columns to auto width
      */
@@ -118,18 +120,20 @@ public class DataListExcelWriter {
             sheet.autoSizeColumn((short) colCount++);
         }
     }
-    
+
     /**
-     * Get current working row in sheet 
-     * @return 
+     * Get current working row in sheet
+     *
+     * @return
      */
     public SXSSFRow getCurrentRow() {
         return currentRow;
     }
-    
+
     /**
-     * Get current working cell in sheet 
-     * @return 
+     * Get current working cell in sheet
+     *
+     * @return
      */
     public Cell getCurrentCell() {
         return currentCell;
@@ -137,7 +141,8 @@ public class DataListExcelWriter {
 
     /**
      * Get Excel Workbook
-     * @return 
+     *
+     * @return
      */
     public SXSSFWorkbook getWb() {
         return wb;
@@ -145,14 +150,17 @@ public class DataListExcelWriter {
 
     /**
      * Get excel sheet
-     * @return 
+     *
+     * @return
      */
     public SXSSFSheet getSheet() {
         return sheet;
     }
-    
+
     /**
-     * Write the value to the cell. Override this method if you have complex data types that may need to be exported.
+     * Write the value to the cell. Override this method if you have complex
+     * data types that may need to be exported.
+     *
      * @param value the value of the cell
      * @param cell the cell to write it to
      */
@@ -167,9 +175,10 @@ public class DataListExcelWriter {
             cell.setCellValue(new XSSFRichTextString(escapeColumnValue(value)));
         }
     }
-    
+
     /**
      * Escape certain values that are not permitted in excel cells.
+     *
      * @param rawValue the object value
      * @return the escaped value
      */

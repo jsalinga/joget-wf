@@ -56,48 +56,48 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
     public String getPropertyOptions() {
         return AppUtil.readPluginResource(getClass().getName(), "/properties/app/userNotificationAuditTrail.json", null, true, null);
     }
-    
+
     public Object execute(Map props) {
         AuditTrail auditTrail = (AuditTrail) props.get("auditTrail");
-        
+
         if (validation(auditTrail)) {
             String method = auditTrail.getMethod();
             Object[] args = auditTrail.getArgs();
-            
+
             String activityInstanceId = null;
             List<String> users = null;
-            
+
             if (method.equals("getDefaultAssignments") && args.length == 3) {
                 users = (List<String>) auditTrail.getReturnObject();
                 activityInstanceId = (String) args[1];
             } else if (method.equals("assignmentReassign") && args.length == 5) {
-                users = new ArrayList<String> ();
+                users = new ArrayList<String>();
                 users.add((String) args[3]);
                 activityInstanceId = (String) args[2];
             }
-            
+
             if (activityInstanceId != null && !activityInstanceId.isEmpty() && users != null) {
                 WorkflowManager workflowManager = (WorkflowManager) AppUtil.getApplicationContext().getBean("workflowManager");
                 WorkflowActivity wfActivity = workflowManager.getActivityById(activityInstanceId);
                 LogUtil.info(UserNotificationAuditTrail.class.getName(), "Users to notify: " + users);
-                
+
                 if (wfActivity != null && !excluded((String) props.get("exclusion"), wfActivity) && !users.isEmpty()) {
                     sendEmail(props, auditTrail, workflowManager, users, wfActivity);
                 }
             }
         }
-        
+
         return null;
     }
-    
-    protected void sendEmail (final Map props, final AuditTrail auditTrail, final WorkflowManager workflowManager, final List<String> users, final WorkflowActivity wfActivity) {
+
+    protected void sendEmail(final Map props, final AuditTrail auditTrail, final WorkflowManager workflowManager, final List<String> users, final WorkflowActivity wfActivity) {
         final String smtpHost = (String) props.get("host");
-        
-        SetupManager setupManager = (SetupManager)AppUtil.getApplicationContext().getBean("setupManager");
+
+        SetupManager setupManager = (SetupManager) AppUtil.getApplicationContext().getBean("setupManager");
         String setupSmtpHost = setupManager.getSettingValue("smtpHost");
-        
+
         if ((smtpHost != null && !smtpHost.isEmpty()) || (setupSmtpHost != null && !setupSmtpHost.isEmpty())) {
-            final String profile = DynamicDataSourceManager.getCurrentProfile();            
+            final String profile = DynamicDataSourceManager.getCurrentProfile();
             new PluginThread(new Runnable() {
 
                 public void run() {
@@ -115,7 +115,7 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
                             decryptedSmtpPassword = SecurityUtil.decrypt(decryptedSmtpPassword);
                         }
                     }
-                    
+
                     String from = (String) props.get("from");
                     String cc = (String) props.get("cc");
 
@@ -133,10 +133,10 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
                         replace = new HashMap<String, String>();
                         replace.put("\\n", "<br/>");
                     }
-                    
+
                     String activityInstanceId = wfActivity.getId();
                     String link = getLink(base, url, passoverMethod, parameterName, activityInstanceId);
-                    
+
                     try {
                         for (String username : users) {
                             Collection<String> addresses = AppUtil.getEmailList(null, username, null, null);
@@ -144,33 +144,34 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
                             if (addresses != null && addresses.size() > 0) {
                                 workflowUserManager.setCurrentThreadUser(username);
                                 WorkflowAssignment wfAssignment = null;
-                                
+
                                 int count = 0;
                                 do {
                                     try {
                                         wfAssignment = workflowManager.getAssignment(activityInstanceId);
-                                    } catch (Exception ex) {}
-                                    
+                                    } catch (Exception ex) {
+                                    }
+
                                     if (wfAssignment == null) {
                                         Thread.sleep(4000); //wait for assignment creation
                                     }
                                     count++;
                                 } while (wfAssignment == null && count < 5); // try max 5 times
-                                
+
                                 if (wfAssignment != null) {
                                     // create the email message
                                     HtmlEmail email = AppUtil.createEmail(smtpHost, smtpPort, security, smtpUsername, smtpPassword, from);
                                     if (email == null) {
                                         return;
                                     }
-                                    
+
                                     if (cc != null && cc.length() != 0) {
                                         Collection<String> ccs = AppUtil.getEmailList(null, cc, wfAssignment, auditTrail.getAppDef());
                                         for (String address : ccs) {
                                             email.addCc(StringUtil.encodeEmail(address));
                                         }
                                     }
-                                    
+
                                     //send to replacement user
                                     UserReplacementDao urDao = (UserReplacementDao) AppUtil.getApplicationContext().getBean("userReplacementDao");
                                     String args[] = wfAssignment.getProcessDefId().split("#");
@@ -241,12 +242,12 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
                     }
                 }
             }).start();
-            
+
         } else {
             LogUtil.info(this.getClassName(), "SMTP Host is not configured.");
         }
     }
-    
+
     public void webService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         boolean isAdmin = WorkflowUtil.isCurrentUserInRole(WorkflowUserManager.ROLE_ADMIN);
@@ -254,7 +255,7 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
         String appId = request.getParameter("appId");
         String appVersion = request.getParameter("appVersion");
@@ -283,7 +284,7 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
                         }
                     }
                 }
-                
+
                 jsonArray.write(response.getWriter());
             } catch (Exception ex) {
                 LogUtil.error(UserNotificationAuditTrail.class.getName(), ex, "Get activity options Error!");
@@ -292,22 +293,22 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         }
     }
-    
+
     protected boolean validation(AuditTrail auditTrail) {
-        return auditTrail != null 
+        return auditTrail != null
                 && (auditTrail.getMethod().equals("getDefaultAssignments")
                 || auditTrail.getMethod().equals("assignmentReassign"));
     }
-    
+
     protected boolean excluded(String exclusion, WorkflowActivity activity) {
         Collection<String> exclusionIds = new ArrayList<String>();
         if (exclusion != null && !exclusion.isEmpty()) {
             exclusionIds.addAll(Arrays.asList(exclusion.split(";")));
         }
-        
+
         return exclusionIds.contains(WorkflowUtil.getProcessDefIdWithoutVersion(activity.getProcessDefId()) + "-" + activity.getActivityDefId());
     }
-    
+
     protected String getLink(String base, String url, String passoverMethod, String parameterName, String activityInstanceId) {
         String link = "";
 
@@ -337,7 +338,7 @@ public class UserNotificationAuditTrail extends DefaultAuditTrailPlugin implemen
 
             link = base + urlMapping + activityInstanceId;
         }
-        
+
         return link;
     }
 }

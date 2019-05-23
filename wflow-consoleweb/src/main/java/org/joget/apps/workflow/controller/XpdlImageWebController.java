@@ -24,7 +24,7 @@ public class XpdlImageWebController {
         File file = null;
         try {
             file = new File(XpdlImageUtil.getXpdlImagePath(processDefId), XpdlImageUtil.THUMBNAIL_PREFIX + processDefId + XpdlImageUtil.IMAGE_EXTENSION);
-        } catch(Exception e) {
+        } catch (Exception e) {
             //ingore
         }
         if (file == null || !file.exists()) {
@@ -35,7 +35,7 @@ public class XpdlImageWebController {
         DataInputStream in = new DataInputStream(new FileInputStream(file));
 
         int length = 0;
-        
+
         try {
             response.setContentType("image/png");
             while ((in != null) && ((length = in.read(bbuf)) != -1)) {
@@ -52,11 +52,11 @@ public class XpdlImageWebController {
     public void getXpdlImage(OutputStream out, @RequestParam("processDefId") String processDefId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         processDefId = SecurityUtil.validateStringInput(processDefId);
         processDefId = processDefId.replaceAll(":", "#");
-        
+
         File file = null;
         try {
             file = new File(XpdlImageUtil.getXpdlImagePath(processDefId), processDefId + XpdlImageUtil.IMAGE_EXTENSION);
-        } catch(Exception e) {
+        } catch (Exception e) {
             //ingore
         }
         if (file == null || !file.exists()) {
@@ -67,7 +67,7 @@ public class XpdlImageWebController {
         DataInputStream in = new DataInputStream(new FileInputStream(file));
 
         int length = 0;
-        
+
         try {
             response.setContentType("image/png");
             while ((in != null) && ((length = in.read(bbuf)) != -1)) {

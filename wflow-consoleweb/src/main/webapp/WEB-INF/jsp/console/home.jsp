@@ -8,19 +8,19 @@
         <div class="welcome-box">
             <h3><fmt:message key="console.home.getStarted.title"/></h3>
             <p>
-                <ul>
+            <ul>
                 <c:if test="${isAdmin}">
                     <li><a href="${pageContext.request.contextPath}/web/console/directory/orgs"><fmt:message key="console.header.menu.label.users"/></a></li>
                     <li><a href="${pageContext.request.contextPath}/web/desktop/apps"><fmt:message key="console.header.menu.label.apps"/></a></li>
                     <li><a href="${pageContext.request.contextPath}/web/console/run/apps"><fmt:message key="console.header.menu.label.run"/></a></li>
                     <li><a href="${pageContext.request.contextPath}/web/console/monitor/running"><fmt:message key="console.header.menu.label.monitor"/></a></li>
                     <li><a href="${pageContext.request.contextPath}/web/console/setting/general"><fmt:message key="console.header.top.label.settings"/></a></li>
-                </c:if>
-                <c:if test="${!isAdmin}">
+                    </c:if>
+                    <c:if test="${!isAdmin}">
                     <li><a href="${pageContext.request.contextPath}/web/console/run/apps"><fmt:message key="console.header.submenu.label.publishedApps"/></a></li>
                     <li><a href="${pageContext.request.contextPath}/web/console/run/inbox"><fmt:message key="console.header.submenu.label.inbox"/></a></li>
-                </c:if>
-                </ul>
+                    </c:if>
+            </ul>
             </p>
         </div>
 
@@ -39,14 +39,14 @@
 <script>
     Template.init("#menu-home", "#nav-home-welcome");
 
-<c:if test="${isAdmin}">
-    HelpGuide.key = "help.web.console.home.admin";
-</c:if>
-<c:if test="${!isAdmin}">
-    HelpGuide.key = "help.web.console.home.user";
-</c:if>
-    
+    <c:if test="${isAdmin}">
+        HelpGuide.key = "help.web.console.home.admin";
+    </c:if>
+    <c:if test="${!isAdmin}">
+        HelpGuide.key = "help.web.console.home.user";
+    </c:if>
+
     if (AdminBar.showQuickOverlay) {
-        HelpGuide.key = "help.none";
+    HelpGuide.key = "help.none";
     }    
 </script>

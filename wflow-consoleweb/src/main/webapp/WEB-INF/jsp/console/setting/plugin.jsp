@@ -27,89 +27,89 @@
     <div id="main-body">
         <div id="main-body-content-filter">
             <form>
-            <fmt:message key="console.plugin.label.typeFilter"/>
-            <select id="JsonDataTable_filterbytype" onchange="filter(JsonDataTable, '&className=', this.options[this.selectedIndex].value)">
-                <option></option>
-            <c:forEach items="${pluginType}" var="t">
-                <c:set var="selected"><c:if test="${t.key == param.className}"> selected</c:if></c:set>
-                <option value="${t.key}" ${selected}>${t.value}</option>
-            </c:forEach>
-            </select>
+                <fmt:message key="console.plugin.label.typeFilter"/>
+                <select id="JsonDataTable_filterbytype" onchange="filter(JsonDataTable, '&className=', this.options[this.selectedIndex].value)">
+                    <option></option>
+                    <c:forEach items="${pluginType}" var="t">
+                        <c:set var="selected"><c:if test="${t.key == param.className}"> selected</c:if></c:set>
+                        <option value="${t.key}" ${selected}>${t.value}</option>
+                    </c:forEach>
+                </select>
             </form>
         </div>
         <ui:jsontable url="${pageContext.request.contextPath}/web/json/plugin/list?${pageContext.request.queryString}"
-                       var="JsonDataTable"
-                       divToUpdate="pluginList"
-                       jsonData="data"
-                       rowsPerPage="15"
-                       width="100%"
-                       sort="name"
-                       desc="false"
-                       hrefParam="id"
-                       hrefQuery="false"
-                       hrefDialog="false"
-                       hrefDialogWidth="600px"
-                       hrefDialogHeight="400px"
-                       hrefDialogTitle="Process Dialog"
-                       checkbox="true"
-                       checkboxButton2="console.setting.plugin.unintall.label"
-                       checkboxCallback2="uninstall"
-                       searchItems="name|Name"
-                       fields="['id','name','description','version','plugintype', 'uninstallable']"
-                       column1="{key: 'name', label: 'console.plugin.label.name', sortable: false, width: 180}"
-                       column2="{key: 'description', label: 'console.plugin.label.description', sortable: false, width: 300}"
-                       column3="{key: 'version', label: 'console.plugin.label.version', sortable: false, width: 80}"
-                       column4="{key: 'plugintype', label: 'console.plugin.label.plugintype', sortable: false, width: 300}"
-                       column5="{key: 'uninstallable', label: 'console.plugin.label.uninstallable', sortable: false, width: 80, relaxed: true}"
-                       />
+                      var="JsonDataTable"
+                      divToUpdate="pluginList"
+                      jsonData="data"
+                      rowsPerPage="15"
+                      width="100%"
+                      sort="name"
+                      desc="false"
+                      hrefParam="id"
+                      hrefQuery="false"
+                      hrefDialog="false"
+                      hrefDialogWidth="600px"
+                      hrefDialogHeight="400px"
+                      hrefDialogTitle="Process Dialog"
+                      checkbox="true"
+                      checkboxButton2="console.setting.plugin.unintall.label"
+                      checkboxCallback2="uninstall"
+                      searchItems="name|Name"
+                      fields="['id','name','description','version','plugintype', 'uninstallable']"
+                      column1="{key: 'name', label: 'console.plugin.label.name', sortable: false, width: 180}"
+                      column2="{key: 'description', label: 'console.plugin.label.description', sortable: false, width: 300}"
+                      column3="{key: 'version', label: 'console.plugin.label.version', sortable: false, width: 80}"
+                      column4="{key: 'plugintype', label: 'console.plugin.label.plugintype', sortable: false, width: 300}"
+                      column5="{key: 'uninstallable', label: 'console.plugin.label.uninstallable', sortable: false, width: 80, relaxed: true}"
+                      />
     </div>
 </div>
 
 <script>
     $(document).ready(function(){
-        $('#JsonDataTable_searchTerm').hide();
+    $('#JsonDataTable_searchTerm').hide();
 
-        <c:if test="${isVirtualHostEnabled}">
-            $('#JsonDataTable_pluginList-buttons button').hide();
-            $('#JsonDataTable_pluginList-buttons button:eq(0)').show();
-        </c:if>
+    <c:if test="${isVirtualHostEnabled}">
+        $('#JsonDataTable_pluginList-buttons button').hide();
+        $('#JsonDataTable_pluginList-buttons button:eq(0)').show();
+    </c:if>
     });
 
     <ui:popupdialog var="popupDialog" src="${pageContext.request.contextPath}/web/console/setting/plugin/upload"/>
 
     function upload(dummy){
-        popupDialog.init();
+    popupDialog.init();
     }
 
     function closeDialog() {
-        popupDialog.close();
+    popupDialog.close();
     }
 
     function reload(dummy){
-        var callback = {
-            success : function() {
-                document.location = '${pageContext.request.contextPath}/web/console/setting/plugin';
-            }
-        }
-        var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/setting/plugin/refresh', callback, "");
+    var callback = {
+    success : function() {
+    document.location = '${pageContext.request.contextPath}/web/console/setting/plugin';
+    }
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/setting/plugin/refresh', callback, "");
     }
 
     function uninstall(selectedList){
-         if (confirm('<fmt:message key="console.setting.plugin.unintall.label.confirmation"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/setting/plugin';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/setting/plugin/uninstall', callback, 'selectedPlugins='+selectedList);
-        }
+    if (confirm('<fmt:message key="console.setting.plugin.unintall.label.confirmation"/>')) {
+    var callback = {
+    success : function() {
+    document.location = '${pageContext.request.contextPath}/web/console/setting/plugin';
     }
-    
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/setting/plugin/uninstall', callback, 'selectedPlugins='+selectedList);
+    }
+    }
+
     var org_filter = window.filter;
     var filter = function(jsonTable, url, value){
-        url = "&className=" + encodeURI($('#JsonDataTable_filterbytype').val());
-        url += "&name=" + encodeURI($('#JsonDataTable_searchCondition').val());
-        org_filter(jsonTable, url, '');
+    url = "&className=" + encodeURI($('#JsonDataTable_filterbytype').val());
+    url += "&name=" + encodeURI($('#JsonDataTable_searchCondition').val());
+    org_filter(jsonTable, url, '');
     };
 </script>
 

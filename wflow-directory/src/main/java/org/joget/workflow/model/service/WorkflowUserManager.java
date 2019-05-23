@@ -15,10 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Utility methods to deal with logged in user
- * 
+ *
  */
 public class WorkflowUserManager {
-    
+
     public static final String ROLE_ANONYMOUS = "roleAnonymous";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
@@ -26,18 +26,20 @@ public class WorkflowUserManager {
     private ThreadLocal currentThreadUserRoles = new ThreadLocal();
     private ThreadLocal currentThreadUserData = new ThreadLocal();
     private ThreadLocal systemThreadUser = new ThreadLocal();
-    
+
     /**
      * Set the current processing is trigger by system
-     * @param isSystemUser 
+     *
+     * @param isSystemUser
      */
     public void setSystemThreadUser(boolean isSystemUser) {
         systemThreadUser.set(isSystemUser);
     }
-    
+
     /**
      * Check the current processing is triggered by system
-     * @return 
+     *
+     * @return
      */
     public boolean isSystemUser() {
         Boolean isSystemUser = (Boolean) systemThreadUser.get();
@@ -49,23 +51,25 @@ public class WorkflowUserManager {
 
     /**
      * Method used by system to set current logged in user
-     * @param username 
+     *
+     * @param username
      */
     public void setCurrentThreadUser(String username) {
         currentThreadUser.set(username);
         currentThreadUserRoles.remove();
     }
-    
+
     /**
      * Method used by system to set current logged in user
-     * @param user 
+     *
+     * @param user
      */
     public void setCurrentThreadUser(User user) {
         currentThreadUser.set(user);
     }
 
     /**
-     * Method used by system to clear the user 
+     * Method used by system to clear the user
      */
     public void clearCurrentThreadUser() {
         currentThreadUser.remove();
@@ -76,45 +80,48 @@ public class WorkflowUserManager {
 
     /**
      * Method used by system to get current thread user
-     * @return 
+     *
+     * @return
      */
     public String getCurrentThreadUser() {
         Object user = currentThreadUser.get();
-        
+
         if (user instanceof User) {
             return ((User) user).getUsername();
         } else {
             return (String) user;
         }
     }
-    
+
     /**
      * To set current logged in user temporary data
+     *
      * @param key
      * @param value
      */
     public void setCurrentUserTempData(String key, Object value) {
-        Map<String, Object> data = (Map<String, Object>)currentThreadUserData.get();
+        Map<String, Object> data = (Map<String, Object>) currentThreadUserData.get();
         if (data == null) {
             data = new HashMap<String, Object>();
             currentThreadUserData.set(data);
         }
         data.put(key, value);
     }
-    
+
     /**
      * To get current user temporary data by key
-     * @return 
+     *
+     * @return
      */
     public Object getCurrentUserTempData(String key) {
-        Map<String, Object> data = (Map<String, Object>)currentThreadUserData.get();
+        Map<String, Object> data = (Map<String, Object>) currentThreadUserData.get();
         if (data != null) {
             return data.get(key);
         }
-        
+
         return null;
     }
-    
+
     public User getCurrentUser() {
         // check for user in current thread
         Object threadUser = currentThreadUser.get();
@@ -123,19 +130,19 @@ public class WorkflowUserManager {
                 return (User) threadUser;
             } else if (threadUser instanceof String) {
                 String username = threadUser.toString();
-                
+
                 if (ROLE_ANONYMOUS.equals(username)) {
                     return null;
                 } else {
                     DirectoryManager directoryManager = (DirectoryManager) DirectoryUtil.getApplicationContext().getBean("directoryManager");
                     User user = directoryManager.getUserByUsername(username);
-                
+
                     setCurrentThreadUser(user);
                     return user;
                 }
             }
         }
-        
+
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication auth = context.getAuthentication();
 
@@ -143,7 +150,7 @@ public class WorkflowUserManager {
             setCurrentThreadUser(ROLE_ANONYMOUS);
             return null;
         }
-        
+
         Object userObj = auth.getDetails();
         if (userObj == null) {
             userObj = auth.getPrincipal();
@@ -166,7 +173,8 @@ public class WorkflowUserManager {
 
     /**
      * Gets current logged in user
-     * @return 
+     *
+     * @return
      */
     public String getCurrentUsername() {
         User user = getCurrentUser();
@@ -178,11 +186,12 @@ public class WorkflowUserManager {
     }
 
     /**
-     * Retrieve the roles of current logged in user 
-     * @return 
+     * Retrieve the roles of current logged in user
+     *
+     * @return
      */
     public Collection<String> getCurrentRoles() {
-        Collection<String> results = (Collection<String>)currentThreadUserRoles.get();
+        Collection<String> results = (Collection<String>) currentThreadUserRoles.get();
         if (results == null) {
             results = new HashSet<String>();
             SecurityContext context = SecurityContextHolder.getContext();
@@ -194,13 +203,13 @@ public class WorkflowUserManager {
                     userObj = auth.getPrincipal();
                 }
                 if (userObj instanceof UserDetails) {
-                    Collection<? extends GrantedAuthority> authorities = ((UserDetails)userObj).getAuthorities();
-                    for (GrantedAuthority ga: authorities) {
+                    Collection<? extends GrantedAuthority> authorities = ((UserDetails) userObj).getAuthorities();
+                    for (GrantedAuthority ga : authorities) {
                         results.add(ga.getAuthority());
                     }
                 } else {
                     Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-                    for (GrantedAuthority ga: authorities) {
+                    for (GrantedAuthority ga : authorities) {
                         results.add(ga.getAuthority());
                     }
                 }
@@ -212,8 +221,9 @@ public class WorkflowUserManager {
 
     /**
      * Check current user has a role
+     *
      * @param role
-     * @return 
+     * @return
      */
     public boolean isCurrentUserInRole(String role) {
         Collection<String> roles = getCurrentRoles();
@@ -223,7 +233,8 @@ public class WorkflowUserManager {
 
     /**
      * Check whether the current user is an anonymous
-     * @return 
+     *
+     * @return
      */
     public boolean isCurrentUserAnonymous() {
         String username = getCurrentUsername();

@@ -49,18 +49,18 @@ import io.proximax.upload.UploadParameterBuilder;
 import io.proximax.upload.UploadResult;
 import io.proximax.upload.Uploader;
 
-
 @Service("formService")
 public class FormServiceImpl implements FormService {
 
-	@Autowired
+    @Autowired
     WorkflowUserManager workflowUserManager;
-	
-	 @Autowired
-	    UserDao userDao;
+
+    @Autowired
+    UserDao userDao;
 
     /**
      * Use case to generate HTML from a JSON element definition.
+     *
      * @param json
      * @return
      */
@@ -71,8 +71,10 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Use case to generate HTML from a JSON element definition.
+     *
      * @param json
-     * @param includeMetaData true to include metadata required for use in the form builder.
+     * @param includeMetaData true to include metadata required for use in the
+     * form builder.
      * @return
      */
     @Override
@@ -80,9 +82,9 @@ public class FormServiceImpl implements FormService {
         Element element = createElementFromJson(StringUtil.decryptContent(json), !includeMetaData);
         FormData formData = new FormData();
         formData.addFormResult(PREVIEW_MODE, "true");
-        
+
         formData = retrieveFormDataFromRequest(formData, WorkflowUtil.getHttpServletRequest());
-        
+
         String html = "";
         try {
             formData = executeFormOptionsBinders(element, formData);
@@ -99,6 +101,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Creates an element object from a JSON definition
+     *
      * @param formJson
      * @return
      */
@@ -109,6 +112,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Creates an element object from a JSON definition
+     *
      * @param formJson
      * @param processHashVariable
      * @return
@@ -121,7 +125,7 @@ public class FormServiceImpl implements FormService {
             if (processHashVariable) {
                 processedJson = AppUtil.processHashVariable(elementJson, null, StringUtil.TYPE_JSON, null);
             }
-            
+
             processedJson = processedJson.replaceAll("\\\"\\{\\}\\\"", "{}");
 
             // instantiate element
@@ -135,6 +139,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Generates HTML for the form element
+     *
      * @param element
      * @param formData
      * @return
@@ -147,6 +152,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Generates error HTML for the form element
+     *
      * @param element
      * @param formData
      * @return
@@ -160,6 +166,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Generates HTML for the form element to be used in the Form Builder
+     *
      * @param element
      * @param formData
      * @return
@@ -172,6 +179,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Generates the JSON definition for the specified form element
+     *
      * @param element
      * @return
      */
@@ -188,6 +196,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Use case to load and view a form, with data loaded
+     *
      * @param form
      * @param primaryKeyValue
      * @return
@@ -202,6 +211,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Use case to view a form from its JSON definition, with data loaded
+     *
      * @param formJson
      * @param primaryKeyValue
      * @return
@@ -217,6 +227,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Load a form from its JSON definition, with data loaded.
+     *
      * @param formJson
      * @param formData
      * @return
@@ -230,6 +241,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Main method to load a form with data loaded.
+     *
      * @param form
      * @param formData
      * @return
@@ -273,6 +285,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Process form submission
+     *
      * @param form
      * @param formData
      * @param ignoreValidation
@@ -282,11 +295,10 @@ public class FormServiceImpl implements FormService {
     @Transactional
     public FormData submitForm(Form form, FormData formData, boolean ignoreValidation) {
         FormData updatedFormData = formData;
-        LogUtil.info("SYDNEY SYDNEY","SYDNEY SYDNEY");
-		// TODO Auto-generated method stub
-		try {
+        // TODO Auto-generated method stub
+        try {
 
-    		System.out.print("\nConnecting to Blockchain Network bctestnet2.xpxsirius.io:3000...");
+            System.out.print("\nConnecting to Blockchain Network bctestnet2.xpxsirius.io:3000...");
             BlockchainNetworkConnection blockChain = new BlockchainNetworkConnection(
                     BlockchainNetworkType.TEST_NET, "bctestnet2.xpxsirius.io", 3000, HttpProtocol.HTTP);
             System.out.println("done!");
@@ -297,18 +309,13 @@ public class FormServiceImpl implements FormService {
             ConnectionConfig config = ConnectionConfig.createWithLocalIpfsConnection(blockChain, connection);
             System.out.println("done!");
             System.out.print("\nExecuting \"UploadParameter.createForFileUpload(file, privatekey)\"");
-//            String req =  updatedFormData.getRequestParameter("sydneytextfield");
-//            Files.write(
-//            	      Paths.get("C:\\Users\\sydney\\Desktop\\freelance\\proximax\\build2.xml"), 
-//            	      test.getBytes(), 
-//            	      StandardOpenOption.APPEND);
-//            
-            Map<String,String[]> mapData = formData.getRequestParamMap();
+         
+            Map<String, String[]> mapData = formData.getRequestParamMap();
             JSONObject jsonString = new JSONObject();
             for (Map.Entry<String, String[]> entry : mapData.entrySet()) {
-            	String[] values = entry.getValue();
-            	jsonString.put(entry.getKey(), String.join(" ", values));
-        	}
+                String[] values = entry.getValue();
+                jsonString.put(entry.getKey(), String.join(" ", values));
+            }
             jsonString.remove("OWASP_CSRFTOKEN");
             jsonString.remove("appVersion");
             jsonString.remove("isPreview");
@@ -325,15 +332,9 @@ public class FormServiceImpl implements FormService {
             jsonString.put("privateKey", user.getPrivateKey());
             String json = jsonString.toString();
             System.out.println(json);
-            UploadParameter up =  UploadParameter.createForStringUpload(json, "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4")
-            		.withNemKeysPrivacy("74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4","9699E0E847DC021EED224CE38E66B154E924B11527634BB66007BB2EA7106560")
-            		.build();
-//            UploadParameter up = UploadParameter.createForFileUpload(new File("C:\\Users\\sydney\\Desktop\\freelance\\proximax\\build2.xml"),
-//                    "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4")
-//                    .withNemKeysPrivacy(
-//                            "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4",
-//                            "9699E0E847DC021EED224CE38E66B154E924B11527634BB66007BB2EA7106560")
-//                    .build();
+            UploadParameter up = UploadParameter.createForStringUpload(json, "74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4")
+                    .withNemKeysPrivacy("74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4", "9699E0E847DC021EED224CE38E66B154E924B11527634BB66007BB2EA7106560")
+                    .build();
             System.out.println("done!");
             System.out.print("\nPerforming uploads....");
             UploadParameterBuilder builder = new UploadParameterBuilder(up.getData(),
@@ -343,28 +344,24 @@ public class FormServiceImpl implements FormService {
             UploadResult result = upload.upload(uploadParameter);
             String ipfsHash = result.getTransactionHash();
             System.out.println("done!");
-            LogUtil.info("SYDNEY","TRANSACTION HASH: " + ipfsHash);
+            LogUtil.info("", "TRANSACTION HASH: " + ipfsHash);
             ProximaxDataModel pdModel = result.getData();
             System.out.println("Data Hash: " + pdModel.getDataHash());
             System.out.println("Digest: " + pdModel.getDigest());
-        	formData.setBlockchainTransactionHash(ipfsHash);
-        	formData.setBlockchainDataHash(pdModel.getDataHash());
-            String[] temp  = {ipfsHash};
-            formData.addRequestParameterValues("resultValue",temp);
-            
-            String[] temp2  = {pdModel.getDataHash()};
-            formData.addRequestParameterValues("resultValue2",temp2);
-        	
-    	}catch(Exception e) {
-    		   LogUtil.error("SYDNEY ERROR",e,e.getMessage());
-    		   formData.addFormError("resultValue", e.getMessage());
-    		   return new FormData();
-    	}
-        
-		
-	  
-        
-        
+            formData.setBlockchainTransactionHash(ipfsHash);
+            formData.setBlockchainDataHash(pdModel.getDataHash());
+            String[] temp = {ipfsHash};
+            formData.addRequestParameterValues("resultValue", temp);
+
+            String[] temp2 = {pdModel.getDataHash()};
+            formData.addRequestParameterValues("resultValue2", temp2);
+
+        } catch (Exception e) {
+            LogUtil.error("ERROR", e, e.getMessage());
+            formData.addFormError("resultValue", e.getMessage());
+            return new FormData();
+        }
+
         updatedFormData = FormUtil.executeElementFormatDataForValidation(form, formData);
         if (!ignoreValidation) {
             updatedFormData = validateFormData(form, formData);
@@ -379,30 +376,30 @@ public class FormServiceImpl implements FormService {
                 //format data to generate id
                 FormUtil.executeElementFormatData(primaryElement, formData);
             }
-            
+
             String primaryKeyValue = form.getPrimaryKeyValue(updatedFormData);
             if (primaryKeyValue == null || primaryKeyValue.trim().length() == 0) {
                 // no primary key value specified, generate new primary key value
                 primaryKeyValue = UuidGenerator.getInstance().getUuid();
                 updatedFormData.setPrimaryKeyValue(primaryKeyValue);
-                
+
                 //set to request param
                 formData.addRequestParameterValues(FormUtil.PROPERTY_ID, new String[]{primaryKeyValue});
             }
             // no errors, save form data
             updatedFormData = executeFormStoreBinders(form, updatedFormData);
         }
-        
-   
+
         return updatedFormData;
     }
-    
+
     /**
      * Store the data of a form field element
+     *
      * @param form
      * @param element
      * @param formData
-     * @return 
+     * @return
      */
     @Override
     public FormData storeElementData(Form form, Element element, FormData formData) {
@@ -411,6 +408,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Validates form data submitted for a specific form
+     *
      * @param form
      * @param formData
      * @return
@@ -418,22 +416,23 @@ public class FormServiceImpl implements FormService {
     @Override
     public FormData validateFormData(Form form, FormData formData) {
         FormUtil.executeValidators(form, formData);
-        
+
         //set all remaining privious submission error to error map
         for (String id : formData.getPreviousFormErrors().keySet()) {
             formData.addFormError(id, formData.getPreviousFormError(id));
         }
-        
+
         //set all file error to error map
         for (String id : formData.getFileErrors().keySet()) {
             formData.addFormError(id, formData.getFileError(id));
         }
-        
+
         return formData;
     }
 
     /**
      * Retrieves form data submitted via a HTTP servlet request
+     *
      * @param request
      * @return
      */
@@ -450,18 +449,19 @@ public class FormServiceImpl implements FormService {
             String[] values = request.getParameterValues(paramName);
             formData.addRequestParameterValues(paramName, values);
         }
-        
+
         handleFiles(formData);
         handleErrors(formData);
-        
+
         return formData;
     }
 
     /**
      * Retrieves form data submitted via a HTTP servlet request parameters map
+     *
      * @param formData
      * @param requestMap
-     * @return 
+     * @return
      */
     @Override
     public FormData retrieveFormDataFromRequestMap(FormData formData, Map requestMap) {
@@ -482,14 +482,14 @@ public class FormServiceImpl implements FormService {
                 formData.addRequestParameterValues(key, new String[]{""});
             }
         }
-        
+
         handleFiles(formData);
         handleErrors(formData);
-        
+
         return formData;
     }
-    
-    private void handleErrors (FormData formData) {
+
+    private void handleErrors(FormData formData) {
         if (formData.getPreviousFormErrors().isEmpty() && formData.getRequestParameter(FormUtil.FORM_ERRORS_PARAM) != null) {
             try {
                 String json = formData.getRequestParameter(FormUtil.FORM_ERRORS_PARAM);
@@ -502,11 +502,12 @@ public class FormServiceImpl implements FormService {
                         formData.addPreviousFormError(key, (String) errors.getString(key));
                     }
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
-    
-    private void handleFiles (FormData formData) {
+
+    private void handleFiles(FormData formData) {
         try {
             // handle multipart files
             Map<String, MultipartFile[]> fileMap = FileStore.getFileMap();
@@ -529,7 +530,7 @@ public class FormServiceImpl implements FormService {
                     }
                 }
             }
-            
+
             Collection<String> errorList = FileStore.getFileErrorList();
             if (errorList != null && !errorList.isEmpty()) {
                 for (String paramName : errorList) {
@@ -543,6 +544,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Invokes actions (e.g. buttons) in the form
+     *
      * @param form
      * @param formData
      * @return
@@ -555,7 +557,9 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
-     * Preloads data for an element, e.g. field options, etc. by calling all option binders in the element.
+     * Preloads data for an element, e.g. field options, etc. by calling all
+     * option binders in the element.
+     *
      * @param element
      * @param formData
      * @return
@@ -573,7 +577,9 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
-     * Loads data for a specific row into an element by calling all load binders in the element.
+     * Loads data for a specific row into an element by calling all load binders
+     * in the element.
+     *
      * @param element
      * @param formData
      * @return
@@ -592,6 +598,7 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Executes store binders for a form
+     *
      * @param form
      * @param formData
      * @return
@@ -607,13 +614,14 @@ public class FormServiceImpl implements FormService {
 
         return formData;
     }
-    
+
     /**
      * Recursively executes all the store binders in a form
+     *
      * @param form
      * @param element
      * @param formData
-     * @return 
+     * @return
      */
     @Override
     public FormData recursiveExecuteFormStoreBinders(Form form, Element element, FormData formData) {
@@ -631,10 +639,10 @@ public class FormServiceImpl implements FormService {
             FormStoreBinder binder = element.getStoreBinder();
             if (!(element instanceof AbstractSubForm) && binder != null) {
                 FormRowSet rowSet = formData.getStoreBinderData(element.getStoreBinder());
-                if(null != rowSet) {
-                	rowSet.setBlockchainDataHash(formData.getBlockchainDataHash() != null ? formData.getBlockchainDataHash(): "");
+                if (null != rowSet) {
+                    rowSet.setBlockchainDataHash(formData.getBlockchainDataHash() != null ? formData.getBlockchainDataHash() : "");
                     rowSet.setBlockchainTransactionHash(formData.getBlockchainTransactionHash() != null ? formData.getBlockchainTransactionHash() : "");
-                    
+
                 }
                 // execute binder
                 FormRowSet binderResult = binder.store(element, rowSet, formData);
@@ -646,10 +654,11 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
-     * Used to retrieves the Form HTML 
+     * Used to retrieves the Form HTML
+     *
      * @param form
      * @param formData
-     * @return 
+     * @return
      */
     @Override
     public String retrieveFormHtml(Form form, FormData formData) {
@@ -665,9 +674,10 @@ public class FormServiceImpl implements FormService {
 
     /**
      * Used to retrieves the Form HTML when there is errors in form
+     *
      * @param form
      * @param formData
-     * @return 
+     * @return
      */
     @Override
     public String retrieveFormErrorHtml(Form form, FormData formData) {

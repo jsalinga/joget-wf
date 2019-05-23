@@ -66,7 +66,6 @@ public class SaveAsDraftButton extends FormButton {
     return null;
     }
      */
-
     public String getLabel() {
         return "Save As Draft Button";
     }

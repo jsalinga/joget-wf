@@ -52,7 +52,7 @@ public class UserviewBuilderWebController {
     @RequestMapping("/console/app/(*:appId)/(~:appVersion)/userview/builder/(*:userviewId)")
     public String builder(ModelMap map, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String appVersion, @RequestParam("userviewId") String userviewId, @RequestParam(required = false) String json) throws Exception {
         // verify app license
-        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin)pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
+        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin) pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
         String page = consoleWebPlugin.verifyAppVersion(appId, appVersion);
         if (page != null) {
             return page;
@@ -95,7 +95,7 @@ public class UserviewBuilderWebController {
         basicRequestParams.put("contextPath", request.getContextPath());
 
         map.addAttribute("menuTypeCategories", userviewBuilderPalette.getUserviewMenuCategoryMap(basicRequestParams));
-        
+
         response.addHeader("X-XSS-Protection", "0");
 
         return "ubuilder/builder";
@@ -104,7 +104,7 @@ public class UserviewBuilderWebController {
     @RequestMapping(value = "/console/app/(*:appId)/(~:appVersion)/userview/builderSave/(*:userviewId)", method = RequestMethod.POST)
     public String save(Writer writer, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String appVersion, @RequestParam("userviewId") String userviewId, @RequestParam("json") String json) throws Exception {
         // verify app version
-        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin)pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
+        ConsoleWebPlugin consoleWebPlugin = (ConsoleWebPlugin) pluginManager.getPlugin(ConsoleWebPlugin.class.getName());
         String page = consoleWebPlugin.verifyAppVersion(appId, appVersion);
         if (page != null) {
             return page;
@@ -125,13 +125,13 @@ public class UserviewBuilderWebController {
         return null;
     }
 
-    @RequestMapping(value = {"/console/app/(*:appId)/(~:appVersion)/userview/builderPreview/(*:userviewId)","/console/app/(*:appId)/(~:appVersion)/userview/builderPreview/(*:userviewId)/(*:menuId)"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/console/app/(*:appId)/(~:appVersion)/userview/builderPreview/(*:userviewId)", "/console/app/(*:appId)/(~:appVersion)/userview/builderPreview/(*:userviewId)/(*:menuId)"}, method = RequestMethod.POST)
     public String preview(ModelMap map, HttpServletRequest request, HttpServletResponse response, @RequestParam("appId") String appId, @RequestParam(value = "appVersion", required = false) String appVersion, @RequestParam("userviewId") String userviewId, @RequestParam("json") String json, @RequestParam(value = "menuId", required = false) String menuId) throws Exception {
         // get app definition so that it's set in the current thread
         AppDefinition appDef = appService.getAppDefinition(appId, appVersion);
         map.addAttribute("appId", appId);
         map.addAttribute("appVersion", appDef.getVersion());
-        
+
         String tempJson = json;
         if (tempJson.contains(SecurityUtil.ENVELOPE) || tempJson.contains(PropertyUtil.PASSWORD_PROTECTED_VALUE)) {
             UserviewDefinition userview = userviewDefinitionDao.loadById(userviewId, appDef);
@@ -146,18 +146,18 @@ public class UserviewBuilderWebController {
         map.addAttribute("userview", userviewObject);
         map.addAttribute("processer", processer);
         map.addAttribute("json", json);
-        
+
         response.addHeader("X-XSS-Protection", "0");
-        
+
         return processer.getPreviewView();
     }
-    
+
     @RequestMapping("/property/userview/json/(*:appId)/(~:version)/getPropertyOptions")
     public void getProperties(Writer writer, @RequestParam("value") String value, @RequestParam(value = "appId", required = true) String appId, @RequestParam(value = "version", required = false) String version) throws Exception {
         if (appId != null && !appId.trim().isEmpty()) {
             appService.getAppDefinition(appId, version);
         }
-        
+
         String propertyOptions = "";
         PropertyEditable element = (PropertyEditable) pluginManager.getPlugin(value);
         if (element != null) {
@@ -173,5 +173,5 @@ public class UserviewBuilderWebController {
         }
         writer.write(propertyOptions);
     }
-    
+
 }

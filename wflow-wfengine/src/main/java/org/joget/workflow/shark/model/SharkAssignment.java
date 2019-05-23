@@ -1,6 +1,7 @@
 package org.joget.workflow.shark.model;
 
-public class SharkAssignment{
+public class SharkAssignment {
+
     private long id;
     private SharkActivity activity;
     private SharkProcess process;
@@ -13,7 +14,7 @@ public class SharkAssignment{
     public void setId(long id) {
         this.id = id;
     }
-    
+
     public SharkActivity getActivity() {
         return activity;
     }

@@ -11,29 +11,29 @@
         <jsp:include page="/WEB-INF/jsp/includes/scripts.jsp" />
         <script type="text/javascript" src="${pageContext.request.contextPath}/wro/form_common.js?build=<fmt:message key="build.number"/>"></script>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/wro/form_common.css?build=<fmt:message key="build.number"/>" />
-        
+
         <c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/form_rtl.css?build=<fmt:message key="build.number"/>" />
         </c:if>
-            
+
         <script type="text/javascript">
             UI.base = "${pageContext.request.contextPath}";
-            
+
             var reloadForm = function() {
-                $('#form-preview').submit();
-                return false;
+            $('#form-preview').submit();
+            return false;
             };
             $(document).ready(function() {
-                // add toggle json link
-                $("#form-json-link").click(function() {
-                    if ($("#form-info").css("display") != "block") {
-                        $("#form-info").css("display", "block");
-                    } else {
-                        $("#form-info").css("display", "none");
-                    }
-                });
-                // disable form buttons
-                $("#form-view .form-button").attr("disabled", "disabled");
+            // add toggle json link
+            $("#form-json-link").click(function() {
+            if ($("#form-info").css("display") != "block") {
+            $("#form-info").css("display", "block");
+            } else {
+            $("#form-info").css("display", "none");
+            }
+            });
+            // disable form buttons
+            $("#form-view .form-button").attr("disabled", "disabled");
             });
         </script>
     </head>
@@ -55,7 +55,7 @@
 
         <!--[if IE]><div id="preview-label" class="ie"><fmt:message key="fbuilder.preview"/></div><![endif]-->
         <!--[if !IE]><!--><div id="preview-label"><fmt:message key="fbuilder.preview"/></div><!--<![endif]-->        
-                
+
         <jsp:include page="/WEB-INF/jsp/includes/csrf.jsp" flush="true" />    
     </body>
 </html>

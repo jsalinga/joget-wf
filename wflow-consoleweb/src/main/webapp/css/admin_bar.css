@@ -321,7 +321,7 @@ body.quickEditModeActive .analyzer-page {
     font-weight: normal; 
 }
 .embeded .hasAnalyzer {
-  padding-top: 20px;
+    padding-top: 20px;
 }
 .embeded .hasAnalyzer .analyzer-page {
     top:0;

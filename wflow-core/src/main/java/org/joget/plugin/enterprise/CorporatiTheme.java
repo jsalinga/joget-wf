@@ -38,12 +38,12 @@ public class CorporatiTheme extends UserviewTheme {
             if (customCssUrl.startsWith("/")) {
                 customCssUrl = contextPath + customCssUrl;
             }
-            css +=  "\n<link rel='stylesheet' href='" + customCssUrl + "'>";
+            css += "\n<link rel='stylesheet' href='" + customCssUrl + "'>";
         }
-        
+
         // add custom CSS
         String customCss = getPropertyString("css");
-        css +=  "\n<style type='text/css'>" + customCss;
+        css += "\n<style type='text/css'>" + customCss;
 
         return css;
     }
@@ -58,12 +58,12 @@ public class CorporatiTheme extends UserviewTheme {
             js += "if($(container).is(\":visible\")){$(container).hide();}else{$(container).show();}return false;";
             js += "});});";
         }
-        
+
         js += "\n$(document).ready(function(){if($(\".menu.current\").length === 1) {var ctop = $(\".menu.current\").offset().top;";
         js += "if (ctop > 140) {";
         js += "$(\"#navigation\").scrollTop($(\".menu.current\").offset().top - 140);";
         js += "}}});";
-        
+
         return js;
     }
 
@@ -128,4 +128,3 @@ public class CorporatiTheme extends UserviewTheme {
         return AppUtil.readPluginResource(getClass().getName(), "/properties/userview/corporatiTheme.json", null, true, "message/userview/corporatiTheme");
     }
 }
-

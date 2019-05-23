@@ -4,9 +4,10 @@ import org.joget.plugin.base.ExtDefaultPlugin;
 
 /**
  * A base abstract class to develop a Datalist Filter Type plugin
- * 
+ *
  */
 public abstract class DataListFilterTypeDefault extends ExtDefaultPlugin implements DataListFilterType {
+
     private DataList datalist;
 
     public DataList getDatalist() {
@@ -16,10 +17,10 @@ public abstract class DataListFilterTypeDefault extends ExtDefaultPlugin impleme
     public void setDatalist(DataList datalist) {
         this.datalist = datalist;
     }
-    
+
     /**
      * Convenience method to get value from request parameters.
-     * 
+     *
      * @param datalist
      * @param name
      * @return
@@ -30,18 +31,18 @@ public abstract class DataListFilterTypeDefault extends ExtDefaultPlugin impleme
 
     /**
      * Convenience method to get values from request parameters.
-     * 
+     *
      * @param datalist
      * @param name
-     * @return 
+     * @return
      */
     public String[] getValues(DataList datalist, String name) {
         return getValues(datalist, name, null);
     }
-    
+
     /**
      * Convenience method to get value from request parameters.
-     * 
+     *
      * @param datalist
      * @param name
      * @param defaultValue
@@ -61,11 +62,12 @@ public abstract class DataListFilterTypeDefault extends ExtDefaultPlugin impleme
 
     /**
      * Convenience method to get values from request parameters.
-     * 
+     *
      * @param datalist
      * @param name
      * @param defaultValue
-     * @return default values if empty. default values can be separated by semicolon ";" if multiple value.
+     * @return default values if empty. default values can be separated by
+     * semicolon ";" if multiple value.
      */
     public String[] getValues(DataList datalist, String name, String defaultValue) {
         if (datalist != null) {

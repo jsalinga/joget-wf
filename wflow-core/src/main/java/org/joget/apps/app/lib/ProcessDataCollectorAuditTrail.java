@@ -27,7 +27,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
-    
+
     public String getName() {
         return "Process Data Collector";
     }
@@ -60,12 +60,12 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                 } else {
                     String actId = null;
                     Object[] args = auditTrail.getArgs();
-                    
+
                     if (method.equals("getDefaultAssignments") && args.length == 3) {
                         users = (List<String>) auditTrail.getReturnObject();
                         actId = (String) args[1];
                     } else if (method.equals("assignmentReassign") && args.length == 5) {
-                        users = new ArrayList<String> ();
+                        users = new ArrayList<String>();
                         users.add((String) args[3]);
                         actId = (String) args[2];
                     } else if (method.equals("assignmentForceComplete") && args.length == 4) {
@@ -76,12 +76,12 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                     } else {
                         actId = auditTrail.getMessage();
                     }
-                    
+
                     activity = workflowManager.getActivityById(actId);
                     trackActivity = workflowManager.getRunningActivityInfo(actId);
                     process = workflowManager.getRunningProcessById(activity.getProcessId());
                     trackProcess = workflowManager.getRunningProcessInfo(activity.getProcessId());
-                    
+
                     if (method.equals("executeTool")) {
                         trackActivity.setStartedTime(trackActivity.getCreatedTime());
                     } else if (method.equals("executeToolCompleted") || method.equals("executeActivity")) {
@@ -89,9 +89,9 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                         trackActivity.setStatus("Completed");
                         trackActivity.setStartedTime(trackActivity.getCreatedTime());
                         trackActivity.setFinishTime(new Date());
-                        
+
                         long timeTakenInSeconds = (trackActivity.getFinishTime().getTime() - trackActivity.getCreatedTime().getTime()) / 1000;
-                        
+
                         trackActivity.setTimeConsumingFromDateCreatedInSeconds(timeTakenInSeconds);
                         trackActivity.setTimeConsumingFromDateStartedInSeconds(timeTakenInSeconds);
                     }
@@ -132,8 +132,9 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                 || auditTrail.getMethod().equals("executeToolCompleted")
                 || auditTrail.getMethod().equals("executeActivity");
     }
-    
+
     protected class ReportTask implements Runnable {
+
         String profile;
         String appId;
         String appVersion;
@@ -142,7 +143,7 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
         WorkflowActivity wfActivity;
         WorkflowActivity wfTrackActivity;
         List<String> users;
-        
+
         ReportTask(String profile, WorkflowActivity wfActivity, WorkflowActivity wfTrackActivity, WorkflowProcess wfProcess, WorkflowProcess wfTrackProcess, List<String> users, String appId, String appVersion) {
             this.profile = profile;
             this.wfActivity = wfActivity;
@@ -153,7 +154,7 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
             this.appId = appId;
             this.appVersion = appVersion;
         }
-        
+
         @Transactional
         public void run() {
             HostManager.setCurrentProfile(profile);
@@ -163,7 +164,7 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                 updateProcessData(wfProcess, wfTrackProcess, appId, appVersion);
             }
         }
-        
+
         protected ReportWorkflowProcessInstance updateProcessData(WorkflowProcess wfProcess, WorkflowProcess wfTrackProcess, String appId, String appVersion) {
             String processInstanceId = wfProcess.getInstanceId();
 
@@ -198,7 +199,7 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                 pInstance.setTimeConsumingFromStartedTime(wfTrackProcess.getTimeConsumingFromDateStartedInSeconds());
                 pInstance.setReportWorkflowActivityInstanceList(null); //to fix session issue. mapping set to no update
                 reportManager.saveReportWorkflowProcessInstance(pInstance);
-                
+
                 return reportManager.getReportWorkflowProcessInstance(processInstanceId);
             }
             return null;
@@ -273,7 +274,7 @@ public class ProcessDataCollectorAuditTrail extends DefaultAuditTrailPlugin {
                     }
                     aInstance.setAssignmentUsers(assignmentUsers);
                 }
-                
+
                 aInstance.setPerformer(wfTrackActivity.getPerformer());
                 aInstance.setNameOfAcceptedUser(wfTrackActivity.getNameOfAcceptedUser());
                 aInstance.setState(wfActivity.getState());

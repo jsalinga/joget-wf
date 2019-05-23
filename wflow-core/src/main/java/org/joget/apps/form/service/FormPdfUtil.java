@@ -31,25 +31,27 @@ import org.xhtmlrenderer.resource.FSEntityResolver;
 
 /**
  * Utility class used to generate PDF file based on a form and its data
- * 
+ *
  */
 public class FormPdfUtil {
+
     private static ITextRenderer renderer;
     private static final int MIN_ESCAPE = 2;
     private static final int MAX_ESCAPE = 6;
     public final static String PDF_GENERATION = "_FORM_PDF_GENERATION";
     private static String DEFAULT_FONTS = "";
-    
+
     /**
      * Gets the renderer
-     * @return 
+     *
+     * @return
      */
     public static ITextRenderer getRenderer() {
         if (renderer == null) {
             float dpp = 20f * 4f / 3f;
             ITextCustomOutputDevice outputDevice = new ITextCustomOutputDevice(dpp);
             renderer = new ITextRenderer(dpp, 20, outputDevice);
-            
+
             SharedContext sharedContext = renderer.getSharedContext();
             CustomITexResourceLoaderUserAgent callback = new CustomITexResourceLoaderUserAgent(renderer.getOutputDevice());
             callback.setSharedContext(sharedContext);
@@ -60,9 +62,10 @@ public class FormPdfUtil {
         }
         return renderer;
     }
-    
+
     /**
      * Create PDF file based on form
+     *
      * @param formId
      * @param primaryKey
      * @param appDef
@@ -74,24 +77,25 @@ public class FormPdfUtil {
      * @param showAllSelectOptions
      * @param repeatHeader
      * @param repeatFooter
-     * @return 
+     * @return
      */
     public static byte[] createPdf(String formId, String primaryKey, AppDefinition appDef, WorkflowAssignment assignment, Boolean hideEmpty, String header, String footer, String css, Boolean showAllSelectOptions, Boolean repeatHeader, Boolean repeatFooter) {
         try {
             String html = getSelectedFormHtml(formId, primaryKey, appDef, assignment, hideEmpty);
-            
+
             header = AppUtil.processHashVariable(header, assignment, null, null);
             footer = AppUtil.processHashVariable(footer, assignment, null, null);
-            
+
             return createPdf(html, header, footer, css, showAllSelectOptions, repeatHeader, repeatFooter);
         } catch (Exception e) {
             LogUtil.error(FormPdfUtil.class.getName(), e, "");
         }
         return null;
     }
-    
+
     /**
      * Create PDF file based on Form HTML
+     *
      * @param html
      * @param header
      * @param footer
@@ -99,14 +103,14 @@ public class FormPdfUtil {
      * @param showAllSelectOptions
      * @param repeatHeader
      * @param repeatFooter
-     * @return 
+     * @return
      */
     public static byte[] createPdf(String html, String header, String footer, String css, Boolean showAllSelectOptions, Boolean repeatHeader, Boolean repeatFooter) {
         try {
             ITextRenderer r = getRenderer();
             synchronized (r) {
                 html = formatHtml(html, header, footer, css, showAllSelectOptions, repeatHeader, repeatFooter);
-            
+
                 final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
                 documentBuilderFactory.setValidating(false);
                 DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
@@ -127,15 +131,16 @@ public class FormPdfUtil {
         }
         return null;
     }
-    
+
     /**
      * Get the HTML of a form
+     *
      * @param formId
      * @param primaryKey
      * @param appDef
      * @param assignment
      * @param hideEmpty
-     * @return 
+     * @return
      */
     public static String getSelectedFormHtml(String formId, String primaryKey, AppDefinition appDef, WorkflowAssignment assignment, Boolean hideEmpty) {
         String html = "";
@@ -155,7 +160,7 @@ public class FormPdfUtil {
             assignment = new WorkflowAssignment();
             assignment.setProcessId(primaryKey);
         }
-        
+
         Form form = null;
         FormDefinitionDao formDefinitionDao = (FormDefinitionDao) AppUtil.getApplicationContext().getBean("formDefinitionDao");
         FormService formService = (FormService) AppUtil.getApplicationContext().getBean("formService");
@@ -166,25 +171,26 @@ public class FormPdfUtil {
             formJson = AppUtil.processHashVariable(formJson, assignment, StringUtil.TYPE_JSON, null);
             form = (Form) formService.loadFormFromJson(formJson, formData);
         }
-        
+
         //set form to readonly
         FormUtil.setReadOnlyProperty(form, true, true);
-        
+
         if (hideEmpty != null && hideEmpty) {
             form = (Form) removeEmptyValueChild(form, form, formData);
         }
-        
+
         if (form != null) {
             html = formService.retrieveFormHtml(form, formData);
         }
 
         html = AppUtil.processHashVariable(html, assignment, null, null, appDef);
-        
+
         return html;
     }
-    
+
     /**
      * Prepare the HTML for PDF generation
+     *
      * @param html
      * @param header
      * @param footer
@@ -192,7 +198,7 @@ public class FormPdfUtil {
      * @param showAllSelectOptions
      * @param repeatHeader
      * @param repeatFooter
-     * @return 
+     * @return
      */
     public static String formatHtml(String html, String header, String footer, String css, Boolean showAllSelectOptions, Boolean repeatHeader, Boolean repeatFooter) {
         html = convertSpecialHtmlEntity(html);
@@ -221,10 +227,10 @@ public class FormPdfUtil {
 
         //remove id
         html = html.replaceAll("id=\"([^\\\"]*)\"", "");
-        
+
         //remove hidden td
         html = html.replaceAll("<td\\s?style=\\\"[^\\\"]*display:none;[^\\\"]?\\\"[^>]*>.*?</\\s?td>", "");
-        
+
         if (showAllSelectOptions != null && showAllSelectOptions) {
             Pattern pattern = Pattern.compile("<label>[^<]*(<input[^>]*type=\\\"([^\\\"]*)\\\"[^>]*>)[^>]*</label>");
             Matcher matcher = pattern.matcher(html);
@@ -233,7 +239,7 @@ public class FormPdfUtil {
                 String input = matcher.group(1);
                 String type = matcher.group(2);
                 String replace = "";
-                
+
                 if (type.equalsIgnoreCase("checkbox") || type.equalsIgnoreCase("radio")) {
                     if (input.contains("checked")) {
                         replace = input;
@@ -287,7 +293,7 @@ public class FormPdfUtil {
         Matcher matcherSelect = patternSelect.matcher(html);
         while (matcherSelect.find()) {
             String selectString = matcherSelect.group(0);
-            String replace = ""; 
+            String replace = "";
             int counter = 0;
 
             //get the type
@@ -342,22 +348,22 @@ public class FormPdfUtil {
 
             html = html.replaceAll(StringUtil.escapeRegex(textareaString), StringUtil.escapeRegex(replace));
         }
-        
+
         //remove &nbsp;
         html = html.replaceAll(StringUtil.escapeRegex("&nbsp;"), " ");
-        
+
         //escape special character in html
         html = escapeSpecialCharacter(html, "label");
         html = escapeSpecialCharacter(html, "span");
         html = escapeSpecialCharacter(html, "th");
         html = escapeSpecialCharacter(html, "p");
-        
+
         //remove br
         html = html.replaceAll("</\\s?br>", "");
-        
+
         //append style
         String style = "<style type='text/css'>";
-        style += "*{font-size:12px;font-family:"+DEFAULT_FONTS+";}";
+        style += "*{font-size:12px;font-family:" + DEFAULT_FONTS + ";}";
         style += ".form-section, .subform-section {position: relative;overflow: hidden;margin-bottom: 10px;}";
         style += ".form-section-title span, .subform-section-title span {padding: 10px;margin-bottom: 10px;font-weight: bold;font-size: 16px;background: #efefef;display: block;}";
         style += ".form-column, .subform-column {position: relative;float: left;min-height: 20px;}";
@@ -379,53 +385,53 @@ public class FormPdfUtil {
         style += ".quickEdit{display:none;}";
         style += ".pdf_visible{display:block !important; height: auto !important; width: 100% !important;}";
         style += ".pdf_hidden{display:none !important;}";
-        
+
         if (repeatHeader != null && repeatHeader) {
             style += "div.header{display: block;position: running(header);}";
             style += "@page { @top-center { content: element(header) }}";
         }
-        if (repeatFooter != null && repeatFooter) {    
+        if (repeatFooter != null && repeatFooter) {
             style += "div.footer{display: block;position: running(footer);}";
             style += "@page { @bottom-center { content: element(footer) }}";
         }
-        
+
         if (css != null && !css.isEmpty()) {
             style += css;
         }
-        
+
         style += "</style>";
-        
-        String headerHtml = ""; 
+
+        String headerHtml = "";
         if (header != null && !header.isEmpty()) {
             headerHtml = "<div class=\"header\">" + header + "</div>";
         }
-        
-        String footerHtml = ""; 
+
+        String footerHtml = "";
         if (footer != null && !footer.isEmpty()) {
             footerHtml = "<div class=\"footer\">" + footer + "</div>";
         }
-        
+
         String htmlMeta = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         htmlMeta += "<!DOCTYPE html>";
         htmlMeta += "<html>";
         htmlMeta += "<head>";
         htmlMeta += "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" />";
         htmlMeta += style + "</head><body>";
-                
-        if (repeatFooter != null && repeatFooter) { 
+
+        if (repeatFooter != null && repeatFooter) {
             html = htmlMeta + headerHtml + footerHtml + html;
         } else {
             html = htmlMeta + headerHtml + html + footerHtml;
         }
-        
+
         html += "</body></html>";
-        
+
         return html;
     }
-    
+
     protected static String escapeSpecialCharacter(String html, String tag) {
         //convert label
-        Pattern pattern = Pattern.compile("<"+tag+"[^>]*>.*?</"+tag+">", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile("<" + tag + "[^>]*>.*?</" + tag + ">", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(html);
         while (matcher.find()) {
             String text = matcher.group(0);
@@ -436,24 +442,25 @@ public class FormPdfUtil {
         }
         return html;
     }
-    
+
     /**
      * Removed the field elements which has empty value from the form
+     *
      * @param form
      * @param element
      * @param formData
-     * @return 
+     * @return
      */
-    public static Element  removeEmptyValueChild(Form form, Element element, FormData formData) {
+    public static Element removeEmptyValueChild(Form form, Element element, FormData formData) {
         Collection<Element> childs = element.getChildren();
         if (childs != null && childs.size() > 0) {
             for (Iterator<Element> it = childs.iterator(); it.hasNext();) {
                 Element c = it.next();
                 if (removeEmptyValueChild(form, c, formData) == null) {
                     it.remove();
-                } 
+                }
             }
-            
+
             if (childs.isEmpty()) {
                 return null;
             }
@@ -469,23 +476,24 @@ public class FormPdfUtil {
                 }
             }
         }
-        
+
         return element;
-    } 
-    
-    /** 
+    }
+
+    /**
      * Gets the full URL of a resource
+     *
      * @param resourceUrl
-     * @return 
+     * @return
      */
     public static URL getResourceURL(String resourceUrl) {
         URL url = null;
 
         url = FormPdfUtil.class.getResource(resourceUrl);
-        
+
         return url;
     }
-    
+
     public static final String convertSpecialHtmlEntity(final String input) {
         StringWriter writer = null;
         int len = input.length();
@@ -493,15 +501,18 @@ public class FormPdfUtil {
         int st = 0;
         while (true) {
             // look for '&'
-            while (i < len && input.charAt(i-1) != '&')
+            while (i < len && input.charAt(i - 1) != '&') {
                 i++;
-            if (i >= len)
+            }
+            if (i >= len) {
                 break;
+            }
 
             // found '&', look for ';'
             int j = i;
-            while (j < len && j < i + MAX_ESCAPE + 1 && input.charAt(j) != ';')
+            while (j < len && j < i + MAX_ESCAPE + 1 && input.charAt(j) != ';') {
                 j++;
+            }
             if (j == len || j < i + MIN_ESCAPE || j == i + MAX_ESCAPE + 1) {
                 i++;
                 continue;
@@ -522,8 +533,9 @@ public class FormPdfUtil {
                 try {
                     int entityValue = Integer.parseInt(input.substring(k, j), radix);
 
-                    if (writer == null) 
+                    if (writer == null) {
                         writer = new StringWriter(input.length());
+                    }
                     writer.append(input.substring(st, i - 1));
 
                     if (entityValue > 0xFFFF) {
@@ -534,12 +546,11 @@ public class FormPdfUtil {
                         writer.write(entityValue);
                     }
 
-                } catch (NumberFormatException ex) { 
+                } catch (NumberFormatException ex) {
                     i++;
                     continue;
                 }
-            }
-            else {
+            } else {
                 // named escape
                 CharSequence value = lookupMap.get(input.substring(i, j));
                 if (value == null) {
@@ -547,8 +558,9 @@ public class FormPdfUtil {
                     continue;
                 }
 
-                if (writer == null) 
+                if (writer == null) {
                     writer = new StringWriter(input.length());
+                }
                 writer.append(input.substring(st, i - 1));
 
                 writer.append(value);
@@ -819,9 +831,11 @@ public class FormPdfUtil {
     };
 
     private static final HashMap<String, CharSequence> lookupMap;
+
     static {
         lookupMap = new HashMap<String, CharSequence>();
-        for (final CharSequence[] seq : ESCAPES) 
+        for (final CharSequence[] seq : ESCAPES) {
             lookupMap.put(seq[1].toString(), seq[0]);
+        }
     }
 }

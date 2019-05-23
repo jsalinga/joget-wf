@@ -46,8 +46,8 @@ import org.joget.apps.datalist.model.DataListPdfExportFormatter;
 import org.joget.apps.datalist.model.DataListPdfWriter;
 
 public class CustomPdfViewer implements BinaryExportView {
-    /* split up the large pdf report into smaller parts */
 
+    /* split up the large pdf report into smaller parts */
     private static final int FRAGMENT_SIZE = 512;
     /**
      * TableModel to render.
@@ -89,7 +89,8 @@ public class CustomPdfViewer implements BinaryExportView {
     private ResourceBundle bundle = null;
 
     /**
-     * @see org.displaytag.export.ExportView#setParameters(TableModel, boolean, boolean, boolean)
+     * @see org.displaytag.export.ExportView#setParameters(TableModel, boolean,
+     * boolean, boolean)
      */
     public void setParameters(TableModel tableModel, boolean exportFullList, boolean includeHeader,
             boolean decorateValues) {
@@ -97,11 +98,11 @@ public class CustomPdfViewer implements BinaryExportView {
         this.exportFull = exportFullList;
         this.header = includeHeader;
         this.decorated = decorateValues;
-        
+
         PageContext pageContext = (new TableModelWrapper(tableModel)).getPageContext();
         if (pageContext != null) {
             datalist = (DataList) pageContext.findAttribute("dataList");
-            
+
             if (datalist != null) {
                 DataListColumn[] columns = datalist.getColumns();
                 Collection<DataListColumnFormat> formats;
@@ -129,11 +130,12 @@ public class CustomPdfViewer implements BinaryExportView {
 
     /**
      * Initialize the main info holder table.
+     *
      * @throws BadElementException for errors during table initialization
      */
-    protected void initTable() throws BadElementException, DocumentException, IOException{
+    protected void initTable() throws BadElementException, DocumentException, IOException {
         writer = new DataListPdfWriter(this.model.getNumberOfColumns());
-        
+
         if (bundle == null) {
             //get displaytag ressource bundle
             bundle = ResourceBundle.getBundle(org.displaytag.properties.TableProperties.LOCAL_PROPERTIES, Locale.getDefault());
@@ -150,7 +152,9 @@ public class CustomPdfViewer implements BinaryExportView {
 
     /**
      * The overall PDF table generator.
-     * @throws JspException for errors during value retrieving from the table model
+     *
+     * @throws JspException for errors during value retrieving from the table
+     * model
      * @throws BadElementException IText exception
      */
     protected void generatePDFTable(Document document) throws JspException, BadElementException, DocumentException, IOException {
@@ -165,7 +169,7 @@ public class CustomPdfViewer implements BinaryExportView {
      * @see org.displaytag.export.BinaryExportView#doExport(OutputStream)
      */
     public void doExport(OutputStream out) throws JspException {
-        
+
         try {
             // Initialize the table with the appropriate number of columns
             initTable();
@@ -191,7 +195,9 @@ public class CustomPdfViewer implements BinaryExportView {
     }
 
     /**
-     * Generates the header cells, which persist on every page of the PDF document.
+     * Generates the header cells, which persist on every page of the PDF
+     * document.
+     *
      * @throws BadElementException IText exception
      */
     protected void generateHeaders() throws BadElementException {
@@ -209,7 +215,9 @@ public class CustomPdfViewer implements BinaryExportView {
 
     /**
      * Generates all the row cells.
-     * @throws JspException for errors during value retrieving from the table model
+     *
+     * @throws JspException for errors during value retrieving from the table
+     * model
      * @throws BadElementException errors while generating content
      */
     protected void generateRows(Document document) throws JspException, BadElementException, DocumentException, IOException {
@@ -225,7 +233,7 @@ public class CustomPdfViewer implements BinaryExportView {
         ColumnIterator columnIterator;
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
-            
+
             if (isBeforeRow) {
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -248,7 +256,7 @@ public class CustomPdfViewer implements BinaryExportView {
 
                 // Get the value to be displayed for the column
                 value = column.getValue(this.decorated);
-                
+
                 /* some eyecandy stuff */
                 if (rowCnt % 2 == 1) {
                     writer.addCell(ObjectUtils.toString(value), new Color(220, 223, 225));
@@ -256,7 +264,7 @@ public class CustomPdfViewer implements BinaryExportView {
                     writer.addCell(ObjectUtils.toString(value), null);
                 }
             }
-            
+
             if (isAfterRow) {
                 // iterator on columns
                 columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
@@ -287,6 +295,7 @@ public class CustomPdfViewer implements BinaryExportView {
 
     /**
      * Wraps IText-generated exceptions.
+     *
      * @author Fabrizio Giustina
      * @version $Revision: 1.2 $ ($Author: mvo $)
      */
@@ -298,7 +307,9 @@ public class CustomPdfViewer implements BinaryExportView {
         private static final long serialVersionUID = 899149338534L;
 
         /**
-         * Instantiate a new PdfGenerationException with a fixed message and the given cause.
+         * Instantiate a new PdfGenerationException with a fixed message and the
+         * given cause.
+         *
          * @param cause Previous exception
          */
         public PdfGenerationException(Throwable cause) {
@@ -306,7 +317,8 @@ public class CustomPdfViewer implements BinaryExportView {
         }
 
         /**
-         * @see org.displaytag.exception.BaseNestableJspTagException#getSeverity()
+         * @see
+         * org.displaytag.exception.BaseNestableJspTagException#getSeverity()
          */
         public SeverityEnum getSeverity() {
             return SeverityEnum.ERROR;

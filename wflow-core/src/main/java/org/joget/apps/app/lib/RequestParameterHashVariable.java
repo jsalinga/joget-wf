@@ -20,7 +20,7 @@ public class RequestParameterHashVariable extends DefaultHashVariablePlugin {
                 separator = variableKey.substring(variableKey.indexOf("[") + 1, variableKey.indexOf("]"));
                 variableKey = variableKey.substring(0, variableKey.indexOf("["));
             }
-            
+
             String[] value = request.getParameterValues(variableKey);
 
             if (value != null && value.length > 0) {
@@ -30,7 +30,7 @@ public class RequestParameterHashVariable extends DefaultHashVariablePlugin {
                 Map<String, String> params = (Map) request.getAttribute(ParameterizedUrlHandlerMapping.PATH_PARAMETERS);
                 if (params != null && params.containsKey(variableKey)) {
                     String pathValue = params.get(variableKey);
-                    
+
                     if (variableKey.equals("key") && pathValue != null && pathValue.equals(Userview.USERVIEW_KEY_EMPTY_VALUE)) {
                         pathValue = "";
                     }

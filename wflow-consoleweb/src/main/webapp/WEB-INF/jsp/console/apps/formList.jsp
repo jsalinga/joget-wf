@@ -32,29 +32,29 @@
             <a href='#' onclick='return refreshNavigator()'><i class='fa fa-refresh'></i> <fmt:message key="general.method.label.refresh"/></a>
         </div>
         <div id="nv-container">
-        <jsp:include page="/web/console/app/${appId}/${appVersion}/navigator" flush="true"/>
+            <jsp:include page="/web/console/app/${appId}/${appVersion}/navigator" flush="true"/>
         </div>
         <script>
             function refreshNavigator() {
-                if ($("#nv-refresh").css("visibility") != "hidden") {
-                    var loading = $("<img id='nv-loading' src='${pageContext.request.contextPath}/images/v3/loading.gif'>");
-                    $("#nv-refresh a").css("visibility", "hidden");
-                    $("#nv-refresh").append(loading);
-                }
-                $.ajax({
-                    url: "${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/${appVersion}/navigator?hidden=true&_=" + jQuery.now(),
-                    success: function(data) {
-                        $("#nv-container").html(data);
-                    },
-                    complete: function() {
-                        $("#nv-refresh a").css("visibility", "visible");
-                        $(loading).remove();
-                    }
-                });
-                return false;
+            if ($("#nv-refresh").css("visibility") != "hidden") {
+            var loading = $("<img id='nv-loading' src='${pageContext.request.contextPath}/images/v3/loading.gif'>");
+            $("#nv-refresh a").css("visibility", "hidden");
+            $("#nv-refresh").append(loading);
+            }
+            $.ajax({
+            url: "${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/${appVersion}/navigator?hidden=true&_=" + jQuery.now(),
+            success: function(data) {
+            $("#nv-container").html(data);
+            },
+            complete: function() {
+            $("#nv-refresh a").css("visibility", "visible");
+            $(loading).remove();
+            }
+            });
+            return false;
             }
             function closeDialog() {
-                refreshNavigator();
+            refreshNavigator();
             }            
         </script>
     </div>
@@ -62,14 +62,14 @@
 
 <script>
     $(document).ready(function(){
-        <c:if test="${param.formCreate == 'true'}">
-            formCreate();
-        </c:if>
+    <c:if test="${param.formCreate == 'true'}">
+        formCreate();
+    </c:if>
     });
-    
+
     <ui:popupdialog var="formCreateDialog" src="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/form/create"/>
     function formCreate(){
-        formCreateDialog.init();
+    formCreateDialog.init();
     }
     Template.init("#menu-apps", "#nav-app-forms");
     HelpGuide.key = "help.web.console.app.navigator";

@@ -442,7 +442,7 @@ td.error .chosen-container, td.error input {
 }
 
 .ace_editor *{
-   font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
 .property-type-sortableselect .sorted_select_control{

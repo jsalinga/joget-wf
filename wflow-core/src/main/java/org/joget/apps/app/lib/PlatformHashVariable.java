@@ -14,7 +14,7 @@ import org.joget.commons.util.SetupManager;
  * The Platform Hash Variable is used to retrieve platform specific information.
  */
 public class PlatformHashVariable extends DefaultHashVariablePlugin {
-    
+
     @Override
     public String processHashVariable(String variableKey) {
         String result = null;
@@ -33,7 +33,7 @@ public class PlatformHashVariable extends DefaultHashVariablePlugin {
             result = "";
         } else if (variableKey.startsWith("setting.")) {
             String property = variableKey.substring("setting.".length());
-            SetupManager setupManager = (SetupManager)AppUtil.getApplicationContext().getBean("setupManager");
+            SetupManager setupManager = (SetupManager) AppUtil.getApplicationContext().getBean("setupManager");
             result = setupManager.getSettingValue(property);
         }
         return result;
@@ -62,11 +62,11 @@ public class PlatformHashVariable extends DefaultHashVariablePlugin {
     public String getClassName() {
         return this.getClass().getName();
     }
-    
+
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();

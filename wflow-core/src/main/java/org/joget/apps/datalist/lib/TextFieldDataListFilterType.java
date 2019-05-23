@@ -38,7 +38,7 @@ public class TextFieldDataListFilterType extends DataListFilterTypeDefault {
     public String getTemplate(DataList datalist, String name, String label) {
         PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
         Map dataModel = new HashMap();
-        dataModel.put("name", datalist.getDataListEncodedParamName(DataList.PARAMETER_FILTER_PREFIX+name));
+        dataModel.put("name", datalist.getDataListEncodedParamName(DataList.PARAMETER_FILTER_PREFIX + name));
         dataModel.put("label", label);
         dataModel.put("value", getValue(datalist, name, getPropertyString("defaultValue")));
         dataModel.put("contextPath", WorkflowUtil.getHttpServletRequest().getContextPath());
@@ -50,7 +50,7 @@ public class TextFieldDataListFilterType extends DataListFilterTypeDefault {
         String value = getValue(datalist, name, getPropertyString("defaultValue"));
         if (datalist != null && datalist.getBinder() != null && value != null && !value.isEmpty()) {
             String cname = datalist.getBinder().getColumnName(name);
-            
+
             //support aggregate function
             if (cname.toLowerCase().contains("count(")
                     || cname.toLowerCase().contains("sum(")
@@ -63,7 +63,7 @@ public class TextFieldDataListFilterType extends DataListFilterTypeDefault {
                 queryObject.setQuery("lower(" + cname + ") like lower(?)");
                 queryObject.setValues(new String[]{'%' + value + '%'});
             }
-            
+
             return queryObject;
         }
         return null;

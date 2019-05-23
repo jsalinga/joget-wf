@@ -27,15 +27,15 @@ public class CustomXPDLHandler extends PluggableXPDLHandler {
 
             try {
                 String sessionId = Designer.SESSION;
-                int port =  Integer.parseInt(Designer.PORT);
-                String cookieDomain =  Designer.DOMAIN;
+                int port = Integer.parseInt(Designer.PORT);
+                String cookieDomain = Designer.DOMAIN;
                 String cookiePath = Designer.CONTEXTPATH;
-                    String contents = "";
+                String contents = "";
                 try {
-                    contents = HttpUtil.httpPost(null, pkgReference, port, sessionId, cookieDomain, cookiePath,  Designer.USERNAME, null, false, false, null, null);
-                } catch(AuthenticationException ae) {
+                    contents = HttpUtil.httpPost(null, pkgReference, port, sessionId, cookieDomain, cookiePath, Designer.USERNAME, null, false, false, null, null);
+                } catch (AuthenticationException ae) {
                     System.exit(0);
-                } catch(HttpResponseException he) {
+                } catch (HttpResponseException he) {
                     System.exit(0);
                 }
                 if (contents == null) {

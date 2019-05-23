@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Utility methods used by security feature
- * 
+ *
  */
 @Service("securityUtil")
 public class SecurityUtil implements ApplicationContextAware {
@@ -25,7 +25,8 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return appContext;
@@ -33,8 +34,9 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Method used by system to set an ApplicationContext
+     *
      * @param context
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         appContext = context;
@@ -42,6 +44,7 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Sets a data encryption implementation
+     *
      * @param deImpl
      */
     public void setDataEncryption(DataEncryption deImpl) {
@@ -52,7 +55,8 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Gets the data encryption implementation
-     * @return 
+     *
+     * @return
      */
     public static DataEncryption getDataEncryption() {
         if (de == null) {
@@ -63,20 +67,22 @@ public class SecurityUtil implements ApplicationContextAware {
         }
         return de;
     }
-    
+
     /**
      * Sets a nonce generator implementation
-     * @param ngImpl 
+     *
+     * @param ngImpl
      */
     public void setNonceGenerator(NonceGenerator ngImpl) {
         if (ng == null) {
             ng = ngImpl;
         }
     }
-    
+
     /**
      * Gets the nonce generator implementation
-     * @return 
+     *
+     * @return
      */
     public static NonceGenerator getNonceGenerator() {
         if (ng == null) {
@@ -90,8 +96,9 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Encrypt raw content if data encryption implementation is exist
+     *
      * @param rawContent
-     * @return 
+     * @return
      */
     public static String encrypt(String rawContent) {
 
@@ -107,8 +114,9 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Decrypt protected content if data encryption implementation is exist
+     *
      * @param protectedContent
-     * @return 
+     * @return
      */
     public static String decrypt(String protectedContent) {
         if (protectedContent.startsWith(ENVELOPE) && protectedContent.endsWith(ENVELOPE) && getDataEncryption() != null) {
@@ -123,10 +131,12 @@ public class SecurityUtil implements ApplicationContextAware {
     }
 
     /**
-     * Computes the hash of a raw content if data encryption implementation is exist
+     * Computes the hash of a raw content if data encryption implementation is
+     * exist
+     *
      * @param rawContent
      * @param randomSalt
-     * @return 
+     * @return
      */
     public static String computeHash(String rawContent, String randomSalt) {
 
@@ -141,12 +151,13 @@ public class SecurityUtil implements ApplicationContextAware {
     }
 
     /**
-     * Verify the hash is belong to the raw content if data encryption 
+     * Verify the hash is belong to the raw content if data encryption
      * implementation is exist
+     *
      * @param hash
      * @param randomSalt
      * @param rawContent
-     * @return 
+     * @return
      */
     public static Boolean verifyHash(String hash, String randomSalt, String rawContent) {
         if (hash != null && !hash.isEmpty() && rawContent != null && !rawContent.isEmpty()) {
@@ -162,7 +173,8 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Generate a random salt value if data encryption implementation is exist
-     * @return 
+     *
+     * @return
      */
     public static String generateRandomSalt() {
         if (getDataEncryption() != null) {
@@ -170,12 +182,13 @@ public class SecurityUtil implements ApplicationContextAware {
         }
         return "";
     }
-    
+
     /**
-     * Check the content is a wrapped in a security envelop if data encryption 
+     * Check the content is a wrapped in a security envelop if data encryption
      * implementation is exist
+     *
      * @param content
-     * @return 
+     * @return
      */
     public static boolean hasSecurityEnvelope(String content) {
         if (content != null && content.startsWith(ENVELOPE) && content.endsWith(ENVELOPE) && getDataEncryption() != null) {
@@ -189,21 +202,24 @@ public class SecurityUtil implements ApplicationContextAware {
 
         return content;
     }
-    
+
     /**
-     * Generate a nonce value based on attributes if Nonce Generator implementation is exist
+     * Generate a nonce value based on attributes if Nonce Generator
+     * implementation is exist
+     *
      * @param attributes
      * @param lifepanHour
-     * @return 
+     * @return
      */
     public static String generateNonce(String[] attributes, int lifepanHour) {
-        
+
         SetupManager sm = (SetupManager) appContext.getBean("setupManager");
         String extendNonceCacheTime = sm.getSettingValue("extendNonceCacheTime");
         if (extendNonceCacheTime != null && !extendNonceCacheTime.isEmpty()) {
             try {
                 lifepanHour += Integer.parseInt(extendNonceCacheTime);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         if (getNonceGenerator() != null) {
@@ -215,13 +231,14 @@ public class SecurityUtil implements ApplicationContextAware {
         }
         return "";
     }
-    
+
     /**
-     * Verify the nonce is a valid nonce against the attributes if Nonce 
+     * Verify the nonce is a valid nonce against the attributes if Nonce
      * Generator implementation is exist
+     *
      * @param nonce
      * @param attributes
-     * @return 
+     * @return
      */
     public static boolean verifyNonce(String nonce, String[] attributes) {
 
@@ -239,22 +256,25 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Gets the domain name from a given URL
+     *
      * @param url
-     * @return 
+     * @return
      */
     public static String getDomainName(String url) {
         try {
             URI uri = new URI(url);
             return uri.getHost();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return null;
     }
-    
+
     /**
      * Verify the domain name against a whitelist
+     *
      * @param domain
      * @param whitelist
-     * @return 
+     * @return
      */
     public static boolean isAllowedDomain(String domain, List<String> whitelist) {
         return whitelist != null && domain != null && whitelist.contains(domain);
@@ -262,17 +282,19 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Returns the name of the CRSF token
-     * @return 
+     *
+     * @return
      */
     public static String getCsrfTokenName() {
         CsrfGuard csrfGuard = CsrfGuard.getInstance();
         return csrfGuard.getTokenName();
     }
-    
+
     /**
      * Returns the value of the CRSF token in the request
+     *
      * @param request
-     * @return 
+     * @return
      */
     public static String getCsrfTokenValue(HttpServletRequest request) {
         CsrfGuard csrfGuard = CsrfGuard.getInstance();
@@ -281,6 +303,7 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Validates a boolean String
+     *
      * @param input
      * @return
      * @throws IllegalArgumentException if the input is invalid
@@ -291,6 +314,7 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Validates an input String
+     *
      * @param input
      * @return
      * @throws IllegalArgumentException if the input is invalid
@@ -301,6 +325,7 @@ public class SecurityUtil implements ApplicationContextAware {
 
     /**
      * Validates input
+     *
      * @param input
      * @param patternStr
      * @return

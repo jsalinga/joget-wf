@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class Userview extends Element {
+
     public static String USERVIEW_KEY_NAME = "keyName";
     public static String USERVIEW_KEY_VALUE = "keyValue";
     public static String USERVIEW_KEY_EMPTY_VALUE = "_";
@@ -57,15 +58,15 @@ public class Userview extends Element {
     public void setParams(Map<String, Object> params) {
         this.params = params;
     }
-    
-    public Object getParam (String key) {
+
+    public Object getParam(String key) {
         if (params != null) {
             return params.get(key);
         }
         return null;
     }
-    
-    public String getParamString (String key) {
+
+    public String getParamString(String key) {
         if (params != null && params.containsKey(key)) {
             return params.get(key).toString();
         }

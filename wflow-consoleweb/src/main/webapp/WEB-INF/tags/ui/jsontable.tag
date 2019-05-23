@@ -61,20 +61,20 @@
             var searchTimer_${var} = null;
 
             function triggerTimer_${var}(){
-                clearTimeout(searchTimer_${var});
-                searchTimer_${var} = setTimeout("search_${var}_${divToUpdate}()", 500);
+            clearTimeout(searchTimer_${var});
+            searchTimer_${var} = setTimeout("search_${var}_${divToUpdate}()", 500);
             }
 
 
             function search_${var}_${divToUpdate}(){
-                var term = document.getElementById("${var}_searchTerm");
-                var condition = $('#${var}_searchCondition').val();
-                filter(${var}, '&' + term.options[term.selectedIndex].value + '=', condition);
+            var term = document.getElementById("${var}_searchTerm");
+            var condition = $('#${var}_searchCondition').val();
+            filter(${var}, '&' + term.options[term.selectedIndex].value + '=', condition);
             }
 
             function clear_${var}_${divToUpdate}(){
-                var condition = $('#${var}_searchCondition').val('');
-                filter(${var}, '', '');
+            var condition = $('#${var}_searchCondition').val('');
+            filter(${var}, '', '');
             }
         </script>
 
@@ -116,11 +116,11 @@
                 Calendar.show("dateToId");
 
                 function filterByDate(jsonTable, dateFrom, dateTo){
-                    var validateDateFrom = dateFrom.split("-")[2];
-                    var validateDateTo = dateTo.split("-")[2];
+                var validateDateFrom = dateFrom.split("-")[2];
+                var validateDateTo = dateTo.split("-")[2];
 
-                    if(validateDateTo<validateDateFrom) alert('<fmt:message key="general.date.from.greater.than.to.exception"/>');
-                    else jsonTable.load(jsonTable.url + '&dateFrom='+dateFrom+'&dateTo='+dateTo);
+                if(validateDateTo<validateDateFrom) alert('<fmt:message key="general.date.from.greater.than.to.exception"/>');
+                else jsonTable.load(jsonTable.url + '&dateFrom='+dateFrom+'&dateTo='+dateTo);
                 }
             </script>
         </c:if>
@@ -142,21 +142,21 @@
         <c:if test="${!empty attributeMap[button]}">
             <script type="text/javascript">
                 function ${var}_${divToUpdate}_${attributeMap[callback]}_callback() {
-                    var selectedRows = ${var}.getSelectedRows();
-                    <c:if test="${attributeMap[optional] != 'true'}">
+                var selectedRows = ${var}.getSelectedRows();
+                <c:if test="${attributeMap[optional] != 'true'}">
                     if (!selectedRows || selectedRows.length === 0 || (selectedRows.length === 1 && selectedRows[0] === "")) {
-                        alert("<fmt:message key="dbuilder.alert.noRecordSelected"/>");
-                        return;
+                    alert("<fmt:message key="dbuilder.alert.noRecordSelected"/>");
+                    return;
                     }
-                    </c:if>
-                    ${attributeMap[callback]}(selectedRows);
+                </c:if>
+                ${attributeMap[callback]}(selectedRows);
                 }
             </script>
             <button type="button" onclick="${var}_${divToUpdate}_${attributeMap[callback]}_callback()"><fmt:message key="${attributeMap[button]}"/></button>
         </c:if>
     </c:forEach>
 </div>
-    
+
 <form id="ui_link_form" style="display:none"></form>
 
 <script type="text/javascript">
@@ -168,12 +168,12 @@
 
     <c:if test="${checkbox}">
         <c:choose>
-                <c:when test="${!checkboxSelectSingle}">
-                        {key: 'checkbox', label: '<input type="checkbox" id="${divToUpdate}-checkboxes" onclick="toggleCheckboxes(this, \'${divToUpdate}\')">', sortable: false, width: '30px'}
+            <c:when test="${!checkboxSelectSingle}">
+                {key: 'checkbox', label: '<input type="checkbox" id="${divToUpdate}-checkboxes" onclick="toggleCheckboxes(this, \'${divToUpdate}\')">', sortable: false, width: '30px'}
                 <c:set var="first" value="false"/>
             </c:when>
             <c:otherwise>
-                        {key: 'radio', label: '<input type="radio" disabled />', sortable: false, width: '30px'}
+                {key: 'radio', label: '<input type="radio" disabled />', sortable: false, width: '30px'}
                 <c:set var="first" value="false"/>
             </c:otherwise>
         </c:choose>
@@ -213,7 +213,7 @@
         </c:otherwise>
     </c:choose>
 
-            ];
+    ];
 
     ${var}.columns = myColumnDefs;
     ${var}.useRp = ${useRp}
@@ -238,9 +238,9 @@
         ${var}.desc = ${desc};
     </c:if>
 
-        // NOTE: replaced by creating buttons outside and at the bottom of table
-        // set buttons
-        var buttons = new Array();
+    // NOTE: replaced by creating buttons outside and at the bottom of table
+    // set buttons
+    var buttons = new Array();
     <c:forEach var="count" begin="0" end="10">
         <c:set var="button">checkboxButton${count}</c:set>
         <c:set var="callback">checkboxCallback${count}</c:set>
@@ -248,12 +248,12 @@
             buttons.push({ name:'${attributeMap[button]}', callback:'${attributeMap[callback]}' });
         </c:if>
     </c:forEach>
-        if (buttons.length > 0) {
-            //${var}.buttons = buttons;
-        }
+    if (buttons.length > 0) {
+    //${var}.buttons = buttons;
+    }
 
-        // set row link and popup dialog
-        var ${var}_popupDialog = null;
+    // set row link and popup dialog
+    var ${var}_popupDialog = null;
     <c:if test="${!empty href && hrefDialog}">
         <c:if test="${!empty hrefDialogWindowName}">
             ${var}_popupDialog = new PopupDialog("${href}", "${hrefDialogTitle}", "${hrefDialogWindowName}");
@@ -276,52 +276,52 @@
     ${var}.init();
 
 
-        function toggleCheckboxes(checkbox, divToUpdate){
-            $.each($("." + divToUpdate + "-checkbox-list"), function(i, v){
-                if ($(checkbox).is(":checked")) {
-                    $(v).attr("checked", "checked");
-                } else {
-                    $(v).removeAttr("checked");
-                }
+    function toggleCheckboxes(checkbox, divToUpdate){
+    $.each($("." + divToUpdate + "-checkbox-list"), function(i, v){
+    if ($(checkbox).is(":checked")) {
+    $(v).attr("checked", "checked");
+    } else {
+    $(v).removeAttr("checked");
+    }
 
-                var tr = $(v).parent().parent().parent();
-                if($(checkbox).attr("checked")){
-                    $(tr).addClass("trSelected");
-                    $("#"+divToUpdate+"_selectedIds").html($("#"+divToUpdate+"_selectedIds").html()+","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'));
-                } else {
-                    $(tr).removeClass("trSelected");
-                    var removeString = $("#"+divToUpdate+"_selectedIds").html().replace(","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'), "");
-                    $("#"+divToUpdate+"_selectedIds").html(removeString);
-                }
-            });
-        }
+    var tr = $(v).parent().parent().parent();
+    if($(checkbox).attr("checked")){
+    $(tr).addClass("trSelected");
+    $("#"+divToUpdate+"_selectedIds").html($("#"+divToUpdate+"_selectedIds").html()+","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'));
+    } else {
+    $(tr).removeClass("trSelected");
+    var removeString = $("#"+divToUpdate+"_selectedIds").html().replace(","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'), "");
+    $("#"+divToUpdate+"_selectedIds").html(removeString);
+    }
+    });
+    }
 
-        function toggleCheckbox(checkbox) {
+    function toggleCheckbox(checkbox) {
 
-            var tr = $('#' + checkbox).parent().parent().parent();
-            var divToUpdate  = tr.parent().parent().attr("id");
-            if($('#' + checkbox).attr("checked")){
-                $(tr).addClass("trSelected");
-                $("#"+divToUpdate+"_selectedIds").html($("#"+divToUpdate+"_selectedIds").html()+","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'));
-            } else {
-                $(tr).removeClass("trSelected");
-                var removeString = $("#"+divToUpdate+"_selectedIds").html().replace(","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'), "");
-                $("#"+divToUpdate+"_selectedIds").html(removeString);
-            }
-        }
+    var tr = $('#' + checkbox).parent().parent().parent();
+    var divToUpdate  = tr.parent().parent().attr("id");
+    if($('#' + checkbox).attr("checked")){
+    $(tr).addClass("trSelected");
+    $("#"+divToUpdate+"_selectedIds").html($("#"+divToUpdate+"_selectedIds").html()+","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'));
+    } else {
+    $(tr).removeClass("trSelected");
+    var removeString = $("#"+divToUpdate+"_selectedIds").html().replace(","+$(tr).attr("id").substring(3).replace(/__dot__/g, '.'), "");
+    $("#"+divToUpdate+"_selectedIds").html(removeString);
+    }
+    }
 
-        var ${divToUpdate}_trRemoved;
-        var ${divToUpdate}_idRemoved;
+    var ${divToUpdate}_trRemoved;
+    var ${divToUpdate}_idRemoved;
 
-        function ${divToUpdate}_toggleRadioButton(radio) {
-            var tr = $('#' + radio).parent().parent().parent();
+    function ${divToUpdate}_toggleRadioButton(radio) {
+    var tr = $('#' + radio).parent().parent().parent();
 
-            if(radio != ${divToUpdate}_idRemoved) {
-                $(tr).addClass("trSelected");
-                $(${divToUpdate}_trRemoved).removeClass("trSelected");
-            }
+    if(radio != ${divToUpdate}_idRemoved) {
+    $(tr).addClass("trSelected");
+    $(${divToUpdate}_trRemoved).removeClass("trSelected");
+    }
 
     ${divToUpdate}_trRemoved = tr;
     ${divToUpdate}_idRemoved = radio;
-            }
+    }
 </script>

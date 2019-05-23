@@ -25,7 +25,7 @@ public class UserviewCache {
     public static final String CACHE_SCOPE_USER = "user";
     public static final String PROPERTY_SCOPE = "userviewCacheScope";
     public static final String PROPERTY_DURATION = "userviewCacheDuration";
-    
+
     public static void clearCachedContent(String userviewId, String menuId, String scope) {
         Cache cache = (Cache) AppUtil.getApplicationContext().getBean("userviewMenuCache");
         if (cache != null) {
@@ -36,7 +36,7 @@ public class UserviewCache {
             for (Result result : results.all()) {
                 String key = (String) result.getKey();
                 cache.remove(key);
-                if (LogUtil.isDebugEnabled(UserviewCache.class.getName())) {    
+                if (LogUtil.isDebugEnabled(UserviewCache.class.getName())) {
                     LogUtil.debug(UserviewCache.class.getName(), "clearCachedContent: " + key);
                 }
             }
@@ -65,7 +65,7 @@ public class UserviewCache {
             if (durationStr != null && !durationStr.isEmpty()) {
                 try {
                     duration = Integer.parseInt(durationStr);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     // ignore
                 }
             }
@@ -76,7 +76,7 @@ public class UserviewCache {
                 element.setTimeToLive(duration);
             }
             cache.put(element);
-            if (LogUtil.isDebugEnabled(UserviewCache.class.getName())) {    
+            if (LogUtil.isDebugEnabled(UserviewCache.class.getName())) {
                 LogUtil.debug(UserviewCache.class.getName(), "setCachedContent: " + cacheKey + ", duration " + duration + "s");
             }
         }
@@ -98,7 +98,7 @@ public class UserviewCache {
             Element element = cache.get(cacheKey);
             if (element != null) {
                 content = (String) element.getObjectValue();
-                if (LogUtil.isDebugEnabled(UserviewCache.class.getName())) {    
+                if (LogUtil.isDebugEnabled(UserviewCache.class.getName())) {
                     LogUtil.debug(UserviewCache.class.getName(), "getCachedContent: " + cacheKey);
                 }
             }
@@ -121,10 +121,10 @@ public class UserviewCache {
         if (request != null) {
             params = request.getQueryString();
             if (params == null) {
-                params = (String)request.getAttribute("javax.servlet.forward.query_string");
+                params = (String) request.getAttribute("javax.servlet.forward.query_string");
             }
         }
         return CACHE_KEY_PREFIX + ":" + profile + ":" + appDef.getAppId() + ":" + userviewId + ":" + menuId + ":" + scope + ":" + userviewKey + ":" + type + ":" + params;
     }
-    
+
 }

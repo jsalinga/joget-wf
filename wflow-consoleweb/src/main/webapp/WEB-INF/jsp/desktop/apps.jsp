@@ -10,7 +10,7 @@
         <ul id="nav-list">
             <li id="nav-apps"><a class="nav-link" href="${pageContext.request.contextPath}/web/desktop/apps"><span class="nav-steps">&nbsp;</span> <fmt:message key="console.header.submenu.label.allApps"/></a></li>
         </ul>
-        
+
         <div id="adminWelcome">
             <jsp:include page="/WEB-INF/jsp/console/welcome.jsp" flush="true" />
         </div>
@@ -28,33 +28,33 @@
     <div id="main-body">
         <script> 
             (function ($) { 
-                jQuery.expr[':'].Contains = function(a,i,m){ 
-                    return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0; 
-                };  
+            jQuery.expr[':'].Contains = function(a,i,m){ 
+            return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0; 
+            };  
 
-                function listFilter(header, list) { 
-                    var form = $("<form>").attr({"class":"filterform","action":"#","onsubmit":"return false"}), 
-                    input = $("<input>").attr({"class":"filterinput","type":"text"}); 
-                    $(form).append($("<span class='filterlabel'><i class='fa fa-search'></i></span>")).append(input).appendTo(header);  
-                    $(input) .change( function () { 
-                        var filter = $(this).val(); 
-                        if(filter) { 
-                            $(list).find("a:not(:Contains(" + filter + "))").parent().slideUp(); 
-                            $(list).find("a:Contains(" + filter + ")").parent().slideDown(); 
-                        } else { 
-                            $(list).find("li").slideDown(); 
-                        } 
-                        return false; 
-                    }) .keyup( function () { 
-                        $(this).change(); 
-                    }); 
-                }  
+            function listFilter(header, list) { 
+            var form = $("<form>").attr({"class":"filterform","action":"#","onsubmit":"return false"}), 
+            input = $("<input>").attr({"class":"filterinput","type":"text"}); 
+            $(form).append($("<span class='filterlabel'><i class='fa fa-search'></i></span>")).append(input).appendTo(header);  
+            $(input) .change( function () { 
+            var filter = $(this).val(); 
+            if(filter) { 
+            $(list).find("a:not(:Contains(" + filter + "))").parent().slideUp(); 
+            $(list).find("a:Contains(" + filter + ")").parent().slideDown(); 
+            } else { 
+            $(list).find("li").slideDown(); 
+            } 
+            return false; 
+            }) .keyup( function () { 
+            $(this).change(); 
+            }); 
+            }  
 
-                $(function () { 
-                    listFilter($("#nv-unpublished h4"), $("#nv-unpublished ul")); 
-                    listFilter($("#nv-published h4"), $("#nv-published ul")); 
-                    $("#nv-published h4 input").focus();
-                }); 
+            $(function () { 
+            listFilter($("#nv-unpublished h4"), $("#nv-unpublished ul")); 
+            listFilter($("#nv-published h4"), $("#nv-published ul")); 
+            $("#nv-published h4 input").focus();
+            }); 
             }(jQuery)); 
         </script>
 

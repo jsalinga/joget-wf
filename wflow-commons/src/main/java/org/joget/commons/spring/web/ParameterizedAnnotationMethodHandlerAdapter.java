@@ -46,12 +46,12 @@ public class ParameterizedAnnotationMethodHandlerAdapter extends AnnotationMetho
                 MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
                 FileStore.clear();
                 Map<String, MultipartFile[]> fileMap = new HashMap<String, MultipartFile[]>();
-                
-                MultiValueMap<String, MultipartFile> multiValueFileMap= req.getMultiFileMap();
+
+                MultiValueMap<String, MultipartFile> multiValueFileMap = req.getMultiFileMap();
                 for (String fieldName : multiValueFileMap.keySet()) {
                     fileMap.put(fieldName, multiValueFileMap.get(fieldName).toArray(new MultipartFile[]{}));
                 }
-                
+
                 FileStore.setFileMap(fileMap);
             } else {
                 FileStore.clear();
@@ -117,7 +117,7 @@ public class ParameterizedAnnotationMethodHandlerAdapter extends AnnotationMetho
             } else {
                 return queryString;
             }
-        }        
+        }
     }
 
     private class IteratorEnumeration implements Enumeration {

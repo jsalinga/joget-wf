@@ -811,8 +811,8 @@ public class XPDLObjectFactory {
             Method m = null;
             try {
                 m = this.getClass().getMethod("createXPDLObject", new Class[]{
-                            cl, String.class, boolean.class
-                        });
+                    cl, String.class, boolean.class
+                });
             } catch (Exception ex) {
                 if (!(cl == XMLCollection.class)) {
                     if (XMLCollection.class.isAssignableFrom(cl)) {
@@ -821,11 +821,11 @@ public class XPDLObjectFactory {
                 }
             }
             m = this.getClass().getMethod("createXPDLObject", new Class[]{
-                        cl, String.class, boolean.class
-                    });
+                cl, String.class, boolean.class
+            });
             return (XMLElement) m.invoke(this, new Object[]{
-                        col, type, new Boolean(addToCollection)
-                    });
+                col, type, new Boolean(addToCollection)
+            });
         } catch (Exception e) {
             e.printStackTrace();
             return null;

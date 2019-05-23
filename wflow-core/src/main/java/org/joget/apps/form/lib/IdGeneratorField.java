@@ -41,9 +41,9 @@ public class IdGeneratorField extends Element implements FormBuilderPaletteEleme
             if (value == null || value.trim().isEmpty()) {
                 // generate new value
                 value = getGeneratedValue(formData);
-                
+
                 String paramName = FormUtil.getElementParameterName(this);
-                formData.addRequestParameterValues(paramName, new String[] {value});
+                formData.addRequestParameterValues(paramName, new String[]{value});
             }
             if (value != null) {
                 // set value into Properties and FormRowSet object
@@ -66,7 +66,7 @@ public class IdGeneratorField extends Element implements FormBuilderPaletteEleme
                     String envVariable = getPropertyString("envVariable");
                     AppDefinition appDef = AppUtil.getCurrentAppDefinition();
                     EnvironmentVariableDao environmentVariableDao = (EnvironmentVariableDao) AppUtil.getApplicationContext().getBean("environmentVariableDao");
-                    
+
                     Integer count = environmentVariableDao.getIncreasedCounter(envVariable, "Used for plugin: " + getName(), appDef);
 
                     String format = getPropertyString("format");

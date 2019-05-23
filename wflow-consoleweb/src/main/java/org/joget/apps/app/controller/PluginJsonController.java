@@ -70,14 +70,14 @@ public class PluginJsonController {
                 if (filter != null && !filter.isEmpty() && !plugin.getI18nLabel().toLowerCase().contains(filter.toLowerCase())) {
                     continue;
                 }
-                
+
                 if (counter >= start && counter < start + rows) {
                     Map data = new HashMap();
                     data.put("id", ClassUtils.getUserClass(plugin).getName());
                     data.put("name", plugin.getI18nLabel());
                     data.put("description", plugin.getI18nDescription());
                     data.put("version", plugin.getVersion());
-                    
+
                     String type = "";
                     for (String c : pluginType.keySet()) {
                         if (Class.forName(c).isInstance(plugin)) {
@@ -88,7 +88,7 @@ public class PluginJsonController {
                         }
                     }
                     data.put("plugintype", type);
-                    
+
                     jsonObject.accumulate("data", data);
                 }
                 counter++;
@@ -115,7 +115,7 @@ public class PluginJsonController {
 
             JSONObject jsonObject = new JSONObject();
             int counter = 0;
-            
+
             Map<String, String> pluginType = PluginManager.getPluginType();
             for (Plugin plugin : pluginList) {
                 if (plugin.getI18nLabel() == null || plugin.getI18nLabel().isEmpty()) {
@@ -124,14 +124,14 @@ public class PluginJsonController {
                 if (filter != null && !filter.isEmpty() && !plugin.getI18nLabel().toLowerCase().contains(filter.toLowerCase())) {
                     continue;
                 }
-                
+
                 if (counter >= start && counter < start + rows) {
                     Map data = new HashMap();
                     data.put("id", ClassUtils.getUserClass(plugin).getName());
                     data.put("name", plugin.getI18nLabel());
                     data.put("description", plugin.getI18nDescription());
                     data.put("version", plugin.getVersion());
-                    
+
                     String type = "";
                     for (String c : pluginType.keySet()) {
                         if (Class.forName(c).isInstance(plugin)) {
@@ -143,7 +143,7 @@ public class PluginJsonController {
                     }
                     data.put("plugintype", type);
                     data.put("uninstallable", (pluginManager.isOsgi(data.get("id").toString())) ? "<div class=\"tick\"></div>" : "");
-                    
+
                     jsonObject.accumulate("data", data);
                 }
                 counter++;
@@ -179,14 +179,14 @@ public class PluginJsonController {
                 if (filter != null && !filter.isEmpty() && !plugin.getI18nLabel().toLowerCase().contains(filter.toLowerCase())) {
                     continue;
                 }
-                
+
                 if (counter >= start && counter < start + rows) {
                     Map data = new HashMap();
                     data.put("id", ClassUtils.getUserClass(plugin).getName());
                     data.put("name", plugin.getI18nLabel());
                     data.put("description", plugin.getI18nDescription());
                     data.put("version", plugin.getVersion());
-                    
+
                     String type = "";
                     for (String c : pluginType.keySet()) {
                         if (Class.forName(c).isInstance(plugin)) {
@@ -198,7 +198,7 @@ public class PluginJsonController {
                     }
                     data.put("plugintype", type);
                     data.put("uninstallable", (pluginManager.isOsgi(data.get("id").toString())) ? "<div class=\"tick\"></div>" : "");
-                    
+
                     jsonObject.accumulate("data", data);
                 }
                 counter++;
@@ -247,15 +247,15 @@ public class PluginJsonController {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
-    
+
     @RequestMapping("/json/hash/options")
     public void HashVariableOptions(Writer writer) throws JSONException {
         try {
             Collection<Plugin> pluginList = pluginManager.list(HashVariablePlugin.class);
-            
+
             JSONArray jsonArray = new JSONArray();
-            
-            List<String> syntaxs = new ArrayList<String> (); 
+
+            List<String> syntaxs = new ArrayList<String>();
             for (Plugin p : pluginList) {
                 HashVariablePlugin hashVariablePlugin = (HashVariablePlugin) p;
                 if (hashVariablePlugin.availableSyntax() != null) {

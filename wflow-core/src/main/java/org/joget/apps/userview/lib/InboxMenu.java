@@ -42,6 +42,7 @@ import org.json.JSONArray;
 import org.springframework.context.ApplicationContext;
 
 public class InboxMenu extends UserviewMenu implements PluginWebSupport {
+
     private DataList cacheDataList = null;
 
     public static final String PREFIX_SELECTED = "selected_";
@@ -156,8 +157,8 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
                 if (ac.getMessage() != null && !ac.getMessage().isEmpty()) {
                     setAlertMessage(ac.getMessage());
                 }
-                if (ac.getType() != null && DataListActionResult.TYPE_REDIRECT.equals(ac.getType()) &&
-                        ac.getUrl() != null && !ac.getUrl().isEmpty()) {
+                if (ac.getType() != null && DataListActionResult.TYPE_REDIRECT.equals(ac.getType())
+                        && ac.getUrl() != null && !ac.getUrl().isEmpty()) {
                     if ("REFERER".equals(ac.getUrl())) {
                         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
                         if (request != null && request.getHeader("Referer") != null) {
@@ -173,7 +174,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
                     }
                 }
             }
-            
+
             // set data list
             setProperty("dataList", dataList);
         } catch (Exception ex) {
@@ -226,7 +227,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
 
             if (packageId != null || processDefId != null) {
                 DataListQueryParam param = dataList.getQueryParam(null, null);
-                               
+
                 // get assignments
                 WorkflowManager workflowManager = (WorkflowManager) WorkflowUtil.getApplicationContext().getBean("workflowManager");
                 Collection<WorkflowAssignment> assignmentList = workflowManager.getAssignmentListLite(packageId, processDefId, null, null, param.getSort(), param.getDesc(), param.getStart(), param.getSize());
@@ -249,7 +250,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
                     resultList.add(data);
                 }
             }
-            
+
             return resultList;
         } catch (Exception e) {
             return null;
@@ -268,7 +269,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
                 PackageDefinition packageDef = appDef.getPackageDefinition();
                 if (packageDef != null) {
                     packageId = packageDef.getId();
-                } 
+                }
             }
         } else if (PROPERTY_FILTER_PROCESS.equals(appFilter)) {
             String processId = getPropertyString("processId");
@@ -281,11 +282,11 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
             }
         }
         int count = 0;
-        
+
         if (packageId != null || processDefId != null) {
             count = workflowManager.getAssignmentSize(packageId, processDefId, null);
         }
-        
+
         return count;
     }
 
@@ -297,7 +298,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
             if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
                 return "userview/plugin/unauthorized.jsp";
             }
-            
+
             // submit form
             submitForm();
         } else {
@@ -357,7 +358,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
         String formUrl = addParamToUrl(getUrl(), "_action", "submit");
         formUrl = addParamToUrl(formUrl, "_mode", "assignment");
         formUrl = addParamToUrl(formUrl, "activityId", activityId);
-        
+
         String cancelUrl = getUrl();
 
         AppService appService;
@@ -365,10 +366,10 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
         appService = (AppService) ac.getBean("appService");
         AppDefinition appDef = appService.getAppDefinitionForWorkflowActivity(activityId);
         FormService formService = (FormService) ac.getBean("formService");
-        
+
         formData = formService.retrieveFormDataFromRequestMap(formData, getRequestParameters());
         formData.setActivityId(assignment.getActivityId());
-        
+
         PackageActivityForm activityForm = appService.viewAssignmentForm(appDef, assignment, formData, formUrl, cancelUrl);
         return activityForm;
     }
@@ -413,7 +414,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
                 formHtml = formService.generateElementErrorHtml(form, formData);
                 errorCount = errors.size();
             }
-            
+
             if (formData.getStay()) {
                 setAlertMessage("");
                 setRedirectUrl("");
@@ -455,7 +456,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
 
         // submit form
         formData = formService.executeFormActions(currentForm, formData);
-        
+
         setProperty("submitted", Boolean.TRUE);
         setProperty("redirectUrlAfterComplete", getUrl());
         setRedirectUrl(getUrl());
@@ -468,13 +469,13 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
             // complete assignment
             Map<String, String> variableMap = AppUtil.retrieveVariableDataFromMap(getRequestParameters());
             formData = appService.completeAssignmentForm(currentForm, assignment, formData, variableMap);
-            
+
             Map<String, String> errors = formData.getFormErrors();
-            
+
             if (!formData.getStay() && (errors == null || errors.isEmpty()) && activityForm.isAutoContinue()) {
                 // redirect to next activity if available
                 WorkflowAssignment nextActivity = workflowManager.getAssignmentByProcess(processId);
-                if (nextActivity != null) { 
+                if (nextActivity != null) {
                     String redirectUrl = getUrl() + "?_mode=assignment&activityId=" + nextActivity.getActivityId();
                     setProperty("messageShowAfterComplete", "");
                     setProperty("redirectUrlAfterComplete", redirectUrl);
@@ -505,7 +506,7 @@ public class InboxMenu extends UserviewMenu implements PluginWebSupport {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
 
         if ("getProcesses".equals(action)) {

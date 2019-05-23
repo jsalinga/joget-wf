@@ -11,13 +11,14 @@ import org.joget.apps.form.service.FormUtil;
 import org.joget.commons.util.UuidGenerator;
 
 public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormStoreBinder, FormDeleteBinder {
+
     protected final GridInnerDataRetriever dataRetriever;
     protected final FormStoreBinder storeBinder;
     protected boolean deleteGridData = false;
     protected boolean deleteSubformData = false;
     protected boolean abortProcess = false;
     protected boolean deleteFiles = false;
-    
+
     public String getName() {
         return "GridInnerDataStoreBinderWrapper";
     }
@@ -65,7 +66,7 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
     public void setAbortProcess(boolean abortProcess) {
         this.abortProcess = abortProcess;
     }
-    
+
     public boolean isDeleteFiles() {
         return deleteFiles;
     }
@@ -73,33 +74,31 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
     public void setDeleteFiles(boolean deleteFiles) {
         this.deleteFiles = deleteFiles;
     }
-    
-    public GridInnerDataStoreBinderWrapper (GridInnerDataRetriever dataRetriever, FormStoreBinder storeBinder) {
+
+    public GridInnerDataStoreBinderWrapper(GridInnerDataRetriever dataRetriever, FormStoreBinder storeBinder) {
         this.dataRetriever = dataRetriever;
         this.storeBinder = storeBinder;
     }
-    
-    
 
     public FormRowSet store(Element element, FormRowSet rows, FormData formData) {
         //handle deleted row inner form/grid data
         handleDeletedRows(element, rows, formData, isDeleteGridData(), isDeleteSubformData(), isAbortProcess(), isDeleteFiles());
-        
+
         if (rows != null && !rows.isEmpty()) {
             //store inner form/grid data
             storeInnerData(rows);
-        }    
+        }
 
         storeBinder.store(element, rows, formData);
-        
+
         return rows;
-    } 
-    
+    }
+
     public void delete(Element element, FormRowSet rows, FormData formData, boolean deleteGrid, boolean deleteSubform, boolean abortProcess, boolean deleteFiles) {
         if (deleteGrid || deleteSubform || abortProcess || deleteFiles) {
             handleDeletedRows(element, null, formData, deleteGrid, deleteSubform, abortProcess, deleteFiles);
         }
-        
+
         if (storeBinder instanceof FormDeleteBinder) {
             ((FormDeleteBinder) storeBinder).delete(element, rows, formData, deleteGrid, deleteSubform, abortProcess, deleteFiles);
         } else if (element.getLoadBinder() != null && element.getLoadBinder() instanceof FormDataDeletableBinder) {
@@ -108,7 +107,7 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
             formDataDao.delete(binder.getFormId(), binder.getTableName(), rows);
         }
     }
-    
+
     public void handleDeletedRows(Element element, FormRowSet rows, FormData formData, boolean deleteGrid, boolean deleteSubform, boolean abortProcess, boolean deleteFiles) {
         //get load binder data of this element
         FormRowSet loadedRows = formData.getLoadBinderData(element);
@@ -118,7 +117,7 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
                 ids.add(r.getId());
             }
         }
-        
+
         if (!ids.isEmpty() && rows != null && !rows.isEmpty()) {
             for (FormRow r : rows) {
                 if (r.getId() != null && !r.getId().isEmpty() && ids.contains(r.getId())) {
@@ -126,7 +125,7 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
                 }
             }
         }
-        
+
         if (!ids.isEmpty()) {
             Form innerForm = dataRetriever.getInnerForm();
             if (innerForm != null) {
@@ -140,7 +139,7 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
                     if (deleteFiles) {
                         FileUtil.deleteFiles(innerForm, id);
                     }
-                    
+
                     //remove inner data
                     if (deleteGrid || deleteSubform) {
                         FormUtil.recursiveDeleteChildFormData(innerForm, id, deleteGrid, deleteSubform, abortProcess, deleteFiles);
@@ -149,15 +148,15 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
             }
         }
     }
-    
+
     public void storeInnerData(FormRowSet rows) {
         Form innerForm = dataRetriever.getInnerForm();
         if (innerForm == null) {
             return;
         }
-        
+
         FormService formService = (FormService) AppUtil.getApplicationContext().getBean("formService");
-        
+
         for (FormRow r : rows) {
             FormData rowFormData = dataRetriever.getFormData(r);
             if (rowFormData != null) {
@@ -167,10 +166,10 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
                     }
                     rowFormData.setPrimaryKeyValue(r.getId());
                 }
-                
+
                 //format data
                 FormUtil.executeElementFormatData(innerForm, rowFormData);
-                
+
                 if (rowFormData.getStoreBinders().size() > 1) {
                     //skip the form element and start with its child
                     for (Element e : innerForm.getChildren()) {
@@ -180,40 +179,40 @@ public class GridInnerDataStoreBinderWrapper extends FormBinder implements FormS
             }
         }
     }
-    
+
     @Override
-    public Map<String, Object> getProperties(){
-        return ((FormBinder)storeBinder).getProperties();
+    public Map<String, Object> getProperties() {
+        return ((FormBinder) storeBinder).getProperties();
     }
-    
+
     @Override
-    public void setProperties(Map<String, Object> properties){
-        ((FormBinder)storeBinder).setProperties(properties);
+    public void setProperties(Map<String, Object> properties) {
+        ((FormBinder) storeBinder).setProperties(properties);
     }
-    
+
     @Override
-    public Object getProperty(String property){
-        return ((FormBinder)storeBinder).getProperty(property);
+    public Object getProperty(String property) {
+        return ((FormBinder) storeBinder).getProperty(property);
     }
-    
+
     @Override
-    public String getPropertyString(String property){
-        return ((FormBinder)storeBinder).getPropertyString(property);
+    public String getPropertyString(String property) {
+        return ((FormBinder) storeBinder).getPropertyString(property);
     }
-    
+
     @Override
-    public void setProperty(String property, Object value){
-        ((FormBinder)storeBinder).setProperty(property, value);
+    public void setProperty(String property, Object value) {
+        ((FormBinder) storeBinder).setProperty(property, value);
     }
-    
+
     @Override
     public Element getElement() {
-        return ((FormBinder)storeBinder).getElement();
+        return ((FormBinder) storeBinder).getElement();
     }
 
     @Override
     public void setElement(Element element) {
-        ((FormBinder)storeBinder).setElement(element);
+        ((FormBinder) storeBinder).setElement(element);
     }
 
 }

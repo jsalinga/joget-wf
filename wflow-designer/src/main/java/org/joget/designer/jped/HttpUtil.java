@@ -60,13 +60,14 @@ import org.joget.designer.Designer;
  * Utility methods for making HTTP requests.
  */
 public class HttpUtil {
-    
+
     public static boolean SSL_TRUSTED = false;
-    
+
     /**
-     * Make a HTTP POST request to a URL, passing in a JSESSIONID cookie, 
-     * with support for SSL (including prompting a warning for self-signed certs).
-     * If the JSESSIONID is invalid, then a password dialog appears.
+     * Make a HTTP POST request to a URL, passing in a JSESSIONID cookie, with
+     * support for SSL (including prompting a warning for self-signed certs). If
+     * the JSESSIONID is invalid, then a password dialog appears.
+     *
      * @param cookieStore
      * @param url
      * @param port
@@ -85,11 +86,11 @@ public class HttpUtil {
      * @throws KeyManagementException
      * @throws KeyStoreException
      * @throws UnrecoverableKeyException
-     * @throws AuthenticationException 
+     * @throws AuthenticationException
      */
     public static String httpPost(CookieStore cookieStore, String url, int port, String sessionId, String cookieDomain, String cookiePath, String username, String password, boolean trustAllSsl, boolean failOnError, String filename, File file) throws IOException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException, AuthenticationException {
         String contents = null;
-        
+
         HttpClientBuilder httpClientBuilder = HttpClients.custom();
 
         // Set no redirect
@@ -114,7 +115,7 @@ public class HttpUtil {
         HttpPost httpRequest = new HttpPost(url);
         if (file != null) {
             HttpEntity reqEntity = MultipartEntityBuilder.create().addPart("packageXpdl", new FileBody(file)).build();
-            httpRequest.setEntity(reqEntity);            
+            httpRequest.setEntity(reqEntity);
         } else {
             if (username != null && password != null) {
                 List<NameValuePair> formparams = new ArrayList<NameValuePair>();
@@ -129,7 +130,7 @@ public class HttpUtil {
         // set referer header
         String referer = "http://" + Designer.DOMAIN;
         httpRequest.addHeader("Referer", referer);
-        
+
         // Set session cookie
         if (cookieStore == null) {
             cookieStore = new BasicCookieStore();
@@ -138,9 +139,9 @@ public class HttpUtil {
             BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", sessionId);
             cookie.setDomain(cookieDomain);
             cookie.setPath(cookiePath);
-            cookieStore.addCookie(cookie); 
+            cookieStore.addCookie(cookie);
         }
-        httpClientBuilder.setDefaultCookieStore(cookieStore);                 
+        httpClientBuilder.setDefaultCookieStore(cookieStore);
 
         // Prepare SSL trust
         SSLContextBuilder builder = new SSLContextBuilder();
@@ -149,7 +150,7 @@ public class HttpUtil {
         if (SSL_TRUSTED || trustAllSsl) {
             httpClientBuilder.setSSLSocketFactory(sslsf);
         }
-        
+
         // Execute the request
         CloseableHttpClient httpClient = httpClientBuilder.build();
         try {
@@ -171,7 +172,7 @@ public class HttpUtil {
                 throw new HttpResponseException(403, ResourceManager.getLanguageDependentString("InvalidSSLMessage"));
             }
             StatusLine status = response.getStatusLine();
-            if (status  == null || status.getStatusCode() == 302 || status.getStatusCode() == 401 || status.getStatusCode() == 500) {
+            if (status == null || status.getStatusCode() == 302 || status.getStatusCode() == 401 || status.getStatusCode() == 500) {
                 if (failOnError) {
                     throw new AuthenticationException(ResourceManager.getLanguageDependentString("AuthenticationFailed"));
                 }
@@ -196,7 +197,7 @@ public class HttpUtil {
                             }
                         }
                     });
-                    JPanel pPanel = new JPanel(new GridLayout(2,2));
+                    JPanel pPanel = new JPanel(new GridLayout(2, 2));
                     pPanel.add(new JLabel(ResourceManager.getLanguageDependentString("UsernameKey")));
                     pPanel.add(uField);
                     pPanel.add(new JLabel(ResourceManager.getLanguageDependentString("PasswordKey")));
@@ -219,7 +220,7 @@ public class HttpUtil {
                         throw new AuthenticationException();
                     }
                     List<Cookie> cookies = cookieStore.getCookies();
-                    for (Cookie ck: cookies) {
+                    for (Cookie ck : cookies) {
                         if ("JSESSIONID".equalsIgnoreCase(ck.getName())) {
                             sessionId = ck.getValue();
                             Designer.SESSION = sessionId;
@@ -229,7 +230,7 @@ public class HttpUtil {
                     // set new csrf token
                     String tokenAttr = "\"token\":\"";
                     if (ssoResponse.contains(tokenAttr)) {
-                        String csrfToken = ssoResponse.substring(ssoResponse.indexOf(tokenAttr) + tokenAttr.length(), ssoResponse.length()-2);
+                        String csrfToken = ssoResponse.substring(ssoResponse.indexOf(tokenAttr) + tokenAttr.length(), ssoResponse.length() - 2);
                         StringTokenizer st = new StringTokenizer(csrfToken, "=");
                         if (st.countTokens() == 2) {
                             Designer.TOKEN_NAME = st.nextToken();
@@ -242,13 +243,13 @@ public class HttpUtil {
 
                     // return contents
                     return contents;
-                } catch(AuthenticationException ate) {
+                } catch (AuthenticationException ate) {
                     JOptionPane.showMessageDialog(null, ResourceManager.getLanguageDependentString("InvalidLogin"));
                     // repeat request
                     return HttpUtil.httpPost(null, url, port, sessionId, cookieDomain, cookiePath, username, null, false, false, filename, file);
-                } catch(HttpResponseException hre) {
+                } catch (HttpResponseException hre) {
                     throw new AuthenticationException(ResourceManager.getLanguageDependentString("InvalidLogin"));
-                }            
+                }
             }
 
             // Get hold of the response entity
@@ -288,16 +289,16 @@ public class HttpUtil {
                     if (instream != null) {
                         instream.close();
                     }
-                    
+
                 }
-            }    
+            }
         } finally {
             // When HttpClient instance is no longer needed,
-                // shut down the connection manager to ensure
-                // immediate deallocation of all system resources
-                httpClient.close();
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpClient.close();
         }
         return contents;
     }
-    
+
 }

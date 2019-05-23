@@ -24,11 +24,12 @@ import static org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE_
 import static org.springframework.web.servlet.i18n.SessionLocaleResolver.TIME_ZONE_SESSION_ATTRIBUTE_NAME;
 import org.springframework.web.util.WebUtils;
 
-public class LocalLocaleResolver extends SessionLocaleResolver implements LocaleResolver, I18nResourceProvider{
+public class LocalLocaleResolver extends SessionLocaleResolver implements LocaleResolver, I18nResourceProvider {
+
     private WorkflowUserManager workflowUserManager;
     private DirectoryManager directoryManager;
     private SetupManager setupManager;
-    
+
     public static final String UNDEFINED_KEY = "???"; //$NON-NLS-1$
     public static final String PARAM_NAME = "_lang";
     public static final Locale DEFAULT = new Locale("en", "US");
@@ -39,52 +40,52 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
     public final static String TIMEZONE_OF_USER = "TIMEZONE_OF_USER";
     public final static String SYSTEM_TIMEZONE = "SYSTEM_TIMEZONE";
     public final static String SYSTEM_TIMEZONE_EXPIRY_KEY = "SYSTEM_TIMEZONE_EXPIRY_KEY";
-    public final static Long CACHE_DURATION =  5000L; // 5 seconds
+    public final static Long CACHE_DURATION = 5000L; // 5 seconds
 
     @Override
     public LocaleContext resolveLocaleContext(final HttpServletRequest request) {
-            return new TimeZoneAwareLocaleContext() {
-                    @Override
-                    public Locale getLocale() {
-                        Locale locale = null;
-                        if (request != null) {
-                            locale = (Locale) WebUtils.getSessionAttribute(request, LOCALE_SESSION_ATTRIBUTE_NAME);
-                        }
-                        if (locale == null) {
-                            locale = determineDefaultLocale(request);
-                        }
-                        return locale;
-                    }
-                    
-                    @Override
-                    public TimeZone getTimeZone() {
-                        TimeZone timeZone = null;
-                        if (request != null) {
-                            timeZone = (TimeZone) WebUtils.getSessionAttribute(request, TIME_ZONE_SESSION_ATTRIBUTE_NAME);
-                        }
-                        if (timeZone == null) {
-                            timeZone = determineDefaultTimeZone(request);
-                        }
-                        return timeZone;
-                    }
-            };
+        return new TimeZoneAwareLocaleContext() {
+            @Override
+            public Locale getLocale() {
+                Locale locale = null;
+                if (request != null) {
+                    locale = (Locale) WebUtils.getSessionAttribute(request, LOCALE_SESSION_ATTRIBUTE_NAME);
+                }
+                if (locale == null) {
+                    locale = determineDefaultLocale(request);
+                }
+                return locale;
+            }
+
+            @Override
+            public TimeZone getTimeZone() {
+                TimeZone timeZone = null;
+                if (request != null) {
+                    timeZone = (TimeZone) WebUtils.getSessionAttribute(request, TIME_ZONE_SESSION_ATTRIBUTE_NAME);
+                }
+                if (timeZone == null) {
+                    timeZone = determineDefaultTimeZone(request);
+                }
+                return timeZone;
+            }
+        };
     }
-        
+
     @Override
     protected TimeZone determineDefaultTimeZone(HttpServletRequest request) {
         TimeZone timezone = null;
-        
+
         if (request != null) {
             // reset profile and set hostname
             HostManager.initHost();
-            
+
             timezone = (TimeZone) request.getAttribute(SYSTEM_TIMEZONE);
-            
+
             if (timezone == null) {
                 // lookup in session
                 HttpSession session = request.getSession(false);
                 if (session != null) {
-                    Long defaultExpiry = (Long)session.getAttribute(SYSTEM_TIMEZONE_EXPIRY_KEY);
+                    Long defaultExpiry = (Long) session.getAttribute(SYSTEM_TIMEZONE_EXPIRY_KEY);
                     if (defaultExpiry == null || defaultExpiry.compareTo(System.currentTimeMillis()) < 0) {
                         session.removeAttribute(SYSTEM_TIMEZONE);
                     } else {
@@ -93,13 +94,13 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                     }
                 }
             }
-            
+
             HttpSession session = request.getSession(false);
             if (timezone != null && session != null && !getWorkflowUserManager().getCurrentUsername().equals(session.getAttribute(TIMEZONE_OF_USER))) {
                 timezone = null;
             }
         }
-            
+
         if (timezone == null) {
             String gmt = null;
             try {
@@ -107,7 +108,7 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                     String userGmt = null;
                     User user = getWorkflowUserManager().getCurrentUser();
                     if (user != null) {
-                        userGmt =  user.getTimeZone();
+                        userGmt = user.getTimeZone();
                     }
                     if (userGmt != null && !userGmt.isEmpty()) {
                         gmt = userGmt;
@@ -140,36 +141,35 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                 LogUtil.warn(getClass().getName(), "Error setting system timezone from setting, using default timezone");
             }
         }
-            
-        
+
         if (timezone == null) {
             timezone = super.getDefaultTimeZone();
         }
-        
+
         if (request != null) {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.setAttribute(TIMEZONE_OF_USER, getWorkflowUserManager().getCurrentUsername());
             }
         }
-            
+
         return timezone;
     }
-            
+
     @Override
-    protected Locale determineDefaultLocale(HttpServletRequest request){
+    protected Locale determineDefaultLocale(HttpServletRequest request) {
         Locale locale = null;
         if (request != null) {
             // reset profile and set hostname
             HostManager.initHost();
-            
+
             locale = (Locale) request.getAttribute(DEFAULT_LOCALE_KEY);
-            
+
             HttpSession session = request.getSession(false);
             if (locale == null) {
                 // lookup in session
                 if (session != null) {
-                    Long defaultExpiry = (Long)session.getAttribute(DEFAULT_LOCALE_EXPIRY_KEY);
+                    Long defaultExpiry = (Long) session.getAttribute(DEFAULT_LOCALE_EXPIRY_KEY);
                     if (defaultExpiry == null || defaultExpiry.compareTo(System.currentTimeMillis()) < 0) {
                         session.removeAttribute(DEFAULT_LOCALE_KEY);
                     } else {
@@ -182,7 +182,7 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                 locale = null;
             }
         }
-        
+
         if (locale == null) {
             String localeCode = null;
             try {
@@ -191,7 +191,7 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                     String userLocale = null;
                     User user = getWorkflowUserManager().getCurrentUser();
                     if (user != null) {
-                        userLocale =  user.getLocale();
+                        userLocale = user.getLocale();
                     }
                     if (userLocale != null && !userLocale.isEmpty()) {
                         localeCode = userLocale;
@@ -209,11 +209,11 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                 if (localeCode != null && !localeCode.isEmpty()) {
                     String[] temp = localeCode.split("_");
 
-                    if(temp.length == 1){
+                    if (temp.length == 1) {
                         locale = new Locale(temp[0]);
-                    }else if (temp.length == 2){
+                    } else if (temp.length == 2) {
                         locale = new Locale(temp[0], temp[1]);
-                    }else if (temp.length == 3){
+                    } else if (temp.length == 3) {
                         locale = new Locale(temp[0], temp[1], temp[2]);
                     }
 
@@ -221,7 +221,7 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
 
                     if (request != null) {
                         request.setAttribute(DEFAULT_LOCALE_KEY, locale);
-                        
+
                         HttpSession session = request.getSession(false);
                         if (session != null) {
                             Long expiry = System.currentTimeMillis() + CACHE_DURATION;
@@ -234,31 +234,31 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                 LogUtil.warn(getClass().getName(), "Error setting system locale from setting, using default locale");
             }
         }
-        
+
         if (locale == null) {
             locale = DEFAULT;
             if (request != null) {
                 request.setAttribute(DEFAULT_LOCALE_KEY, locale);
             }
         }
-        
+
         if (request != null) {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.setAttribute(LOCALE_OF_USER, getWorkflowUserManager().getCurrentUsername());
             }
         }
-            
+
         return locale;
     }
-    
+
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         Locale locale = null;
-        
+
         if (request != null) {
             locale = (Locale) request.getAttribute(CURRENT_LOCALE_KEY);
-            if (request.getParameter(PARAM_NAME) != null 
+            if (request.getParameter(PARAM_NAME) != null
                     && (locale == null || !request.getParameter(PARAM_NAME).equals(locale.toString()))) {
                 locale = null;
                 String paramValue = request.getParameter(PARAM_NAME);
@@ -278,8 +278,8 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                 }
                 locale = super.resolveLocale(request);
                 request.setAttribute(CURRENT_LOCALE_KEY, locale);
-            } 
-            
+            }
+
             if (locale == null) {
                 locale = super.resolveLocale(request);
                 request.setAttribute(CURRENT_LOCALE_KEY, locale);
@@ -287,22 +287,22 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
         } else {
             locale = determineDefaultLocale(null);
         }
-        
+
         return locale;
     }
-    
+
     @Override
-    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale){
+    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
         super.setLocale(request, response, locale);
     }
-    
+
     public String getResource(String resourceKey, String defaultValue, Tag tag, PageContext pageContext) {
         return ResourceBundleUtil.getMessage(resourceKey, defaultValue);
     }
-    
+
     protected static TimeZone getTimeZoneByGMT(String gmt) {
         TimeZone timezone = null;
-        
+
         try {
             if (gmt != null && gmt.trim().length() > 0) {
                 if (gmt.contains(".")) {
@@ -322,11 +322,12 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return timezone;
     }
-    
+
     public void setWorkflowUserManager(WorkflowUserManager workflowUserManager) {
         this.workflowUserManager = workflowUserManager;
     }
@@ -359,5 +360,5 @@ public class LocalLocaleResolver extends SessionLocaleResolver implements Locale
         }
         return setupManager;
     }
-    
+
 }

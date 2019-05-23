@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.mozilla.javascript.Scriptable;
 
 public class Section extends Element implements FormBuilderEditable, FormContainer {
+
     protected Map<FormData, Boolean> continueValidations = new HashMap<FormData, Boolean>();
     private Collection<Map<String, String>> rules = null;
     private Map<String, Element> elements = new HashMap<String, Element>();
@@ -30,11 +31,11 @@ public class Section extends Element implements FormBuilderEditable, FormContain
     public String getDescription() {
         return "Section Element";
     }
-    
+
     @Override
     public void setChildren(Collection<Element> children) {
         super.setChildren(children);
-        
+
         if ("true".equalsIgnoreCase(getPropertyString("readonly"))) {
             FormUtil.setReadOnlyProperty(this, true, "true".equalsIgnoreCase(getPropertyString("readonlyLabel")));
         }
@@ -44,7 +45,7 @@ public class Section extends Element implements FormBuilderEditable, FormContain
     public String renderTemplate(FormData formData, Map dataModel) {
         if (((Boolean) dataModel.get("includeMetaData") == true) || isAuthorize(formData) || (!isAuthorize(formData) && "true".equalsIgnoreCase(getPropertyString("permissionReadonly")))) {
             String template = "section.ftl";
-            
+
             boolean readonly = "true".equalsIgnoreCase(getPropertyString("readonly"));
             if (!isAuthorize(formData) && "true".equalsIgnoreCase(getPropertyString("permissionReadonly"))) {
                 readonly = true;
@@ -52,7 +53,7 @@ public class Section extends Element implements FormBuilderEditable, FormContain
             if (readonly) {
                 FormUtil.setReadOnlyProperty(this, true, "true".equalsIgnoreCase(getPropertyString("readonlyLabel")));
             }
-            
+
             if (!(dataModel.containsKey("elementMetaData") && !dataModel.get("elementMetaData").toString().isEmpty())) {
                 if (!getRules(formData).isEmpty()) {
                     try {
@@ -68,7 +69,7 @@ public class Section extends Element implements FormBuilderEditable, FormContain
                 dataModel.put("visible", isMatch(formData));
             } else {
                 dataModel.put("visible", true);
-            }   
+            }
 
             String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
             return html;
@@ -117,30 +118,30 @@ public class Section extends Element implements FormBuilderEditable, FormContain
     public String getFormBuilderTemplate() {
         return "";
     }
-    
+
     @Override
     public FormRowSet formatData(FormData formData) {
         return null;
     }
-    
+
     protected Collection<Map<String, String>> getRules(FormData formData) {
         if (rules == null) {
             rules = new ArrayList<Map<String, String>>();
-            
+
             String[] fields = getPropertyString("visibilityControl").split(";", -1);
             String[] values = getPropertyString("visibilityValue").split(";", -1);
             String[] regex = getPropertyString("regex").split(";", -1);
             String[] joins = getPropertyString("join").split(";", -1);
             String[] reverses = getPropertyString("reverse").split(";", -1);
-            
+
             if (fields.length > 0) {
                 Form rootForm = FormUtil.findRootForm(this);
-                
+
                 for (int i = 0; i < fields.length; i++) {
                     if (fields[i].isEmpty()) {
                         continue;
                     }
-                    
+
                     Map<String, String> rule = new HashMap<String, String>();
                     rule.put("join", joins[i]);
                     rule.put("reverse", reverses[i]);
@@ -164,11 +165,11 @@ public class Section extends Element implements FormBuilderEditable, FormContain
         }
         return rules;
     }
-    
+
     protected Boolean isMatch(FormData formData) {
         if (!getRules(formData).isEmpty()) {
             boolean match = false;
-            
+
             org.mozilla.javascript.Context cx = org.mozilla.javascript.Context.enter();
             Scriptable scope = cx.initStandardObjects(null);
             try {
@@ -193,26 +194,26 @@ public class Section extends Element implements FormBuilderEditable, FormContain
                     if (!reverse.isEmpty() && !")".equals(field)) {
                         rule += "!";
                     }
-                    if ("(".equals(field) || ")".equals(field) ) {
+                    if ("(".equals(field) || ")".equals(field)) {
                         rule += field;
                     } else {
                         rule += checkValue(formData, field, value, "true".equalsIgnoreCase(regex));
                     }
                 }
-                
+
                 return (Boolean) cx.evaluateString(scope, rule, "", 1, null);
             } catch (Exception e) {
                 LogUtil.error(Section.class.getName(), e, "rules are not valid");
             } finally {
                 org.mozilla.javascript.Context.exit();
             }
-            
+
             return match;
         } else {
             return true;
         }
     }
-    
+
     protected boolean checkValue(FormData formData, String field, String value, boolean isRegex) {
         Element controlElement = elements.get(field);
         if (controlElement != null) {
@@ -226,7 +227,8 @@ public class Section extends Element implements FormBuilderEditable, FormContain
                             if (v.matches(StringEscapeUtils.unescapeJavaScript(value))) {
                                 return true;
                             }
-                        } catch (Exception e){}
+                        } catch (Exception e) {
+                        }
                     } else {
                         if (v.equals(value)) {
                             return true;

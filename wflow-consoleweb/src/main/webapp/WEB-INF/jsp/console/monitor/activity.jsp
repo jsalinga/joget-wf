@@ -19,14 +19,14 @@
             <c:if test="${activity.state == 'open.not_running.not_started'}">
                 <li><button onclick="reevaluate()"><fmt:message key="console.monitoring.running.label.reevaluate"/></button></li>
                 <li><button onclick="showReevaluateForUser()"><fmt:message key="console.monitoring.running.label.reevaluateForUser"/></button></li>
-            </c:if>
-            <c:if test="${activity.state != 'closed.completed' && activity.state != 'closed.terminated' && activity.state != 'closed.aborted'}">
+                </c:if>
+                <c:if test="${activity.state != 'closed.completed' && activity.state != 'closed.terminated' && activity.state != 'closed.aborted'}">
                 <li><button onclick="reassign()"><fmt:message key="console.monitoring.running.label.reassign"/></button></li>
                 <li><button onclick="completeActivity()"><fmt:message key="console.monitoring.running.label.complete"/></button></li>
-            </c:if>
-            <c:if test="${!empty formId}">
+                </c:if>
+                <c:if test="${!empty formId}">
                 <li><button onclick="viewForm()"><fmt:message key="console.monitoring.running.label.viewForm"/></button></li>
-            </c:if>
+                </c:if>
         </ul>
     </div>
     <div id="main-body">
@@ -50,14 +50,14 @@
                     <c:choose>
                         <c:when test="${assignUserSize > 1}">
                             <c:forEach var="assignmentUser" items="${trackWflowActivity.assignmentUsers}" varStatus="index">
-                                    <c:choose>
-                                        <c:when test="${index.count < assignUserSize}">
-                                            <span><c:out value="${assignmentUser}, "/></span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span><c:out value="${assignmentUser}"/></span>
-                                        </c:otherwise>
-                                    </c:choose>
+                                <c:choose>
+                                    <c:when test="${index.count < assignUserSize}">
+                                        <span><c:out value="${assignmentUser}, "/></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span><c:out value="${assignmentUser}"/></span>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
@@ -66,8 +66,8 @@
                             </c:forEach>
                         </c:otherwise>
                     </c:choose>
-                &nbsp;</dd>
-            </c:if>
+                    &nbsp;</dd>
+                </c:if>
 
             <c:choose>
                 <c:when test="${trackWflowActivity.type == 'subflow'}">
@@ -145,69 +145,69 @@
     <ui:popupdialog var="popupDialog" src=""/>
 
     var callback = {
-        success: function(){
-            window.location.reload(true);
-        }
+    success: function(){
+    window.location.reload(true);
+    }
     }
 
     function reevaluate(){
-        ConnectionManager.post("${pageContext.request.contextPath}/web/json/monitoring/activity/reevaluate", callback, "activityId=${activity.id}");
+    ConnectionManager.post("${pageContext.request.contextPath}/web/json/monitoring/activity/reevaluate", callback, "activityId=${activity.id}");
     }
 
     function setVariable(variable){
-        var url = "${pageContext.request.contextPath}/web/json/monitoring/activity/variable/${activity.id}/" + encodeURIComponent(variable);
-        var value = $('#' + variable).attr('value');
+    var url = "${pageContext.request.contextPath}/web/json/monitoring/activity/variable/${activity.id}/" + encodeURIComponent(variable);
+    var value = $('#' + variable).attr('value');
 
-        ConnectionManager.post(url, callback, "value=" + encodeURIComponent(value));
+    ConnectionManager.post(url, callback, "value=" + encodeURIComponent(value));
 
     }
 
     function viewForm(){
-        //var url = '${pageContext.request.contextPath}/web/formbuilder/view/${formId}?overlay=true&processId=${activity.processId}&activityId=${activity.id}';
-        //popupDialog.src = url;
-        //popupDialog.init();
+    //var url = '${pageContext.request.contextPath}/web/formbuilder/view/${formId}?overlay=true&processId=${activity.processId}&activityId=${activity.id}';
+    //popupDialog.src = url;
+    //popupDialog.init();
     }
 
 
     function reassign(){
-        popupDialog.src = "${pageContext.request.contextPath}/web/console/monitor/running/activity/reassign?state=${activity.state}&processDefId=${activity.encodedProcessDefId}&activityId=${activity.id}&processId=${activity.processId}";
-        popupDialog.init();
+    popupDialog.src = "${pageContext.request.contextPath}/web/console/monitor/running/activity/reassign?state=${activity.state}&processDefId=${activity.encodedProcessDefId}&activityId=${activity.id}&processId=${activity.processId}";
+    popupDialog.init();
     }
 
     function completeActivity(){
-        ConnectionManager.post("${pageContext.request.contextPath}/web/json/monitoring/running/activity/complete", callback, "state=${activity.state}&processDefId=${activity.processDefId}&activityId=${activity.id}&processId=${activity.processId}");
+    ConnectionManager.post("${pageContext.request.contextPath}/web/json/monitoring/running/activity/complete", callback, "state=${activity.state}&processDefId=${activity.processDefId}&activityId=${activity.id}&processId=${activity.processId}");
     }
 
     function showReevaluateForUser(){
-        var openDialog = function() {
-            $(".ui-dialog.ui-widget").css("position", "fixed");
-        }
-      
-        $('#reevaluateForUser').dialog({
-            modal: true,
-            width: 860,
-            height: 520,
-            position: 'center',
-            autoOpen: true,
-            draggable: false,
-            resizable: false,
-            open: openDialog,
-            overlay: {
-              opacity: 0.5,
-              background: "black"
-            },
-            zIndex: 15001
-        });
+    var openDialog = function() {
+    $(".ui-dialog.ui-widget").css("position", "fixed");
+    }
+
+    $('#reevaluateForUser').dialog({
+    modal: true,
+    width: 860,
+    height: 520,
+    position: 'center',
+    autoOpen: true,
+    draggable: false,
+    resizable: false,
+    open: openDialog,
+    overlay: {
+    opacity: 0.5,
+    background: "black"
+    },
+    zIndex: 15001
+    });
     }
 
     function reevaluateForUser(){
-        $('#reevaluateForUserSubmit').attr('disabled', 'disabled');
-        $('#reevaluateForUserSubmit').val('<fmt:message key="console.monitoring.running.label.reevaluateForUser.loading"/>')
+    $('#reevaluateForUserSubmit').attr('disabled', 'disabled');
+    $('#reevaluateForUserSubmit').val('<fmt:message key="console.monitoring.running.label.reevaluateForUser.loading"/>')
 
-        var url = "${pageContext.request.contextPath}/web/json/monitoring/user/reevaluate";
-        var value = $('#reevaluateUser').val();
+    var url = "${pageContext.request.contextPath}/web/json/monitoring/user/reevaluate";
+    var value = $('#reevaluateUser').val();
 
-        ConnectionManager.post(url, callback, "username=" + encodeURIComponent(value));
+    ConnectionManager.post(url, callback, "username=" + encodeURIComponent(value));
     }
 
     Template.init("#menu-monitor", "#nav-monitor-<c:out value="${processStatus}"/>");

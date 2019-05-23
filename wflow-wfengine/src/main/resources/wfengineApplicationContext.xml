@@ -17,8 +17,12 @@
     </bean>
     
     <bean id="workflowManager" class="org.joget.workflow.model.service.WorkflowManagerImpl">
-        <constructor-arg><ref bean="setupDataSource" /></constructor-arg>
-        <constructor-arg><ref bean="transactionManager" /></constructor-arg>
+        <constructor-arg>
+            <ref bean="setupDataSource" />
+        </constructor-arg>
+        <constructor-arg>
+            <ref bean="transactionManager" />
+        </constructor-arg>
         <property name="workflowUserManager" ref="workflowUserManager"/>
         <property name="setupManager" ref="setupManager"/>
         <property name="workflowProcessLinkDao" ref="workflowProcessLinkDao"/>

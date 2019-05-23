@@ -32,7 +32,7 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             throw new RepositoryException("No xpdl with Id=" + xpdlId + " in repository", ex);
         }
     }
-    
+
     @Override
     public byte[] getXPDL(WMSessionHandle shandle, String xpdlId, String xpdlVersion) throws RepositoryException {
         DBQuery dbQuery = null;
@@ -40,17 +40,17 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
         try {
             byte[] result = null;
             BigDecimal oid = getOid(shandle, xpdlId, xpdlVersion);
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLDataQuery q = new CustomXPDLDataQuery(dbt);
             q.getQueryBuilder().setSelectClause("SHKXPDLData.XPDLContent");
             q.getQueryBuilder().addWhere(XPDLDataDO.XPDL, oid, "=");
             q.setMaxRows(1);
-            
+
             dbQuery = XPDLDataDO.createQuery(dbt);
             dbQuery.query(q);
             rs = q.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     result = rs.getBytes(1);
@@ -64,7 +64,8 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
@@ -80,17 +81,17 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
         try {
             byte[] result = null;
             BigDecimal oid = getOid(shandle, xpdlId, xpdlVersion);
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLDataQuery q = new CustomXPDLDataQuery(dbt);
             q.getQueryBuilder().setSelectClause("SHKXPDLData.XPDLClassContent");
             q.getQueryBuilder().addWhere(XPDLDataDO.XPDL, oid, "=");
             q.setMaxRows(1);
-            
+
             dbQuery = XPDLDataDO.createQuery(dbt);
             dbQuery.query(q);
             rs = q.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     result = rs.getBytes(1);
@@ -104,37 +105,38 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
     }
-    
+
     protected BigDecimal getOid(WMSessionHandle shandle, String xpdlId, String xpdlVersion) {
         BigDecimal result = null;
         DBQuery dbQuery = null;
         ResultSet rs = null;
         try {
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLQuery query = new CustomXPDLQuery(dbt);
             query.getQueryBuilder().setSelectClause("SHKXPDLS.oid");
             query.setQueryXPDLId(xpdlId);
-            
+
             if (xpdlVersion == null) {
                 query.getQueryBuilder().addOrderByColumn("SHKXPDLS.oid", "DESC");
             } else {
                 query.setQueryXPDLVersion(xpdlVersion);
             }
-            
+
             query.setMaxRows(1);
-            
+
             dbQuery = XPDLDO.createQuery(dbt);
             dbQuery.query(query);
             rs = query.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     result = rs.getBigDecimal(1);
@@ -142,39 +144,40 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             }
             query.getQueryBuilder().close();
         } catch (Exception ex) {
-            
+
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
-        
+
         return result;
     }
-    
+
     @Override
     public String getCurrentVersion(WMSessionHandle shandle, String xpdlId) throws RepositoryException {
         String result = null;
         DBQuery dbQuery = null;
         ResultSet rs = null;
         try {
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLQuery query = new CustomXPDLQuery(dbt);
             query.getQueryBuilder().setSelectClause("SHKXPDLS.XPDLVersion");
             query.setQueryXPDLId(xpdlId);
             query.getQueryBuilder().addOrderByColumn("SHKXPDLS.oid", "DESC");
             query.setMaxRows(1);
-            
+
             dbQuery = XPDLDO.createQuery(dbt);
             dbQuery.query(query);
             rs = query.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     result = rs.getString(1);
@@ -182,21 +185,22 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             }
             query.getQueryBuilder().close();
         } catch (Exception ex) {
-            
+
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
-        
+
         return result;
     }
-  
+
     @Override
     public List getXPDLVersions(WMSessionHandle shandle, String xpdlId)
             throws RepositoryException {
@@ -204,16 +208,16 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
         DBQuery dbQuery = null;
         ResultSet rs = null;
         try {
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLQuery query = new CustomXPDLQuery(dbt);
             query.getQueryBuilder().setSelectClause("SHKXPDLS.XPDLVersion");
             query.setQueryXPDLId(xpdlId);
-            
+
             dbQuery = XPDLDO.createQuery(dbt);
             dbQuery.query(query);
             rs = query.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     xpdlVersions.add(rs.getString(1));
@@ -226,13 +230,14 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
-        
+
         return xpdlVersions;
     }
 
@@ -242,17 +247,17 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
         DBQuery dbQuery = null;
         ResultSet rs = null;
         try {
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLQuery query = new CustomXPDLQuery(dbt);
             query.getQueryBuilder().setSelectClause("SHKXPDLS.XPDLVersion");
             query.setQueryXPDLId(xpdlId);
             query.setMaxRows(1);
-            
+
             dbQuery = XPDLDO.createQuery(dbt);
             dbQuery.query(query);
             rs = query.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     result = true;
@@ -260,18 +265,19 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             }
             query.getQueryBuilder().close();
         } catch (Exception ex) {
-            
+
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
-        
+
         return result;
     }
 
@@ -281,18 +287,18 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
         DBQuery dbQuery = null;
         ResultSet rs = null;
         try {
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLQuery query = new CustomXPDLQuery(dbt);
             query.getQueryBuilder().setSelectClause("SHKXPDLS.XPDLVersion");
             query.setQueryXPDLId(xpdlId);
             query.setQueryXPDLVersion(xpdlVersion);
             query.setMaxRows(1);
-            
+
             dbQuery = XPDLDO.createQuery(dbt);
             dbQuery.query(query);
             rs = query.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     result = true;
@@ -300,18 +306,19 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             }
             query.getQueryBuilder().close();
         } catch (Exception ex) {
-            
+
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
-        
+
         return result;
     }
 
@@ -321,15 +328,15 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
         DBQuery dbQuery = null;
         ResultSet rs = null;
         try {
-            
+
             DBTransaction dbt = getDBTransaction();
             CustomXPDLQuery query = new CustomXPDLQuery(dbt);
             query.getQueryBuilder().setSelectClause("DISTINCT SHKXPDLS.XPDLId");
-            
+
             dbQuery = XPDLDO.createQuery(dbt);
             dbQuery.query(query);
             rs = query.getResultSet();
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     xpdlIds.add(rs.getString(1));
@@ -342,13 +349,14 @@ public class CustomDODSRepositoryPersistenceManager extends DODSRepositoryPersis
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             if (dbQuery != null) {
                 dbQuery.release();
             }
         }
-        
+
         return xpdlIds;
     }
 }

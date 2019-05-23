@@ -28,54 +28,54 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/ubuilder.core.js?build=<fmt:message key="build.number"/>"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/html2canvas/html2canvas.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/html2canvas/jquery.plugin.html2canvas.js"></script>        
-        
+
         <link href="${pageContext.request.contextPath}/js/boxy/stylesheets/boxy.css" rel="stylesheet" type="text/css" />
         <link href="${pageContext.request.contextPath}/css/ubuilder.css?build=<fmt:message key="build.number"/>" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/jsondiffpatch/jsondiffpatchhtml.css" />
-        
+
         <c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}">
             <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_rtl.css?build=<fmt:message key="build.number"/>">
         </c:if>
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_custom.css?build=<fmt:message key="build.number"/>">
         <jsp:include page="/WEB-INF/jsp/includes/css.jsp" />
-            
+
         <script type="text/javascript">
             $(document).ready(function () {
-                UserviewBuilder.saveUrl = '${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/<c:out value="${appVersion}"/>/userview/builderSave/';
-                UserviewBuilder.previewUrl = '${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/<c:out value="${appVersion}"/>/userview/builderPreview/';
-                UserviewBuilder.contextPath = '${pageContext.request.contextPath}';
-                UserviewBuilder.appId = '<c:out value="${appId}"/>';
-                UserviewBuilder.appVersion = '<c:out value="${appVersion}"/>';
-                UserviewBuilder.userviewUrl = '${pageContext.request.contextPath}/web/userview/<c:out value="${appId}"/>/<c:out value="${userviewId}"/>/';
+            UserviewBuilder.saveUrl = '${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/<c:out value="${appVersion}"/>/userview/builderSave/';
+            UserviewBuilder.previewUrl = '${pageContext.request.contextPath}/web/console/app/<c:out value="${appId}"/>/<c:out value="${appVersion}"/>/userview/builderPreview/';
+            UserviewBuilder.contextPath = '${pageContext.request.contextPath}';
+            UserviewBuilder.appId = '<c:out value="${appId}"/>';
+            UserviewBuilder.appVersion = '<c:out value="${appVersion}"/>';
+            UserviewBuilder.userviewUrl = '${pageContext.request.contextPath}/web/userview/<c:out value="${appId}"/>/<c:out value="${userviewId}"/>/';
 
-                UserviewBuilder.initSettingPropertyOptions(${setting.propertyOptions});
-                UserviewBuilder.initCategoryPropertyOptions(${category.propertyOptions});
+            UserviewBuilder.initSettingPropertyOptions(${setting.propertyOptions});
+            UserviewBuilder.initCategoryPropertyOptions(${category.propertyOptions});
 
-                <c:forEach items="${menuTypeCategories}" var="categoryRow">
-                    <c:set var="category" value="${categoryRow.key}"/>
-                    <c:set var="elementList" value="${categoryRow.value}"/>
-                    <c:forEach items="${elementList}" var="element">
-                        <c:set var="propertyOptions" value="${element.propertyOptions}"/>
-                        <c:if test="${empty propertyOptions}">
-                            <c:set var="propertyOptions" value="''"/>
-                        </c:if>
-                        UserviewBuilder.initMenuType('${category}', '${element.className}', '${element.i18nLabel}', '${element.icon}',${propertyOptions});
-                    </c:forEach>
+            <c:forEach items="${menuTypeCategories}" var="categoryRow">
+                <c:set var="category" value="${categoryRow.key}"/>
+                <c:set var="elementList" value="${categoryRow.value}"/>
+                <c:forEach items="${elementList}" var="element">
+                    <c:set var="propertyOptions" value="${element.propertyOptions}"/>
+                    <c:if test="${empty propertyOptions}">
+                        <c:set var="propertyOptions" value="''"/>
+                    </c:if>
+                    UserviewBuilder.initMenuType('${category}', '${element.className}', '${element.i18nLabel}', '${element.icon}',${propertyOptions});
                 </c:forEach>
+            </c:forEach>
 
-                UserviewBuilder.loadUserview('<c:out value="${userviewId}"/>', ${json});
-                UserviewBuilder.initBuilder();
+            UserviewBuilder.loadUserview('<c:out value="${userviewId}"/>', ${json});
+            UserviewBuilder.initBuilder();
 
-                <c:if test="${!empty param.menuId}">
-                    UserviewBuilder.editMenu('<c:out value="${param.menuId}"/>');
-                </c:if>
+            <c:if test="${!empty param.menuId}">
+                UserviewBuilder.editMenu('<c:out value="${param.menuId}"/>');
+            </c:if>
             });
 
             window.onbeforeunload = function() {
-                if(UserviewBuilder.saveChecker != 0){
-                    return "<fmt:message key="ubuilder.saveBeforeClose" />";
-                }
+            if(UserviewBuilder.saveChecker != 0){
+            return "<fmt:message key="ubuilder.saveBeforeClose" />";
+            }
             };
         </script>
     </head>
@@ -91,7 +91,7 @@
             </div>
             <div id="builder-body">
                 <div id="builder-bar">
-                        <ul id="builder-steps">
+                    <ul id="builder-steps">
                         <li id="step-design" class="first-active active"><a href="#step-design-container"><span class="steps-bg"><span class="title"><fmt:message key="ubuilder.designUserview"/></span><span class="subtitle"><fmt:message key="ubuilder.designUserview.description"/></span></span></a></li>
                         <li id="step-setting"><a href="#step-setting-container"><span class="steps-bg"><span class="title"><fmt:message key="ubuilder.setting"/></span><span class="subtitle"><fmt:message key="ubuilder.setting.description"/></span></span></a></li>
                         <li id="step-preview"><a onclick="UserviewBuilder.preview();" title="<fmt:message key="ubuilder.preview.tip"/>"><span class="steps-bg"><span class="title"><fmt:message key="ubuilder.preview"/></span><span class="subtitle"><fmt:message key="ubuilder.preview.description"/></span></span></a></li>
@@ -159,7 +159,7 @@
                         </fieldset>
                         <div class="clear"></div>
                         <div id="propertyEditor" class="menu-wizard-container" style="display:none;"></div>
-                    
+
                         <div id="userview-advanced">
                             <div id="userview-info" style="display: none">
                                 <form id="userview-preview" action="?" target="_blank" method="post">
@@ -172,8 +172,8 @@
                         </div>
 
                     </div>
-                    </div>
                 </div>
+            </div>
             <div id="builder-footer">
                 <fmt:message key="console.builder.footer"/>
             </div>
@@ -181,14 +181,14 @@
 
         <div id="builder-message"></div>
         <div id="builder-screenshot"></div>
-                                
+
         <script type="text/javascript">
             HelpGuide.base = "${pageContext.request.contextPath}"
             HelpGuide.attachTo = "#builder-bar";
             HelpGuide.key = "help.web.console.app.userview.builder";
             HelpGuide.show();
         </script>
-            
+
         <jsp:include page="/WEB-INF/jsp/console/apps/builder.jsp" flush="true">
             <jsp:param name="appId" value="${appId}"/>
             <jsp:param name="appVersion" value="${appDefinition.version}"/>
@@ -202,6 +202,6 @@
             <jsp:param name="webConsole" value="true"/>
             <jsp:param name="builderMode" value="true"/>
         </jsp:include>
-            
+
     </body>
 </html>

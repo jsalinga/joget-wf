@@ -32,7 +32,7 @@ public class HiddenField extends Element implements FormBuilderPaletteElement {
         // set value
         String value = FormUtil.getElementPropertyValue(this, formData);
         String priority = getPropertyString("useDefaultWhenEmpty");
-        
+
         if (priority != null && !priority.isEmpty()) {
             if (("true".equals(priority) && (value == null || value.isEmpty()))
                     || "valueOnly".equals(priority)) {
@@ -42,7 +42,7 @@ public class HiddenField extends Element implements FormBuilderPaletteElement {
             if (getPropertyString("value") != null && !getPropertyString("value").isEmpty()) {
                 value = getPropertyString("value");
             }
-        } 
+        }
 
         dataModel.put("value", value);
 

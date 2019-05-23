@@ -47,7 +47,7 @@ public class WorkflowUserDetails implements UserDetails {
         }
         return authorities;
     }
-    
+
     public User getUser() {
         return user;
     }

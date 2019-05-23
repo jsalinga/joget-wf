@@ -49,7 +49,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * Service methods used to parse userview json definition to create Userview
- * 
+ *
  */
 @Service("userviewService")
 public class UserviewService {
@@ -70,24 +70,25 @@ public class UserviewService {
 
     /**
      * Get userview setting object
+     *
      * @param appDef
      * @param json
      * @return setting
      */
     public UserviewSetting getUserviewSetting(AppDefinition appDef, String json) {
         UserviewSetting setting = null;
-        
+
         //process json with hash variable
         json = AppUtil.processHashVariable(json, null, StringUtil.TYPE_JSON, null, appDef);
 
         User currentUser = workflowUserManager.getCurrentUser();
-        
+
         Map<String, Object> requestParameters = new HashMap<String, Object>();
         requestParameters.put("appId", appDef.getAppId());
         requestParameters.put("appVersion", appDef.getVersion().toString());
-        
+
         Userview userview = new Userview();
-        
+
         try {
             //set userview properties
             JSONObject userviewObj = new JSONObject(json);
@@ -134,9 +135,10 @@ public class UserviewService {
 
         return setting;
     }
-    
+
     /**
      * Create userview fron json
+     *
      * @return
      */
     public Userview createUserview(String json, String menuId, boolean preview, String contextPath, Map requestParameters, String key, Boolean embed) {
@@ -146,6 +148,7 @@ public class UserviewService {
 
     /**
      * Create userview fron json
+     *
      * @return
      */
     public Userview createUserview(AppDefinition appDef, String json, String menuId, boolean preview, String contextPath, Map requestParameters, String key, Boolean embed) {
@@ -176,9 +179,9 @@ public class UserviewService {
         String appVersion = appDef.getVersion().toString();
         Userview userview = new Userview();
         userview.setParams(requestParameters);
-        
+
         boolean userviewPermission = true;
-        
+
         //if screenshot, set user to null (anonymous)
         User currentThreadUser = currentUser;
         boolean isScreenCapture = workflowUserManager.isCurrentUserInRole(WorkflowUserManager.ROLE_ADMIN) && "true".equalsIgnoreCase((String) requestParameters.get("_isScreenCapture"));
@@ -240,7 +243,7 @@ public class UserviewService {
 
             //set categories
             Collection<UserviewCategory> categories = new ArrayList<UserviewCategory>();
-            
+
             if (userviewPermission) {
                 JSONArray categoriesArray = userviewObj.getJSONArray("categories");
                 for (int i = 0; i < categoriesArray.length(); i++) {
@@ -248,7 +251,7 @@ public class UserviewService {
 
                     UserviewCategory category = new UserviewCategory();
                     category.setProperties(PropertyUtil.getProperties(categoryObj.getJSONObject("properties")));
-                    
+
                     boolean hasPermis = false;
                     if (preview || "true".equals(setting.getPropertyString("tempDisablePermissionChecking"))) {
                         hasPermis = true;
@@ -290,7 +293,7 @@ public class UserviewService {
 
                                 // check for mobile support
                                 boolean isMobileView = MobileUtil.isMobileView();
-                                if (isMobileView && (menu instanceof MobileElement) && !((MobileElement)menu).isMobileSupported()) {
+                                if (isMobileView && (menu instanceof MobileElement) && !((MobileElement) menu).isMobileSupported()) {
                                     // mobile not supported, skip this menu
                                     continue;
                                 }
@@ -325,7 +328,7 @@ public class UserviewService {
                                 if (userview.getPropertyString("homeMenuId") == null || userview.getPropertyString("homeMenuId").isEmpty() && menu.isHomePageSupported()) {
                                     userview.setProperty("homeMenuId", mId);
                                 }
-                                
+
                                 menu = new CachedUserviewMenu(menu);
                                 menus.add(menu);
                             } catch (Exception e) {
@@ -353,8 +356,9 @@ public class UserviewService {
 
     /**
      * Gets the id of an userview menu
+     *
      * @param menu
-     * @return 
+     * @return
      */
     public String getMenuId(UserviewMenu menu) {
         String menuId = menu.getPropertyString("id");
@@ -366,8 +370,9 @@ public class UserviewService {
 
     /**
      * Gets the name of a userview from json definition
+     *
      * @param json
-     * @return 
+     * @return
      */
     public String getUserviewName(String json) {
         try {
@@ -378,16 +383,17 @@ public class UserviewService {
         }
         return "";
     }
-    
+
     /**
      * Gets the userview theme used by an userview
+     *
      * @param appId
      * @param userviewId
-     * @return 
+     * @return
      */
     public UserviewTheme getUserviewTheme(String appId, String userviewId) {
         UserviewTheme theme = null;
-        
+
         AppDefinition appDef = appService.getPublishedAppDefinition(appId);
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (appDef != null && request != null) {
@@ -429,8 +435,9 @@ public class UserviewService {
 
     /**
      * Gets userview description from json definition
+     *
      * @param json
-     * @return 
+     * @return
      */
     public String getUserviewDescription(String json) {
         try {
@@ -446,14 +453,15 @@ public class UserviewService {
 
     /**
      * Gets the userview theme used by an userview
+     *
      * @param appId
      * @param version
      * @param userviewId
-     * @return 
+     * @return
      */
     public Set<String> getAllMenuIds(String appId, String version, String userviewId) {
         Set<String> ids = new HashSet<String>();
-        
+
         AppDefinition appDef = appService.getAppDefinition(appId, version);
         UserviewDefinition userviewDef = userviewDefinitionDao.loadById(userviewId, appDef);
         if (userviewDef != null) {
@@ -470,7 +478,7 @@ public class UserviewService {
                         JSONObject menuObj = (JSONObject) menusArray.get(j);
                         JSONObject props = menuObj.getJSONObject("properties");
                         String id = props.getString("id");
-                        String customId = (props.has("customId"))?props.getString("customId"):null;
+                        String customId = (props.has("customId")) ? props.getString("customId") : null;
                         if (customId != null && !customId.isEmpty()) {
                             ids.add(customId);
                         } else {
@@ -482,10 +490,10 @@ public class UserviewService {
                 LogUtil.debug(getClass().getName(), "get userview menu ids error.");
             }
         }
-        
+
         return ids;
     }
-    
+
     private Map convertRequestParamMap(Map params) {
         Map result = new HashMap();
         for (String key : (Set<String>) params.keySet()) {
@@ -499,7 +507,7 @@ public class UserviewService {
         }
         return result;
     }
-    
+
     public UserviewDefinition getDefaultUserview() {
         // check for app center userview setting
         String defaultUserviewProperty = "defaultUserview";
@@ -516,7 +524,7 @@ public class UserviewService {
                 if (appDef != null) {
                     defaultUserview = userviewDefinitionDao.loadById(userviewId, appDef);
                 }
-            }            
+            }
         } else {
             // import default app center app
             String path = "/setup/apps/APP_appcenter-1.zip";
@@ -539,13 +547,13 @@ public class UserviewService {
                     if (!userviewList.isEmpty()) {
                         String userviewId = userviewList.iterator().next().getId();
                         defaultUserview = userviewDefinitionDao.loadById(userviewId, appDef);
-                        
+
                         // save setting
                         String value = defaultUserview.getAppId() + "/" + defaultUserview.getId();
                         Setting newSetting = new Setting();
                         newSetting.setProperty(defaultUserviewProperty);
                         newSetting.setValue(value);
-                        setupManager.saveSetting(newSetting);                        
+                        setupManager.saveSetting(newSetting);
                     }
                 }
             } catch (Exception ex) {
@@ -573,5 +581,5 @@ public class UserviewService {
         }
         return result;
     }
-    
+
 }

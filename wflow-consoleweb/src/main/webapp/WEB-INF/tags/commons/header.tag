@@ -32,41 +32,41 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/console_custom.css?build=<fmt:message key="build.number"/>">
         <script>
             var Template = {
-                debug: function() {
-                    $("div").prepend(function(index, html) {
-                        $(this).attr("style", "border: dotted 1px #dedede");
-                        return "<span class='debug'>" + $(this).attr("id") + "</span>";
-                    });
-                },
-                selectMenu: function(menu) {
-                    if (menu) {
-                        $("#menu-items").children("li").removeClass();
-                        var first = $("#menu-items").children("li:first");
-                        var last = $("#menu-items").children("li:last");
-                        $(menu).addClass("active");
-                        if ($(menu).prev().length == 0) {
-                            first.addClass("first-active");
-                        } else {
-                            first.addClass("first-inactive");
-                            $(menu).prev().addClass("next");
-                        }
-                        if ($(menu).next().length == 0) {
-                            last.addClass("last-active");
-                        } else {
-                            last.addClass("last-inactive");
-                        }
-                    }
-                },
-                selectNav: function(nav) {
-                    if (nav) {
-                        $("#nav-list li").removeClass("nav-selected");
-                        $(nav).addClass("nav-selected");
-                    }
-                },
-                init: function(menu, nav) {
-                    Template.selectMenu(menu);
-                    Template.selectNav(nav);
-                }
+            debug: function() {
+            $("div").prepend(function(index, html) {
+            $(this).attr("style", "border: dotted 1px #dedede");
+            return "<span class='debug'>" + $(this).attr("id") + "</span>";
+            });
+            },
+            selectMenu: function(menu) {
+            if (menu) {
+            $("#menu-items").children("li").removeClass();
+            var first = $("#menu-items").children("li:first");
+            var last = $("#menu-items").children("li:last");
+            $(menu).addClass("active");
+            if ($(menu).prev().length == 0) {
+            first.addClass("first-active");
+            } else {
+            first.addClass("first-inactive");
+            $(menu).prev().addClass("next");
+            }
+            if ($(menu).next().length == 0) {
+            last.addClass("last-active");
+            } else {
+            last.addClass("last-inactive");
+            }
+            }
+            },
+            selectNav: function(nav) {
+            if (nav) {
+            $("#nav-list li").removeClass("nav-selected");
+            $(nav).addClass("nav-selected");
+            }
+            },
+            init: function(menu, nav) {
+            Template.selectMenu(menu);
+            Template.selectNav(nav);
+            }
             }
         </script>
     </head>
@@ -83,25 +83,25 @@
                     <c:choose>
                         <c:when test="${isCustomDirectoryManager || userIsReadonly}">
                             <a><i class="fa fa-user"></i> ${username}</a>
-                            </c:when>
-                            <c:otherwise>
+                        </c:when>
+                        <c:otherwise>
                             <a href="javascript:navMenuUserProfile()" id="header-profile"><i class="fa fa-user"></i> <fmt:message key="console.header.top.label.userProfile"/> (<c:out value="${username}"/>)</a>
                             <script>
                                 <ui:popupdialog var="userProfilePopupDialog" src="${pageContext.request.contextPath}/web/console/profile"/>
-                                    function navMenuUserProfile() {
-                                        userProfilePopupDialog.init();
-                                    }
+                                function navMenuUserProfile() {
+                                userProfilePopupDialog.init();
+                                }
 
-                                    function userProfileCloseDialog() {
-                                        userProfilePopupDialog.close();
-                                    }
+                                function userProfileCloseDialog() {
+                                userProfilePopupDialog.close();
+                                }
                             </script>
                         </c:otherwise>
                     </c:choose>
                     <a href="${pageContext.request.contextPath}/j_spring_security_logout" id="header-logout"><i class="fa fa-signout"></i> <fmt:message key="console.header.top.label.logout"/></a>
                 </c:if>
                 <c:if test="${isAnonymous}">
-                <a href="${pageContext.request.contextPath}/web/login" id="header-login"><i class="fa fa-signin"></i> <fmt:message key="console.header.top.label.login"/></a>
+                    <a href="${pageContext.request.contextPath}/web/login" id="header-login"><i class="fa fa-signin"></i> <fmt:message key="console.header.top.label.login"/></a>
                 </c:if>
                 <a id="main-action-help"><i class="fa fa-info-circle"></i></a>
             </div>

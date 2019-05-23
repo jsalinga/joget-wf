@@ -1012,8 +1012,8 @@ img {
     padding-right: 0;
 }
 *>.ui-tabs-nav a span { /* hide from IE 6 */
-                        width: auto;
-                        height: auto;
+    width: auto;
+    height: auto;
 }
 #main-body-content .ui-tabs-nav .ui-tabs-selected a span {
     padding-bottom: 1px;
@@ -1031,11 +1031,11 @@ img {
     background-position: 0 0;
 }
 #main-body-content .ui-tabs-nav .ui-tabs-selected a:link, #main-body-content .ui-tabs-nav .ui-tabs-selected a:visited, #main-body-content .ui-tabs-nav .ui-tabs-disabled a:link, #main-body-content .ui-tabs-nav .ui-tabs-disabled a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
-                                                                                                                                                                                                                                               cursor: text;
+    cursor: text;
 }
 #main-body-content .ui-tabs-nav a:hover, #main-body-content .ui-tabs-nav a:focus, #main-body-content .ui-tabs-nav a:active,
 #main-body-content .ui-tabs-nav .ui-tabs-unselect a:hover, #main-body-content .ui-tabs-nav .ui-tabs-unselect a:focus, #main-body-content .ui-tabs-nav .ui-tabs-unselect a:active { /* @ Opera, we need to be explicit again here now... */
-                                                                                                                                                                                   cursor: pointer;
+    cursor: pointer;
 }
 #main-body-content .ui-tabs-disabled {
     opacity: .4;
@@ -1053,10 +1053,10 @@ img {
 
 /* Additional IE specific bug fixes... */
 * html #main-body-content .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
-                                         display: inline-block;
+    display: inline-block;
 }
 *:first-child+html #main-body-content .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
-                                                      display: inline-block;
+    display: inline-block;
 }
 
 #main-body-content .ui-tabs-nav {
@@ -1611,7 +1611,7 @@ body#login {
 
 #nv {
     <c:if test="${param.hidden == 'true'}">display: none;</c:if>
-    background: white;
+        background: white;
     border: none;
     padding: 2px 20px;
     width: 100%;

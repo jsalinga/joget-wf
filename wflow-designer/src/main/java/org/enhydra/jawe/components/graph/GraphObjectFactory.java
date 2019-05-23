@@ -19,6 +19,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * Factory for generating graph objects.
+ *
  * @author Sasa Bojanic
  */
 public class GraphObjectFactory {
@@ -52,8 +53,8 @@ public class GraphObjectFactory {
         int actW = GraphUtilities.getGraphController().getGraphSettings().getActivityWidth();
         int actH = GraphUtilities.getGraphController().getGraphSettings().getActivityHeight();
         Dimension dim = DefaultGraphActivityRenderer.calculateWidthAndHeight(displayName, actW, actH);
-        actW = (int)dim.getWidth();
-        actH = (int)dim.getHeight();
+        actW = (int) dim.getWidth();
+        actH = (int) dim.getHeight();
         Rectangle bounds = new Rectangle(partPoint.x + offset.x, partPoint.y + offset.y, actW, actH);
         if (type.equals("ACTIVITY_ROUTE")) {
             bounds = new Rectangle(partPoint.x + offset.x, partPoint.y + offset.y, GraphUtilities.getGraphController().getGraphSettings().getRouteWidth(), GraphUtilities.getGraphController().getGraphSettings().getRouteHeight());

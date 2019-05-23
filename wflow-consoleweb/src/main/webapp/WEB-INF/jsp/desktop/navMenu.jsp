@@ -14,10 +14,10 @@
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/nav_menu.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/nav_menu_custom.css"/>
-    
+
     <script src="${pageContext.request.contextPath}/js/jquery/jquery.cookie.js"></script>
     <script src="${pageContext.request.contextPath}/js/navMenu.js"></script>
-    
+
     <c:if test="${isAdmin}">
         <c:set var="useOverlay" value="${param.frontEndMode == 'true' || param.builderMode == 'true'}"/>
         <c:set var="quickEditMode" value="${cookie['quickEditMode'].value}"/>
@@ -47,11 +47,11 @@
             </style>
         </c:if>
         <script>
-        var path = "${cookiePath}";
-        NavMenu.setCookiePath(path);
-        <c:if test="${param.webConsole == 'true'}">
-            NavMenu.enableQuickEditMode();
-        </c:if>
+            var path = "${cookiePath}";
+            NavMenu.setCookiePath(path);
+            <c:if test="${param.webConsole == 'true'}">
+                NavMenu.enableQuickEditMode();
+            </c:if>
         </script>
     </c:if>    
 
@@ -63,25 +63,25 @@
             <div id="menu-logo"></div>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/web/desktop"><i class="fa fa-desktop"></i> <fmt:message key="adminBar.label.appCenter"/></a></li>
-                <c:if test="${!isAnonymous}">
+                    <c:if test="${!isAnonymous}">
                     <li><a href="${pageContext.request.contextPath}/web/console/run/inbox" onclick="return NavMenu.showQuickOverlay('${pageContext.request.contextPath}/web/console/run/inbox', '${useOverlay}')"><i class="fa fa-tasks"></i> <fmt:message key="console.header.submenu.label.inbox"/></a></li>
-                </c:if>
-                <c:if test="${isAdmin}">
-                    <h3><fmt:message key="appCenter.label.administration"/>
-                    <c:if test="${true || !empty param.appId}">
-                        <div id="quickEditModeOption">
-                            <input type="radio" id="quickEditModeOn" name="radio" /><label id="quickEditModeOnLabel" for="quickEditModeOn"><fmt:message key='adminBar.label.on'/></label>
-                            <input type="radio" id="quickEditModeOff" name="radio" /><label id="quickEditModeOffLabel" for="quickEditModeOff"><fmt:message key='adminBar.label.off'/></label>
-                        </div>
                     </c:if>
+                    <c:if test="${isAdmin}">
+                    <h3><fmt:message key="appCenter.label.administration"/>
+                        <c:if test="${true || !empty param.appId}">
+                            <div id="quickEditModeOption">
+                                <input type="radio" id="quickEditModeOn" name="radio" /><label id="quickEditModeOnLabel" for="quickEditModeOn"><fmt:message key='adminBar.label.on'/></label>
+                                <input type="radio" id="quickEditModeOff" name="radio" /><label id="quickEditModeOffLabel" for="quickEditModeOff"><fmt:message key='adminBar.label.off'/></label>
+                            </div>
+                        </c:if>
                     </h3>
                     <ul>
                         <c:if test="${!empty param.appId}">
                             <li><a class="menu-link-admin" href="${pageContext.request.contextPath}/web/console/app/<c:out value="${param.appId}"/>/<c:out value="${param.appVersion}"/>/forms" onclick="return NavMenu.showQuickOverlay('${pageContext.request.contextPath}/web/console/app/<c:out value="${param.appId}"/>/<c:out value="${param.appVersion}"/>/forms', '${useOverlay}')"><i class="fa fa-pencil"></i> <fmt:message key="adminBar.label.designApp"/></a></li>
-                        </c:if>
-                        <c:if test="${empty param.appId}">
+                            </c:if>
+                            <c:if test="${empty param.appId}">
                             <li><a class="menu-link-admin" href="${pageContext.request.contextPath}/web/desktop/apps" onclick="return NavMenu.showQuickOverlay('${pageContext.request.contextPath}/web/desktop/apps', '${useOverlay}')"><i class="fa fa-pencil"></i> <fmt:message key="console.header.menu.label.apps"/></a></li>
-                        </c:if>
+                            </c:if>
                         <li><a class="menu-link-admin" href="${pageContext.request.contextPath}/web/console/monitor/running" onclick="return NavMenu.showQuickOverlay('${pageContext.request.contextPath}/web/console/monitor/running', '${useOverlay}')"><i class="fa fa-dashboard"></i> <fmt:message key='adminBar.label.monitor'/></a></li>
                         <li><a class="menu-link-admin" href="${pageContext.request.contextPath}/web/console/directory/orgs" onclick="return NavMenu.showQuickOverlay('${pageContext.request.contextPath}/web/console/directory/orgs', '${useOverlay}')"><i class="fa fa-users"></i> <fmt:message key='adminBar.label.users'/></a></li>
                         <li><a class="menu-link-admin" href="${pageContext.request.contextPath}/web/console/setting/general" onclick="return NavMenu.showQuickOverlay('${pageContext.request.contextPath}/web/console/setting/general', '${useOverlay}')"><i class="fa fa-cogs"></i> <fmt:message key='adminBar.label.settings'/></a></li>
@@ -97,44 +97,44 @@
                             <li><a href="javascript:navMenuUserProfile()"><i class="fa fa-user"></i> <fmt:message key="console.header.top.label.userProfile"/> (<c:out value="${username}"/>)</a></li>
                             <script>
                                 <ui:popupdialog var="userProfilePopupDialog" src="${pageContext.request.contextPath}/web/console/profile"/>
-                                    function navMenuUserProfile() {
-                                        userProfilePopupDialog.init();
-                                    }
+                                function navMenuUserProfile() {
+                                userProfilePopupDialog.init();
+                                }
 
-                                    function userProfileCloseDialog() {
-                                        userProfilePopupDialog.close();
-                                    }
+                                function userProfileCloseDialog() {
+                                userProfilePopupDialog.close();
+                                }
                             </script>
                         </c:otherwise>
                     </c:choose>
                     <li><a href="${pageContext.request.contextPath}/j_spring_security_logout"><i class="fa fa-sign-out"></i> <fmt:message key="console.header.top.label.logout"/></a></li>
-                </c:if>
-                <c:if test="${isAnonymous}">
-                <li><a href="${pageContext.request.contextPath}/web/login"><i class="fa fa-sign-in"></i> <fmt:message key="console.header.top.label.login"/></a></li>
-                </c:if>
+                    </c:if>
+                    <c:if test="${isAnonymous}">
+                    <li><a href="${pageContext.request.contextPath}/web/login"><i class="fa fa-sign-in"></i> <fmt:message key="console.header.top.label.login"/></a></li>
+                    </c:if>
             </ul>
         </div>
     </div>
     <script>
         <ui:popupdialog var="appCreateDialog" src="${pageContext.request.contextPath}/web/console/app/create"/>
-            function appCreate() {
-                appCreateDialog.init();
-            }
+        function appCreate() {
+        appCreateDialog.init();
+        }
     </script>
     <script>
         <ui:popupdialog var="appCreateDialog2" src="${pageContext.request.contextPath}/web/console/app/import"/>
-            function appImport() {
-                appCreateDialog2.init();
-            }
+        function appImport() {
+        appCreateDialog2.init();
+        }
     </script>
     <c:if test="${param.frontEndMode == 'true'}">
-    <script>
-        $("#main-menu").addClass("quickEditMode");
-    </script>
+        <script>
+            $("#main-menu").addClass("quickEditMode");
+        </script>
     </c:if>
     <c:if test="${param.builderMode == 'true'}">
-    <script>
-        $("#main-menu").addClass("builderMode");
-    </script>
+        <script>
+            $("#main-menu").addClass("builderMode");
+        </script>
     </c:if>
 </c:if>

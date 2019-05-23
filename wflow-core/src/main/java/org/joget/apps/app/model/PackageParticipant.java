@@ -24,7 +24,7 @@ public class PackageParticipant implements Serializable {
     public static final String TYPE_ROLE = "role";
     public static final String VALUE_ROLE_ADMIN = "adminUser";
     public static final String VALUE_ROLE_LOGGED_IN_USER = "loggedInUser";
-    
+
     private PackageDefinition packageDefinition;
     @Element(required = false)
     private String processDefId;
@@ -38,7 +38,9 @@ public class PackageParticipant implements Serializable {
     private String pluginProperties;
 
     /**
-     * Unique ID (primary key) for the object, which consists of the process def ID and participant ID separated by ::.
+     * Unique ID (primary key) for the object, which consists of the process def
+     * ID and participant ID separated by ::.
+     *
      * @return
      */
     public String getUid() {

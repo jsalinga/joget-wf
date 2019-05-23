@@ -38,5 +38,5 @@ public class LoggedInUserPermission extends UserviewPermission implements FormPe
     public String getPropertyOptions() {
         return "";
     }
-    
+
 }

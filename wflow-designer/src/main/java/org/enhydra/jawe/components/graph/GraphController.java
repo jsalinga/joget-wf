@@ -113,16 +113,16 @@ public class GraphController extends Observable implements Observer, JaWECompone
         if (info.getSource() == this || (changedElement == null && action != XPDLElementChangeInfo.SELECTED)) {
             return;
         }
-        if (!(action == XMLElementChangeInfo.UPDATED ||
-                action == XMLElementChangeInfo.INSERTED ||
-                action == XMLElementChangeInfo.REMOVED ||
-                action == XMLElementChangeInfo.REPOSITIONED ||
-                action == XPDLElementChangeInfo.SELECTED ||
-                action == XPDLElementChangeInfo.ADJUST_UNDOABLE_ACTION ||
-                action == XPDLElementChangeInfo.UNDO ||
-                action == XPDLElementChangeInfo.REDO ||
-                action == XPDLElementChangeInfo.COPY ||
-                action == XPDLElementChangeInfo.CUT)) {
+        if (!(action == XMLElementChangeInfo.UPDATED
+                || action == XMLElementChangeInfo.INSERTED
+                || action == XMLElementChangeInfo.REMOVED
+                || action == XMLElementChangeInfo.REPOSITIONED
+                || action == XPDLElementChangeInfo.SELECTED
+                || action == XPDLElementChangeInfo.ADJUST_UNDOABLE_ACTION
+                || action == XPDLElementChangeInfo.UNDO
+                || action == XPDLElementChangeInfo.REDO
+                || action == XPDLElementChangeInfo.COPY
+                || action == XPDLElementChangeInfo.CUT)) {
             return;
         }
 
@@ -308,10 +308,10 @@ public class GraphController extends Observable implements Observer, JaWECompone
             boolean isMyEA = GraphUtilities.isMyKindOfExtendedAttribute(ea);
             if (isMyEA) {
                 String eaName = ea.getName();
-                if (eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_END_OF_WORKFLOW) ||
-                        eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_START_OF_WORKFLOW) ||
-                        eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_START_OF_BLOCK) ||
-                        eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_END_OF_BLOCK)) {
+                if (eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_END_OF_WORKFLOW)
+                        || eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_START_OF_WORKFLOW)
+                        || eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_START_OF_BLOCK)
+                        || eaName.equals(GraphEAConstants.EA_JAWE_GRAPH_END_OF_BLOCK)) {
                     return true;
                 }
                 return false;

@@ -36,7 +36,7 @@ public class BeanShellMultiRowValidator extends FormMultiRowValidator {
     public String getPropertyOptions() {
         return AppUtil.readPluginResource(getClass().getName(), "/properties/form/beanShellMultiRowValidator.json", null, true, null);
     }
-    
+
     protected boolean executeScript(String script, Map properties, boolean throwException) throws RuntimeException {
         Boolean result = null;
         try {
@@ -53,9 +53,9 @@ public class BeanShellMultiRowValidator extends FormMultiRowValidator {
                 throw new RuntimeException("Error executing script");
             }
         }
-        return (result != null)?result:false;
+        return (result != null) ? result : false;
     }
-    
+
     @Override
     public String getElementDecoration() {
         return getPropertyString("decoration");

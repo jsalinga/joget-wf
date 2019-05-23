@@ -26,7 +26,6 @@ public class DataField extends XMLCollectionElement {
                 }, 1);
 
         //CUSTOM
-
         super.fillStructure();
         this. //add(attrName);
                 add(attrIsArray);

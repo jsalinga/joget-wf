@@ -21,7 +21,9 @@ public class PackageActivityPlugin implements Serializable {
     private String pluginProperties;
 
     /**
-     * Unique ID (primary key) for the object, which consists of the process def ID and activity def ID separated by ::.
+     * Unique ID (primary key) for the object, which consists of the process def
+     * ID and activity def ID separated by ::.
+     *
      * @return
      */
     public String getUid() {

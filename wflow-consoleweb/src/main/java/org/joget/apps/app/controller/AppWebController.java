@@ -78,7 +78,7 @@ public class AppWebController {
     private WorkflowUserManager workflowUserManager;
     @Autowired
     UserviewService userviewService;
-    
+
     protected static String ORIGIN_FROM_PARAM = "_orifrom";
     protected static String ORIGIN_FROM_RUNPROCESS = "runProcess";
 
@@ -86,11 +86,11 @@ public class AppWebController {
     public String clientProcessView(HttpServletRequest request, ModelMap model, @RequestParam("appId") String appId, @RequestParam(required = false) String version, @RequestParam String processDefId, @RequestParam(required = false) String recordId, @RequestParam(required = false) String start) {
 
         // clean process def
-        appId = SecurityUtil.validateStringInput(appId);        
-        processDefId = SecurityUtil.validateStringInput(processDefId);        
-        recordId = SecurityUtil.validateStringInput(recordId);        
+        appId = SecurityUtil.validateStringInput(appId);
+        processDefId = SecurityUtil.validateStringInput(processDefId);
+        recordId = SecurityUtil.validateStringInput(recordId);
         processDefId = WorkflowUtil.getProcessDefIdWithoutVersion(processDefId);
-        
+
         AppDefinition appDef = appService.getAppDefinition(appId, version);
         WorkflowProcess processDef = appService.getWorkflowProcessForApp(appId, appDef.getVersion().toString(), processDefId);
 
@@ -110,13 +110,13 @@ public class AppWebController {
         FormData formData = new FormData();
         formData = formService.retrieveFormDataFromRequest(formData, request);
         formData.setPrimaryKeyValue(recordId);
-        
+
         String formUrl = "/web/client/app/" + appDef.getId() + "/" + appDef.getVersion() + "/process/" + StringEscapeUtils.escapeHtml(processDefId) + "/start";
         if (recordId != null) {
             formUrl += "?recordId=" + StringEscapeUtils.escapeHtml(recordId);
         }
         String formUrlWithContextPath = AppUtil.getRequestContextPath() + formUrl;
-        
+
         PackageActivityForm startFormDef = appService.viewStartProcessForm(appDef.getId(), appDef.getVersion().toString(), processDefId, formData, formUrlWithContextPath);
         if (startFormDef != null && startFormDef.getForm() != null) {
             Form startForm = startFormDef.getForm();
@@ -136,14 +136,14 @@ public class AppWebController {
                     if (key.startsWith(FormService.PREFIX_FOREIGN_KEY) || key.startsWith(FormService.PREFIX_FOREIGN_KEY_EDITABLE) || key.startsWith(AppUtil.PREFIX_WORKFLOW_VARIABLE)) {
                         try {
                             String[] values = (String[]) requestParam.get(k);
-                            
+
                             for (String v : values) {
                                 if (formUrl.contains("?")) {
                                     formUrl += "&";
                                 } else {
                                     formUrl += "?";
                                 }
-                                
+
                                 formUrl += key + "=" + URLEncoder.encode(v, "UTF-8");
                             }
                         } catch (Exception e) {
@@ -165,8 +165,8 @@ public class AppWebController {
     public String clientProcessStart(HttpServletRequest request, ModelMap model, @RequestParam("appId") String appId, @RequestParam(required = false) String version, @RequestParam(required = false) String recordId, @RequestParam String processDefId) {
 
         // clean process def
-        appId = SecurityUtil.validateStringInput(appId);        
-        recordId = SecurityUtil.validateStringInput(recordId);        
+        appId = SecurityUtil.validateStringInput(appId);
+        recordId = SecurityUtil.validateStringInput(recordId);
         processDefId = WorkflowUtil.getProcessDefIdWithoutVersion(processDefId);
 
         // set app and process details
@@ -242,17 +242,17 @@ public class AppWebController {
         // check assignment
         appId = SecurityUtil.validateStringInput(appId);
         activityId = SecurityUtil.validateStringInput(activityId);
-        
+
         if (request.getParameterValues(ORIGIN_FROM_PARAM) == null) {
             //redirect to default userview if inbox is available in default userview
             UserviewDefinition defaultUserview = userviewService.getDefaultUserview();
             if (UserviewUtil.checkUserviewInboxEnabled(defaultUserview)) {
                 // redirect to app center userview
-                String path = "redirect:/web/userview/" + defaultUserview.getAppId() + "/" +  defaultUserview.getId() + "/_/_ja_inbox?_mode=assignment&activityId=" + URLEncoder.encode(activityId, "UTF-8");
+                String path = "redirect:/web/userview/" + defaultUserview.getAppId() + "/" + defaultUserview.getId() + "/_/_ja_inbox?_mode=assignment&activityId=" + URLEncoder.encode(activityId, "UTF-8");
                 return path;
             }
         }
-        
+
         WorkflowAssignment assignment = workflowManager.getAssignment(activityId);
         if (assignment == null) {
             return "client/app/assignmentUnavailable";
@@ -389,6 +389,7 @@ public class AppWebController {
 
     /**
      * Download uploaded files.
+     *
      * @param response
      * @param fileName
      * @param processInstanceId
@@ -397,19 +398,19 @@ public class AppWebController {
     @RequestMapping("/client/app/(*:appId)/(~:version)/form/download/(*:formDefId)/(*:primaryKeyValue)/(*:fileName)")
     public void downloadUploadedFile(HttpServletRequest request, HttpServletResponse response, @RequestParam("formDefId") String formDefId, @RequestParam(value = "appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("primaryKeyValue") String primaryKeyValue, @RequestParam("fileName") String fileName, @RequestParam(required = false) String attachment) throws IOException {
         boolean isAuthorize = false;
-        
+
         Form form = null;
         AppDefinition appDef;
-        
+
         try {
             if (appId != null && !appId.isEmpty()
-                    && formDefId != null && !formDefId.isEmpty() 
-                    && primaryKeyValue != null && !primaryKeyValue.isEmpty() 
+                    && formDefId != null && !formDefId.isEmpty()
+                    && primaryKeyValue != null && !primaryKeyValue.isEmpty()
                     && fileName != null && !fileName.isEmpty()) {
-                
+
                 appDef = appService.getAppDefinition(appId, version);
                 FormDefinition formDef = formDefinitionDao.loadById(formDefId, appDef);
-                
+
                 if (formDef != null) {
                     String json = formDef.getJson();
                     form = (Form) formService.createElementFromJson(json);
@@ -424,19 +425,19 @@ public class AppWebController {
                                 if (compareValue.endsWith(FileManager.THUMBNAIL_EXT)) {
                                     compareValue = compareValue.replace(FileManager.THUMBNAIL_EXT, "");
                                 }
-                                
+
                                 String value = row.getProperty(fieldId.toString());
-                                
+
                                 if (value.equals(compareValue)
-                                        || (value.contains(";") 
-                                            && (value.startsWith(compareValue + ";") 
-                                                || value.contains(";" + compareValue + ";")
-                                                || value.endsWith(";" + compareValue)))) {
+                                        || (value.contains(";")
+                                        && (value.startsWith(compareValue + ";")
+                                        || value.contains(";" + compareValue + ";")
+                                        || value.endsWith(";" + compareValue)))) {
                                     Element field = FormUtil.findElement(fieldId.toString(), form, formData);
                                     if (field instanceof FileDownloadSecurity) {
                                         FileDownloadSecurity security = (FileDownloadSecurity) field;
                                         isAuthorize = security.isDownloadAllowed(request.getParameterMap());
-                                        
+
                                         break;
                                     }
                                 }
@@ -445,15 +446,16 @@ public class AppWebController {
                     }
                 }
             }
-        } catch (Exception e){}
-        
+        } catch (Exception e) {
+        }
+
         if (!isAuthorize) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.setDateHeader("Expires", System.currentTimeMillis() + 0);
             response.setHeader("Cache-Control", "no-cache, no-store");
             return;
         }
-        
+
         ServletOutputStream stream = response.getOutputStream();
         String decodedFileName = fileName;
         try {
@@ -476,11 +478,11 @@ public class AppWebController {
             if (contentType != null) {
                 response.setContentType(contentType);
             }
-            
+
             // set attachment filename
             if (Boolean.valueOf(attachment).booleanValue()) {
                 String name = URLEncoder.encode(decodedFileName, "UTF8").replaceAll("\\+", "%20");
-                response.setHeader("Content-Disposition", "attachment; filename="+name+"; filename*=UTF-8''" + name);
+                response.setHeader("Content-Disposition", "attachment; filename=" + name + "; filename*=UTF-8''" + name);
             }
 
             // send output
@@ -494,9 +496,10 @@ public class AppWebController {
             stream.close();
         }
     }
-    
+
     /**
      * Download app resource files.
+     *
      * @param request
      * @param response
      * @param appId
@@ -508,9 +511,9 @@ public class AppWebController {
     @RequestMapping("/app/(*:appId)/(~:version)/resources/(*:fileName)")
     public void downloadAppResource(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "appId") String appId, @RequestParam(value = "version", required = false) String version, @RequestParam("fileName") String fileName, @RequestParam(required = false) String attachment) throws IOException {
         boolean isAuthorize = false;
-        
+
         fileName = getFilename(fileName, request.getRequestURL().toString());
-        
+
         AppDefinition appDef;
         String decodedFileName = fileName;
         try {
@@ -518,7 +521,7 @@ public class AppWebController {
         } catch (UnsupportedEncodingException e) {
             // ignore
         }
-        
+
         try {
             if (appId != null && !appId.isEmpty()) {
                 if (version == null || version.isEmpty()) {
@@ -527,11 +530,11 @@ public class AppWebController {
                         version = appVersion.toString();
                     }
                 }
-                
+
                 appDef = appService.getAppDefinition(appId, version);
                 version = appDef.getVersion().toString();
                 AppResource appResource = appResourceDao.loadById(decodedFileName, appDef);
-                
+
                 Map<String, Object> value = PropertyUtil.getPropertiesValueFromJson(appResource.getPermissionProperties());
                 if (value.containsKey("permission") && value.get("permission") instanceof Map && ((Map) value.get("permission")).containsKey("className")) {
                     Map permission = (Map) value.get("permission");
@@ -549,15 +552,16 @@ public class AppWebController {
                     }
                 }
             }
-        } catch (Exception e){}
-        
+        } catch (Exception e) {
+        }
+
         if (!isAuthorize) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.setDateHeader("Expires", System.currentTimeMillis() + 0);
             response.setHeader("Cache-Control", "no-cache, no-store");
             return;
         }
-        
+
         ServletOutputStream stream = response.getOutputStream();
         File file = AppResourceUtil.getFile(appId, version, decodedFileName);
         if (file == null || file.isDirectory() || !file.exists()) {
@@ -574,11 +578,11 @@ public class AppWebController {
             if (contentType != null) {
                 response.setContentType(contentType);
             }
-            
+
             // set attachment filename
             if (Boolean.valueOf(attachment).booleanValue()) {
                 String name = URLEncoder.encode(decodedFileName, "UTF8").replaceAll("\\+", "%20");
-                response.setHeader("Content-Disposition", "attachment; filename="+name+"; filename*=UTF-8''" + name);
+                response.setHeader("Content-Disposition", "attachment; filename=" + name + "; filename*=UTF-8''" + name);
             }
 
             // send output
@@ -592,15 +596,16 @@ public class AppWebController {
             stream.close();
         }
     }
-    
+
     protected String getFilename(String filename, String url) {
         if (!url.endsWith(".")) {
             try {
                 url = URLDecoder.decode(url, "UTF-8");
-            } catch (UnsupportedEncodingException ex) {}
-            filename = url.substring(url.lastIndexOf(filename+"."));
+            } catch (UnsupportedEncodingException ex) {
+            }
+            filename = url.substring(url.lastIndexOf(filename + "."));
         }
-        
+
         return filename;
     }
 }

@@ -23,63 +23,63 @@
     <div id="main-body">
 
         <ui:jsontable url="${pageContext.request.contextPath}/web/json/directory/admin/organization/list?${pageContext.request.queryString}"
-                       var="JsonDataTable"
-                       divToUpdate="organizationList"
-                       jsonData="data"
-                       rowsPerPage="15"
-                       width="100%"
-                       sort="name"
-                       desc="false"
-                       href="${pageContext.request.contextPath}/web/console/directory/org/view"
-                       hrefParam="id"
-                       hrefSuffix="."
-                       hrefQuery="false"
-                       hrefDialog="false"
-                       hrefDialogWidth="600px"
-                       hrefDialogHeight="400px"
-                       hrefDialogTitle="Process Dialog"
-                       checkbox="${!isCustomDirectoryManager}"
-                       checkboxButton2="general.method.label.delete"
-                       checkboxCallback2="deleteOrganization"
-                       searchItems="name|Organization Name"
-                       fields="['id','name','description']"
-                       column1="{key: 'id', label: 'console.directory.org.common.label.id', sortable: true}"
-                       column2="{key: 'name', label: 'console.directory.org.common.label.name', sortable: true}"
-                       column3="{key: 'description', label: 'console.directory.org.common.label.description', sortable: false}"
-                       />
+                      var="JsonDataTable"
+                      divToUpdate="organizationList"
+                      jsonData="data"
+                      rowsPerPage="15"
+                      width="100%"
+                      sort="name"
+                      desc="false"
+                      href="${pageContext.request.contextPath}/web/console/directory/org/view"
+                      hrefParam="id"
+                      hrefSuffix="."
+                      hrefQuery="false"
+                      hrefDialog="false"
+                      hrefDialogWidth="600px"
+                      hrefDialogHeight="400px"
+                      hrefDialogTitle="Process Dialog"
+                      checkbox="${!isCustomDirectoryManager}"
+                      checkboxButton2="general.method.label.delete"
+                      checkboxCallback2="deleteOrganization"
+                      searchItems="name|Organization Name"
+                      fields="['id','name','description']"
+                      column1="{key: 'id', label: 'console.directory.org.common.label.id', sortable: true}"
+                      column2="{key: 'name', label: 'console.directory.org.common.label.name', sortable: true}"
+                      column3="{key: 'description', label: 'console.directory.org.common.label.description', sortable: false}"
+                      />
 
     </div>
 </div>
 
 <script>
     $(document).ready(function(){
-        $('#JsonDataTable_searchTerm').hide();
+    $('#JsonDataTable_searchTerm').hide();
 
-        <c:if test="${isCustomDirectoryManager}">
-            $('#main-action-buttons').remove();
-            $('#JsonDataTable_organizationList-buttons').remove();
-        </c:if>
+    <c:if test="${isCustomDirectoryManager}">
+        $('#main-action-buttons').remove();
+        $('#JsonDataTable_organizationList-buttons').remove();
+    </c:if>
     });
 
     <ui:popupdialog var="popupDialog" src="${pageContext.request.contextPath}/web/console/directory/org/create"/>
 
     function onCreate(){
-        popupDialog.init();
+    popupDialog.init();
     }
 
     function closeDialog() {
-        popupDialog.close();
+    popupDialog.close();
     }
 
     function deleteOrganization(selectedList){
-         if (confirm('<fmt:message key="console.directory.org.delete.label.confirmation"/>')) {
-            var callback = {
-                success : function() {
-                    document.location = '${pageContext.request.contextPath}/web/console/directory/orgs';
-                }
-            }
-            var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/org/delete', callback, 'ids='+selectedList);
-        }
+    if (confirm('<fmt:message key="console.directory.org.delete.label.confirmation"/>')) {
+    var callback = {
+    success : function() {
+    document.location = '${pageContext.request.contextPath}/web/console/directory/orgs';
+    }
+    }
+    var request = ConnectionManager.post('${pageContext.request.contextPath}/web/console/directory/org/delete', callback, 'ids='+selectedList);
+    }
     }
 </script>
 

@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Grid extends Element implements FormBuilderPaletteElement, FormContainer {
+
     protected Map<FormData, FormRowSet> cachedRowSet = new HashMap<FormData, FormRowSet>();
 
     @Override
@@ -42,6 +43,7 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
 
     /**
      * Return a Map of value=label, each pair representing a grid column header.
+     *
      * @param formData
      * @return
      */
@@ -62,6 +64,7 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
 
     /**
      * Return the grid data
+     *
      * @param formData
      * @return A FormRowSet containing the grid cell data.
      */
@@ -138,6 +141,7 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
 
     /**
      * Parses a JSON String into a FormRowSet
+     *
      * @param json
      * @return
      * @throws JSONException
@@ -175,7 +179,6 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
         rowSet.setMultiRow(true);
 
         // TODO: set foreign key?
-
         return rowSet;
     }
 
@@ -199,7 +202,7 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
         // set rows
         FormRowSet rows = getRows(formData);
         dataModel.put("rows", rows);
-        
+
         dataModel.put("customDecorator", getDecorator());
 
         String html = FormUtil.generateElementHtml(this, formData, template, dataModel);
@@ -240,15 +243,15 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
     public String getFormBuilderIcon() {
         return "/plugin/org.joget.apps.form.lib.Grid/images/grid_icon.gif";
     }
-     
+
     @Override
     public Boolean selfValidate(FormData formData) {
         Boolean valid = true;
-        
+
         FormRowSet rowSet = getRows(formData);
         String id = FormUtil.getElementParameterName(this);
         String errorMsg = getPropertyString("errorMessage");
-        
+
         String min = getPropertyString("validateMinRow");
         if (min != null && !min.isEmpty()) {
             try {
@@ -256,9 +259,10 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
                 if (rowSet.size() < minNumber) {
                     valid = false;
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-        
+
         String max = getPropertyString("validateMaxRow");
         if (max != null && !max.isEmpty()) {
             try {
@@ -266,42 +270,43 @@ public class Grid extends Element implements FormBuilderPaletteElement, FormCont
                 if (rowSet.size() > maxNumber) {
                     valid = false;
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-        
+
         if (!valid) {
             formData.addFormError(id, errorMsg);
         }
-        
+
         return valid;
     }
-    
+
     protected String getDecorator() {
         String decorator = "";
-        
+
         try {
             String min = getPropertyString("validateMinRow");
-            
+
             if ((min != null && !min.isEmpty())) {
                 int minNumber = Integer.parseInt(min);
                 if (minNumber > 0) {
                     decorator = "*";
                 }
             }
-        } catch (Exception e) {}
-        
+        } catch (Exception e) {
+        }
+
         return decorator;
     }
-    
+
     @Override
     public Collection<String> getDynamicFieldNames() {
         Collection<String> fieldNames = new ArrayList<String>();
-        
+
         if (getStoreBinder() == null) {
             fieldNames.add(getPropertyString(FormUtil.PROPERTY_ID));
         }
-        
+
         return fieldNames;
     }
 }
-

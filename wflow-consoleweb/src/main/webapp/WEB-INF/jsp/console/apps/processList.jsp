@@ -7,19 +7,19 @@
 
 <script>
     function convert(process){
-        process.id = process.id.replace(/#/g, ':');
+    process.id = process.id.replace(/#/g, ':');
     }
 
     function convertProcessId(jsonObject){
-        if(jsonObject.data != undefined && jsonObject.data.length == undefined){
-            convert(jsonObject.data);
-        }else{
-            for(var i in jsonObject.data){
-                convert(jsonObject.data[i]);
-            }
-        }
+    if(jsonObject.data != undefined && jsonObject.data.length == undefined){
+    convert(jsonObject.data);
+    }else{
+    for(var i in jsonObject.data){
+    convert(jsonObject.data[i]);
+    }
+    }
 
-        return jsonObject;
+    return jsonObject;
     }
 </script>
 
@@ -50,26 +50,26 @@
 
         <ul id="main-body-list">
             <c:forEach items="${processList}" var="process">
-            <li>
-                <div class="list-thumbnail" id="${process.encodedId}"><a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.idWithoutVersion}">
-                        <div id="thumbnail">
-                            <img src="${pageContext.request.contextPath}/images/v3/loading.gif">
-                            <fmt:message key="console.process.config.label.xpdlThumbnailLoading"/>
-                        </div></a>
-                </div>
-                <div class="list-details">
-                    <div class="list-name"><a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.idWithoutVersion}"><c:out value="${process.name}"/></a>
+                <li>
+                    <div class="list-thumbnail" id="${process.encodedId}"><a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.idWithoutVersion}">
+                            <div id="thumbnail">
+                                <img src="${pageContext.request.contextPath}/images/v3/loading.gif">
+                                <fmt:message key="console.process.config.label.xpdlThumbnailLoading"/>
+                            </div></a>
                     </div>
-                    <div class="list-description">
-<!--                        <ul id="main-body-sublist">
-                            <li>7 activities</li>
-                            <li>2 tools</li>
-                            <li>3 participants</li>
-                        </ul>-->
+                    <div class="list-details">
+                        <div class="list-name"><a href="${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/processes/${process.idWithoutVersion}"><c:out value="${process.name}"/></a>
+                        </div>
+                        <div class="list-description">
+                            <!--                        <ul id="main-body-sublist">
+                                                        <li>7 activities</li>
+                                                        <li>2 tools</li>
+                                                        <li>3 participants</li>
+                                                    </ul>-->
+                        </div>
                     </div>
-                </div>
-                <div class="clear"></div>
-            </li>
+                    <div class="clear"></div>
+                </li>
             </c:forEach>
         </ul>
     </div>
@@ -93,85 +93,85 @@
     <ui:popupdialog var="popupDialog" src="/"/>
 
     function launchDesigner(){
-        $("#updateInformation").dialog({modal:true, height:150, width:550, resizable:false, show: 'slide',overlay: {opacity: 0.5, background: "black"},zIndex: 15001});
-        $("#closeInfo").click(function(){$("#updateInformation").dialog("close")});
-        window.open("${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/process/builder");
+    $("#updateInformation").dialog({modal:true, height:150, width:550, resizable:false, show: 'slide',overlay: {opacity: 0.5, background: "black"},zIndex: 15001});
+    $("#closeInfo").click(function(){$("#updateInformation").dialog("close")});
+    window.open("${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/process/builder");
     }
 
     function uploadPackage(){
-        popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/package/upload";
-        popupDialog.init();
+    popupDialog.src = "${pageContext.request.contextPath}/web/console/app/${appId}/${appVersion}/package/upload";
+    popupDialog.init();
     }
-    
+
     Thumbnail = {
-        retry: 0,
-        load: function(el, callback) {
-            var image = new Image();
-            image.src = "${pageContext.request.contextPath}/web/console/images/xpdl/thumbnail/" + el.attr("id") + "?rnd=" + new Date().valueOf().toString();
-            $(image).load(function(){
-                $(el).children("a").append(image);
-                $(image).each(function() {
-                    var maxWidth = 170; // Max width for the image
-                    var maxHeight = 100;    // Max height for the image
-                    var ratio = 0;  // Used for aspect ratio
-                    var width = $(this).width();    // Current image width
-                    var height = $(this).height();  // Current image height
+    retry: 0,
+    load: function(el, callback) {
+    var image = new Image();
+    image.src = "${pageContext.request.contextPath}/web/console/images/xpdl/thumbnail/" + el.attr("id") + "?rnd=" + new Date().valueOf().toString();
+    $(image).load(function(){
+    $(el).children("a").append(image);
+    $(image).each(function() {
+    var maxWidth = 170; // Max width for the image
+    var maxHeight = 100;    // Max height for the image
+    var ratio = 0;  // Used for aspect ratio
+    var width = $(this).width();    // Current image width
+    var height = $(this).height();  // Current image height
 
-                    // Check if the current width is larger than the max
-                    if(width > maxWidth){
-                        ratio = maxWidth / width;   // get ratio for scaling image
-                        $(this).css("width", maxWidth); // Set new width
-                        $(this).css("height", height * ratio);  // Scale height based on ratio
-                        height = height * ratio;    // Reset height to match scaled image
-                        width = width * ratio;    // Reset width to match scaled image
-                    }
+    // Check if the current width is larger than the max
+    if(width > maxWidth){
+    ratio = maxWidth / width;   // get ratio for scaling image
+    $(this).css("width", maxWidth); // Set new width
+    $(this).css("height", height * ratio);  // Scale height based on ratio
+    height = height * ratio;    // Reset height to match scaled image
+    width = width * ratio;    // Reset width to match scaled image
+    }
 
-                    // Check if current height is larger than max
-                    if(height > maxHeight){
-                        ratio = maxHeight / height; // get ratio for scaling image
-                        $(this).css("height", maxHeight);   // Set new height
-                        $(this).css("width", width * ratio);    // Scale width based on ratio
-                        width = width * ratio;    // Reset width to match scaled image
-                    }
-                });
-                $(el).find(" #thumbnail").hide();
-                $(el).addClass("loaded");
-                Thumbnail.retry = 0;
-                callback();
-            });
-            $(image).error(function(){
-                var processDefId = el.attr("id");
-                Thumbnail.render(processDefId);
-                if (Thumbnail.retry <= 3) {
-                    setTimeout(function() { Thumbnail.load(el, callback);}, 5000);
-                } 
-            });
-        },
-        remove_generator : function() {
-            $("#xpdl_images_generator").remove();
-        },
-        render: function(processDefId) {
-            if ($("#xpdl_images_generator").length === 0) {
-                Thumbnail.retry++;
-                // create invisible iframe for canvas
-                var iframe = document.createElement('iframe');
-                var iwidth = 1024;
-                var iheight = 0;
-                $(iframe).attr("id", "xpdl_images_generator");
-                $(iframe).attr("src", "${pageContext.request.contextPath}/web/console/app/${appDefinition.id}/process/screenshot/" + processDefId + "?callback=Thumbnail.remove_generator");
-                $(iframe).css({
-                    'visibility':'hidden'
-                }).width(iwidth).height(iheight);
-                $(document.body).append(iframe);
-            }
-        },
-        init: function() {
-            if ($(".list-thumbnail:not(.loaded)").length > 0) {
-                Thumbnail.load($(".list-thumbnail:not(.loaded):eq(0)"), function() {
-                    Thumbnail.init();
-                });
-            }
-        }
+    // Check if current height is larger than max
+    if(height > maxHeight){
+    ratio = maxHeight / height; // get ratio for scaling image
+    $(this).css("height", maxHeight);   // Set new height
+    $(this).css("width", width * ratio);    // Scale width based on ratio
+    width = width * ratio;    // Reset width to match scaled image
+    }
+    });
+    $(el).find(" #thumbnail").hide();
+    $(el).addClass("loaded");
+    Thumbnail.retry = 0;
+    callback();
+    });
+    $(image).error(function(){
+    var processDefId = el.attr("id");
+    Thumbnail.render(processDefId);
+    if (Thumbnail.retry <= 3) {
+    setTimeout(function() { Thumbnail.load(el, callback);}, 5000);
+    } 
+    });
+    },
+    remove_generator : function() {
+    $("#xpdl_images_generator").remove();
+    },
+    render: function(processDefId) {
+    if ($("#xpdl_images_generator").length === 0) {
+    Thumbnail.retry++;
+    // create invisible iframe for canvas
+    var iframe = document.createElement('iframe');
+    var iwidth = 1024;
+    var iheight = 0;
+    $(iframe).attr("id", "xpdl_images_generator");
+    $(iframe).attr("src", "${pageContext.request.contextPath}/web/console/app/${appDefinition.id}/process/screenshot/" + processDefId + "?callback=Thumbnail.remove_generator");
+    $(iframe).css({
+    'visibility':'hidden'
+    }).width(iwidth).height(iheight);
+    $(document.body).append(iframe);
+    }
+    },
+    init: function() {
+    if ($(".list-thumbnail:not(.loaded)").length > 0) {
+    Thumbnail.load($(".list-thumbnail:not(.loaded):eq(0)"), function() {
+    Thumbnail.init();
+    });
+    }
+    }
     }
     Thumbnail.init();
     Template.init("#menu-apps", "#nav-app-processes");

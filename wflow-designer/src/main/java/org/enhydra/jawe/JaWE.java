@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 
 /**
  * The main editor class.
- * 
+ *
  * @author Sasa Bojanic
  */
 public class JaWE {
@@ -99,21 +99,21 @@ public class JaWE {
 
         if (args != null && args.length > 0) {
             // check if there is a file that should be open at the startup
-            if(args[0] != null && !args[0].trim().equals("")){
+            if (args[0] != null && !args[0].trim().equals("")) {
                 fn = args[0];
             }
 
             // check if there is a locale is set
-            if(args[1] != null && !args[1].trim().equals("")){
+            if (args[1] != null && !args[1].trim().equals("")) {
                 Locale locale = null;
 
                 String[] temp = args[1].split("_");
 
-                if(temp.length == 1){
+                if (temp.length == 1) {
                     locale = new Locale(temp[0]);
-                }else if (temp.length == 2){
+                } else if (temp.length == 2) {
                     locale = new Locale(temp[0], temp[1]);
-                }else if (temp.length == 3){
+                } else if (temp.length == 3) {
                     locale = new Locale(temp[0], temp[1], temp[2]);
                 }
 
@@ -160,7 +160,7 @@ public class JaWE {
             }
         }
     }
-    
+
     public static final int COMMUNITY_VERSION = 0;
     public static final int DEMO_VERSION = 1;
     public static final int PROFESSIONAL_VERSION = 2;
@@ -194,4 +194,3 @@ public class JaWE {
         return addOnsAvailable;
     }
 }
-

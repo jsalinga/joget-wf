@@ -15,8 +15,9 @@ import org.joget.workflow.model.service.WorkflowManager;
 import org.springframework.context.ApplicationContext;
 
 public class PerformerHashVariable extends DefaultHashVariablePlugin {
+
     private Map<String, User> userCache = new HashMap<String, User>();
-    
+
     @Override
     public String processHashVariable(String variableKey) {
         WorkflowAssignment wfAssignment = (WorkflowAssignment) this.getProperty("workflowAssignment");
@@ -102,7 +103,7 @@ public class PerformerHashVariable extends DefaultHashVariablePlugin {
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();
@@ -113,7 +114,7 @@ public class PerformerHashVariable extends DefaultHashVariablePlugin {
         syntax.add("performer.ACTIVITY_DEF_ID.email");
         syntax.add("performer.ACTIVITY_DEF_ID.active");
         syntax.add("performer.ACTIVITY_DEF_ID.timeZone");
-        
+
         return syntax;
     }
 }

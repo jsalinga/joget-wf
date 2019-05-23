@@ -30,10 +30,10 @@ public class GroupPermission extends UserviewPermission implements PluginWebSupp
         User user = getCurrentUser();
         ApplicationContext ac = AppUtil.getApplicationContext();
         ExtDirectoryManager directoryManager = (ExtDirectoryManager) ac.getBean("directoryManager");
-        
+
         if (user != null) {
             Collection<Group> groups = directoryManager.getGroupByUsername(user.getUsername());
-            
+
             if (groups != null) {
                 StringTokenizer strToken = new StringTokenizer(getPropertyString("allowedGroupIds"), ";");
                 while (strToken.hasMoreTokens()) {
@@ -81,7 +81,7 @@ public class GroupPermission extends UserviewPermission implements PluginWebSupp
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
 
         if ("getOrgs".equals(action)) {

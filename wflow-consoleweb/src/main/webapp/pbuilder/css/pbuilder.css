@@ -339,22 +339,22 @@ tr#header {
     text-align: center;
     background: url(images/route.png);
     background-size: cover;
-/*    -webkit-transform: rotate(-45deg);
-    -moz-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    transform: rotate(-45deg);*/
+    /*    -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);*/
 }
 .route .node_label {
     width: 35px;
     height: 35px;
-/*    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-    width: 45px;
-    margin-top: 5px;
-    text-align: center;
-    border: none 1px red;*/
+    /*    -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+        width: 45px;
+        margin-top: 5px;
+        text-align: center;
+        border: none 1px red;*/
 }
 .route .node_route_icon {
     font-size: 40px;

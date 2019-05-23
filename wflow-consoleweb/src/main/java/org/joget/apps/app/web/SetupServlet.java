@@ -92,7 +92,7 @@ public class SetupServlet extends HttpServlet {
             if (dbName != null) {
                 dbName = SecurityUtil.validateStringInput(dbName);
             }
-            
+
             // create datasource
             LogUtil.info(getClass().getName(), "===== Starting Database Setup =====");
             boolean success = false;
@@ -135,7 +135,7 @@ public class SetupServlet extends HttpServlet {
                 } catch (SQLException ex) {
                     LogUtil.info(getClass().getName(), "Database not yet initialized " + jdbcUrl);
                 }
-                
+
                 if (!exists) {
                     // get schema file
                     String schemaFile = null;
@@ -162,7 +162,7 @@ public class SetupServlet extends HttpServlet {
                         LogUtil.info(getClass().getName(), "Use database " + dbName);
                         con.setCatalog(dbName);
                     }
-                    
+
                     // execute schema file
                     LogUtil.info(getClass().getName(), "Execute schema " + schemaFile);
                     ScriptRunner runner = new ScriptRunner(con, false, true);
@@ -177,10 +177,10 @@ public class SetupServlet extends HttpServlet {
                     in = getClass().getResourceAsStream(schemaFile);
                     runner.runScript(new BufferedReader(new InputStreamReader(in)));
                 }
-                
+
                 con.commit();
                 LogUtil.info(getClass().getName(), "Datasource init complete: " + success);
-                
+
                 // save profile
                 String profileName = (dbName != null && !dbName.trim().isEmpty()) ? dbName : "custom";
                 String jdbcUrlToSave = (jdbcFullUrl != null && !jdbcFullUrl.trim().isEmpty()) ? jdbcFullUrl : jdbcUrl;
@@ -191,7 +191,7 @@ public class SetupServlet extends HttpServlet {
                 DynamicDataSourceManager.writeProperty("workflowUrl", jdbcUrlToSave);
                 DynamicDataSourceManager.writeProperty("workflowUser", jdbcUser);
                 DynamicDataSourceManager.writeProperty("workflowPassword", jdbcPassword);
-                
+
                 // initialize spring application context
                 ServletContext sc = request.getServletContext();
                 ServletContextEvent sce = new ServletContextEvent(sc);
@@ -204,7 +204,7 @@ public class SetupServlet extends HttpServlet {
                 wacField.set(servlet, null);
                 // reinitialize DispatcherServlet
                 servlet.init();
-                
+
                 if (sampleApps != null) {
                     // import sample apps
                     ApplicationContext context = AppUtil.getApplicationContext();
@@ -223,11 +223,11 @@ public class SetupServlet extends HttpServlet {
                             setupInput.close();
                         }
                     }
-                }                
-                
+                }
+
                 LogUtil.info(getClass().getName(), "Profile init complete: " + profileName);
                 LogUtil.info(getClass().getName(), "===== Database Setup Complete =====");
-                
+
             } catch (Exception ex) {
                 LogUtil.error(getClass().getName(), null, ex.toString());
                 success = false;
@@ -283,6 +283,7 @@ public class SetupServlet extends HttpServlet {
 
     /**
      * Import an app from a specified path.
+     *
      * @param context
      * @param path
      */
@@ -290,7 +291,7 @@ public class SetupServlet extends HttpServlet {
         LogUtil.info(getClass().getName(), "Import app " + path);
         InputStream in = null;
         try {
-            final AppService appService = (AppService)context.getBean("appService");
+            final AppService appService = (AppService) context.getBean("appService");
             in = getClass().getResourceAsStream(path);
             byte[] fileContent = readInputStream(in);
             final AppDefinition appDef = appService.importApp(fileContent);
@@ -303,23 +304,24 @@ public class SetupServlet extends HttpServlet {
                     }
                 });
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             LogUtil.error(getClass().getName(), ex, "Failed to import app " + path);
         } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
-            } catch(IOException e) {                
+            } catch (IOException e) {
             }
         }
-    }    
+    }
 
     /**
      * Reads a specified InputStream, returning its contents in a byte array
+     *
      * @param in
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected byte[] readInputStream(InputStream in) throws IOException {
         byte[] fileContent;
@@ -348,7 +350,7 @@ public class SetupServlet extends HttpServlet {
             }
         }
     }
-    
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -631,7 +631,7 @@
                 <xpdl:Created>2004-08-31 23:05:16</xpdl:Created>
                 <xpdl:Description>merge many execution paths. Synchronize if many paths are taken. Simple merge if only one execution path is taken 
 
-WARNING: this process can't contain loops (at least, the branch with synchronizing merge structure mustn't be in a loop)</xpdl:Description>
+                    WARNING: this process can't contain loops (at least, the branch with synchronizing merge structure mustn't be in a loop)</xpdl:Description>
             </xpdl:ProcessHeader>
             <xpdl:RedefinableHeader PublicationStatus="UNDER_TEST">
                 <xpdl:Author>Sasa Bojanic</xpdl:Author>
@@ -962,7 +962,7 @@ WARNING: this process can't contain loops (at least, the branch with synchronizi
             <xpdl:ProcessHeader>
                 <xpdl:Created>2006-11-23 14:26:30</xpdl:Created>
                 <xpdl:Description>The discriminator is a point in a workflow process that waits for one of the incoming branches to complete before activating the subsequent activity. From that moment on it waits for all remaining branches to complete and "ignores" them. Once all incoming branches have been triggered, it resets itself so that it can be triggered again (which is important otherwise it could not really be used in the context of a loop). 
-(NOTE that current implementation does not support loop scenario).</xpdl:Description>
+                    (NOTE that current implementation does not support loop scenario).</xpdl:Description>
             </xpdl:ProcessHeader>
             <xpdl:RedefinableHeader PublicationStatus="UNDER_TEST">
                 <xpdl:Author>Fuad Abinader</xpdl:Author>

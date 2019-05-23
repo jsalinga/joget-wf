@@ -1,8 +1,8 @@
 /**
  * The OWASP CSRFGuard Project, BSD License
- * Eric Sheridan (eric@infraredsecurity.com), Copyright (c) 2011 
+ * Eric Sheridan (eric@infraredsecurity.com), Copyright (c) 2011
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -53,258 +53,272 @@ import org.owasp.csrfguard.util.Writers;
 
 public final class JavaScriptServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -1459584282530150483L;
-	
-	private static final String TOKEN_NAME_IDENTIFIER = "%TOKEN_NAME%";
-	
-	private static final String TOKEN_VALUE_IDENTIFIER = "%TOKEN_VALUE%";
-	
-	private static final String DOMAIN_ORIGIN_IDENTIFIER = "%DOMAIN_ORIGIN%";
-	
-	private static final String DOMAIN_STRICT_IDENTIFIER = "%DOMAIN_STRICT%";
-	
-	private static final String INJECT_INTO_XHR_IDENTIFIER = "%INJECT_XHR%";
-	
-	private static final String INJECT_INTO_FORMS_IDENTIFIER = "%INJECT_FORMS%";
+    private static final long serialVersionUID = -1459584282530150483L;
 
-	private static final String INJECT_GET_FORMS_IDENTIFIER = "%INJECT_GET_FORMS%";
-	
-	private static final String INJECT_FORM_ATTRIBUTES_IDENTIFIER = "%INJECT_FORM_ATTRIBUTES%";
-	
-	private static final String INJECT_INTO_ATTRIBUTES_IDENTIFIER = "%INJECT_ATTRIBUTES%";
-	
-	private static final String CONTEXT_PATH_IDENTIFIER = "%CONTEXT_PATH%";
-	
-	private static final String SERVLET_PATH_IDENTIFIER = "%SERVLET_PATH%";
-	
-	private static final String X_REQUESTED_WITH_IDENTIFIER = "%X_REQUESTED_WITH%";
-	
-	private static final String TOKENS_PER_PAGE_IDENTIFIER = "%TOKENS_PER_PAGE%";
-	
-	private static ServletConfig servletConfig = null;
+    private static final String TOKEN_NAME_IDENTIFIER = "%TOKEN_NAME%";
 
-	public static ServletConfig getStaticServletConfig() {
-		return servletConfig;
-	}
-	
-	@Override
-	public void init(ServletConfig theServletConfig) {
-	  servletConfig = theServletConfig;
-	  //print again since it might change based on servlet config of javascript servlet
-	  CsrfGuardServletContextListener.printConfigIfConfigured(servletConfig.getServletContext(), 
-			  "Printing properties after Javascript servlet, note, the javascript properties have now been initialized: ");
-	}
+    private static final String TOKEN_VALUE_IDENTIFIER = "%TOKEN_VALUE%";
 
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String refererHeader = request.getHeader("referer");
-		boolean hasError = false;
-		Pattern javascriptRefererPattern = CsrfGuard.getInstance().getJavascriptRefererPattern();
-		if(refererHeader != null && !javascriptRefererPattern.matcher(refererHeader).matches()) {
-			CsrfGuard.getInstance().getLogger().log(LogLevel.Error, "Referer domain " + refererHeader + " does not match regex: " + javascriptRefererPattern.pattern());
-			response.sendError(404);
-			hasError = true;
-		}
-			
-		if (refererHeader != null && CsrfGuard.getInstance().isJavascriptRefererMatchDomain()) {
-			//this is something like http://something.com/path or https://something.com/path
-			String url = request.getRequestURL().toString();
-			String requestProtocolAndDomain = CsrfGuardUtils.httpProtocolAndDomain(url);
-			String refererProtocolAndDomain = CsrfGuardUtils.httpProtocolAndDomain(refererHeader);
-			if (!refererProtocolAndDomain.equals(requestProtocolAndDomain)) {
-				CsrfGuard.getInstance().getLogger().log(LogLevel.Error, "Referer domain " + refererHeader + " does not match request domain: " + url);
-				hasError = true;
-				response.sendError(404);
-			}
-			
-		}
-		if (!hasError) {
-			
-			//save this path so javascript is whitelisted
-			String javascriptPath = request.getContextPath() + request.getServletPath();
-			
-			//dont know why there would be more than one... hmmm
-			if (javascriptUris.size() < 100) {
-				javascriptUris.add(javascriptPath);
-			}
-			
-			writeJavaScript(request, response);
-		}
-	}
+    private static final String DOMAIN_ORIGIN_IDENTIFIER = "%DOMAIN_ORIGIN%";
 
-	/**
-	 * whitelist the javascript servlet from csrf errors
-	 * @return the javascriptUris
-	 */
-	public static Set<String> getJavascriptUris() {
-		return javascriptUris;
-	}
+    private static final String DOMAIN_STRICT_IDENTIFIER = "%DOMAIN_STRICT%";
 
-	/** whitelist the javascript servlet from csrf errors */
-	private static Set<String> javascriptUris = new HashSet<String>();
-	
+    private static final String INJECT_INTO_XHR_IDENTIFIER = "%INJECT_XHR%";
 
-	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		CsrfGuard csrfGuard = CsrfGuard.getInstance();
-		String isFetchCsrfToken = request.getHeader("FETCH-CSRF-TOKEN");
-                // CUSTOM: workaround for IE8
-                if (isFetchCsrfToken == null) {
-                    isFetchCsrfToken = request.getParameter("FETCH-CSRF-TOKEN-PARAM");
-                }
-                // END CUSTOM
-		
-		if (csrfGuard != null && isFetchCsrfToken != null){
-			fetchCsrfToken(request, response);
-		} else {
-			if (csrfGuard != null && csrfGuard.isTokenPerPageEnabled()) {
-				writePageTokens(request, response);
-			} else {
-				response.sendError(404);
-			}
-		}
-	}
+    private static final String INJECT_INTO_FORMS_IDENTIFIER = "%INJECT_FORMS%";
 
-	private void fetchCsrfToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession(true);
-		@SuppressWarnings("unchecked")
-		CsrfGuard csrfGuard = CsrfGuard.getInstance();
-		String token_name = csrfGuard.getTokenName();
-		String token_value = (String) session.getAttribute(csrfGuard.getSessionKey());
-		String token_pair = token_name + ":" + token_value;
+    private static final String INJECT_GET_FORMS_IDENTIFIER = "%INJECT_GET_FORMS%";
 
-		/** setup headers **/
-		response.setContentType("text/plain");
+    private static final String INJECT_FORM_ATTRIBUTES_IDENTIFIER = "%INJECT_FORM_ATTRIBUTES%";
 
-		/** write dynamic javascript **/
-		OutputStream output = null;
-		PrintWriter writer = null;
+    private static final String INJECT_INTO_ATTRIBUTES_IDENTIFIER = "%INJECT_ATTRIBUTES%";
 
-		try {
-			output = response.getOutputStream();
-			writer = new PrintWriter(output);
+    private static final String CONTEXT_PATH_IDENTIFIER = "%CONTEXT_PATH%";
 
-			writer.write(token_pair);
-			writer.flush();
-		} finally {
-			Writers.close(writer);
-			Streams.close(output);
-		}
-	}
+    private static final String SERVLET_PATH_IDENTIFIER = "%SERVLET_PATH%";
 
+    private static final String X_REQUESTED_WITH_IDENTIFIER = "%X_REQUESTED_WITH%";
 
-	private void writePageTokens(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession(true);
-		@SuppressWarnings("unchecked")
-		Map<String, String> pageTokens = (Map<String, String>) session.getAttribute(CsrfGuard.PAGE_TOKENS_KEY);
-		String pageTokensString = (pageTokens != null ? parsePageTokens(pageTokens) : Strings.EMPTY);
+    private static final String TOKENS_PER_PAGE_IDENTIFIER = "%TOKENS_PER_PAGE%";
 
-		/** setup headers **/
-		response.setContentType("text/plain");
-		response.setContentLength(pageTokensString.length());
+    private static ServletConfig servletConfig = null;
 
-		/** write dynamic javascript **/
-		OutputStream output = null;
-		PrintWriter writer = null;
+    public static ServletConfig getStaticServletConfig() {
+        return servletConfig;
+    }
 
-		try {
-			output = response.getOutputStream();
-			writer = new PrintWriter(output);
+    @Override
+    public void init(ServletConfig theServletConfig) {
+        servletConfig = theServletConfig;
+        //print again since it might change based on servlet config of javascript servlet
+        CsrfGuardServletContextListener.printConfigIfConfigured(servletConfig.getServletContext(),
+                "Printing properties after Javascript servlet, note, the javascript properties have now been initialized: ");
+    }
 
-			writer.write(pageTokensString);
-			writer.flush();
-		} finally {
-			Writers.close(writer);
-			Streams.close(output);
-		}
-	}
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String refererHeader = request.getHeader("referer");
+        boolean hasError = false;
+        Pattern javascriptRefererPattern = CsrfGuard.getInstance().getJavascriptRefererPattern();
+        if (refererHeader != null && !javascriptRefererPattern.matcher(refererHeader).matches()) {
+            CsrfGuard.getInstance().getLogger().log(LogLevel.Error, "Referer domain " + refererHeader + " does not match regex: " + javascriptRefererPattern.pattern());
+            response.sendError(404);
+            hasError = true;
+        }
 
-	private void writeJavaScript(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession(true);
-		CsrfGuard csrfGuard = CsrfGuard.getInstance();
+        if (refererHeader != null && CsrfGuard.getInstance().isJavascriptRefererMatchDomain()) {
+            //this is something like http://something.com/path or https://something.com/path
+            String url = request.getRequestURL().toString();
+            String requestProtocolAndDomain = CsrfGuardUtils.httpProtocolAndDomain(url);
+            String refererProtocolAndDomain = CsrfGuardUtils.httpProtocolAndDomain(refererHeader);
+            if (!refererProtocolAndDomain.equals(requestProtocolAndDomain)) {
+                CsrfGuard.getInstance().getLogger().log(LogLevel.Error, "Referer domain " + refererHeader + " does not match request domain: " + url);
+                hasError = true;
+                response.sendError(404);
+            }
 
-		/** cannot cache if rotate or token-per-page is enabled **/
-		if (csrfGuard.isRotateEnabled() || csrfGuard.isTokenPerPageEnabled()) {
-			response.setHeader("Cache-Control", "no-cache, no-store");
-			response.setHeader("Pragma", "no-cache");
-			response.setHeader("Expires", "0");
-		} else {
-			response.setHeader("Cache-Control", CsrfGuard.getInstance().getJavascriptCacheControl());
-		}
+        }
+        if (!hasError) {
 
-		response.setContentType("text/javascript");
+            //save this path so javascript is whitelisted
+            String javascriptPath = request.getContextPath() + request.getServletPath();
 
-		/** build dynamic javascript **/
-		String code = CsrfGuard.getInstance().getJavascriptTemplateCode();
+            //dont know why there would be more than one... hmmm
+            if (javascriptUris.size() < 100) {
+                javascriptUris.add(javascriptPath);
+            }
 
-		code = code.replace(TOKEN_NAME_IDENTIFIER, CsrfGuardUtils.defaultString(csrfGuard.getTokenName()));
-		code = code.replace(TOKEN_VALUE_IDENTIFIER, CsrfGuardUtils.defaultString((String) session.getAttribute(csrfGuard.getSessionKey())));
-		code = code.replace(INJECT_INTO_FORMS_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectIntoForms()));
-		code = code.replace(INJECT_GET_FORMS_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectGetForms()));
-		code = code.replace(INJECT_FORM_ATTRIBUTES_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectFormAttributes()));
-		code = code.replace(INJECT_INTO_ATTRIBUTES_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectIntoAttributes()));
-		code = code.replace(INJECT_INTO_XHR_IDENTIFIER, String.valueOf(csrfGuard.isAjaxEnabled()));
-		code = code.replace(TOKENS_PER_PAGE_IDENTIFIER, String.valueOf(csrfGuard.isTokenPerPageEnabled()));
-		code = code.replace(DOMAIN_ORIGIN_IDENTIFIER, CsrfGuardUtils.defaultString(parseDomain(request.getRequestURL())));
-		code = code.replace(DOMAIN_STRICT_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptDomainStrict()));
-		code = code.replace(CONTEXT_PATH_IDENTIFIER, CsrfGuardUtils.defaultString(request.getContextPath()));
-		code = code.replace(SERVLET_PATH_IDENTIFIER, CsrfGuardUtils.defaultString(request.getContextPath() + request.getServletPath()));
-		code = code.replace(X_REQUESTED_WITH_IDENTIFIER, CsrfGuardUtils.defaultString(csrfGuard.getJavascriptXrequestedWith()));
+            writeJavaScript(request, response);
+        }
+    }
 
-		/** write dynamic javascript **/
-		OutputStream output = null;
-		PrintWriter writer = null;
+    /**
+     * whitelist the javascript servlet from csrf errors
+     *
+     * @return the javascriptUris
+     */
+    public static Set<String> getJavascriptUris() {
+        return javascriptUris;
+    }
 
-		try {
-			output = response.getOutputStream();
-			writer = new PrintWriter(output);
+    /**
+     * whitelist the javascript servlet from csrf errors
+     */
+    private static Set<String> javascriptUris = new HashSet<String>();
 
-			writer.write(code);
-			writer.flush();
-		} finally {
-			Writers.close(writer);
-			Streams.close(output);
-		}
-	}
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        CsrfGuard csrfGuard = CsrfGuard.getInstance();
+        String isFetchCsrfToken = request.getHeader("FETCH-CSRF-TOKEN");
+        // CUSTOM: workaround for IE8
+        if (isFetchCsrfToken == null) {
+            isFetchCsrfToken = request.getParameter("FETCH-CSRF-TOKEN-PARAM");
+        }
+        // END CUSTOM
 
-	private String parsePageTokens(Map<String, String> pageTokens) {
-		StringBuilder sb = new StringBuilder();
-		Iterator<String> keys = pageTokens.keySet().iterator();
+        if (csrfGuard != null && isFetchCsrfToken != null) {
+            fetchCsrfToken(request, response);
+        } else {
+            if (csrfGuard != null && csrfGuard.isTokenPerPageEnabled()) {
+                writePageTokens(request, response);
+            } else {
+                response.sendError(404);
+            }
+        }
+    }
 
-		while (keys.hasNext()) {
-			String key = keys.next();
-			String value = pageTokens.get(key);
+    private void fetchCsrfToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(true);
+        @SuppressWarnings("unchecked")
+        CsrfGuard csrfGuard = CsrfGuard.getInstance();
+        String token_name = csrfGuard.getTokenName();
+        String token_value = (String) session.getAttribute(csrfGuard.getSessionKey());
+        String token_pair = token_name + ":" + token_value;
 
-			sb.append(key);
-			sb.append(':');
-			sb.append(value);
+        /**
+         * setup headers *
+         */
+        response.setContentType("text/plain");
 
-			if (keys.hasNext()) {
-				sb.append(',');
-			}
-		}
+        /**
+         * write dynamic javascript *
+         */
+        OutputStream output = null;
+        PrintWriter writer = null;
 
-		return sb.toString();
-	}
-	
+        try {
+            output = response.getOutputStream();
+            writer = new PrintWriter(output);
 
-	private String parseDomain(StringBuffer url) {
-		String token = "://";
-		int index = url.indexOf(token);
-		String part = url.substring(index + token.length());
-		StringBuilder domain = new StringBuilder();
+            writer.write(token_pair);
+            writer.flush();
+        } finally {
+            Writers.close(writer);
+            Streams.close(output);
+        }
+    }
 
-		for (int i = 0; i < part.length(); i++) {
-			char character = part.charAt(i);
+    private void writePageTokens(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(true);
+        @SuppressWarnings("unchecked")
+        Map<String, String> pageTokens = (Map<String, String>) session.getAttribute(CsrfGuard.PAGE_TOKENS_KEY);
+        String pageTokensString = (pageTokens != null ? parsePageTokens(pageTokens) : Strings.EMPTY);
 
-			if (character == '/' || character == ':') {
-				break;
-			}
+        /**
+         * setup headers *
+         */
+        response.setContentType("text/plain");
+        response.setContentLength(pageTokensString.length());
 
-			domain.append(character);
-		}
+        /**
+         * write dynamic javascript *
+         */
+        OutputStream output = null;
+        PrintWriter writer = null;
 
-		return domain.toString();
-	}
-	
+        try {
+            output = response.getOutputStream();
+            writer = new PrintWriter(output);
+
+            writer.write(pageTokensString);
+            writer.flush();
+        } finally {
+            Writers.close(writer);
+            Streams.close(output);
+        }
+    }
+
+    private void writeJavaScript(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(true);
+        CsrfGuard csrfGuard = CsrfGuard.getInstance();
+
+        /**
+         * cannot cache if rotate or token-per-page is enabled *
+         */
+        if (csrfGuard.isRotateEnabled() || csrfGuard.isTokenPerPageEnabled()) {
+            response.setHeader("Cache-Control", "no-cache, no-store");
+            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Expires", "0");
+        } else {
+            response.setHeader("Cache-Control", CsrfGuard.getInstance().getJavascriptCacheControl());
+        }
+
+        response.setContentType("text/javascript");
+
+        /**
+         * build dynamic javascript *
+         */
+        String code = CsrfGuard.getInstance().getJavascriptTemplateCode();
+
+        code = code.replace(TOKEN_NAME_IDENTIFIER, CsrfGuardUtils.defaultString(csrfGuard.getTokenName()));
+        code = code.replace(TOKEN_VALUE_IDENTIFIER, CsrfGuardUtils.defaultString((String) session.getAttribute(csrfGuard.getSessionKey())));
+        code = code.replace(INJECT_INTO_FORMS_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectIntoForms()));
+        code = code.replace(INJECT_GET_FORMS_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectGetForms()));
+        code = code.replace(INJECT_FORM_ATTRIBUTES_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectFormAttributes()));
+        code = code.replace(INJECT_INTO_ATTRIBUTES_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptInjectIntoAttributes()));
+        code = code.replace(INJECT_INTO_XHR_IDENTIFIER, String.valueOf(csrfGuard.isAjaxEnabled()));
+        code = code.replace(TOKENS_PER_PAGE_IDENTIFIER, String.valueOf(csrfGuard.isTokenPerPageEnabled()));
+        code = code.replace(DOMAIN_ORIGIN_IDENTIFIER, CsrfGuardUtils.defaultString(parseDomain(request.getRequestURL())));
+        code = code.replace(DOMAIN_STRICT_IDENTIFIER, Boolean.toString(csrfGuard.isJavascriptDomainStrict()));
+        code = code.replace(CONTEXT_PATH_IDENTIFIER, CsrfGuardUtils.defaultString(request.getContextPath()));
+        code = code.replace(SERVLET_PATH_IDENTIFIER, CsrfGuardUtils.defaultString(request.getContextPath() + request.getServletPath()));
+        code = code.replace(X_REQUESTED_WITH_IDENTIFIER, CsrfGuardUtils.defaultString(csrfGuard.getJavascriptXrequestedWith()));
+
+        /**
+         * write dynamic javascript *
+         */
+        OutputStream output = null;
+        PrintWriter writer = null;
+
+        try {
+            output = response.getOutputStream();
+            writer = new PrintWriter(output);
+
+            writer.write(code);
+            writer.flush();
+        } finally {
+            Writers.close(writer);
+            Streams.close(output);
+        }
+    }
+
+    private String parsePageTokens(Map<String, String> pageTokens) {
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> keys = pageTokens.keySet().iterator();
+
+        while (keys.hasNext()) {
+            String key = keys.next();
+            String value = pageTokens.get(key);
+
+            sb.append(key);
+            sb.append(':');
+            sb.append(value);
+
+            if (keys.hasNext()) {
+                sb.append(',');
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private String parseDomain(StringBuffer url) {
+        String token = "://";
+        int index = url.indexOf(token);
+        String part = url.substring(index + token.length());
+        StringBuilder domain = new StringBuilder();
+
+        for (int i = 0; i < part.length(); i++) {
+            char character = part.charAt(i);
+
+            if (character == '/' || character == ':') {
+                break;
+            }
+
+            domain.append(character);
+        }
+
+        return domain.toString();
+    }
+
 }

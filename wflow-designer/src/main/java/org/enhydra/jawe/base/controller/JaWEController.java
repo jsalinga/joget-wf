@@ -295,11 +295,11 @@ public class JaWEController extends Observable implements
             changed = true;
         }
 
-      String verInfo = JaWEManager.getVersion()
-                       + "-" + JaWEManager.getRelease() + "-"
-                       + JaWEManager.getBuildEdition()
-                       + JaWEManager.getBuildEditionSuffix() + "-"
-                       + JaWEManager.getBuildNo();
+        String verInfo = JaWEManager.getVersion()
+                + "-" + JaWEManager.getRelease() + "-"
+                + JaWEManager.getBuildEdition()
+                + JaWEManager.getBuildEditionSuffix() + "-"
+                + JaWEManager.getBuildNo();
         if (!JaWEEAHandler.getEditingToolVersion(pkg).equals(verInfo)) {
             JaWEEAHandler.setEditingToolVersion(pkg, verInfo);
             changed = true;
@@ -545,11 +545,11 @@ public class JaWEController extends Observable implements
             String className = settings.getResolverTypeClassName();
 
             Constructor c = Class.forName(className).getConstructor(new Class[]{
-                        JaWEController.class
-                    });
+                JaWEController.class
+            });
             jtypeResolver = (JaWETypeResolver) c.newInstance(new Object[]{
-                        this
-                    });
+                this
+            });
             JaWEManager.getInstance().getLoggingManager().info("JaWEController -> Working with '" + className + "' as type resolver");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -2301,8 +2301,9 @@ public class JaWEController extends Observable implements
     ValueFilter valueFilter = new PluggableValueFilter();
 
     /**
-     * Return the plugin manager. All operations on plugins
-     * are done thru this manager.
+     * Return the plugin manager. All operations on plugins are done thru this
+     * manager.
+     *
      * @since JPEd-plugins
      */
     public PluginsManager getPluginsManager() {
@@ -2310,9 +2311,10 @@ public class JaWEController extends Observable implements
     }
 
     /**
-     * Acquire the global value filter. It may dispatch to plugins
-     * depending on interface implementation. Always use a ValueFilter
-     * instead of calling XMLElement.toValue() directly
+     * Acquire the global value filter. It may dispatch to plugins depending on
+     * interface implementation. Always use a ValueFilter instead of calling
+     * XMLElement.toValue() directly
+     *
      * @return The ValueFilter
      * @since JPEd-plugins
      */
@@ -2322,6 +2324,7 @@ public class JaWEController extends Observable implements
 
     /**
      * shortcut to getValueFilter().getValue(element.get(property))
+     *
      * @param element the XMLComplexElement which property is to be filtered
      * @param property the property to filter
      * @return the filtered property or null of property does not exist

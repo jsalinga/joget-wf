@@ -11,9 +11,9 @@
         <property column="timeZone" name="timeZone" type="string"/>
         <property column="locale" name="locale" type="string"/>
         <property column="active" name="active" type="integer"/>
-		<property column="address" name="address" type="string"/>
-		<property column="privateKey" name="privateKey" type="string"/>
-		<property column="publicKey" name="publicKey" type="string"/>
+        <property column="address" name="address" type="string"/>
+        <property column="privateKey" name="privateKey" type="string"/>
+        <property column="publicKey" name="publicKey" type="string"/>
         <!-- join tables -->
         <set name="roles" table="dir_user_role">
             <key column="userId"/>

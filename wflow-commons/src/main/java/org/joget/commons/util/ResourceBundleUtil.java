@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Utility method to get i18n label
- * 
+ *
  */
 @Service("resourceBundleUtil")
 public class ResourceBundleUtil implements ApplicationContextAware {
@@ -34,7 +34,8 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getApplicationContext() {
         return appContext;
@@ -42,8 +43,9 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Method used for system to set ApplicationContext
+     *
      * @param context
-     * @throws BeansException 
+     * @throws BeansException
      */
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         appContext = context;
@@ -51,7 +53,8 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Utility method to retrieve the Setup ApplicationContext of the system
-     * @return 
+     *
+     * @return
      */
     public static ApplicationContext getSetupApplicationContext() {
         if (setupAppContext == null) {
@@ -62,7 +65,8 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the message source
-     * @return 
+     *
+     * @return
      */
     public static MessageSourceAccessor getMessageSource() {
         if (messages == null) {
@@ -80,13 +84,14 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Method used to import message from PO file
+     *
      * @param multipartFile
      * @param locale
-     * @throws IOException 
+     * @throws IOException
      */
     public static void POFileImport(MultipartFile multipartFile, String locale) throws IOException {
 
-    InputStream inputStream = null;
+        InputStream inputStream = null;
         try {
             inputStream = multipartFile.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
@@ -114,7 +119,7 @@ public class ResourceBundleUtil implements ApplicationContextAware {
                             keys.add(t);
                         }
                     }
-                    
+
                 } else if (line.length() > 8 && locale != null && !keys.isEmpty() && line.substring(0, 7).equalsIgnoreCase("msgid \"")) {
                     //this is the original string
                     original = line.substring(7, line.length() - 1);
@@ -145,12 +150,12 @@ public class ResourceBundleUtil implements ApplicationContextAware {
                                 resourceBundleMessage = new ResourceBundleMessage();
                                 resourceBundleMessage.setKey(key);
                                 resourceBundleMessage.setLocale(locale);
-                            }   
+                            }
                             resourceBundleMessage.setMessage(translated);
                             resourceBundleMessageList.add(resourceBundleMessage);
                         }
                     }
-                    
+
                     keys = new HashSet<String>();
                     original = null;
                     translated = null;
@@ -176,7 +181,8 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Method used by the system to get resource bundle message dao
-     * @return 
+     *
+     * @return
      */
     public static ResourceBundleMessageDao getResourceBundleMessageDao() {
         if (resourceBundleMessageDao == null) {
@@ -187,8 +193,9 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the i18n message based on code
+     *
      * @param code
-     * @return 
+     * @return
      */
     public static String getMessage(String code) {
         try {
@@ -199,9 +206,10 @@ public class ResourceBundleUtil implements ApplicationContextAware {
     }
 
     /**
-     * Gets the i18n message with arguments based on code 
+     * Gets the i18n message with arguments based on code
+     *
      * @param code
-     * @return 
+     * @return
      */
     public static String getMessage(String code, Object[] args) {
         try {
@@ -213,6 +221,7 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the i18n message with arguments based on code
+     *
      * @param code
      * @param args
      * @param defaultMessage
@@ -228,6 +237,7 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the i18n message based on code
+     *
      * @param code
      * @param defaultMessage
      * @return default message if i18n message not found
@@ -239,12 +249,13 @@ public class ResourceBundleUtil implements ApplicationContextAware {
             return null;
         }
     }
-    
+
     /**
      * Gets the i18n message based on code and locale
+     *
      * @param code
      * @param locale
-     * @return 
+     * @return
      */
     public static String getMessage(String code, Locale locale) {
         try {
@@ -256,10 +267,11 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the i18n message with arguments based on code and locale
+     *
      * @param code
      * @param args
      * @param locale
-     * @return 
+     * @return
      */
     public static String getMessage(String code, Object[] args, Locale locale) {
         try {
@@ -271,6 +283,7 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the i18n message with arguments based on code and locale
+     *
      * @param code
      * @param args
      * @param defaultMessage
@@ -287,6 +300,7 @@ public class ResourceBundleUtil implements ApplicationContextAware {
 
     /**
      * Gets the i18n message based on code and locale
+     *
      * @param code
      * @param defaultMessage
      * @param locale
@@ -299,5 +313,5 @@ public class ResourceBundleUtil implements ApplicationContextAware {
             return null;
         }
     }
-    
+
 }

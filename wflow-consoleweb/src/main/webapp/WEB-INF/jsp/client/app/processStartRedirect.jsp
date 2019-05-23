@@ -6,8 +6,8 @@
         <jsp:include page="/WEB-INF/jsp/includes/scripts.jsp" />
         <script>
             $(document).ready(function(){
-               $("#postStart").append('<input name="'+ConnectionManager.tokenName+'" value="'+ConnectionManager.tokenValue+'" type="hidden" />');
-               $("#postStart").submit(); 
+            $("#postStart").append('<input name="'+ConnectionManager.tokenName+'" value="'+ConnectionManager.tokenValue+'" type="hidden" />');
+            $("#postStart").submit(); 
             });
         </script>
     </head>

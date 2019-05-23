@@ -17,34 +17,34 @@ import org.enhydra.shark.xpdl.elements.WorkflowProcess;
 
 public class XMLTransitionPanel extends XMLGroupPanel {
 
-   public XMLTransitionPanel(PanelContainer pc,
-                        XMLElement myOwnerL,
-                        Object[] elements,
-                        String title,
-                        boolean isVertical,
-                        boolean hasBorder,
-                        boolean hasEmptyBorder) {
-      super(pc,
-           myOwnerL,
-           Arrays.asList(elements),
-           title,
-           isVertical,
-           hasBorder,
-           hasEmptyBorder);
-   }
+    public XMLTransitionPanel(PanelContainer pc,
+            XMLElement myOwnerL,
+            Object[] elements,
+            String title,
+            boolean isVertical,
+            boolean hasBorder,
+            boolean hasEmptyBorder) {
+        super(pc,
+                myOwnerL,
+                Arrays.asList(elements),
+                title,
+                isVertical,
+                hasBorder,
+                hasEmptyBorder);
+    }
 
-   public XMLTransitionPanel(PanelContainer pc,
-                        XMLElement myOwnerL,
-                        List elements,
-                        String title,
-                        boolean isVertical,
-                        boolean hasBorder,
-                        boolean hasEmptyBorder) {
+    public XMLTransitionPanel(PanelContainer pc,
+            XMLElement myOwnerL,
+            List elements,
+            String title,
+            boolean isVertical,
+            boolean hasBorder,
+            boolean hasEmptyBorder) {
 
-      super(pc, myOwnerL, elements, title, isVertical, hasBorder, hasEmptyBorder);
-   }
+        super(pc, myOwnerL, elements, title, isVertical, hasBorder, hasEmptyBorder);
+    }
 
-   public static final String DEFAULT_VARIABLE = "status";
+    public static final String DEFAULT_VARIABLE = "status";
 
     @Override
     public void setElements() {
@@ -56,14 +56,14 @@ public class XMLTransitionPanel extends XMLGroupPanel {
      * Suggest to automatically add a Condition if a name is specified
      */
     protected void suggestCondition() {
-        Transition transition = (Transition)getOwner();
+        Transition transition = (Transition) getOwner();
         String name = transition.getName();
         Condition condition = transition.getCondition();
         String conditionType = (condition != null) ? condition.getType() : "";
         String expression = (condition != null) ? condition.toValue() : "";
 
         // check when transition name is specified and no existing condition
-        if (name != null && name.trim().length() > 0 
+        if (name != null && name.trim().length() > 0
                 && conditionType.trim().length() == 0 || conditionType.equals(XPDLConstants.CONDITION_TYPE_CONDITION)
                 && expression.trim().length() == 0) {
 
@@ -90,6 +90,7 @@ public class XMLTransitionPanel extends XMLGroupPanel {
 
     /**
      * Check for existence of the default variable
+     *
      * @return name of the default variable, null if not created
      */
     protected String checkDefaultVariable(Transition transition) {
@@ -105,6 +106,7 @@ public class XMLTransitionPanel extends XMLGroupPanel {
 
     /**
      * Create default variable if no existing variables
+     *
      * @return name of the created variable, null if not created
      */
     protected void createDefaultVariable(Transition transition, String variableName) {
@@ -113,7 +115,7 @@ public class XMLTransitionPanel extends XMLGroupPanel {
         if (dataFieldMap.isEmpty() || dataFieldMap.get(variableName) == null) {
             // default variable does not exist, create new one
             DataFields dfs = process.getDataFields();
-            DataField df = (DataField)dfs.generateNewElement();
+            DataField df = (DataField) dfs.generateNewElement();
             df.setId(variableName);
             dfs.add(df);
         }
@@ -121,6 +123,7 @@ public class XMLTransitionPanel extends XMLGroupPanel {
 
     /**
      * Add condition expression variable == 'value'
+     *
      * @param variable
      * @param value
      */

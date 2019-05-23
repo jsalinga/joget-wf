@@ -9,8 +9,9 @@ import java.util.Map;
  * Contains meta data regarding a data list column
  */
 public class DataListColumn {
+
     private Map<String, Object> properties;
-    
+
     public Map<String, Object> getProperties() {
         return properties;
     }
@@ -18,17 +19,17 @@ public class DataListColumn {
     public void setProperties(Map<String, Object> properties) {
         this.properties = properties;
     }
-    
+
     public Object getProperty(String property) {
         Object value = (properties != null) ? properties.get(property) : null;
         return value;
     }
-    
+
     public String getPropertyString(String property) {
         String value = (properties != null && properties.get(property) != null) ? (String) properties.get(property) : "";
         return value;
     }
-    
+
     public void setProperty(String property, Object value) {
         if (properties == null) {
             properties = new HashMap<String, Object>();
@@ -68,17 +69,17 @@ public class DataListColumn {
      * Column Style
      */
     private String style;
-    
+
     /**
      * Column alignment
      */
     private String alignment;
-    
+
     /**
      * Column header alignment
      */
     private String headerAlignment;
-    
+
     /**
      * Optional action for this column
      */
@@ -101,6 +102,7 @@ public class DataListColumn {
 
     /**
      * Convenience method to add a format to this column
+     *
      * @param format
      * @return
      */
@@ -151,7 +153,7 @@ public class DataListColumn {
     public void setWidth(String width) {
         this.width = width;
     }
-    
+
     public String getAlignment() {
         if (alignment == null) {
             alignment = "";
@@ -162,7 +164,7 @@ public class DataListColumn {
     public void setAlignment(String alignment) {
         this.alignment = alignment;
     }
-    
+
     public String getHeaderAlignment() {
         if (headerAlignment == null) {
             headerAlignment = "";
@@ -182,7 +184,7 @@ public class DataListColumn {
             if (!style.isEmpty() && !style.endsWith(";")) {
                 style += ";";
             }
-            style += "width:"+ getWidth() + ";";
+            style += "width:" + getWidth() + ";";
             width = null;
         }
         return style;
@@ -191,7 +193,7 @@ public class DataListColumn {
     public void setStyle(String style) {
         this.style = style;
     }
-    
+
     public DataListAction getAction() {
         return action;
     }
@@ -215,7 +217,7 @@ public class DataListColumn {
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public Boolean isRenderHtml() {
         return renderHtml;
     }

@@ -17,26 +17,29 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Utility method used to deal with Plugin Properties Options values (JSON format)
- * 
+ * Utility method used to deal with Plugin Properties Options values (JSON
+ * format)
+ *
  */
 public class PropertyUtil {
+
     public final static String PASSWORD_PROTECTED_VALUE = "****SECURE_VALUE****-";
     public final static String TYPE_PASSWORD = "password";
     public final static String TYPE_ELEMENT_SELECT = "elementselect";
     public final static String PROPERTIES_EDITOR_METAS = "PROPERTIES_EDITOR_METAS";
 
     /**
-     * Parses default properties string (JSON format) from Plugin Properties 
+     * Parses default properties string (JSON format) from Plugin Properties
      * Options (JSON format)
+     *
      * @param json
-     * @return 
+     * @return
      */
     public static String getDefaultPropertyValues(String json) {
         try {
             JSONArray pages = new JSONArray(json);
             JSONObject values = new JSONObject();
-            
+
             //loop page
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject page = (JSONObject) pages.get(i);
@@ -52,7 +55,7 @@ public class PropertyUtil {
                     }
                 }
             }
-            
+
             return values.toString();
         } catch (Exception ex) {
             LogUtil.error("PropertyUtil", ex, json);
@@ -61,15 +64,16 @@ public class PropertyUtil {
     }
 
     /**
-     * Parses the Plugin Properties Options values (JSON format) into a properties
-     * map
+     * Parses the Plugin Properties Options values (JSON format) into a
+     * properties map
+     *
      * @param json
      * @return
      */
     public static Map<String, Object> getPropertiesValueFromJson(String json) {
         try {
             if (json != null) {
-                json = json.replaceAll("\n","\\\\n").replaceAll("\r","\\\\r");
+                json = json.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
             }
             JSONObject obj = new JSONObject(json);
             return getProperties(obj);
@@ -81,8 +85,9 @@ public class PropertyUtil {
 
     /**
      * Convenient method used by system to parses a JSON object in to a map
+     *
      * @param obj
-     * @return 
+     * @return
      */
     public static Map<String, Object> getProperties(JSONObject obj) {
         Map<String, Object> properties = new HashMap<String, Object>();
@@ -135,12 +140,13 @@ public class PropertyUtil {
         }
         return array.toArray();
     }
-    
+
     /**
-     * Convenient method used by system to hide secure values in Plugin Properties 
-     * Options values (JSON format)
+     * Convenient method used by system to hide secure values in Plugin
+     * Properties Options values (JSON format)
+     *
      * @param json
-     * @return 
+     * @return
      */
     public static String propertiesJsonLoadProcessing(String json) {
         //parse content
@@ -164,20 +170,21 @@ public class PropertyUtil {
                 LogUtil.error(PropertyUtil.class.getName(), ex, "");
             }
         }
-        
+
         return json;
     }
-    
+
     /**
-     * Convenient method used by system to reverse the replaced/hided secure values in Plugin Properties 
-     * Options values (JSON format)
+     * Convenient method used by system to reverse the replaced/hided secure
+     * values in Plugin Properties Options values (JSON format)
+     *
      * @param oldJson
      * @param newJson
-     * @return 
+     * @return
      */
     public static String propertiesJsonStoreProcessing(String oldJson, String newJson) {
         Map<String, String> passwordProperty = new HashMap<String, String>();
-        
+
         if (oldJson != null && !oldJson.isEmpty() && oldJson.contains(SecurityUtil.ENVELOPE)) {
             Pattern pattern = Pattern.compile(SecurityUtil.ENVELOPE + "((?!" + SecurityUtil.ENVELOPE + ").)*" + SecurityUtil.ENVELOPE);
             Matcher matcher = pattern.matcher(oldJson);
@@ -185,7 +192,7 @@ public class PropertyUtil {
             while (matcher.find()) {
                 sList.add(matcher.group(0));
             }
-            
+
             if (!sList.isEmpty()) {
                 int count = 0;
                 for (String s : sList) {
@@ -194,7 +201,7 @@ public class PropertyUtil {
                 }
             }
         }
-        
+
         if (newJson != null && !newJson.isEmpty() && (newJson.contains(SecurityUtil.ENVELOPE) || newJson.contains(PASSWORD_PROTECTED_VALUE))) {
             Pattern pattern = Pattern.compile(SecurityUtil.ENVELOPE + "((?!" + SecurityUtil.ENVELOPE + ").)*" + SecurityUtil.ENVELOPE);
             Matcher matcher = pattern.matcher(newJson);
@@ -202,20 +209,20 @@ public class PropertyUtil {
             while (matcher.find()) {
                 sList.add(matcher.group(0));
             }
-            
-            Pattern pattern2 = Pattern.compile("\"("+StringUtil.escapeRegex(PASSWORD_PROTECTED_VALUE)+"[^\"]*)\"");
+
+            Pattern pattern2 = Pattern.compile("\"(" + StringUtil.escapeRegex(PASSWORD_PROTECTED_VALUE) + "[^\"]*)\"");
             Matcher matcher2 = pattern2.matcher(newJson);
             while (matcher2.find()) {
                 sList.add(SecurityUtil.ENVELOPE + matcher2.group(1) + SecurityUtil.ENVELOPE);
                 newJson = newJson.replaceAll(StringUtil.escapeRegex(matcher2.group(1)), SecurityUtil.ENVELOPE + StringUtil.escapeRegex(matcher2.group(1)) + SecurityUtil.ENVELOPE);
             }
-            
+
             //For datalist binder initialization (getBuilderDataColumnList) 
             if (newJson.startsWith(PASSWORD_PROTECTED_VALUE)) {
                 sList.add(SecurityUtil.ENVELOPE + newJson + SecurityUtil.ENVELOPE);
                 newJson = SecurityUtil.ENVELOPE + newJson + SecurityUtil.ENVELOPE;
             }
-            
+
             try {
                 if (!sList.isEmpty()) {
                     for (String s : sList) {
@@ -233,10 +240,10 @@ public class PropertyUtil {
                 LogUtil.error(PropertyUtil.class.getName(), ex, "");
             }
         }
-        
+
         return newJson;
     }
-    
+
     public static String injectHelpLink(String helpLink, String json) {
         if (json == null || json.isEmpty()) {
             json = "[]";
@@ -248,7 +255,8 @@ public class PropertyUtil {
                     jarr.getJSONObject(0).put("helplink", helpLink);
                 }
                 json = jarr.toString(4);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return json;
     }

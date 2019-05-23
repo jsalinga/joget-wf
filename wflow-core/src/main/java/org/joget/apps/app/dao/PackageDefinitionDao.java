@@ -14,6 +14,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Loads the package definition for a specific app version
+     *
      * @param appId
      * @param appVersion
      * @return
@@ -22,6 +23,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Loads the package definition based on a process definition ID
+     *
      * @param packageId
      * @param packageVersion
      * @return
@@ -30,6 +32,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Loads the package definition based on a process definition ID
+     *
      * @param packageVersion
      * @param processDefId
      * @return
@@ -38,6 +41,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Create package definition for an app
+     *
      * @param appDef
      * @param packageVersion
      * @return
@@ -46,6 +50,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Update the package version for a package definition
+     *
      * @param packageDef
      * @param packageVersion
      * @return
@@ -54,6 +59,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Add a form/URL mapping to an activity
+     *
      * @param appId
      * @param appVersion
      * @param activityForm
@@ -62,6 +68,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Remove a form/URL mapping from an activity
+     *
      * @param appId
      * @param appVersion
      * @param processDefId
@@ -71,6 +78,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Add a plugin mapping to an activity
+     *
      * @param appId
      * @param appVersion
      * @param activityPlugin
@@ -79,6 +87,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Remove a plugin mapping from an activity
+     *
      * @param appId
      * @param appVersion
      * @param processDefId
@@ -88,6 +97,7 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Add a participant mapping
+     *
      * @param appId
      * @param appVersion
      * @param participant
@@ -96,22 +106,25 @@ public interface PackageDefinitionDao extends VersionedObjectDao<PackageDefiniti
 
     /**
      * Remove a participant mapping
+     *
      * @param appId
      * @param appVersion
      * @param processDefId
      * @param participantId
      */
     void removeAppParticipant(String appId, Long appVersion, String processDefId, String participantId);
-    
+
     /**
      * Get all package versions in used
+     *
      * @param packageId
      * @return
      */
     Collection<Long> getPackageVersions(String packageId);
-    
+
     /**
      * Get AppDefinition by package id and version
+     *
      * @param packageId
      * @param packageVersion
      * @return

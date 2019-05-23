@@ -3,6 +3,7 @@ package org.joget.workflow.model;
 import java.io.Serializable;
 
 public class WorkflowProcessLink implements Serializable {
+
     private String processId;
     private String parentProcessId;
     private String originProcessId;

@@ -13,14 +13,15 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     public CachedUserviewMenu() {
     }
-    
+
     public CachedUserviewMenu(UserviewMenu delegate) {
         this.delegate = delegate;
     }
 
     /**
      * Return plugin label. This value will be used when a Resource Bundle
-     * Message Key "<i>plugin.className</i>.pluginlabel" is not found by getI18nLabel() method.
+     * Message Key "<i>plugin.className</i>.pluginlabel" is not found by
+     * getI18nLabel() method.
      *
      * @return
      */
@@ -31,6 +32,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Return Class Name for the plugin.
+     *
      * @return
      */
     @Override
@@ -39,7 +41,8 @@ public class CachedUserviewMenu extends UserviewMenu {
     }
 
     /**
-     * Return a unique name for the plugin. You can override a existing System plugin by providing the same name as the System plugin.
+     * Return a unique name for the plugin. You can override a existing System
+     * plugin by providing the same name as the System plugin.
      *
      * @return
      */
@@ -60,7 +63,8 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Return a plugin description. This value will be used when a Resource
-     * Bundle Message Key "plugin.className.pluginDesc" is not found by getI18nDescription method.
+     * Bundle Message Key "plugin.className.pluginDesc" is not found by
+     * getI18nDescription method.
      *
      * @return
      */
@@ -90,11 +94,13 @@ public class CachedUserviewMenu extends UserviewMenu {
     /**
      * Return a plugin label for the plugin based on language setting.
      *
-     * It will auto look for Resource Bundle Message Key "<i>plugin.className</i>.pluginLabel".
-     * If resource key not found, org.joget.plugin.property.model.PropertyEditable.getLabel()
-     * will be use if the plugin also implemented org.joget.plugin.property.model.PropertyEditable
-     * interface. Else, value from getName() method is use. OSGI plugin is required
-     * to override this method to provide an internationalization label.
+     * It will auto look for Resource Bundle Message Key
+     * "<i>plugin.className</i>.pluginLabel". If resource key not found,
+     * org.joget.plugin.property.model.PropertyEditable.getLabel() will be use
+     * if the plugin also implemented
+     * org.joget.plugin.property.model.PropertyEditable interface. Else, value
+     * from getName() method is use. OSGI plugin is required to override this
+     * method to provide an internationalization label.
      *
      * @return
      */
@@ -105,9 +111,11 @@ public class CachedUserviewMenu extends UserviewMenu {
     /**
      * Return a plugin description for the plugin based on language setting.
      *
-     * It will auto look for Resource Bundle Message Key "<i>plugin.className</i>.pluginDesc".
-     * If resource key not found, value from org.joget.plugin.base.Plugin.getDescription() is use.
-     * OSGI plugin is required to override this method to provide an internationalization description.
+     * It will auto look for Resource Bundle Message Key
+     * "<i>plugin.className</i>.pluginDesc". If resource key not found, value
+     * from org.joget.plugin.base.Plugin.getDescription() is use. OSGI plugin is
+     * required to override this method to provide an internationalization
+     * description.
      *
      * @return
      */
@@ -117,6 +125,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Get plugin properties.
+     *
      * @return
      */
     public Map<String, Object> getProperties() {
@@ -125,6 +134,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Set plugin properties.
+     *
      * @param properties
      */
     public void setProperties(Map<String, Object> properties) {
@@ -141,8 +151,9 @@ public class CachedUserviewMenu extends UserviewMenu {
     }
 
     /**
-     * Get a plugin property value by property key and return in java.lang.String. Non-exist key
-     * will return an empty string instead of NULL value.
+     * Get a plugin property value by property key and return in
+     * java.lang.String. Non-exist key will return an empty string instead of
+     * NULL value.
      *
      * @param property
      */
@@ -163,9 +174,10 @@ public class CachedUserviewMenu extends UserviewMenu {
     /**
      * Return a set of plugin properties to configure by admin user
      *
-     * @Deprecated Since version 3, Joget Workflow introduced a better UI for plugin
-     * configuration. A plugin should implement org.joget.plugin.property.model.PropertyEditable
-     * interface to provide the plugin configuration options.
+     * @Deprecated Since version 3, Joget Workflow introduced a better UI for
+     * plugin configuration. A plugin should implement
+     * org.joget.plugin.property.model.PropertyEditable interface to provide the
+     * plugin configuration options.
      *
      * @return
      */
@@ -176,10 +188,11 @@ public class CachedUserviewMenu extends UserviewMenu {
     /**
      * To execute a plugin
      *
-     * @Deprecated This method is only use by Process Tool plugin therefore it had
-     * been moved to org.joget.plugin.base.DefaultApplicationPlugin
+     * @Deprecated This method is only use by Process Tool plugin therefore it
+     * had been moved to org.joget.plugin.base.DefaultApplicationPlugin
      *
-     * @param pluginProperties Properties to be used by the plugin during execution
+     * @param pluginProperties Properties to be used by the plugin during
+     * execution
      *
      * @return
      */
@@ -189,6 +202,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Gets request parameters
+     *
      * @return
      */
     public Map getRequestParameters() {
@@ -197,6 +211,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Sets request parameters
+     *
      * @param requestParameters
      */
     public void setRequestParameters(Map requestParameters) {
@@ -205,6 +220,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Convenience method to get a parameter value
+     *
      * @param requestParameter
      * @return
      */
@@ -214,6 +230,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Convenience method to get a parameter String value
+     *
      * @param requestParameter
      * @return Empty string instead of null.
      */
@@ -259,6 +276,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Category to be displayed in Userview Builder palette
+     *
      * @return
      */
     public String getCategory() {
@@ -267,6 +285,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Icon path to be displayed in Userview Builder palette
+     *
      * @return
      */
     public String getIcon() {
@@ -275,6 +294,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Get render HTML template for UI
+     *
      * @return
      */
     public String getRenderPage() {
@@ -283,6 +303,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Used to determine this menu item can used as home page or not.
+     *
      * @return
      */
     public boolean isHomePageSupported() {
@@ -292,13 +313,12 @@ public class CachedUserviewMenu extends UserviewMenu {
     /**
      * Get path of JSP file to render the HTML template.
      *
-     * If this value is not NULL, value returned by getRenderPage will be ignored.
-     * It is used to use the system predefined template for rendering.
-     * Options are as following:
-     * - userview/plugin/datalist.jsp
-     * - userview/plugin/form.jsp
-     * - userview/plugin/runProcess.jsp
-     * - userview/plugin/unauthorized.jsp
+     * If this value is not NULL, value returned by getRenderPage will be
+     * ignored. It is used to use the system predefined template for rendering.
+     * Options are as following: - userview/plugin/datalist.jsp -
+     * userview/plugin/form.jsp - userview/plugin/runProcess.jsp -
+     * userview/plugin/unauthorized.jsp
+     *
      * @return
      */
     public String getJspPage() {
@@ -306,8 +326,9 @@ public class CachedUserviewMenu extends UserviewMenu {
     }
 
     /**
-     * Used by the system to retrieve the JSP file page to avoid the logic to run again.
-     * It will called the getJspPage method once to initial the value.
+     * Used by the system to retrieve the JSP file page to avoid the logic to
+     * run again. It will called the getJspPage method once to initial the
+     * value.
      *
      * @return
      */
@@ -316,8 +337,9 @@ public class CachedUserviewMenu extends UserviewMenu {
     }
 
     /**
-     * Used by the system to retrieve the HTML template to avoid the logic to run again.
-     * It will called the getRenderPage method once to initial the value.
+     * Used by the system to retrieve the HTML template to avoid the logic to
+     * run again. It will called the getRenderPage method once to initial the
+     * value.
      *
      * @return
      */
@@ -327,6 +349,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Gets the userview which this menu is belongs to.
+     *
      * @return
      */
     public Userview getUserview() {
@@ -335,6 +358,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Sets the userview which this menu is belongs to.
+     *
      * @param userview
      */
     public void setUserview(Userview userview) {
@@ -343,6 +367,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Set this property to force the userview to redirect to a specific URL.
+     *
      * @param redirectUrl
      */
     public void setRedirectUrl(String redirectUrl) {
@@ -362,6 +387,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Set this property to display an alert message/prompt.
+     *
      * @param message
      */
     public void setAlertMessage(String message) {
@@ -382,6 +408,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Get Decorated menu HTML for rendering
+     *
      * @return
      */
     public String getDecoratedMenu() {
@@ -389,9 +416,10 @@ public class CachedUserviewMenu extends UserviewMenu {
     }
 
     /**
-     * Get menu html for rendering. It will call getDecoratedMenu method
-     * to retrieve the menu HTML. If empty value is return, a default menu
-     * HTML will be generated based on getURL method and "label" property.
+     * Get menu html for rendering. It will call getDecoratedMenu method to
+     * retrieve the menu HTML. If empty value is return, a default menu HTML
+     * will be generated based on getURL method and "label" property.
+     *
      * @return
      */
     public String getMenu() {
@@ -405,6 +433,7 @@ public class CachedUserviewMenu extends UserviewMenu {
 
     /**
      * Return the plugin properties options in JSON format.
+     *
      * @return
      */
     @Override
@@ -412,9 +441,9 @@ public class CachedUserviewMenu extends UserviewMenu {
         String propertyOptions = PropertyUtil.injectHelpLink(delegate.getHelpLink(), delegate.getPropertyOptions());
         String cacheOptions = AppUtil.readPluginResource(getClass().getName(), "/properties/userview/userviewCache.json", null, true, "message/userview/userviewCache");
         if (cacheOptions != null && !cacheOptions.isEmpty()) {
-            propertyOptions = propertyOptions.substring(0, propertyOptions.lastIndexOf("]")) + "," + cacheOptions + "]"; 
+            propertyOptions = propertyOptions.substring(0, propertyOptions.lastIndexOf("]")) + "," + cacheOptions + "]";
         }
         return propertyOptions;
     }
-    
+
 }

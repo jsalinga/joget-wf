@@ -20,10 +20,10 @@ import org.joget.commons.util.LogUtil;
 public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDefinition> implements FormDefinitionDao {
 
     public static final String ENTITY_NAME = "FormDefinition";
-    
+
     private FormColumnCache formColumnCache;
     private Cache cache;
-    
+
     public Cache getCache() {
         return cache;
     }
@@ -31,11 +31,11 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
     public void setCache(Cache cache) {
         this.cache = cache;
     }
-    
-    private String getCacheKey(String id, String appId, Long version){
-        return DynamicDataSourceManager.getCurrentProfile()+"_"+appId+"_"+version+"_FORM_"+id;
+
+    private String getCacheKey(String id, String appId, Long version) {
+        return DynamicDataSourceManager.getCurrentProfile() + "_" + appId + "_" + version + "_FORM_" + id;
     }
-    
+
     public FormColumnCache getFormColumnCache() {
         return formColumnCache;
     }
@@ -51,6 +51,7 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
 
     /**
      * Retrieves FormDefinitions mapped to a table name.
+     *
      * @param tableName
      * @return
      */
@@ -92,7 +93,7 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
 
         return this.count(conditions, params.toArray(), appDefinition);
     }
-    
+
     protected FormDefinition load(String id, AppDefinition appDefinition) {
         FormDefinition formDef = super.loadById(id, appDefinition);
         return formDef;
@@ -115,11 +116,11 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
             return (FormDefinition) element.getValue();
         }
     }
-    
+
     @Override
     public boolean add(FormDefinition object) {
         formColumnCache.remove(object.getTableName());
-        
+
         object.setDateCreated(new Date());
         object.setDateModified(new Date());
         return super.add(object);
@@ -130,7 +131,7 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
         // clear from cache
         formColumnCache.remove(object.getTableName());
         cache.remove(getCacheKey(object.getId(), object.getAppId(), object.getAppVersion()));
-        
+
         // update object
         object.setDateModified(new Date());
         return super.update(object);
@@ -158,7 +159,7 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
                 // delete obj
                 super.delete(getEntityName(), obj);
                 result = true;
-                
+
                 // clear from cache
                 formColumnCache.remove(obj.getTableName());
                 cache.remove(getCacheKey(id, appDef.getId(), appDef.getVersion()));
@@ -171,7 +172,7 @@ public class FormDefinitionDaoImpl extends AbstractAppVersionedObjectDao<FormDef
 
     public Collection<String> getTableNameList(AppDefinition appDefinition) {
         final AppDefinition appDef = appDefinition;
-        
+
         String query = "SELECT DISTINCT e.tableName FROM " + getEntityName() + " e where e.appId = ? and e.appVersion = ?";
 
         Query q = findSession().createQuery(query);

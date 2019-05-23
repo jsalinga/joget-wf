@@ -102,7 +102,7 @@ public class EmploymentDaoImpl extends AbstractSpringDao implements EmploymentDa
                         departmentDao.updateDepartment(dept);
                     }
                 }
-                
+
                 // clear employment
                 employment.setOrganization(null);
                 employment.setDepartment(null);
@@ -234,8 +234,8 @@ public class EmploymentDaoImpl extends AbstractSpringDao implements EmploymentDa
             //get only 1st employment
             if (user != null && user.getEmployments() != null && user.getEmployments().size() > 0 && department != null) {
                 Employment employment = (Employment) user.getEmployments().iterator().next();
-                    employment.getHods().clear();
-                    employment.getHods().add(department);
+                employment.getHods().clear();
+                employment.getHods().add(department);
                 saveOrUpdate("Employment", employment);
                 department.setHod(employment);
                 departmentDao.updateDepartment(department);
@@ -329,7 +329,7 @@ public class EmploymentDaoImpl extends AbstractSpringDao implements EmploymentDa
                         orgDepartment.setHod(null);
                         departmentDao.updateDepartment(orgDepartment);
                     }
-                    
+
                     employment.setOrganizationId(organization.getId());
                     employment.setDepartmentId(null);
                     employment.setGradeId(null);
@@ -358,7 +358,7 @@ public class EmploymentDaoImpl extends AbstractSpringDao implements EmploymentDa
                         orgDepartment.setHod(null);
                         departmentDao.updateDepartment(orgDepartment);
                     }
-                    
+
                     employment.setOrganizationId(null);
                     employment.setDepartmentId(null);
                     employment.setGradeId(null);
@@ -387,7 +387,7 @@ public class EmploymentDaoImpl extends AbstractSpringDao implements EmploymentDa
                         orgDepartment.setHod(null);
                         departmentDao.updateDepartment(orgDepartment);
                     }
-                    
+
                     employment.setOrganizationId(department.getOrganization().getId());
                     employment.setDepartmentId(department.getId());
                     employment.getHods().clear();
@@ -415,7 +415,7 @@ public class EmploymentDaoImpl extends AbstractSpringDao implements EmploymentDa
                         orgDepartment.setHod(null);
                         departmentDao.updateDepartment(orgDepartment);
                     }
-                    
+
                     employment.setDepartmentId(null);
                     employment.getHods().clear();
                     saveOrUpdate("Employment", employment);

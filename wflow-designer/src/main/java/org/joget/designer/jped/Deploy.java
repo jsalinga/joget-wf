@@ -48,8 +48,8 @@ public class Deploy extends ActionBase {
                     String url = Designer.URLPATH + "/web/json/console/app/" + Designer.APP_ID + "/" + Designer.APP_VERSION + "/package/deploy";
                     String username = Designer.USERNAME;
                     String sessionId = Designer.SESSION;
-                    int port =  Integer.parseInt(Designer.PORT);
-                    String cookieDomain =  Designer.DOMAIN;
+                    int port = Integer.parseInt(Designer.PORT);
+                    String cookieDomain = Designer.DOMAIN;
                     String cookiePath = Designer.CONTEXTPATH;
 
                     // get XPDL file
@@ -58,17 +58,17 @@ public class Deploy extends ActionBase {
                         file = saveTempFile();
 
                         // POST request
-                        String jsonString = HttpUtil.httpPost(null, url, port, sessionId, cookieDomain, cookiePath,  username, null, false, false, "packageXpdl", file);
+                        String jsonString = HttpUtil.httpPost(null, url, port, sessionId, cookieDomain, cookiePath, username, null, false, false, "packageXpdl", file);
                         if (jsonString != null) {
                             Pattern pattern = Pattern.compile("\"([^\"]{2,})\":\"([^\"]{2,})\"");
                             Matcher matcher = pattern.matcher(jsonString);
 
                             while (matcher.find()) {
-                                if(matcher.group(1).equals("status") && matcher.group(2).equals("complete")){
-                                     JOptionPane.showMessageDialog(null, ResourceManager.getLanguageDependentString("DeploySuccessful"));
-                                     System.exit(0);
-                                }else if(matcher.group(1).equals("errorMsg")){
-                                    JOptionPane.showMessageDialog(null,  matcher.group(2));
+                                if (matcher.group(1).equals("status") && matcher.group(2).equals("complete")) {
+                                    JOptionPane.showMessageDialog(null, ResourceManager.getLanguageDependentString("DeploySuccessful"));
+                                    System.exit(0);
+                                } else if (matcher.group(1).equals("errorMsg")) {
+                                    JOptionPane.showMessageDialog(null, matcher.group(2));
                                 }
                             }
                         }

@@ -7,7 +7,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * Overrides Spring's ContextLoaderListener to support re-initialization of the 
+ * Overrides Spring's ContextLoaderListener to support re-initialization of the
  * ApplicationContext if previous attempts fail.
  */
 public class CustomContextLoaderListener extends ContextLoaderListener {
@@ -29,7 +29,7 @@ public class CustomContextLoaderListener extends ContextLoaderListener {
         try {
             LogUtil.info(getClass().getName(), "===== Initializing WebApplicationContext =====");
             super.contextInitialized(event);
-        } catch(Exception e) {
+        } catch (Exception e) {
             if (LogUtil.isDebugEnabled(getClass().getName())) { //if debug then log everything
                 LogUtil.error(getClass().getName(), e, "===== Error initializing WebApplicationContext =====");
             } else {
@@ -39,5 +39,5 @@ public class CustomContextLoaderListener extends ContextLoaderListener {
             contextDestroyed(event);
         }
     }
-    
+
 }

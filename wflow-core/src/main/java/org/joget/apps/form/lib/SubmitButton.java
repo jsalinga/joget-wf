@@ -68,7 +68,6 @@ public class SubmitButton extends FormButton {
     return null;
     }
      */
-
     public String getLabel() {
         return "Submit Button";
     }

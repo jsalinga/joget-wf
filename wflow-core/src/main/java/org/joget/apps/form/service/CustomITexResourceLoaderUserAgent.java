@@ -27,14 +27,15 @@ import org.xhtmlrenderer.pdf.ITextUserAgent;
 import org.xhtmlrenderer.resource.ImageResource;
 
 public class CustomITexResourceLoaderUserAgent extends ITextUserAgent {
+
     private ITextOutputDevice _outputDevice;
 
     public CustomITexResourceLoaderUserAgent(ITextOutputDevice outputDevice) {
         super(outputDevice);
-        
+
         this._outputDevice = outputDevice;
     }
-    
+
     public ImageResource getImageResource(String uri) {
         ImageResource resource = null;
         HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
@@ -70,14 +71,14 @@ public class CustomITexResourceLoaderUserAgent extends ITextUserAgent {
                     HttpClientBuilder httpClientBuilder = HttpClients.custom();
                     HttpGet get = new HttpGet(uri);
 
-                    CookieStore cookieStore = new BasicCookieStore(); 
+                    CookieStore cookieStore = new BasicCookieStore();
                     Cookie[] cookies = request.getCookies();
                     for (Cookie c : cookies) {
                         if (c.getName().equalsIgnoreCase("JSESSIONID")) {
                             BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", c.getValue());
                             cookie.setPath(request.getContextPath());
                             cookie.setDomain(request.getServerName());
-                            cookieStore.addCookie(cookie); 
+                            cookieStore.addCookie(cookie);
                         }
                     }
 
@@ -148,7 +149,7 @@ public class CustomITexResourceLoaderUserAgent extends ITextUserAgent {
         }
         return resource;
     }
-        
+
     private void scaleToOutputResolution(Image image) {
         float factor = getSharedContext().getDotsPerPixel();
         image.scaleAbsolute(image.getPlainWidth() * factor, image.getPlainHeight() * factor);

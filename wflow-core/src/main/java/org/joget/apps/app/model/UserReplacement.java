@@ -3,7 +3,7 @@ package org.joget.apps.app.model;
 import java.util.Date;
 
 public class UserReplacement {
-    
+
     private String id;
     private String username;
     private String replacementUser;

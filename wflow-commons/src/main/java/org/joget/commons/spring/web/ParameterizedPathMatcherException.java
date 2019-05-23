@@ -11,8 +11,10 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
 specific language governing permissions and limitations under the License.
  */
 /**
- * Exception thrown if a pattern given to the ParameterizedPathMatcher (configured in
- * {@link carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping}) is invalid.
+ * Exception thrown if a pattern given to the ParameterizedPathMatcher
+ * (configured in
+ * {@link carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping})
+ * is invalid.
  *
  * @author alex cruikshank
  */

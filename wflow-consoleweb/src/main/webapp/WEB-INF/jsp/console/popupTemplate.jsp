@@ -2,5 +2,5 @@
 <%@ include file="/WEB-INF/jsp/includes/taglibs.jsp" %>
 
 <commons:popupHeader />
-    ${content}
+${content}
 <commons:popupFooter />

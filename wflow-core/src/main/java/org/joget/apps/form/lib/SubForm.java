@@ -37,9 +37,10 @@ public class SubForm extends AbstractSubForm implements FormBuilderPaletteElemen
     public String getDescription() {
         return "Subform Element";
     }
+
     @Override
     public String renderTemplate(FormData formData, Map dataModel) {
-        
+
         // set subform html
         String elementMetaData = ((Boolean) dataModel.get("includeMetaData")) ? FormUtil.generateElementMetaData(this) : "";
         Collection<Element> childElements = getChildren();
@@ -48,7 +49,7 @@ public class SubForm extends AbstractSubForm implements FormBuilderPaletteElemen
         String cellClass = ((Boolean) dataModel.get("includeMetaData")) ? "form-cell" : "subform-cell";
         String noFrame = ("true".equalsIgnoreCase(getPropertyString("noframe"))) ? " no-frame" : " has-frame";
         String readonly = ("true".equalsIgnoreCase(getPropertyString(FormUtil.PROPERTY_READONLY))) ? " readonly" : "";
-        String html = "<div class='" + cellClass + "' " + elementMetaData + "><div class='subform-container"+noFrame+readonly+"'>";
+        String html = "<div class='" + cellClass + "' " + elementMetaData + "><div class='subform-container" + noFrame + readonly + "'>";
         if (!label.isEmpty()) {
             html += "<span class='subform-title'>" + label + "</span>";
         }
@@ -64,7 +65,7 @@ public class SubForm extends AbstractSubForm implements FormBuilderPaletteElemen
         html += "<div style='clear:both;'></div></div></div>";
         return html;
     }
-    
+
     @Override
     public String getClassName() {
         return getClass().getName();
@@ -112,6 +113,7 @@ public class SubForm extends AbstractSubForm implements FormBuilderPaletteElemen
 
     /**
      * Return JSON of available forms that can be embedded as this subform.
+     *
      * @param request
      * @param response
      * @throws ServletException
@@ -125,7 +127,7 @@ public class SubForm extends AbstractSubForm implements FormBuilderPaletteElemen
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        
+
         String action = request.getParameter("action");
         if ("getOptions".equals(action)) {
             Collection<FormDefinition> formDefList = new ArrayList<FormDefinition>();

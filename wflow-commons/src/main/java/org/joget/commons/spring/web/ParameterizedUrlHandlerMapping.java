@@ -20,16 +20,17 @@ specific language governing permissions and limitations under the License.
 import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
 
 /**
- * Substitute for Spring's SimpleUrlHandlerMapping that is capable of parsing parameters out of
- * URLs and adding them to the request.  When used alone, parameters will be placed in a Map which
- * is added to the request attributes.  If the
- * {@link carbonfive.spring.web.pathparameter.ParameterizedPathFilter} has been configured in
- * web.xml to handle the current request, each path parameter will appear as a request parameter
- * for all subsequent stages of the request processing, including command and form binding in Spring MVC.
+ * Substitute for Spring's SimpleUrlHandlerMapping that is capable of parsing
+ * parameters out of URLs and adding them to the request. When used alone,
+ * parameters will be placed in a Map which is added to the request attributes.
+ * If the {@link carbonfive.spring.web.pathparameter.ParameterizedPathFilter}
+ * has been configured in web.xml to handle the current request, each path
+ * parameter will appear as a request parameter for all subsequent stages of the
+ * request processing, including command and form binding in Spring MVC.
  *
- * <p>To use this class, replace the SimpleUrlHandlerMapping bean in the dispatcher configuration file
- * with something that looks like this:
- * <code><pre>
+ * <p>
+ * To use this class, replace the SimpleUrlHandlerMapping bean in the dispatcher
+ * configuration file with something that looks like this:  <code><pre>
  * &lt;bean class="carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping"&gt;
  *   &lt;property name="alwaysUseFullPath" value="true"/&gt;
  *   &lt;property name="mappings"&gt;
@@ -42,26 +43,34 @@ import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMa
  *      &lt;/value&gt;
  *   &lt;/property&gt;
  * &lt;/bean&gt;
- * </pre></code>
- * The ParameterizedUrlHandlerMapping supports all mappings that are valid using SimpleUrlHandlerMapping's
- * default AntPathMatcher.  The special parenthetical paths allow one to parse parameters out of the
- * given path and add them to the request for further use.</p>
+ * </pre></code> The ParameterizedUrlHandlerMapping supports all mappings that
+ * are valid using SimpleUrlHandlerMapping's default AntPathMatcher. The special
+ * parenthetical paths allow one to parse parameters out of the given path and
+ * add them to the request for further use.</p>
  *
- * <p>In the above example, hitting the URL, "/view/bar",
- * will cause the request to be routed to controller2 and a map containing the key/value pair 'foo'-&gt;'bar'
- * will be added as a request parameter with the key "ParameterizedUrlHandlerMapping.path-parameters".
- * A request to "/view/piglet.html" will route to controller3 and the parameter map will contain
- * 'html'-&gt;'piglet.html'. Controller4 will handle a request to "/view/this/that/the-other.view" and will
- * receive the parameter 'view'-&gt;'this/that/the-other'.  Finally a request to "/view/c/save/2342443' will
- * provide a parameters containing both 'controller'-&gt;'save' and 'id'-&gt;'2342443' to controller5.</p>
+ * <p>
+ * In the above example, hitting the URL, "/view/bar", will cause the request to
+ * be routed to controller2 and a map containing the key/value pair
+ * 'foo'-&gt;'bar' will be added as a request parameter with the key
+ * "ParameterizedUrlHandlerMapping.path-parameters". A request to
+ * "/view/piglet.html" will route to controller3 and the parameter map will
+ * contain 'html'-&gt;'piglet.html'. Controller4 will handle a request to
+ * "/view/this/that/the-other.view" and will receive the parameter
+ * 'view'-&gt;'this/that/the-other'. Finally a request to "/view/c/save/2342443'
+ * will provide a parameters containing both 'controller'-&gt;'save' and
+ * 'id'-&gt;'2342443' to controller5.</p>
  *
- * <p>The backslash before the colon isn't really part of the pattern which is:
- * '(' + [ant_style_path] + ':' + [parameter_name] + ')'.  The backslash is required because the list
- * is parsed as a java properties file and it will interpret the colons as separators if you don't escape them.
- * This ugliness can be avoided by using the &lt;props&gt; tag instead.</p>
+ * <p>
+ * The backslash before the colon isn't really part of the pattern which is: '('
+ * + [ant_style_path] + ':' + [parameter_name] + ')'. The backslash is required
+ * because the list is parsed as a java properties file and it will interpret
+ * the colons as separators if you don't escape them. This ugliness can be
+ * avoided by using the &lt;props&gt; tag instead.</p>
  *
- * <p>Since parsing parameterized URLs requires a custom path matcher, this class does not support setting
- * the <code>pathMatcher</code> property.  Attempts to do so will be ignored.</p>
+ * <p>
+ * Since parsing parameterized URLs requires a custom path matcher, this class
+ * does not support setting the <code>pathMatcher</code> property. Attempts to
+ * do so will be ignored.</p>
  */
 public class ParameterizedUrlHandlerMapping extends DefaultAnnotationHandlerMapping { //SimpleUrlHandlerMapping {
 
@@ -70,7 +79,7 @@ public class ParameterizedUrlHandlerMapping extends DefaultAnnotationHandlerMapp
 
     private static Map<String, String> pathCache = new HashMap<String, String>();
     private static Map<String, Map<String, String>> parameterCache = new HashMap<String, Map<String, String>>();
-    
+
     public ParameterizedUrlHandlerMapping() {
         pathMatcher = new ParameterizedPathMatcher();
         super.setPathMatcher(pathMatcher);

@@ -24,7 +24,6 @@ public class Script extends XMLComplexElement {
             XMLAttribute attrVersion = new XMLAttribute(this, "Version", false);
             XMLAttribute attrGrammar = new XMLAttribute(this, "Grammar", false);
 
-
             add(attrVersion);
             add(attrGrammar);
         }

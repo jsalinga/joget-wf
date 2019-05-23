@@ -10,7 +10,7 @@ import net.sf.ehcache.Element;
 
 /**
  * Service method used to manage system settings
- * 
+ *
  */
 public class SetupManager {
 
@@ -33,7 +33,8 @@ public class SetupManager {
 
     /**
      * Gets the path of base storing folder for a profile
-     * @return 
+     *
+     * @return
      */
     public static String getBaseDirectory() {
         if (HostManager.isVirtualHostEnabled()) {
@@ -44,15 +45,15 @@ public class SetupManager {
             }
             String baseDirectory = BASE_DIRECTORY + File.separator + DIRECTORY_PROFILES + File.separator + currentProfile + File.separator;
             return baseDirectory;
-        }
-        else {
+        } else {
             return getBaseSharedDirectory();
         }
     }
-    
+
     /**
      * Gets the path of wflow folder
-     * @return 
+     *
+     * @return
      */
     public static String getBaseSharedDirectory() {
         // shared directory e.g. profiles, plugins. This is also the default if virtual host feature is turned off.
@@ -65,7 +66,8 @@ public class SetupManager {
 
     /**
      * Method used by system to set cache object
-     * @param cache 
+     *
+     * @param cache
      */
     public void setCache(Cache cache) {
         this.cache = cache;
@@ -73,31 +75,31 @@ public class SetupManager {
             LogUtil.info(getClass().getName(), "Initializing setup cache");
         }
     }
-    
+
     /**
      * Method used by system to clear cache
      */
     public void clearCache() {
         if (cache != null) {
-            synchronized(cache) {
+            synchronized (cache) {
                 String profile = DynamicDataSourceManager.getCurrentProfile();
                 cache.remove(profile);
             }
         }
     }
-    
+
     /**
-     * Method used by system to refresh cache 
+     * Method used by system to refresh cache
      */
     public void refreshCache() {
         if (cache != null) {
-            synchronized(cache) {
+            synchronized (cache) {
                 String profile = DynamicDataSourceManager.getCurrentProfile();
                 LogUtil.debug(getClass().getName(), "Refreshing setup cache for " + profile);
                 cache.remove(profile);
                 Collection<Setting> settings = getSetupDao().find("", null, null, null, null, null);
                 Map<String, Setting> settingMap = new HashMap<String, Setting>();
-                for (Setting setting: settings) {
+                for (Setting setting : settings) {
                     settingMap.put(setting.getProperty(), setting);
                 }
                 Element element = new Element(profile, settingMap);
@@ -105,10 +107,11 @@ public class SetupManager {
             }
         }
     }
-    
+
     /**
      * Save a system setting
-     * @param setting 
+     *
+     * @param setting
      */
     public void saveSetting(Setting setting) {
         getSetupDao().saveOrUpdate(setting);
@@ -117,12 +120,13 @@ public class SetupManager {
 
     /**
      * Retrieve a list of System settings based on search criteria
+     *
      * @param propertyFilter
      * @param sort
      * @param desc
      * @param start
      * @param rows
-     * @return 
+     * @return
      */
     public Collection<Setting> getSettingList(String propertyFilter, String sort, Boolean desc, Integer start, Integer rows) {
         String condition = "";
@@ -139,13 +143,14 @@ public class SetupManager {
 
     /**
      * Gets system setting by property key. Cached if possible.
+     *
      * @param property
-     * @return 
+     * @return
      */
     public Setting getSettingByProperty(String property) {
         if (cache != null) {
             Setting setting = null;
-            synchronized(cache) {
+            synchronized (cache) {
                 Element element = null;
                 String profile = DynamicDataSourceManager.getCurrentProfile();
                 element = cache.get(profile);
@@ -154,7 +159,7 @@ public class SetupManager {
                     element = cache.get(profile);
                 }
                 if (element != null) {
-                    Map<String, Setting> settingMap = (Map<String, Setting>)element.getValue();
+                    Map<String, Setting> settingMap = (Map<String, Setting>) element.getValue();
                     setting = settingMap.get(property);
                 }
             }
@@ -169,10 +174,11 @@ public class SetupManager {
 
     /**
      * Gets the system setting value by property key. Cached if possible.
+     *
      * @param property
-     * @return 
+     * @return
      */
-    public String getSettingValue(String property) {        
+    public String getSettingValue(String property) {
         Setting setting = getSettingByProperty(property);
         String value = (setting != null) ? setting.getValue() : null;
         return value;
@@ -180,7 +186,8 @@ public class SetupManager {
 
     /**
      * Delete system setting by property key.
-     * @param property 
+     *
+     * @param property
      */
     public void deleteSetting(String property) {
         Setting setting = getSettingByProperty(property);
@@ -191,7 +198,8 @@ public class SetupManager {
 
     /**
      * Method used by system to gets the SetupDao implementation
-     * @return 
+     *
+     * @return
      */
     public SetupDao getSetupDao() {
         return setupDao;
@@ -199,7 +207,8 @@ public class SetupManager {
 
     /**
      * Method used by system to sets the SetupDao implementation
-     * @param setupDao 
+     *
+     * @param setupDao
      */
     public void setSetupDao(SetupDao setupDao) {
         this.setupDao = setupDao;

@@ -9,11 +9,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 public class JogetCommonsMultipartResolver extends CommonsMultipartResolver {
-    
+
     @Override
     public MultipartHttpServletRequest resolveMultipart(final HttpServletRequest request) throws MultipartException {
         Assert.notNull(request, "Request must not be null");
-        
+
         try {
             // reset profile and set hostname
             HostManager.initHost();
@@ -30,8 +30,8 @@ public class JogetCommonsMultipartResolver extends CommonsMultipartResolver {
         } catch (Exception e) {
             LogUtil.error(JogetCommonsMultipartResolver.class.getName(), e, "");
         }
-        
+
         return super.resolveMultipart(request);
     }
-    
+
 }

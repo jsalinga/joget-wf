@@ -23,12 +23,14 @@ public interface DataListAction extends PropertyEditable {
     String getTarget();
 
     /**
-     * Name of the parameter if linked, separated by semicolon ";" if has multiple.
+     * Name of the parameter if linked, separated by semicolon ";" if has
+     * multiple.
      */
     String getHrefParam();
 
     /**
-     * Name of the column to use for the param value if linked, separated by semicolon ";" if has multiple.
+     * Name of the column to use for the param value if linked, separated by
+     * semicolon ";" if has multiple.
      */
     String getHrefColumn();
 
@@ -44,22 +46,23 @@ public interface DataListAction extends PropertyEditable {
 
     /**
      * Method to perform the action on selected rows
+     *
      * @param dataList
      * @param rowKeys
      * @return
      */
     DataListActionResult executeAction(DataList dataList, String[] rowKeys);
-    
+
     /**
      * Flag that decide this action object can use as column action
      */
     Boolean supportColumn();
-    
+
     /**
      * Flag that decide this action object can use as row action
      */
     Boolean supportRow();
-    
+
     /**
      * Flag that decide this action object can use as list action
      */

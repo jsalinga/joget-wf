@@ -37,7 +37,7 @@ public class AppMessageHashVariable extends DefaultHashVariablePlugin {
     public String getClassName() {
         return this.getClass().getName();
     }
-    
+
     public String getPropertyOptions() {
         return "";
     }

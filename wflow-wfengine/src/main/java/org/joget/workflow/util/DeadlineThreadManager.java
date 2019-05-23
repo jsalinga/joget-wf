@@ -37,8 +37,7 @@ public class DeadlineThreadManager {
                 workflowManager.internalUpdateDeadlineChecker();
             }
             HostManager.setCurrentProfile(null);
-        }
-        else {
+        } else {
             // start current profile
             workflowManager.internalUpdateDeadlineChecker();
         }
@@ -55,14 +54,13 @@ public class DeadlineThreadManager {
             DeadlineChecker thread = getThread(profile);
             if (thread == null) {
                 thread = new DeadlineChecker(profile,
-                    null,
-                    interval,
-                    10,
-                    10,
-                    true);
+                        null,
+                        interval,
+                        10,
+                        10,
+                        true);
                 threadMap.put(profile, thread);
-            }
-            else {
+            } else {
                 thread.setDelay(interval);
                 if (thread.isStopped()) {
                     LogUtil.info(DeadlineThreadManager.class.getName(), "Starting DeadlineChecker for profile " + profile);
@@ -73,7 +71,7 @@ public class DeadlineThreadManager {
     }
 
     protected static DeadlineChecker getThread(String profile) {
-        DeadlineChecker thread = (DeadlineChecker)threadMap.get(profile);
+        DeadlineChecker thread = (DeadlineChecker) threadMap.get(profile);
         return thread;
     }
 

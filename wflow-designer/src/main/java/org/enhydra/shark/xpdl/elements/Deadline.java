@@ -10,11 +10,12 @@ import org.enhydra.shark.xpdl.XMLElementChangeListener;
 import org.enhydra.shark.xpdl.XPDLConstants;
 
 public class Deadline extends XMLComplexElement implements XMLElementChangeListener {
+
     public static String DURATION_UNIT_DATETIME = "t";
     public static String DURATION_UNIT_DATE = "d";
     public static String DURATION_UNIT_DATE2 = "1";
     public static String DURATION_UNIT_DATETIME2 = "2";
-    
+
     private DeadlineLimit refDeadlineLimit;
     private XMLAttribute attrDurationUnit;
     private DeadlineCondition refDeadlineCondition;
@@ -51,7 +52,7 @@ public class Deadline extends XMLComplexElement implements XMLElementChangeListe
         add(attrExecution);
         add(refDeadlineCondition);
         add(refExceptionName);
-        
+
         addCustomElements();
         //END CUSTOM
     }
@@ -136,7 +137,7 @@ public class Deadline extends XMLComplexElement implements XMLElementChangeListe
                         case 's':
                             variableCondition += 1000;
                     }
-                    
+
                     if (durationUnitChar != 'd' && durationUnitChar != 't') {
                         variableCondition = "(" + changedDeadlineLimit + "*" + variableCondition + ")";
 
@@ -161,16 +162,16 @@ public class Deadline extends XMLComplexElement implements XMLElementChangeListe
             hideCustomElements();
         }
     }
-    
+
     public void addCustomElements() {
         add(attrDurationUnit);
         add(refDeadlineLimit);
     }
-    
+
     public void hideCustomElements() {
         // set deadline limit from deadline condition
         String deadlineCondition = getDeadlineCondition();
-        
+
         if (deadlineCondition.contains("java.text.SimpleDateFormat")) {
             String deadlineLimit = "";
             Pattern pattern = Pattern.compile("d.parse\\((.+)\\);");
@@ -179,7 +180,7 @@ public class Deadline extends XMLComplexElement implements XMLElementChangeListe
                 deadlineLimit = matcher.group(1);
             }
             refDeadlineLimit.setValue(deadlineLimit);
-            
+
             if (deadlineCondition.contains("dd/MM/yyyy HH:mm")) {
                 attrDurationUnit.setValue(DURATION_UNIT_DATETIME);
             } else if (deadlineCondition.contains("dd/MM/yyyy")) {
@@ -195,7 +196,7 @@ public class Deadline extends XMLComplexElement implements XMLElementChangeListe
             Matcher matcher = pattern.matcher(deadlineCondition);
             if (matcher.find()) {
                 String match = matcher.group();
-                deadlineLimit = match.substring(2, match.length()-1);
+                deadlineLimit = match.substring(2, match.length() - 1);
             }
             refDeadlineLimit.setValue(deadlineLimit);
 
@@ -205,7 +206,7 @@ public class Deadline extends XMLComplexElement implements XMLElementChangeListe
             matcher = pattern.matcher(deadlineCondition);
             if (matcher.find()) {
                 String match = matcher.group();
-                String millis = match.substring(1, match.length()-1);
+                String millis = match.substring(1, match.length() - 1);
                 if ("1000".equals(millis)) {
                     durationUnit = XPDLConstants.DURATION_UNIT_s;
                 } else if ("60000".equals(millis)) {

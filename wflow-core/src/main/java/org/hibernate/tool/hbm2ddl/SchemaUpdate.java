@@ -151,7 +151,7 @@ public class SchemaUpdate {
                         checkNamingAndNamingDelegatorNotBothSpecified(hasNaming, hasNamingDelegator);
                         cfg.setNamingStrategyDelegator(
                                 (NamingStrategyDelegator) ReflectHelper.classForName(args[i].substring(18))
-                                .newInstance()
+                                        .newInstance()
                         );
                     }
                 } else {

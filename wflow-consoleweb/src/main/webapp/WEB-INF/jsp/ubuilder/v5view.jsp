@@ -9,11 +9,11 @@
 
 <c:if test="${!empty processer}">
     <c:set var="html" value="${processer.html}"/>
-    
+
     <c:if test="${!empty processer.redirectUrl}">
         <c:redirect url="${processer.redirectUrl}"/>
     </c:if> 
-    
+
     ${html}  
 </c:if>
 

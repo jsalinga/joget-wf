@@ -31,7 +31,7 @@ try {
             <div id="icon"><i class="warning fa fa-exclamation-circle" aria-hidden="true"></i></div>
             <div id="content">
                 <h1>
-                <%= ResourceBundleUtil.getMessage("general.error.error500", locale) %>
+                    <%= ResourceBundleUtil.getMessage("general.error.error500", locale) %>
                 </h1>
                 <p>&nbsp;</p>
                 <%= ResourceBundleUtil.getMessage("general.error.error500Description", locale) %>
@@ -40,7 +40,7 @@ try {
                     <li><%= ResourceBundleUtil.getMessage("console.footer.label.revision") %></li>
                     <li><%= ResourceBundleUtil.getMessage("general.error.url", locale) %>: ${pageContext.errorData.requestURI}</li>
                     <li><%= ResourceBundleUtil.getMessage("general.error.date", locale) %>: <fmt:formatDate pattern="d MMM yyyy HH:mm:ss" value="<%= new Date() %>"/></li>
-                    <%= ResourceBundleUtil.getMessage("general.error.errorDetails", locale) %>
+                        <%= ResourceBundleUtil.getMessage("general.error.errorDetails", locale) %>
                 </ul>
                 <p>&nbsp;</p>
             </div>

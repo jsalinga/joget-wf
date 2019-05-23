@@ -16,7 +16,7 @@ public class DateHashVariable extends DefaultHashVariablePlugin {
     public String processHashVariable(String variableKey) {
         try {
             Calendar cal = Calendar.getInstance();
-            
+
             if (variableKey.contains("[") && variableKey.contains("]")) {
                 String date = variableKey.substring(variableKey.indexOf("[") + 1, variableKey.indexOf("]"));
                 variableKey = variableKey.substring(0, variableKey.indexOf("["));
@@ -30,7 +30,7 @@ public class DateHashVariable extends DefaultHashVariablePlugin {
                         }
 
                         DateFormat df = new SimpleDateFormat(format);
-                        Date result =  df.parse(date);  
+                        Date result = df.parse(date);
                         cal.setTime(result);
                     } catch (Exception e) {
                         LogUtil.error(DateHashVariable.class.getName(), e, "");
@@ -94,7 +94,7 @@ public class DateHashVariable extends DefaultHashVariablePlugin {
     public String getPropertyOptions() {
         return "";
     }
-    
+
     @Override
     public Collection<String> availableSyntax() {
         Collection<String> syntax = new ArrayList<String>();

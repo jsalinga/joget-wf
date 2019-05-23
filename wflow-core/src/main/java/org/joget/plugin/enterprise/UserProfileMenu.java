@@ -104,7 +104,7 @@ public class UserProfileMenu extends UserviewMenu {
                 // only allow POST
                 HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
                 if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
-                    PluginManager pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+                    PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
                     String content = pluginManager.getPluginFreeMarkerTemplate(new HashMap(), getClass().getName(), "/templates/unauthorized.ftl", null);
                     return content;
                 }
@@ -117,12 +117,12 @@ public class UserProfileMenu extends UserviewMenu {
         Map model = new HashMap();
         model.put("request", getRequestParameters());
         model.put("element", this);
-        
-        PluginManager pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+
+        PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
         String content = pluginManager.getPluginFreeMarkerTemplate(model, getClass().getName(), "/templates/userProfile.ftl", null);
         return content;
     }
-    
+
     private void viewForm(User submittedData) {
         setProperty("headerTitle", getPropertyString("label"));
         setProperty("view", "formView");
@@ -139,32 +139,32 @@ public class UserProfileMenu extends UserviewMenu {
         }
         setProperty("user", user);
         setProperty("timezones", TimeZoneUtil.getList());
-        
+
         SetupManager setupManager = (SetupManager) ac.getBean("setupManager");
         String enableUserLocale = setupManager.getSettingValue("enableUserLocale");
         Map<String, String> localeStringList = new TreeMap<String, String>();
-        if(enableUserLocale != null && enableUserLocale.equalsIgnoreCase("true")) {
+        if (enableUserLocale != null && enableUserLocale.equalsIgnoreCase("true")) {
             String userLocale = setupManager.getSettingValue("userLocale");
             Collection<String> locales = new HashSet();
             locales.addAll(Arrays.asList(userLocale.split(",")));
-            
+
             Locale[] localeList = Locale.getAvailableLocales();
             for (int x = 0; x < localeList.length; x++) {
                 String code = localeList[x].toString();
                 if (locales.contains(code)) {
-                    localeStringList.put(code, code + " - " +localeList[x].getDisplayName());
+                    localeStringList.put(code, code + " - " + localeList[x].getDisplayName());
                 }
             }
         }
         setProperty("enableUserLocale", enableUserLocale);
         setProperty("localeStringList", localeStringList);
-        
+
         UserSecurity us = DirectoryUtil.getUserSecurity();
         if (us != null) {
             setProperty("policies", us.passwordPolicies());
             setProperty("userProfileFooter", us.getUserProfileFooter(user));
         }
-        
+
         String url = getUrl() + "?action=submit";
         setProperty("actionUrl", url);
     }
@@ -180,10 +180,10 @@ public class UserProfileMenu extends UserviewMenu {
             BeanUtils.copyProperties(userObject, currentUser);
         }
         ExtDirectoryManager directoryManager = (ExtDirectoryManager) AppUtil.getApplicationContext().getBean("directoryManager");
-           
+
         Collection<String> errors = new ArrayList<String>();
         Collection<String> passwordErrors = new ArrayList<String>();
-        
+
         boolean authenticated = false;
         if (currentUser != null) {
             if (!currentUser.getUsername().equals(getRequestParameterString("username"))) {
@@ -200,11 +200,12 @@ public class UserProfileMenu extends UserviewMenu {
                     if (directoryManager.authenticate(currentUser.getUsername(), getRequestParameterString("oldPassword"))) {
                         authenticated = true;
                     }
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
         }
         UserSecurity us = DirectoryUtil.getUserSecurity();
-        
+
         if ("".equals(getPropertyString("f_firstName"))) {
             currentUser.setFirstName(getRequestParameterString("firstName"));
         }
@@ -236,7 +237,7 @@ public class UserProfileMenu extends UserviewMenu {
             }
 
             if (getRequestParameterString("password") != null && !getRequestParameterString("password").isEmpty() && us != null) {
-                passwordErrors = us.validatePassword(getRequestParameterString("username"),  getRequestParameterString("oldPassword"), getRequestParameterString("password"), getRequestParameterString("confirmPassword")); 
+                passwordErrors = us.validatePassword(getRequestParameterString("username"), getRequestParameterString("oldPassword"), getRequestParameterString("password"), getRequestParameterString("confirmPassword"));
             }
         }
 
@@ -244,7 +245,7 @@ public class UserProfileMenu extends UserviewMenu {
         if (passwordErrors != null && !passwordErrors.isEmpty()) {
             setProperty("passwordErrors", passwordErrors);
         }
-        
+
         if (authenticated && (passwordErrors != null && passwordErrors.isEmpty()) && (errors != null && errors.isEmpty())) {
             if ("".equals(getPropertyString("f_password"))) {
                 if (getRequestParameterString("password") != null && getRequestParameterString("confirmPassword") != null && getRequestParameterString("password").length() > 0 && getRequestParameterString("password").equals(getRequestParameterString("confirmPassword"))) {
@@ -262,7 +263,7 @@ public class UserProfileMenu extends UserviewMenu {
                 if (us != null) {
                     us.updateUserProfilePostProcessing(currentUser);
                 }
-                
+
                 setAlertMessage(getPropertyString("message"));
                 setProperty("headerTitle", getPropertyString("label"));
                 if (getPropertyString("redirectURL") != null && !getPropertyString("redirectURL").isEmpty()) {

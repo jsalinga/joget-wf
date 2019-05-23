@@ -19,7 +19,7 @@
 
         <jsp:include page="/WEB-INF/jsp/includes/scripts.jsp" />
         <jsp:include page="/WEB-INF/jsp/console/plugin/library.jsp" />
-        
+
         <c:if test="${rightToLeft == 'true' || fn:startsWith(currentLocale, 'ar') == true}">
             <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_rtl.css?build=<fmt:message key="build.number"/>">
         </c:if>
@@ -42,24 +42,24 @@
         <script src="${pageContext.request.contextPath}/pbuilder/js/pbuilder.js?build=<fmt:message key="build.number"/>"></script>
         <script>
             $(function() {
-                //init ApiClient base url (add to support different context path)
-                ProcessBuilder.ApiClient.appName = "<c:out value="${appDefinition.name}"/>";
-                ProcessBuilder.ApiClient.baseUrl = "${pageContext.request.contextPath}";
-                ProcessBuilder.ApiClient.designerBaseUrl = "${pageContext.request.contextPath}";
-                ProcessBuilder.Designer.contextPath = "${pageContext.request.contextPath}";
-                ProcessBuilder.Designer.setZoom(1.0);
-                <c:if test="${param.editable == 'false'}">
-                    ProcessBuilder.Designer.editable = false;
-                </c:if>
-                <c:if test="${param.autoValidate == 'false'}">
-                    ProcessBuilder.Designer.autoValidate = false;
-                </c:if>
-                <c:choose>
+            //init ApiClient base url (add to support different context path)
+            ProcessBuilder.ApiClient.appName = "<c:out value="${appDefinition.name}"/>";
+            ProcessBuilder.ApiClient.baseUrl = "${pageContext.request.contextPath}";
+            ProcessBuilder.ApiClient.designerBaseUrl = "${pageContext.request.contextPath}";
+            ProcessBuilder.Designer.contextPath = "${pageContext.request.contextPath}";
+            ProcessBuilder.Designer.setZoom(1.0);
+            <c:if test="${param.editable == 'false'}">
+                ProcessBuilder.Designer.editable = false;
+            </c:if>
+            <c:if test="${param.autoValidate == 'false'}">
+                ProcessBuilder.Designer.autoValidate = false;
+            </c:if>
+            <c:choose>
                 <c:when test="${!empty appId && empty param.xpdl}">
                     var loadCallback;
                     <c:if test="${!empty param.processId}">
                         loadCallback = function() {
-                            ProcessBuilder.Actions.viewProcess('<c:out value="${param.processId}"/>');
+                        ProcessBuilder.Actions.viewProcess('<c:out value="${param.processId}"/>');
                         }
                     </c:if>
                     ProcessBuilder.ApiClient.load('<c:out value="${appId}"/>','<c:out value="${version}"/>', loadCallback);
@@ -67,27 +67,27 @@
                 <c:otherwise>
                     var xpdl = $("#xpdl").val();
                     if (xpdl && xpdl !== '') {
-                        ProcessBuilder.Designer.init(xpdl);
+                    ProcessBuilder.Designer.init(xpdl);
                     }
                 </c:otherwise>
-                </c:choose>
-                $(window).bind('beforeunload', function() {
-                    if (ProcessBuilder.Designer.isModified()) {
-                        return '<fmt:message key="pbuilder.label.modifiedPrompt"/>';
-                    }
-                });
-                // check for web designer
-                var designerUrl = "<%= AppUtil.getDesignerWebBaseUrl() %>/designer/webstart.jsp";
-                $.ajax({
-                    type: 'GET',
-                    url: designerUrl,
-                    cache: false,
-                    success: function(data) {
-                        $("#launchDesigner").show();
-                    },
-                    error: function(data) {
-                    }
-                });
+            </c:choose>
+            $(window).bind('beforeunload', function() {
+            if (ProcessBuilder.Designer.isModified()) {
+            return '<fmt:message key="pbuilder.label.modifiedPrompt"/>';
+            }
+            });
+            // check for web designer
+            var designerUrl = "<%= AppUtil.getDesignerWebBaseUrl() %>/designer/webstart.jsp";
+            $.ajax({
+            type: 'GET',
+            url: designerUrl,
+            cache: false,
+            success: function(data) {
+            $("#launchDesigner").show();
+            },
+            error: function(data) {
+            }
+            });
             });
             function launchDesigner(){
             <%
@@ -97,12 +97,12 @@
                     locale = WorkflowUtil.getSystemSetupValue("systemLocale");
                 }
             %>
-                var base = '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}';
-                var url = base + "${pageContext.request.contextPath}/web/console/app/${appId}/${appDefinition.version}/package/xpdl";
-                var path = base + '${pageContext.request.contextPath}';
-                <c:set var="sessionId" value="${cookie.JSESSIONID.value}"/>
-                <c:if test="${empty sessionId}"><c:set var="sessionId" value="${pageContext.request.session.id}"/></c:if>
-                document.location = '<%= designerwebBaseUrl%>/designer/webstart.jsp?url=' + encodeURIComponent(url) + '&path=' + encodeURIComponent(path) + '&appId=${appId}&appVersion=${appDefinition.version}&locale=<%= locale%>&username=${username}&domain=${pageContext.request.serverName}&port=${pageContext.request.serverPort}&context=${pageContext.request.contextPath}&session=<c:out value="${sessionId}"/>&tokenName=<%= SecurityUtil.getCsrfTokenName() %>&tokenValue=<%= SecurityUtil.getCsrfTokenValue(request) %>';
+            var base = '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}';
+            var url = base + "${pageContext.request.contextPath}/web/console/app/${appId}/${appDefinition.version}/package/xpdl";
+            var path = base + '${pageContext.request.contextPath}';
+            <c:set var="sessionId" value="${cookie.JSESSIONID.value}"/>
+            <c:if test="${empty sessionId}"><c:set var="sessionId" value="${pageContext.request.session.id}"/></c:if>
+            document.location = '<%= designerwebBaseUrl%>/designer/webstart.jsp?url=' + encodeURIComponent(url) + '&path=' + encodeURIComponent(path) + '&appId=${appId}&appVersion=${appDefinition.version}&locale=<%= locale%>&username=${username}&domain=${pageContext.request.serverName}&port=${pageContext.request.serverPort}&context=${pageContext.request.contextPath}&session=<c:out value="${sessionId}"/>&tokenName=<%= SecurityUtil.getCsrfTokenName() %>&tokenValue=<%= SecurityUtil.getCsrfTokenValue(request) %>';
             }            
         </script>
     </head>
@@ -118,13 +118,13 @@
             </div>
             <div id="builder-body">
                 <div id="builder-bar">
-                        <ul id="builder-steps">
+                    <ul id="builder-steps">
                     </ul>
                     <div id="builder-bg"></div>
                 </div>
                 <div id="builder-content">
                     <div id="step-design-container">
-                        
+
                         <div id="designer-container">
                             <div id="header"><div id="header_title"><strong><fmt:message key="pbuilder.title"/></strong></div></div>
                             <div id="viewport">
@@ -145,14 +145,14 @@
                                 <div id="config">
                                     <form method="POST" action="?">
                                         <textarea id="xpdl" name="xpdl" rows="12" cols="30"><c:if test="${empty param.xpdl}"><jsp:include page="resources/default.xpdl"/></c:if><c:if test="${!empty param.xpdl}"><c:out value="${param.xpdl}" escapeXml="true"/></c:if></textarea>
-                                        <br />
-                                        <!--
-                                        <input type="checkbox" name="editable" value="false" <c:if test="${param.editable == 'false'}">checked</c:if> /> <fmt:message key="pbuilder.label.readonly"/>
-                                        <br />
-                                        <input type="checkbox" name="autoValidate" value="false" <c:if test="${param.autoValidate == 'false'}">checked</c:if> /> <fmt:message key="pbuilder.label.disableAutoValidate"/>
-                                        <br />
-                                        -->
-                                        <input type="submit" value="<fmt:message key="pbuilder.label.update"/>" />
+                                            <br />
+                                            <!--
+                                            <input type="checkbox" name="editable" value="false" <c:if test="${param.editable == 'false'}">checked</c:if> /> <fmt:message key="pbuilder.label.readonly"/>
+                                            <br />
+                                            <input type="checkbox" name="autoValidate" value="false" <c:if test="${param.autoValidate == 'false'}">checked</c:if> /> <fmt:message key="pbuilder.label.disableAutoValidate"/>
+                                            <br />
+                                            -->
+                                            <input type="submit" value="<fmt:message key="pbuilder.label.update"/>" />
                                     </form>
                                 </div>
                             </div>
@@ -196,37 +196,37 @@
 
         <div id="builder-message"></div>
         <div id="builder-screenshot"></div>
-        
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_custom.css?build=<fmt:message key="build.number"/>">
-        
-        <script>
-            $(function() {
-                $('#builder-steps li').click(function(){
-                    var div = $(this).find('a').attr('href');
-                    if($(div).length > 0){
-                        $('#builder-steps li').removeClass("active");
-                        $('#builder-steps li').removeClass("next");
-                        $(this).addClass("active");
-                        $(this).prev().addClass("next");
-                        $('#builder-content').children().hide();
-                        $(div).show();
-                        if (div === "#step-design-container") {
-                            $("#palette").dialog("open");
-                        } else {
-                            $("#palette").dialog("close");
-                        }
-                    }
-                    return false;
-                });
-            });
-        </script>
 
-        <jsp:include page="/WEB-INF/jsp/console/apps/adminBar.jsp" flush="true">
-            <jsp:param name="appId" value="${appId}"/>
-            <jsp:param name="appVersion" value="${appDefinition.version}"/>
-            <jsp:param name="webConsole" value="true"/>
-            <jsp:param name="builderMode" value="true"/>
-        </jsp:include>
-        
-    </body>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/builder_custom.css?build=<fmt:message key="build.number"/>">
+
+    <script>
+        $(function() {
+        $('#builder-steps li').click(function(){
+        var div = $(this).find('a').attr('href');
+        if($(div).length > 0){
+        $('#builder-steps li').removeClass("active");
+        $('#builder-steps li').removeClass("next");
+        $(this).addClass("active");
+        $(this).prev().addClass("next");
+        $('#builder-content').children().hide();
+        $(div).show();
+        if (div === "#step-design-container") {
+        $("#palette").dialog("open");
+        } else {
+        $("#palette").dialog("close");
+        }
+        }
+        return false;
+        });
+        });
+    </script>
+
+    <jsp:include page="/WEB-INF/jsp/console/apps/adminBar.jsp" flush="true">
+        <jsp:param name="appId" value="${appId}"/>
+        <jsp:param name="appVersion" value="${appDefinition.version}"/>
+        <jsp:param name="webConsole" value="true"/>
+        <jsp:param name="builderMode" value="true"/>
+    </jsp:include>
+
+</body>
 </html>

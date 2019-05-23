@@ -84,7 +84,7 @@ public final class CsrfGuard {
                 configurationProvider = retrieveNewConfig();
             }
         }
-        
+
         return configurationProvider;
     }
 
@@ -585,7 +585,8 @@ public final class CsrfGuard {
                 }
                 if (!tokenFromSession.equals(tokenFromRequest)) {
                     /**
-                     * FAIL: the request token does not match the session token *
+                     * FAIL: the request token does not match the session token
+                     * *
                      */
                     throw new CsrfGuardException("request token does not match session token");
                 }
@@ -762,7 +763,7 @@ public final class CsrfGuard {
 
         /**
          * Case 1: Exact Match MCH 140419: ??? isnt this checks in
-         * isUriExactMatch() ???  *
+         * isUriExactMatch() ??? *
          */
         if (testPath.equals(requestPath)) {
             retval = true;
