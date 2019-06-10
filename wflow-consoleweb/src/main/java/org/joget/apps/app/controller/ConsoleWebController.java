@@ -3,6 +3,7 @@ package org.joget.apps.app.controller;
 import au.com.bytecode.opencsv.CSVWriter;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.blockchain.NetworkType;
+import io.proximax.utils.NemUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -933,7 +934,8 @@ public class ConsoleWebController {
                         }
                         user.setRoles(roles);
                     }
-                    Account account = Account.createFromPrivateKey("74707FB82A47362461EE7B5689BBD0228F4E43349D1514F794CB925E0765FEC4", NetworkType.TEST_NET);
+					NemUtils nemUtils = new NemUtils(NetworkType.TEST_NET);
+                    Account account = nemUtils.generateAccount();
                     user.setAddress(account.getAddress().plain().toString());
                     user.setPublicKey(account.getPublicKey());
                     user.setPrivateKey(account.getPrivateKey());
@@ -4040,6 +4042,53 @@ public class ConsoleWebController {
         map.addAttribute("currentProfile", DynamicDataSourceManager.getCurrentProfile());
 
         return "console/setting/datasource";
+    }
+
+    @RequestMapping("/console/setting/wallet")
+    public String consoleSettingAccount(ModelMap map) {
+		Collection<Setting> settingList = setupManager.getSettingList("", null, null, null, null);
+		
+		List<String> walletSettingsList = new ArrayList<String>();
+        walletSettingsList.add("walletName");
+        walletSettingsList.add("dfmsHost");
+        walletSettingsList.add("bcHost");
+        walletSettingsList.add("walletAddress");
+        walletSettingsList.add("publicKey");
+        walletSettingsList.add("privateKey");
+        
+        Map<String, String> walletMap = new HashMap<String, String>();
+        for (Setting setting : settingList) {
+            if (walletSettingsList.contains(setting.getProperty())) {
+                walletMap.put(setting.getProperty(), setting.getValue());
+            }
+        }
+		//walletMap.put("accountName", "Administrator");
+		//walletMap.put("dfmsHost", "https://ipfs1-dev.xpxsirius.io:5001");
+		//walletMap.put("bcHost", "http://bctestnet1.xpxsirius.io:3000");
+        map.addAttribute("walletMap", walletMap);
+        return "console/setting/wallet";
+    }
+	
+	@RequestMapping(value = "/console/setting/wallet/submit", method = RequestMethod.POST)
+    public String consoleSettingWalletSubmit(HttpServletRequest request, ModelMap map) {        
+
+        //request params
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String paramName = (String) e.nextElement();
+            String paramValue = request.getParameter(paramName);
+            Setting setting = setupManager.getSettingByProperty(paramName);
+            if (setting == null) {
+                setting = new Setting();
+                setting.setProperty(paramName);
+            }
+            setting.setValue(paramValue);            
+            setupManager.saveSetting(setting);
+        }
+        //pluginManager.refresh();
+        //workflowManager.internalUpdateDeadlineChecker();
+        //FileStore.updateFileSizeLimit();
+        return "redirect:/web/console/setting/wallet";
     }
 
     @RequestMapping(value = "/console/setting/profile/change", method = RequestMethod.POST)
