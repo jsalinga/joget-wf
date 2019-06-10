@@ -49,7 +49,7 @@
         <dependency>
             <groupId>io.proximax</groupId>
             <artifactId>xpx2-java-sdk</artifactId>
-            <version>0.1.0-beta.7-jar-with-dependencies</version>
+            <version>0.1.0-beta.7</version>
         </dependency>
 		
         <dependency>
